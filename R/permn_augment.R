@@ -22,7 +22,7 @@
 #' permn_augment(tab, J = 3)
 #'
 #' @export
-#'
+
 permn_augment <- function(tab, J = 4) {
   ## Suppress "no visible binding for global variable" warnings
   . <- NULL

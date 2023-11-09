@@ -58,7 +58,7 @@
 #' )
 #'
 #' @export
-#'
+
 rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
   ## Suppress "no visible binding for global variable" warnings
   . <- ranking <- item_name <- reference_no <- NULL
