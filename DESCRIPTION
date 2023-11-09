@@ -1,12 +1,23 @@
 Package: ranking
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Wrangling and Analyzing Ranking Data
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: person("Seo-young Silvia", "Kim", 
+  email = "sskim.research@gmail.com",
+  role = c("aut", "cre"))
+Maintainer: The package maintainer <sskim.research@gmail.com>
+Description: Functions that wrangle and analyze ranking data. 
+  The package includes functions to wrangle ranking data into a 
+  tidy format, to calculate various quantities of interest associated 
+  with ranking data, and to visualize the results.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Imports:
+  dplyr,
+  tidyr,
+  tidyselect,
+  magrittr
+Depends:
+  R (>= 3.5.0)
 RoxygenNote: 7.2.3
