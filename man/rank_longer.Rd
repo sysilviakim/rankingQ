@@ -22,6 +22,9 @@ you can provide a character vector.}
 }
 \value{
 A data frame in long format with columns recording rankings.
+The first column is the id variable that has been pre-specified.
+The second and third columns record what item is being ranked.
+The final column records the ranking of the item.
 }
 \description{
 This function takes a data frame in wide format with columns recording

@@ -31,9 +31,12 @@
 #' @importFrom dplyr arrange left_join select
 #' @importFrom tidyr pivot_longer separate
 #' @importFrom magrittr `%>%`
-#' @importFrom tidyselect any_of
+#' @importFrom tidyselect any_of all_of
 #'
 #' @return A data frame in long format with columns recording rankings.
+#' The first column is the id variable that has been pre-specified.
+#' The second and third columns record what item is being ranked.
+#' The final column records the ranking of the item.
 #'
 #' @examples
 #' x <- data.frame(
@@ -145,7 +148,7 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
   ## Now turn the separate ranking columns into a long format
   out <- x %>%
     pivot_longer(
-      cols = cols,
+      cols = all_of(cols),
       names_to = "item_name",
       values_to = "ranking"
     ) %>%

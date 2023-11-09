@@ -10,7 +10,7 @@ Description: Functions that wrangle and analyze ranking data.
   The package includes functions to wrangle ranking data into a 
   tidy format, to calculate various quantities of interest associated 
   with ranking data, and to visualize the results.
-License: GPL-3
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Imports:
