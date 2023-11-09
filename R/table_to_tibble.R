@@ -12,6 +12,13 @@
 #' @importFrom tibble enframe
 #' @importFrom dplyr mutate
 #'
+#' @examples
+#' tab <- lapply(combinat::permn(seq(3)), paste0, collapse = "") |>
+#'   sample(30, replace = TRUE) |>
+#'   unlist() |>
+#'   table()
+#' table_to_tibble(tab)
+#'
 #' @export
 
 table_to_tibble <- function(tab, tibble = TRUE) {

@@ -5,7 +5,7 @@
 #' the `ggplot2` package.
 #'
 #' @importFrom ggplot2 ggplot geom_col scale_fill_manual scale_y_continuous
-#' @importFrom ggplot2 geom_hline geom_text aes xlab ylab
+#' @importFrom ggplot2 geom_hline geom_text aes xlab ylab theme
 #' @importFrom scales percent
 #'
 #' @param tab A table in which the frequencies of ranking patterns are recorded.
@@ -21,6 +21,14 @@
 #'
 #' @return A ggplot2 object.
 #'
+#' @examples
+#' tab <- lapply(combinat::permn(seq(3)), paste0, collapse = "") |>
+#'   sample(30, replace = TRUE) |>
+#'   unlist() |>
+#'   table() |>
+#'   table_to_tibble()
+#' plot_dist_ranking(tab, ylim = 0.5)
+#'
 #' @export
 
 plot_dist_ranking <- function(tab,
@@ -29,7 +37,7 @@ plot_dist_ranking <- function(tab,
                               ylim = 0.315,
                               fill = "firebrick4",
                               xlab = "Recorded Rankings",
-                              family = "Sans",
+                              family = NULL,
                               vjust = -0.5,
                               size = 3) {
   ## Suppress "no visible binding for global variable" warnings
@@ -39,8 +47,7 @@ plot_dist_ranking <- function(tab,
   J <- nchar(as.character(tab[[x]][[1]]))
 
   ## ggplot2
-  p <- tab %>%
-    ggplot(aes(x = !!as.name(x), y = !!as.name(y), fill = "1")) +
+  p <- ggplot(tab, aes(x = !!as.name(x), y = !!as.name(y), fill = "1")) +
     geom_col() +
     scale_fill_manual(values = fill) +
     xlab(xlab) +
@@ -54,7 +61,8 @@ plot_dist_ranking <- function(tab,
       ),
       vjust = vjust,
       size = size
-    )
+    ) +
+    theme(legend.position = "none")
 
   return(p)
 }

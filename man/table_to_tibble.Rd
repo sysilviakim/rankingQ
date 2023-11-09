@@ -19,3 +19,11 @@ A tibble or data frame, depending on the `tibble` argument.
 This function converts a frequency table to a tibble or data frame.
 It also creates a proportion variable as well as the frequency variable.
 }
+\examples{
+tab <- lapply(combinat::permn(seq(3)), paste0, collapse = "") |>
+  sample(30, replace = TRUE) |>
+  unlist() |>
+  table()
+table_to_tibble(tab)
+
+}

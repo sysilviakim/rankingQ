@@ -11,7 +11,7 @@ plot_dist_ranking(
   ylim = 0.315,
   fill = "firebrick4",
   xlab = "Recorded Rankings",
-  family = "Sans",
+  family = NULL,
   vjust = -0.5,
   size = 3
 )
@@ -43,4 +43,13 @@ A ggplot2 object.
 This function takes a table in which the frequencies of ranking patterns
 are recorded and plots it over the permutation space of rankings, using
 the `ggplot2` package.
+}
+\examples{
+tab <- lapply(combinat::permn(seq(3)), paste0, collapse = "") |>
+  sample(30, replace = TRUE) |>
+  unlist() |>
+  table() |>
+  table_to_tibble()
+plot_dist_ranking(tab, ylim = 0.5)
+
 }
