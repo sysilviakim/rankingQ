@@ -17,7 +17,10 @@ Imports:
   dplyr,
   tidyr,
   tidyselect,
-  magrittr
+  purrr,
+  tibble,
+  magrittr,
+  combinat
 Depends:
   R (>= 3.5.0)
 RoxygenNote: 7.2.3
