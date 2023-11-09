@@ -13,6 +13,10 @@ Description: Functions that wrangle and analyze ranking data.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+Suggests:
+  knitr,
+  rmarkdown,
+  utils
 Imports:
   dplyr,
   tidyr,
@@ -20,7 +24,10 @@ Imports:
   purrr,
   tibble,
   magrittr,
+  ggplot2,
+  scales,
   combinat
 Depends:
   R (>= 3.5.0)
+VignetteBuilder: utils, knitr
 RoxygenNote: 7.2.3
