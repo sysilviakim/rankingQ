@@ -31,20 +31,20 @@ This function takes a data frame in wide format with columns recording
 rankings into a long data format.
 }
 \details{
-If the data frame has more than one columns specified in the `cols` argument,
-they will be translated as the first, second, third, etc. items in the
-reference choice set. For example, if the first column records 2, the second
-column records 1, and the third column records 3, then the function will
-interpret that this respondent prefers the second item the most,
+If the data frame has more than one columns specified in the \code{cols}
+argument, they will be translated as the first, second, third, etc. items in
+the reference choice set. For example, if the first column records 2, the
+second column records 1, and the third column records 3, then the function
+will interpret that this respondent prefers the second item the most,
 then the first item, then the third item.
 
-If the data frame has only one column specified in the `cols` argument, it
-will be parsed by character length. For example, if the column records "213",
-then the function will interpret that this respondent prefers the second item
-the most, then the first, and then the third item.
+If the data frame has only one column specified in the \code{cols} argument,
+it will be parsed by character length. For example, if the column records
+"213", then the function will interpret that this respondent prefers the
+second item the most, then the first, and then the third item.
 
-Currently, this function depends on `tidyverse` functions.
-Eventually, a `data.table` option will be added for large datasets.
+Currently, this function depends on \code{tidyverse} functions.
+Eventually, a \code{data.table} option will be added for large datasets.
 }
 \examples{
 x <- data.frame(
@@ -52,7 +52,6 @@ x <- data.frame(
   orange = c(1, 3, 2),
   banana = c(3, 2, 1)
 )
-
 rank_longer(x)
 
 y <- data.frame(
@@ -61,8 +60,9 @@ y <- data.frame(
 )
 rank_longer(y, cols = "rank", id = "id")
 rank_longer(
-  y, cols = "rank", id = "id",
-  reference = c("Baseball", "Basketball", "Football")
+  y,
+  cols = "rank", id = "id",
+  reference = c("Money", "Power", "Respect")
 )
 
 }

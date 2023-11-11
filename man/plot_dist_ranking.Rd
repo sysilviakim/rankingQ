@@ -42,7 +42,7 @@ A ggplot2 object.
 \description{
 This function takes a table in which the frequencies of ranking patterns
 are recorded and plots it over the permutation space of rankings, using
-the `ggplot2` package.
+the \code{ggplot2} package.
 }
 \examples{
 tab <- lapply(combinat::permn(seq(3)), paste0, collapse = "") |>

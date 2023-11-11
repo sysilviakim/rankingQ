@@ -5,9 +5,9 @@
 #'
 #' @param tab A frequency table.
 #' @param tibble A logical value indicating whether the output should be
-#' a tibble or data frame. Defaults to TRUE.
+#' a tibble or data frame. Default is \code{TRUE}.
 #'
-#' @return A tibble or data frame, depending on the `tibble` argument.
+#' @return A tibble or data frame, depending on the \code{tibble} argument.
 #'
 #' @importFrom tibble enframe
 #' @importFrom dplyr mutate

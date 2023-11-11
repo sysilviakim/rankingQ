@@ -2,7 +2,7 @@
 #'
 #' This function takes a table in which the frequencies of ranking patterns
 #' are recorded and plots it over the permutation space of rankings, using
-#' the `ggplot2` package.
+#' the \code{ggplot2} package.
 #'
 #' @importFrom ggplot2 ggplot geom_col scale_fill_manual scale_y_continuous
 #' @importFrom ggplot2 geom_hline geom_text aes xlab ylab theme

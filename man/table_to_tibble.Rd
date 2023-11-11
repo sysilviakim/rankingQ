@@ -10,10 +10,10 @@ table_to_tibble(tab, tibble = TRUE)
 \item{tab}{A frequency table.}
 
 \item{tibble}{A logical value indicating whether the output should be
-a tibble or data frame. Defaults to TRUE.}
+a tibble or data frame. Default is \code{TRUE}.}
 }
 \value{
-A tibble or data frame, depending on the `tibble` argument.
+A tibble or data frame, depending on the \code{tibble} argument.
 }
 \description{
 This function converts a frequency table to a tibble or data frame.

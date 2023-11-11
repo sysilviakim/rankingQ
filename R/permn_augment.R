@@ -10,8 +10,9 @@
 #' @param J The length of the reference choice set.
 #'
 #' @importFrom tibble enframe deframe
-#' @importFrom dplyr bind_rows
+#' @importFrom dplyr bind_rows mutate
 #' @importFrom purrr map
+#' @importFrom tidyselect contains
 #' @importFrom combinat permn
 #'
 #' @return A table of observed permutation patterns augmented with all possible
@@ -25,10 +26,11 @@
 
 permn_augment <- function(tab, J = 4) {
   ## Suppress "no visible binding for global variable" warnings
-  . <- NULL
+  . <- value <- name <- NULL
 
   out <- deframe(
     enframe(tab) %>%
+      mutate(value = as.numeric(value)) %>%
       bind_rows(
         .,
         data.frame(
@@ -36,7 +38,8 @@ permn_augment <- function(tab, J = 4) {
             map(~ paste(.x, collapse = "")) %>%
             unlist() %>%
             setdiff(., names(tab)), value = as.table(0)
-        )
+        ) %>%
+          select(name, value = contains("freq"))
       )
   )
   out <- out[sort(names(out))]

@@ -3,20 +3,20 @@
 #' This function takes a data frame in wide format with columns recording
 #' rankings into a long data format.
 #'
-#' If the data frame has more than one columns specified in the `cols` argument,
-#' they will be translated as the first, second, third, etc. items in the
-#' reference choice set. For example, if the first column records 2, the second
-#' column records 1, and the third column records 3, then the function will
-#' interpret that this respondent prefers the second item the most,
+#' If the data frame has more than one columns specified in the \code{cols}
+#' argument, they will be translated as the first, second, third, etc. items in
+#' the reference choice set. For example, if the first column records 2, the
+#' second column records 1, and the third column records 3, then the function
+#' will interpret that this respondent prefers the second item the most,
 #' then the first item, then the third item.
 #'
-#' If the data frame has only one column specified in the `cols` argument, it
-#' will be parsed by character length. For example, if the column records "213",
-#' then the function will interpret that this respondent prefers the second item
-#' the most, then the first, and then the third item.
+#' If the data frame has only one column specified in the \code{cols} argument,
+#' it will be parsed by character length. For example, if the column records
+#' "213", then the function will interpret that this respondent prefers the
+#' second item the most, then the first, and then the third item.
 #'
-#' Currently, this function depends on `tidyverse` functions.
-#' Eventually, a `data.table` option will be added for large datasets.
+#' Currently, this function depends on \code{tidyverse} functions.
+#' Eventually, a \code{data.table} option will be added for large datasets.
 #'
 #' @param x A data frame in wide format with columns recording rankings.
 #' @param cols A character vector of column names that record rankings.
@@ -44,7 +44,6 @@
 #'   orange = c(1, 3, 2),
 #'   banana = c(3, 2, 1)
 #' )
-#'
 #' rank_longer(x)
 #'
 #' y <- data.frame(
@@ -53,8 +52,9 @@
 #' )
 #' rank_longer(y, cols = "rank", id = "id")
 #' rank_longer(
-#'   y, cols = "rank", id = "id",
-#'   reference = c("Baseball", "Basketball", "Football")
+#'   y,
+#'   cols = "rank", id = "id",
+#'   reference = c("Money", "Power", "Respect")
 #' )
 #'
 #' @export
@@ -66,9 +66,7 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
   ## Originally the `pivot_sim` function, expanded
   ## Sanity check on `x` argument
   if (!("data.frame" %in% class(x))) {
-    stop(
-      "The x argument must be a data frame."
-    )
+    stop("The x argument must be a data frame.")
   }
 
   ## Sanity check on `id` argument
@@ -141,7 +139,8 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
   if (length(cols) == 1) {
     ## Split the column into N = max_ranking columns
     x <- x %>%
-      separate(cols, into = reference, sep = 1:max_ranking)
+      separate(cols, into = reference, sep = 1:max_ranking) %>%
+      mutate(across(all_of(reference), as.numeric))
     cols <- reference
   }
 
