@@ -16,7 +16,8 @@ LazyData: true
 Suggests:
   knitr,
   rmarkdown,
-  utils
+  utils,
+  stats
 Imports:
   dplyr,
   tidyr,
@@ -24,7 +25,9 @@ Imports:
   purrr,
   tibble,
   magrittr,
+  stringr,
   ggplot2,
+  rlang,
   scales,
   combinat
 Depends:
