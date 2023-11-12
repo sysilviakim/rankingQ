@@ -29,7 +29,9 @@ Imports:
   ggplot2,
   rlang,
   scales,
-  combinat
+  combinat,
+  clarify,
+  mlogit
 Depends:
   R (>= 3.5.0)
 VignetteBuilder: utils, knitr
