@@ -24,17 +24,24 @@
 #' @param n The total number of samples to draw.
 #' @param t The number of items or alternatives to choose from.
 #' @param prob A vector of choice probabilities.
+#' @param choices A vector of choices to be ranked.
+#' @param seed An optional seed for the random number generator.
 #'
 #' @importFrom stats rmultinom
 #'
 #' @return A data frame of rankings of t items for n assessors.
 #'
 #' @examples
-#' rpluce(n = 10, t = 3, prob = c(0.5, 0.3, 0.2))
+#' rpluce(n = 10, t = 3, prob = c(0.5, 0.3, 0.2), seed = 123)
 #'
 #' @export
 
-rpluce <- function(n, t, prob, choices = NULL) {
+rpluce <- function(n, t, prob, choices = NULL, seed = NULL) {
+  ## Set the seed if specified
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+
   ## Sanity check on the `prob` argument.
   if (!is.numeric(prob)) {
     stop("The specified probability must be a number.")

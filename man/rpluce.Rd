@@ -4,7 +4,7 @@
 \alias{rpluce}
 \title{Draw Samples from the Plackett-Luce Model}
 \usage{
-rpluce(n, t, prob, choices = NULL)
+rpluce(n, t, prob, choices = NULL, seed = NULL)
 }
 \arguments{
 \item{n}{The total number of samples to draw.}
@@ -12,6 +12,10 @@ rpluce(n, t, prob, choices = NULL)
 \item{t}{The number of items or alternatives to choose from.}
 
 \item{prob}{A vector of choice probabilities.}
+
+\item{choices}{A vector of choices to be ranked.}
+
+\item{seed}{An optional seed for the random number generator.}
 }
 \value{
 A data frame of rankings of t items for n assessors.
@@ -40,6 +44,6 @@ Output: A ranking \eqn{R \in \mathcal{L}(\mathcal{A})} from
   6: return \eqn{R}.
 }
 \examples{
-rpluce(n = 10, t = 3, prob = c(0.5, 0.3, 0.2))
+rpluce(n = 10, t = 3, prob = c(0.5, 0.3, 0.2), seed = 123)
 
 }
