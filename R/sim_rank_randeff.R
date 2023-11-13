@@ -106,7 +106,8 @@ sim_rank_randeff <- function(m,
       !!as.name(random_var) := range_cont,
       mean = NA,
       low = NA,
-      high = NA
+      high = NA,
+      ranking = NA,
     )
 
     ## Must make sure that the last ranking item should be set as the base
@@ -190,6 +191,9 @@ p <- p_analog
         mean(p) - qt((1 + 0.95) / 2, df = 1000 - 1) * sd(p) / sqrt(length(p))
       p_qoi[i, "high"] <-
         mean(p) + qt((1 + 0.95) / 2, df = 1000 - 1) * sd(p) / sqrt(length(p))
+
+     ## Record ranking
+      p_qoi[, "ranking"] <- paste0(permn, collapse = "_")
     }
   }
 
