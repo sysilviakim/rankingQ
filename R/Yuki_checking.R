@@ -6,6 +6,7 @@ m1 <- readRDS(file="m1.RData")
 m2 <- readRDS(file="m2.RData")
 
 # Let's try all possible rankings
+tgt_ranking <- c("gender", "race", "party", "religion")
 all_rankings <- combinat::permn(tgt_ranking)
 out_vec_raw <- list()
 out_vec_correct <- list()
@@ -59,8 +60,8 @@ ggdt <- rbind(dt_raw, dt_correct)
 # Visualize the results
 ggdt %>%
   ggplot(aes(x = ideo7, y = mean, color = Result)) +
-  geom_point(alpha = 0.4) +
-  geom_pointrange(aes(ymin = low, ymax = high), alpha = 0.4) +
+  geom_point(size = 0.3) +
+  geom_pointrange(aes(ymin = low, ymax = high), size = 0.3) +
   scale_color_manual(values = c("darkcyan", "darkred")) +
   facet_wrap(~ ranking) +
   theme_bw() +

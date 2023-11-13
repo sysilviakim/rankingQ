@@ -187,10 +187,14 @@ p <- p_analog
       ## quantile(p, prob = 1 - (1 - conf_level) / 2)
 
       ## Calculate the confidence interval
-      p_qoi[i, "low"] <-
-        mean(p) - qt((1 + 0.95) / 2, df = 1000 - 1) * sd(p) / sqrt(length(p))
-      p_qoi[i, "high"] <-
-        mean(p) + qt((1 + 0.95) / 2, df = 1000 - 1) * sd(p) / sqrt(length(p))
+      # p_qoi[i, "low"] <-
+      #   mean(p) - qt((1 + 0.95) / 2, df = 1000 - 1) * sd(p) / sqrt(length(p))
+      # p_qoi[i, "high"] <-
+      #   mean(p) + qt((1 + 0.95) / 2, df = 1000 - 1) * sd(p) / sqrt(length(p))
+
+      # Use 2.5% and 97.5% percentiles of simulated values
+      p_qoi[i, "low"] <- quantile(p, prob = 0.025)
+      p_qoi[i, "high"] <- quantile(p, prob = 0.975)
 
      ## Record ranking
       p_qoi[, "ranking"] <- paste0(permn, collapse = "_")
