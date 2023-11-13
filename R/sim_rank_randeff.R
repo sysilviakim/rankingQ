@@ -133,10 +133,11 @@ sim_rank_randeff <- function(m,
       ## For example, if the permutation pattern is
       ## party - race - religion - gender for the four social identities ranked,
       ## this is equivalent to the following:
-      ## exp_party / (exp_party + exp_race + exp_reli) *
-      ##   exp_race / (exp_race + exp_reli) *
-      ##   exp_reli / (exp_reli + 1) *
-      ##   exp_gend / exp_gend
+      ## exp_party / (exp_party + exp_race + exp_religion + exp_gender) *
+      ## exp_race / (exp_race + exp_religion + exp_gender) *
+      ## exp_religion / (exp_religion + exp_gender) *
+      ## exp_gender / exp_gender
+
       p_list <- seq(length(permn)) %>%
         map(
           ~ exp_values[[permn[.x]]] /
@@ -144,6 +145,40 @@ sim_rank_randeff <- function(m,
         )
 
       p <- Reduce(`*`, p_list)
+
+      # issue was inside map()
+
+
+# Yuki: decompose all stages to check
+p_stage1 <- exp_values[[permn[1]]] /
+  (exp_values[[permn[1]]] + exp_values[[permn[2]]] +
+   exp_values[[permn[3]]] + exp_values[[permn[4]]])
+
+p_stage2 <- exp_values[[permn[2]]] /
+  (exp_values[[permn[2]]] + exp_values[[permn[3]]] + exp_values[[permn[4]]])
+
+p_stage3 <- exp_values[[permn[3]]] /
+  (exp_values[[permn[3]]] + exp_values[[permn[4]]])
+
+p_stage4 <- exp_values[[permn[4]]] /
+  (exp_values[[permn[4]]])
+
+# checking
+  head(p_list[[1]])
+  head(p_list[[2]])
+  head(p_list[[3]])
+  head(p_list[[4]])
+
+  head(p_stage1) # good!
+  head(p_stage2) # different
+  head(p_stage3) # different
+  head(p_stage4) # very different, it should be 1
+
+  p_analog <- p_stage1 * p_stage2 * p_stage3 * p_stage4
+
+# checking
+p <- p_analog
+
       p_qoi[i, "mean"] <- mean(p)
 
       ## These are standard-deviation based
