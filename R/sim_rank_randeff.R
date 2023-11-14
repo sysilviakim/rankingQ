@@ -39,7 +39,7 @@
 #' @importFrom rlang `!!` set_names `:=`
 #' @importFrom purrr map keep imap
 #' @importFrom magrittr `%>%`
-#' @importFrom stats qt
+#' @importFrom stats quantile
 #'
 #' @export
 
