@@ -31,7 +31,8 @@ Imports:
   scales,
   combinat,
   clarify,
-  mlogit
+  mlogit,
+  dfidx
 Depends:
   R (>= 3.5.0)
 VignetteBuilder: utils, knitr

@@ -34,12 +34,32 @@
 #' random effect variable's values.
 #'
 #' @import mlogit
+#' @import dfidx
 #' @importFrom clarify sim
 #' @importFrom tibble tibble
 #' @importFrom rlang `!!` set_names `:=`
 #' @importFrom purrr map keep imap
 #' @importFrom magrittr `%>%`
 #' @importFrom stats quantile
+#'
+#' @examples
+#'
+#' ## This model does not mean *anything.*
+#' ## This is simply to demonstrate the function.
+#' library(mlogit)
+#' library(dfidx)
+#'
+#' data("Fishing", package = "mlogit")
+#' Fish <- dfidx(Fishing, varying = 2:9, shape = "wide", choice = "mode")
+#' m1 <- mlogit(mode ~ 1 | price, reflevel = "beach", data = Fish)
+#'
+#' sim_rank_randeff(
+#'   m = m1,
+#'   permn = c("charter", "boat", "pier", "beach"),
+#'   random_var = "price",
+#'   range_cont = c(10, 50, 100),
+#'   seed = 123
+#' )
 #'
 #' @export
 
@@ -102,13 +122,7 @@ sim_rank_randeff <- function(m,
 
     ## The probabilities that the particular permutation pattern will be chosen
     ## over the random effect variable: initialization
-    p_qoi <- tibble(
-      !!as.name(random_var) := range_cont,
-      mean = NA,
-      low = NA,
-      high = NA,
-      ranking = NA,
-    )
+    p_qoi <- tibble()
 
     ## Must make sure that the last ranking item should be set as the base
     ## category in the `mlogit` object
@@ -146,13 +160,20 @@ sim_rank_randeff <- function(m,
         )
 
       p <- Reduce(`*`, p_list)
-      p_qoi[i, "mean"] <- mean(p)
-      ## Use 2.5% and 97.5% percentiles of simulated values
-      p_qoi[i, "low"] <- quantile(p, prob = 0.025)
-      p_qoi[i, "high"] <- quantile(p, prob = 0.975)
 
-      ## Record ranking pattern
-      p_qoi[, "ranking"] <- paste0(permn, collapse = "_")
+      ## Create a data frame and bind to the initialized one
+      p_qoi <- bind_rows(
+        p_qoi,
+        tibble(
+          `:=`(!!as.name(random_var), i),
+          mean = mean(p),
+          ## Use 2.5% and 97.5% percentiles of simulated values
+          low = quantile(p, prob = (1 - conf_level) / 2),
+          high = quantile(p, prob = 1 - (1 - conf_level) / 2),
+          ## Record the ranking pattern for clarity
+          ranking = paste0(permn, collapse = "_")
+        )
+      )
     }
   }
 

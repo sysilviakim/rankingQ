@@ -65,3 +65,23 @@ objects.
 Warning: the `mlogit`'s `reflevel` should match the last element of
 \code{permn}. (This should be fixed in a future version.)
 }
+\examples{
+
+## This model does not mean *anything.*
+## This is simply to demonstrate the function.
+library(mlogit)
+library(dfidx)
+
+data("Fishing", package = "mlogit")
+Fish <- dfidx(Fishing, varying = 2:9, shape = "wide", choice = "mode")
+m1 <- mlogit(mode ~ 1 | price, reflevel = "beach", data = Fish)
+
+sim_rank_randeff(
+  m = m1,
+  permn = c("charter", "boat", "pier", "beach"),
+  random_var = "price",
+  range_cont = c(10, 50, 100),
+  seed = 123
+)
+
+}
