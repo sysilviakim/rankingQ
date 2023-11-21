@@ -254,7 +254,9 @@ typical_data <- function(m, random_var = NULL) {
         return(x)
       }
     ) %>%
-    select(-idx)
+    select(-idx) %>%
+    ## Delete the outcome variable
+    select(-all_of(all.vars(m$call$formula)[1]))
 
   return(typical)
 }
