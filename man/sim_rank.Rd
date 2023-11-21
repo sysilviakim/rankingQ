@@ -26,7 +26,11 @@ sim_rank(
 of variables.}
 
 \item{random_var}{A character string that specifies the random effect
-variable.}
+variable. Default is \code{NULL}.}
+
+\item{newdata}{A data frame that contains the new data to be used for
+prediction. Default is \code{NULL}. You cannot specify both \code{random_var}
+and \code{newdata} and must pick one.}
 
 \item{range_cont}{A vector that specifies the range of the random effect
 variable to be visualized/simulated.}
@@ -45,9 +49,6 @@ Defaults to 1,000.}
 \item{coefs}{Argument for \code{clarify::sim}. The default is \code{NULL}.}
 
 \item{dist}{Argument for \code{clarify::sim}. The default is \code{NULL}.}
-
-\item{continuous}{A logical value that indicates whether the random effect
-variable is continuous or not. The default is \code{TRUE}.}
 }
 \value{
 A data frame that contains the mean, lower bound, and upper bound of

@@ -11,9 +11,10 @@
 #' @param permn A permutation pattern that is being checked over a combination
 #' of variables.
 #' @param random_var A character string that specifies the random effect
-#' variable.
-#' @param continuous A logical value that indicates whether the random effect
-#' variable is continuous or not. The default is \code{TRUE}.
+#' variable. Default is \code{NULL}.
+#' @param newdata A data frame that contains the new data to be used for
+#' prediction. Default is \code{NULL}. You cannot specify both \code{random_var}
+#' and \code{newdata} and must pick one.
 #' @param range_cont A vector that specifies the range of the random effect
 #' variable to be visualized/simulated.
 #' @param conf_level A numeric value that specifies the confidence level of the
@@ -233,6 +234,8 @@ sim_rank <- function(m,
 }
 
 typical_data <- function(m, random_var = NULL) {
+  probabilities <- linpred <- NULL
+
   df <- m$model %>%
     select(-all_of(random_var)) %>%
     select(-idx, -probabilities, -linpred)
