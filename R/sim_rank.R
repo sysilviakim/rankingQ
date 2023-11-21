@@ -248,8 +248,8 @@ typical_data <- function(m, random_var = NULL) {
         if (is.factor(x)) {
           x <- names(sort(table(x), decreasing = TRUE))[1]
         } else {
-          ## Otherwise, choose the mean
-          x <- mean(x)
+          ## Otherwise, choose the mean after deleting missing values
+          x <- mean(x, na.rm = TRUE)
         }
         return(x)
       }
