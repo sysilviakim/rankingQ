@@ -4,7 +4,7 @@
 \alias{bootstrap_list}
 \title{Bootstrap the Data Frames in a List}
 \usage{
-bootstrap_list(x, n = 1000, rows = 1000, dfidx = FALSE, ...)
+bootstrap_list(x, n = 1000, rows = 1000, seed = NULL, dfidx = FALSE, ...)
 }
 \arguments{
 \item{x}{The original data frame.}
@@ -12,6 +12,9 @@ bootstrap_list(x, n = 1000, rows = 1000, dfidx = FALSE, ...)
 \item{n}{The number of bootstrapped data frames to return.}
 
 \item{rows}{The number of rows to sample from the original data frame.}
+
+\item{seed}{The seed to use for the random number generator.
+Default is NULL.}
 
 \item{dfidx}{If TRUE, use the dfidx::dfidx function to transform into mlogit
 data format, i.e., a dataframe with indexes. Default is FALSE.}

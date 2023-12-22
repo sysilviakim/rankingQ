@@ -6,6 +6,8 @@
 #' @param x The original data frame.
 #' @param n The number of bootstrapped data frames to return.
 #' @param rows The number of rows to sample from the original data frame.
+#' @param seed The seed to use for the random number generator.
+#' Default is NULL.
 #' @param dfidx If TRUE, use the dfidx::dfidx function to transform into mlogit
 #' data format, i.e., a dataframe with indexes. Default is FALSE.
 #' @param ... Additional arguments to pass to dfidx::dfidx.
@@ -18,8 +20,12 @@
 #'
 #' @export
 
-bootstrap_list <- function(x, n = 1000, rows = 1000,
+bootstrap_list <- function(x, n = 1000, rows = 1000, seed = NULL,
                            dfidx = FALSE, ...) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+
   df_list <- vector("list", n)
   for (i in 1:n) {
     df_list[[i]] <- x[sample(nrow(x), replace = TRUE), ]
