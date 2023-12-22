@@ -14,6 +14,8 @@
 #'
 #' @return A list of data frames.
 #'
+#' @importFrom dfidx dfidx
+#'
 #' @examples
 #' df <- data.frame(no = seq(length(state.abb)), stabb = state.abb)
 #' bootstrap_list(df)
@@ -32,7 +34,7 @@ bootstrap_list <- function(x, n = 1000, rows = 1000, seed = NULL,
     ## If dfidx is TRUE,
     ## use the dfidx::dfidx function to transform into mlogit format.
     if (dfidx == TRUE) {
-      df_list[[i]] <- dfidx::dfidx(df_list[[i]], ...)
+      df_list[[i]] <- dfidx(df_list[[i]], ...)
     }
   }
   return(df_list)

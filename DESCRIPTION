@@ -32,7 +32,8 @@ Imports:
   combinat,
   clarify,
   mlogit,
-  dfidx
+  dfidx,
+  assertthat
 Depends:
   R (>= 3.5.0)
 VignetteBuilder: utils, knitr
