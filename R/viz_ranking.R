@@ -234,13 +234,13 @@ viz_ranking <- function(dat,
     if (single_plot == TRUE) {
       if (!is.null(font)) {
         p_avg <- plot_add_font(p_avg, font) +
-          theme(legend_position = "none")
+          theme(legend.position = "none")
         p_pair <- plot_add_font(p_pair, font) +
-          theme(legend_position = "none")
+          theme(legend.position = "none")
         p_topk <- plot_add_font(p_topk, font) +
-          theme(legend_position = "none")
+          theme(legend.position = "none")
         p_marg <- plot_add_font(p_marg, font) +
-          theme(legend_position = "none")
+          theme(legend.position = "none")
       }
       return(
         ggarrange(p_avg, p_pair, p_topk, p_marg) +
@@ -417,13 +417,13 @@ viz_ranking <- function(dat,
     if (single_plot == TRUE) {
       if (!is.null(font)) {
         p_avg <- plot_add_font(p_avg, font) +
-          theme(legend_position = "none")
+          theme(legend.position = "none")
         p_pair <- plot_add_font(p_pair, font) +
-          theme(legend_position = "none")
+          theme(legend.position = "none")
         p_topk <- plot_add_font(p_topk, font) +
-          theme(legend_position = "none")
+          theme(legend.position = "none")
         p_marg <- plot_add_font(p_marg, font) +
-          theme(legend_position = "none")
+          theme(legend.position = "none")
       }
       return(
         ggarrange(p_avg, p_pair, p_topk, p_marg) +
