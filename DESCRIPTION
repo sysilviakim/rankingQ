@@ -27,6 +27,7 @@ Imports:
   magrittr,
   stringr,
   ggplot2,
+  forcats,
   rlang,
   scales,
   combinat,
@@ -34,6 +35,11 @@ Imports:
   mlogit,
   dfidx,
   PLMIX,
+  estimatr,
+  generics,
+  ggpubr,
+  extrafont,
+  fontcm,
   assertthat
 Depends:
   R (>= 3.5.0)
