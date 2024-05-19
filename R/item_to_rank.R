@@ -10,7 +10,7 @@
 #' @param format_input Character string indicating the format of the data input,
 #' namely "ordering" or "ranking".
 #' Used for \code{PLMIX::rank_ord_switch}.
-#' @param item_order A character vector of item names to be used for renaming
+#' @param reference A character vector of item names to be used for renaming
 #' the columns. If not specified, will use the first 26 letters of the alphabet.
 #' Default is `NULL`.
 #' @param long Whether to return the output in a long data format.
@@ -35,11 +35,11 @@
 
 item_to_rank <- function(item_rank,
                          format_input = "ordering",
-                         item_order = NULL,
+                         reference = NULL,
                          long = NULL) {
-  if (!is.null(item_order)) {
+  if (!is.null(reference)) {
     item_crosswalk <- data.frame(
-      name = item_order, item_no = paste0("Item_", seq(length(letters)))
+      name = reference, item_no = paste0("Item_", seq(length(letters)))
     )
   } else {
     item_crosswalk <- data.frame(

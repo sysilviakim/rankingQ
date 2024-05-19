@@ -50,4 +50,11 @@ z <- rank_longer(
 )
 avg_rank(z, "ranking", items = "item_name")
 
+## Example output from item_to_rank
+x <- data.frame(
+  item = c("a", "b", "c", "a", "b", "c", "a", "b", "c"),
+  rank = c(3L, 1L, 2L, 1L, 2L, 3L, 3L, 2L, 1L)
+)
+avg_rank(x)
+
 }

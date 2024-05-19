@@ -7,7 +7,7 @@
 item_to_rank(
   item_rank,
   format_input = "ordering",
-  item_order = NULL,
+  reference = NULL,
   long = NULL
 )
 }
@@ -19,7 +19,7 @@ with items being ranked as cell values.}
 namely "ordering" or "ranking".
 Used for \code{PLMIX::rank_ord_switch}.}
 
-\item{item_order}{A character vector of item names to be used for renaming
+\item{reference}{A character vector of item names to be used for renaming
 the columns. If not specified, will use the first 26 letters of the alphabet.
 Default is `NULL`.}
 
