@@ -246,7 +246,7 @@ viz_ranking <- function(dat,
 
     gg_marg$outcome <- factor(
       gg_marg$outcome,
-      sort(unique(gg_marg$outcome))
+      levels = sort(unique(gg_marg$outcome), decreasing = TRUE)
     )
     p_marg <- ggplot(gg_marg, aes(outcome, y = estimate)) +
       geom_point(size = 2) +
