@@ -36,6 +36,31 @@
 #' If FALSE, it will return four ggplot objects in a list:
 #' average ranks, pairwise ranks, top-k ranks, and marginal ranks.
 #'
+#' @examples
+#'
+#' jam <- data.frame(
+#'   strawberry = c(
+#'     1, 1, 1, 2, 2, 2, 1, 2, 1, 2, 1, 1, 3, 1, 1, 2, 2, 1, 1, 1,
+#'     2, 3, 1, 1, 2, 1, 2, 3, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1,
+#'     1, 1, 3, 3, 1, 1, 3, 3, 1
+#'   ),
+#'   apricot = c(
+#'     3, 3, 2, 3, 1, 3, 2, 1, 2, 3, 3, 2, 1, 2, 2, 3, 3, 3, 3, 2,
+#'     3, 2, 3, 3, 3, 2, 3, 1, 2, 2, 3, 3, 2, 1, 3, 1, 2, 3, 2, 2, 3,
+#'     2, 2, 1, 1, 2, 2, 1, 1, 3
+#'   ),
+#'   blueberry = c(
+#'     2, 2, 3, 1, 3, 1, 3, 3, 3, 1, 2, 3, 2, 3, 3, 1, 1, 2, 2, 3,
+#'     1, 1, 2, 2, 1, 3, 1, 2, 3, 3, 2, 2, 3, 3, 2, 3, 3, 1, 3, 3, 2,
+#'     3, 3, 2, 2, 3, 3, 2, 2, 2
+#'   )
+#' )
+#' viz_ranking(
+#'   dat = jam,
+#'   target_item = "strawberry",
+#'   other_items = c("apricot", "blueberry")
+#' )
+#'
 #' @export
 
 viz_ranking <- function(dat,
@@ -209,7 +234,7 @@ viz_ranking <- function(dat,
 
     gg_topk$outcome <- factor(
       gg_topk$outcome,
-      levels = sort(unique(gg_topk$outcome))
+      levels = sort(unique(gg_topk$outcome), decreasing = TRUE)
     )
     p_topk <- ggplot(gg_topk, aes(outcome, y = estimate)) +
       geom_point(size = 2) +
@@ -388,7 +413,7 @@ viz_ranking <- function(dat,
 
     gg_topk$outcome <- factor(
       gg_topk$outcome,
-      levels = sort(unique(gg_topk$outcome))
+      levels = sort(unique(gg_topk$outcome), decreasing = TRUE)
     )
     p_topk <- ggplot(gg_topk, aes(outcome, y = estimate)) +
       geom_point(aes(color = col), size = 2) +
@@ -404,7 +429,7 @@ viz_ranking <- function(dat,
 
     gg_marg$outcome <- factor(
       gg_marg$outcome,
-      levels = sort(unique(gg_marg$outcome))
+      levels = sort(unique(gg_marg$outcome), decreasing = TRUE)
     )
     p_marg <- ggplot(gg_marg, aes(outcome, y = estimate)) +
       geom_point(aes(color = col), size = 2) +

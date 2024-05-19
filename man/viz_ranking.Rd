@@ -48,3 +48,29 @@ ranking data: average rankings, pair rankings over a single target item over
 other items, top-k ranking of the target item, and the marginal ranking of
 the target item.
 }
+\examples{
+
+jam <- data.frame(
+  strawberry = c(
+    1, 1, 1, 2, 2, 2, 1, 2, 1, 2, 1, 1, 3, 1, 1, 2, 2, 1, 1, 1,
+    2, 3, 1, 1, 2, 1, 2, 3, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1,
+    1, 1, 3, 3, 1, 1, 3, 3, 1
+  ),
+  apricot = c(
+    3, 3, 2, 3, 1, 3, 2, 1, 2, 3, 3, 2, 1, 2, 2, 3, 3, 3, 3, 2,
+    3, 2, 3, 3, 3, 2, 3, 1, 2, 2, 3, 3, 2, 1, 3, 1, 2, 3, 2, 2, 3,
+    2, 2, 1, 1, 2, 2, 1, 1, 3
+  ),
+  blueberry = c(
+    2, 2, 3, 1, 3, 1, 3, 3, 3, 1, 2, 3, 2, 3, 3, 1, 1, 2, 2, 3,
+    1, 1, 2, 2, 1, 3, 1, 2, 3, 3, 2, 2, 3, 3, 2, 3, 3, 1, 3, 3, 2,
+    3, 3, 2, 2, 3, 3, 2, 2, 2
+  )
+)
+viz_ranking(
+  dat = jam,
+  target_item = "strawberry",
+  other_items = c("apricot", "blueberry")
+)
+
+}
