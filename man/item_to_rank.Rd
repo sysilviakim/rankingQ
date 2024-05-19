@@ -8,7 +8,7 @@ item_to_rank(
   item_rank,
   format_input = "ordering",
   reference = NULL,
-  long = NULL
+  long = FALSE
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ the columns. If not specified, will use the first 26 letters of the alphabet.
 Default is `NULL`.}
 
 \item{long}{Whether to return the output in a long data format.
-Unless `TRUE`, will not be. Default is `NULL`.}
+Default is `FALSE`.}
 }
 \value{
 A data frame with items that are being ranked as columns,
