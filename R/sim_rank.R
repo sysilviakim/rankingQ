@@ -37,10 +37,9 @@
 #' @importFrom tibble tibble enframe
 #' @importFrom rlang `!!` set_names `:=`
 #' @importFrom purrr map keep imap map_dfr imap_dfr map_dbl
-#' @importFrom dplyr select bind_cols
+#' @importFrom dplyr select bind_cols `%>%`
 #' @importFrom tidyr pivot_wider
 #' @importFrom tidyselect all_of
-#' @importFrom magrittr `%>%`
 #' @importFrom stats quantile
 #'
 #' @examples

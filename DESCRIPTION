@@ -17,17 +17,16 @@ Suggests:
   knitr,
   rmarkdown,
   utils,
-  stats
+  stats,
+  cli
 Imports:
   dplyr,
   tidyr,
   tidyselect,
   purrr,
   tibble,
-  magrittr,
   stringr,
   ggplot2,
-  forcats,
   rlang,
   scales,
   combinat,
@@ -38,8 +37,6 @@ Imports:
   estimatr,
   generics,
   ggpubr,
-  extrafont,
-  fontcm,
   assertthat
 Depends:
   R (>= 3.5.0)

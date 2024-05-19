@@ -39,7 +39,7 @@
 #' @importFrom tibble tibble
 #' @importFrom rlang `!!` set_names `:=`
 #' @importFrom purrr map keep imap
-#' @importFrom magrittr `%>%`
+#' @importFrom dplyr `%>%`
 #' @importFrom stats quantile
 #'
 #' @examples

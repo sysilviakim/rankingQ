@@ -13,7 +13,6 @@
 #' @importFrom purrr map
 #' @importFrom rlang set_names
 #' @importFrom stringr str_pad
-#' @importFrom forcats fct_reorder
 #'
 #' @importFrom estimatr lm_robust
 #' @importFrom ggpubr ggarrange
@@ -182,10 +181,11 @@ viz_ranking <- function(dat,
       unify_label_length()
 
     # Visualize all effects
-    p_avg <- ggplot(
-      gg_avg,
-      aes(fct_reorder(outcome, desc(estimate)), y = estimate)
-    ) +
+    gg_avg$outcome <- factor(
+      gg_avg$outcome,
+      levels = gg_avg$outcome[order(-gg_avg$estimate)]
+    )
+    p_avg <- ggplot(gg_avg, aes(outcome, y = estimate)) +
       geom_point(aes(color = target), size = 2) +
       geom_linerange(
         aes(x = outcome, ymin = conf.low, ymax = conf.high, color = target),
@@ -193,10 +193,11 @@ viz_ranking <- function(dat,
       )
     p_avg <- vis_helper(p_avg, "avg", J, use_col, label, treat)
 
-    p_pair <- ggplot(
-      gg_pair,
-      aes(fct_reorder(outcome, desc(estimate)), y = estimate)
-    ) +
+    gg_pair$outcome <- factor(
+      gg_pair$outcome,
+      levels = gg_pair$outcome[order(-gg_pair$estimate)]
+    )
+    p_pair <- ggplot(gg_pair, aes(outcome, y = estimate)) +
       geom_point(size = 2) +
       geom_linerange(
         aes(x = outcome, ymin = conf.low, ymax = conf.high),
@@ -204,10 +205,11 @@ viz_ranking <- function(dat,
       )
     p_pair <- vis_helper(p_pair, "pair", J, use_col, label, treat)
 
-    p_topk <- ggplot(
-      gg_topk,
-      aes(x = fct_reorder(outcome, sort(outcome)), y = estimate)
-    ) +
+    gg_topk$outcome <- factor(
+      gg_topk$outcome,
+      levels = sort(unique(gg_topk$outcome))
+    )
+    p_topk <- ggplot(gg_topk, aes(outcome, y = estimate)) +
       geom_point(size = 2) +
       geom_linerange(
         aes(ymin = conf.low, ymax = conf.high),
@@ -215,10 +217,11 @@ viz_ranking <- function(dat,
       )
     p_topk <- vis_helper(p_topk, "topk", J, use_col, label, treat)
 
-    p_marg <- ggplot(
-      gg_marg,
-      aes(x = fct_reorder(outcome, sort(outcome)), y = estimate)
-    ) +
+    gg_marg$outcome <- factor(
+      gg_marg$outcome,
+      sort(unique(gg_marg$outcome))
+    )
+    p_marg <- ggplot(gg_marg, aes(outcome, y = estimate)) +
       geom_point(size = 2) +
       geom_linerange(
         aes(x = outcome, ymin = conf.low, ymax = conf.high),
@@ -228,12 +231,7 @@ viz_ranking <- function(dat,
 
     if (single_plot == TRUE) {
       return(
-        ggarrange(
-          plot_nolegend(pdf_default(p_avg)),
-          plot_nolegend(pdf_default(p_pair)),
-          plot_nolegend(pdf_default(p_topk)),
-          plot_nolegend(pdf_default(p_marg))
-        ) +
+        ggarrange(p_avg, p_pair, p_topk, p_marg) +
           theme(
             plot.background = element_blank(),
             panel.grid.major = element_blank(),
@@ -344,10 +342,11 @@ viz_ranking <- function(dat,
     pattern <- unique(gg_avg$col) # Observed pattern
     use_col <- av_scena_col[pattern] # Use this color palette
 
-    p_avg <- ggplot(
-      gg_avg,
-      aes(fct_reorder(outcome, desc(estimate)), y = estimate)
-    ) +
+    gg_avg$outcome <- factor(
+      gg_avg$outcome,
+      levels = gg_avg$outcome[order(-gg_avg$estimate)]
+    )
+    p_avg <- ggplot(gg_avg, aes(outcome, y = estimate)) +
       geom_point(aes(color = col), size = 2) +
       geom_linerange(
         aes(x = outcome, ymin = conf.low, ymax = conf.high, color = col),
@@ -359,10 +358,11 @@ viz_ranking <- function(dat,
     pattern <- unique(gg_pair$col) # Observed pattern
     use_col <- scena_col[pattern] # Use this color palette
 
-    p_pair <- ggplot(
-      gg_pair,
-      aes(fct_reorder(outcome, desc(estimate)), y = estimate)
-    ) +
+    gg_pair$outcome <- factor(
+      gg_pair$outcome,
+      levels = gg_pair$outcome[order(-gg_pair$estimate)]
+    )
+    p_pair <- ggplot(gg_pair, aes(outcome, y = estimate)) +
       geom_point(aes(color = col), size = 2) +
       geom_linerange(
         aes(x = outcome, ymin = conf.low, ymax = conf.high, color = col),
@@ -374,9 +374,11 @@ viz_ranking <- function(dat,
     pattern <- unique(gg_topk$col) # Observed pattern
     use_col <- scena_col[pattern] # Use this color pallet
 
-    p_topk <- ggplot(
-      gg_topk, aes(x = fct_reorder(outcome, sort(outcome)), y = estimate)
-    ) +
+    gg_topk$outcome <- factor(
+      gg_topk$outcome,
+      levels = sort(unique(gg_topk$outcome))
+    )
+    p_topk <- ggplot(gg_topk, aes(outcome, y = estimate)) +
       geom_point(aes(color = col), size = 2) +
       geom_linerange(
         aes(x = outcome, ymin = conf.low, ymax = conf.high, color = col),
@@ -388,9 +390,11 @@ viz_ranking <- function(dat,
     pattern <- unique(gg_marg$col) # Observed pattern
     use_col <- scena_col[pattern] # Use this color pallet
 
-    p_marg <- ggplot(
-      gg_marg, aes(x = fct_reorder(outcome, sort(outcome)), y = estimate)
-    ) +
+    gg_marg$outcome <- factor(
+      gg_marg$outcome,
+      levels = sort(unique(gg_marg$outcome))
+    )
+    p_marg <- ggplot(gg_marg, aes(outcome, y = estimate)) +
       geom_point(aes(color = col), size = 2) +
       geom_linerange(
         aes(x = outcome, ymin = conf.low, ymax = conf.high, color = col),
@@ -400,12 +404,7 @@ viz_ranking <- function(dat,
 
     if (single_plot == TRUE) {
       return(
-        ggarrange(
-          plot_nolegend(pdf_default(p_avg)),
-          plot_nolegend(pdf_default(p_pair)),
-          plot_nolegend(pdf_default(p_topk)),
-          plot_nolegend(pdf_default(p_marg))
-        ) +
+        ggarrange(p_avg, p_pair, p_topk, p_marg) +
           theme(
             plot.background = element_blank(),
             panel.grid.major = element_blank(),
@@ -500,66 +499,3 @@ unify_label_length <- function(x, width = 20) {
       outcome = str_pad(outcome, width = width)
     )
 }
-
-#' Graphics Option: PDF Articles, Default Option
-#'
-#' This function implements my *personal* favorite setup for article pdfs.
-#' This does not currenty contain details on colors.
-#' Note that the CM Roman font will not show immediately when called in the
-#' Rstudio plot pane, but will be correctly input in the resulting pdf file.
-
-#' @import fontcm
-#' @importFrom extrafont font_install
-#' @importFrom extrafont loadfonts
-#' @importFrom ggplot2 theme
-#' @importFrom ggplot2 element_text
-#' @importFrom ggplot2 theme_bw
-#' @param p The input ggplot2 object
-#' @param CMRoman Font for the graphics. Default is CM Roman.
-#' @keywords plot
-#' @examples
-#' library(ggplot2)
-#' p <- ggplot(diamonds, aes(depth, colour = cut)) +
-#'   geom_density()
-#' pdf_default(p)
-#' @export
-
-pdf_default <- function(p, CMRoman = NULL) {
-  if (is.null(CMRoman)) {
-    CMRoman <- "CM Roman"
-    requireNamespace("fontcm")
-    font_install("fontcm")
-    loadfonts()
-    requireNamespace("ggplot2")
-  }
-  p <- p +
-    theme_bw() +
-    theme(
-      plot.title = element_text(family = CMRoman),
-      text = element_text(family = CMRoman),
-      axis.text.x = element_text(family = CMRoman),
-      axis.text.y = element_text(family = CMRoman),
-      legend.text = element_text(family = CMRoman)
-    )
-  return(p)
-}
-
-#' No Legend Plots
-#'
-#' This is a function that strips the plot of its legend.
-#'
-#' @importFrom ggplot2 theme
-#'
-#' @param p The plot that we will strip its legend of.
-#'
-#' @examples
-#' library(ggplot2)
-#' p <- ggplot(diamonds, aes(depth, colour = cut)) +
-#'   geom_density()
-#' plot_nolegend(p)
-#' @export
-
-plot_nolegend <- function(p) {
-  return(p + theme(legend.position = "none"))
-}
-

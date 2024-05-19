@@ -28,9 +28,8 @@
 #' @param reference If you wish to specify the reference choice set,
 #' you can provide a character vector.
 #'
-#' @importFrom dplyr arrange left_join select
+#' @importFrom dplyr arrange left_join select `%>%`
 #' @importFrom tidyr pivot_longer separate
-#' @importFrom magrittr `%>%`
 #' @importFrom tidyselect any_of all_of
 #'
 #' @return A data frame in long format with columns recording rankings.
@@ -154,8 +153,8 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
     left_join(., crosswalk_df)
 
   ## Arrange the output
-  out <- out %>%
-    select(any_of(id), reference_no, item_name, ranking) %>%
+  out <- out |>
+    select(any_of(id), reference_no, item_name, ranking) |>
     arrange(!!as.name(id), reference_no)
 
   ## Return the output

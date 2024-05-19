@@ -21,10 +21,9 @@
 #' @return A data frame with the average rank of each item in the
 #' reference choice set.
 #'
-#' @importFrom dplyr group_by summarise across everything
+#' @importFrom dplyr group_by summarise across everything `%>%`
 #' @importFrom tidyr pivot_longer
 #' @importFrom stringr str_split
-#' @importFrom magrittr %>%
 #' @importFrom rlang !!
 #' @importFrom tidyselect all_of
 #' @importFrom stats sd
