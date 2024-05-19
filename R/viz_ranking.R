@@ -523,7 +523,8 @@ plot_add_font <- function(p, font) {
       text = element_text(family = font),
       axis.text.x = element_text(family = font),
       axis.text.y = element_text(family = font),
-      legend.text = element_text(family = font),
-      legend_position = "none"
+      legend.text = element_text(family = font)
     )
+  out <- out + theme(legend_position = "none")
+  return(out)
 }
