@@ -33,6 +33,7 @@ Imports:
   clarify,
   mlogit,
   dfidx,
+  PLMIX,
   assertthat
 Depends:
   R (>= 3.5.0)

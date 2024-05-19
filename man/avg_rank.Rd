@@ -4,15 +4,18 @@
 \alias{avg_rank}
 \title{Compute the Average Rank of All Items}
 \usage{
-avg_rank(x, rankings, items = NULL, type = "long")
+avg_rank(x, rankings = NULL, items = NULL, type = "long")
 }
 \arguments{
 \item{x}{A data frame that contains rankings of items.}
 
-\item{rankings}{The name of the column that contains the rankings.}
+\item{rankings}{The name of the column that contains the rankings.
+Defaults to NULL, which means that the function will look for a data frame
+with two columns, "item" and "rank".}
 
 \item{items}{The name of the column that contains the items' names, or,
-in case of a wide file, the item names in the reference choice set.}
+in case of a wide file, the item names in the reference choice set.
+Defaults to NULL.}
 
 \item{type}{The type of the data frame.
 It defaults to \code{"long"}, which means that the data frame is in
