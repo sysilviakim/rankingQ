@@ -29,6 +29,7 @@
 #' Defaults to TRUE.
 #' @param color_palette The color palette to be used.
 #' @param weight The weight vector to be used.
+#' @param font The font to be used. Defaults to NULL.
 #'
 #' @return A ggplot that visualizes all treatment effects.
 #' If single_plot is TRUE, it will return a single ggplot.
@@ -48,7 +49,8 @@ viz_ranking <- function(dat,
                           "#b0015a",
                           "#128ba0",
                           "gray"
-                        )) {
+                        ),
+                        font = NULL) {
   ## Suppress global variable visible binding error
   . <- outcome <- desc <- estimate <- target <-
     conf.low <- conf.high <- term <- weight <- NULL
@@ -230,6 +232,12 @@ viz_ranking <- function(dat,
     p_marg <- vis_helper(p_marg, "marg", J, use_col, label, treat)
 
     if (single_plot == TRUE) {
+      if (!is.null(font)) {
+        p_avg <- plot_add_font(p_avg, font)
+        p_pair <- plot_add_font(p_pair, font)
+        p_topk <- plot_add_font(p_topk, font)
+        p_marg <- plot_add_font(p_marg, font)
+      }
       return(
         ggarrange(p_avg, p_pair, p_topk, p_marg) +
           theme(
@@ -403,6 +411,12 @@ viz_ranking <- function(dat,
     p_marg <- vis_helper(p_marg, "marg", J, use_col, label, treat)
 
     if (single_plot == TRUE) {
+      if (!is.null(font)) {
+        p_avg <- plot_add_font(p_avg, font)
+        p_pair <- plot_add_font(p_pair, font)
+        p_topk <- plot_add_font(p_topk, font)
+        p_marg <- plot_add_font(p_marg, font)
+      }
       return(
         ggarrange(p_avg, p_pair, p_topk, p_marg) +
           theme(
@@ -497,5 +511,19 @@ unify_label_length <- function(x, width = 20) {
   x %>%
     mutate(
       outcome = str_pad(outcome, width = width)
+    )
+}
+
+plot_add_font <- function(p, font) {
+  ## pdf_default + plot_nolegend
+  out <- p +
+    theme_bw() +
+    theme(
+      plot.title = element_text(family = font),
+      text = element_text(family = font),
+      axis.text.x = element_text(family = font),
+      axis.text.y = element_text(family = font),
+      legend.text = element_text(family = font),
+      legend_position = "none"
     )
 }

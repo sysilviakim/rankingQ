@@ -11,7 +11,8 @@ viz_ranking(
   treat = NULL,
   single_plot = TRUE,
   weight = rep(1, dim(dat)[1]),
-  color_palette = c("black", "#b0015a", "#128ba0", "gray")
+  color_palette = c("black", "#b0015a", "#128ba0", "gray"),
+  font = NULL
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ Defaults to TRUE.}
 \item{weight}{The weight vector to be used.}
 
 \item{color_palette}{The color palette to be used.}
+
+\item{font}{The font to be used. Defaults to NULL.}
 }
 \value{
 A ggplot that visualizes all treatment effects.
