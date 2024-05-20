@@ -19,7 +19,7 @@
 #'
 #' @param presented_order A string representing the order of the items that
 #' were presented to the respondent.
-#' @param true_order A string representing the true order of the items, i.e.,
+#' @param true_order A string representing the true ranking of the respondent
 #' with respect to the reference choice set.
 #' @param df The input data frame. Defaults to NULL.
 #' If NULL, the function expects inputs as simple strings such as "321" or
@@ -31,9 +31,16 @@
 #' @return A data frame with the true ranking of the items per respondent.
 #'
 #' @examples
-#' recover_recorded_responses("321", "123") ## outputs 321
-#' recover_recorded_responses("321", "321") ## outputs 321
-#' recover_recorded_responses("123", "123") ## outputs 123
+#'
+#' ## This respondent's true ranking reported is A-B-C-D.
+#' ## However, the items were presented in the order B-A-D-C.
+#' ## Therefore, the respondent's recorded response is 2-1-4-3.
+#' recover_recorded_responses("1234", "2143") ## Output: "2134"
+#'
+#' ## This respondent's true ranking is reported as C-A-D-B.
+#' ## However, the items were presented in the order D-C-B-A.
+#' ## Therefore, the respondent's recorded response is 3-1-4-2.
+#' recover_recorded_responses("3142", "4321") ## Output: "3142"
 #'
 #' @export
 
