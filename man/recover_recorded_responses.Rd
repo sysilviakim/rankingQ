@@ -10,7 +10,7 @@ recover_recorded_responses(presented_order, true_order, df = NULL)
 \item{presented_order}{A string representing the order of the items that
 were presented to the respondent.}
 
-\item{true_order}{A string representing the true order of the items, i.e.,
+\item{true_order}{A string representing the true ranking of the respondent
 with respect to the reference choice set.}
 
 \item{df}{The input data frame. Defaults to NULL.
@@ -40,8 +40,15 @@ The true order of the items is A, B, C, so the observed/true ranking is
 1-2-3. This function takes C, B, A and 1-2-3 as inputs and returns 3-2-1.
 }
 \examples{
-recover_recorded_responses("321", "123") ## outputs 321
-recover_recorded_responses("321", "321") ## outputs 321
-recover_recorded_responses("123", "123") ## outputs 123
+
+## This respondent's true ranking reported is A-B-C-D.
+## However, the items were presented in the order B-A-D-C.
+## Therefore, the respondent's recorded response is 2-1-4-3.
+recover_recorded_responses("1234", "2143") ## Output: "2134"
+
+## This respondent's true ranking is reported as C-A-D-B.
+## However, the items were presented in the order D-C-B-A.
+## Therefore, the respondent's recorded response is 3-1-4-2.
+recover_recorded_responses("3142", "4321") ## Output: "3142"
 
 }
