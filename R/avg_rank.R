@@ -59,7 +59,7 @@ avg_rank <- function(x,
                      items = NULL,
                      long = FALSE) {
   ## Suppress "no visible binding for global variable" warnings
-  name <- NULL
+  lower <- upper <- se <- name <- NULL
 
   if (long != FALSE & long != TRUE) {
     stop("The 'long' argument must be either TRUE or FALSE.")
