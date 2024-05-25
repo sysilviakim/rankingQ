@@ -26,7 +26,7 @@
 #' @return A data frame with the average rank of each item in the
 #' reference choice set.
 #'
-#' @importFrom dplyr group_by summarise across everything `%>%` rename mutate
+#' @importFrom dplyr group_by summarise across everything `%>%` mutate
 #' select
 #' @importFrom tidyr pivot_longer pivot_wider
 #' @importFrom purrr map
@@ -87,6 +87,9 @@ avg_rank <- function(x,
   }
   if (raw == FALSE & long == TRUE) {
     stop("If using the IPW estimator, the data frame must be in wide format.")
+  }
+  if (raw == TRUE & !is.null(weight)) {
+    stop("If not using the IPW estimator, the weight variable must be NULL.")
   }
 
   ## Use the output from `item_to_rank` without having to specify input.
@@ -193,7 +196,7 @@ avg_rank <- function(x,
         ~ lm_robust(.x ~ 1, data = x) %>% tidy()
       ) %>%
       Reduce(rbind, .) %>%
-      rename(
+      mutate(
         mean = estimate,
         lower = conf.low,
         upper = conf.high,
