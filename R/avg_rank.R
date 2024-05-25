@@ -72,7 +72,7 @@ avg_rank <- function(x,
                      weight = NULL,
                      round = NULL) {
   ## Suppress "no visible binding for global variable" warnings
-  . <- item <- lower <- upper <- se <- variable <- method <-
+  . <- item <- lower <- upper <- se <- variable <- method <- std.error <-
     estimate <- conf.low <- conf.high <- outcome <- qoi <- NULL
 
   if (long != FALSE & long != TRUE) {
@@ -199,9 +199,11 @@ avg_rank <- function(x,
     out <- out %>%
       summarise(
         mean = mean(!!as.name(rankings), na.rm = TRUE),
+        qoi = "Average Rank",
         se = sd(!!as.name(rankings), na.rm = TRUE) / sqrt(nrow(x)),
         lower = mean - 1.96 * se,
-        upper = mean + 1.96 * se
+        upper = mean + 1.96 * se,
+        method = "Raw Data"
       )
   } else {
     vars <- items
@@ -231,6 +233,7 @@ avg_rank <- function(x,
       Reduce(rbind, .) %>%
       mutate(
         mean = estimate,
+        se = std.error,
         lower = conf.low,
         upper = conf.high,
         item = outcome,
