@@ -17,16 +17,24 @@
 #' This only accepts a data frame with a single ranking variable that
 #' contains rankings, and the rankings should be in the form of a string
 #' such as \code{"123"}.
+#' @param raw If \code{TRUE}, the function will return the raw average rank.
+#' If \code{FALSE}, the function will return the average rank after correcting
+#' based on the IPW estimator. Defaults to \code{TRUE}.
+#' @param weight The name of the column that contains the weights for the IPW
+#' estimator. Defaults to \code{NULL}.
 #'
 #' @return A data frame with the average rank of each item in the
 #' reference choice set.
 #'
-#' @importFrom dplyr group_by summarise across everything `%>%`
-#' @importFrom tidyr pivot_longer
+#' @importFrom dplyr group_by summarise across everything `%>%` rename mutate
+#' select
+#' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom purrr map
 #' @importFrom stringr str_split
 #' @importFrom rlang !!
 #' @importFrom tidyselect all_of
 #' @importFrom stats sd
+#' @importFrom estimatr lm_robust
 #'
 #' @examples
 #' x <- data.frame(
@@ -57,12 +65,28 @@
 avg_rank <- function(x,
                      rankings = NULL,
                      items = NULL,
-                     long = FALSE) {
+                     long = FALSE,
+                     raw = TRUE,
+                     weight = NULL) {
   ## Suppress "no visible binding for global variable" warnings
-  lower <- upper <- se <- name <- NULL
+  . <- item <- lower <- upper <- se <-
+    estimate <- conf.low <- conf.high <- outcome <- qoi <- NULL
 
   if (long != FALSE & long != TRUE) {
     stop("The 'long' argument must be either TRUE or FALSE.")
+  }
+  if (raw != FALSE & raw != TRUE) {
+    stop("The 'raw' argument must be either TRUE or FALSE.")
+  }
+
+  if (raw == FALSE & is.null(items)) {
+    stop("If using the IPW estimator, the items variable must be specified.")
+  }
+  if (raw == FALSE & is.null(weight)) {
+    stop("If using the IPW estimator, the weight variable must be specified.")
+  }
+  if (raw == FALSE & long == TRUE) {
+    stop("If using the IPW estimator, the data frame must be in wide format.")
   }
 
   ## Use the output from `item_to_rank` without having to specify input.
@@ -123,51 +147,68 @@ avg_rank <- function(x,
 
   ## Depending on whether it's a long- or wide-type data frame,
   ## treat differently
-  if (long == TRUE) {
-    out <- x %>%
-      group_by(!!as.name(items))
-  } else {
-    if (is.null(items)) {
-      ## Just use the ranking positions to identify the items
+  if (raw == TRUE) {
+    if (long == TRUE) {
       out <- x %>%
-        separate(!!as.name(rankings), sep = seq(J), into = ordinal_seq(J)) %>%
-        mutate(across(all_of(ordinal_seq(J)), as.numeric)) %>%
-        pivot_longer(
-          all_of(ordinal_seq(J)),
-          names_to = "name",
-          values_to = "rankings"
-        )
+        group_by(!!as.name(items))
     } else {
-      ## Use the items variable as item names
-      out <- x %>%
-        separate(!!as.name(rankings), sep = seq(J), into = items) %>%
-        mutate(across(all_of(items), as.numeric)) %>%
-        pivot_longer(
-          all_of(items),
-          names_to = "name",
-          values_to = "rankings"
-        )
+      if (is.null(items)) {
+        ## Just use the ranking positions to identify the items
+        out <- x %>%
+          separate(!!as.name(rankings), sep = seq(J), into = ordinal_seq(J)) %>%
+          mutate(across(all_of(ordinal_seq(J)), as.numeric)) %>%
+          pivot_longer(
+            all_of(ordinal_seq(J)),
+            names_to = "item",
+            values_to = "rankings"
+          )
+      } else {
+        ## Use the items variable as item names
+        out <- x %>%
+          separate(!!as.name(rankings), sep = seq(J), into = items) %>%
+          mutate(across(all_of(items), as.numeric)) %>%
+          pivot_longer(
+            all_of(items),
+            names_to = "item",
+            values_to = "rankings"
+          )
+      }
+      rankings <- "rankings"
+      out <- out %>%
+        group_by(item) %>%
+        select(item, !!as.name(rankings))
     }
-    rankings <- "rankings"
-    out <- out %>%
-      group_by(name) %>%
-      select(name, !!as.name(rankings))
-  }
 
-  ## Compute the average rank and the 95% CI
-  out <- out %>%
-    summarise(
-      mean = mean(!!as.name(rankings), na.rm = TRUE),
-      se = sd(!!as.name(rankings), na.rm = TRUE) / sqrt(nrow(x)),
-      lower = mean - 1.96 * se,
-      upper = mean + 1.96 * se
-    )
+    ## Compute the average rank and the 95% CI
+    out <- out %>%
+      summarise(
+        mean = mean(!!as.name(rankings), na.rm = TRUE),
+        se = sd(!!as.name(rankings), na.rm = TRUE) / sqrt(nrow(x)),
+        lower = mean - 1.96 * se,
+        upper = mean + 1.96 * se
+      )
+  } else {
+    out <- items %>%
+      map(
+        ~ lm_robust(.x ~ 1, data = x) %>% tidy()
+      ) %>%
+      Reduce(rbind, .) %>%
+      rename(
+        mean = estimate,
+        lower = conf.low,
+        upper = conf.high,
+        item = outcome,
+        qoi = "Average Rank"
+      ) %>%
+      select(item, qoi, mean, lower, upper) %>%
+      mutate(method = "Raw Data")
+  }
 
   if (!is.null(items) & long == FALSE) {
     ## Must align the summary output by the item order given;
     ## otherwise, the summary tibble appears in alphabetical order
-    out$name <- factor(out$name, levels = items)
-    out <- out[order(out$name), ]
+    out$item <- factor(out$item, levels = items)
+    out <- out[order(out$item), ]
   } else if (!is.null(items) & long == TRUE) {
     out[[items]] <- factor(out[[items]], levels = items)
     out <- out[order(out[[items]]), ]

@@ -4,7 +4,14 @@
 \alias{avg_rank}
 \title{Compute the Average Rank of All Items}
 \usage{
-avg_rank(x, rankings = NULL, items = NULL, long = FALSE)
+avg_rank(
+  x,
+  rankings = NULL,
+  items = NULL,
+  long = FALSE,
+  raw = TRUE,
+  weight = NULL
+)
 }
 \arguments{
 \item{x}{A data frame that contains rankings of items.}
@@ -24,6 +31,13 @@ If the data frame is in the wide format, it should be set to `FALSE`.
 This only accepts a data frame with a single ranking variable that
 contains rankings, and the rankings should be in the form of a string
 such as \code{"123"}.}
+
+\item{raw}{If \code{TRUE}, the function will return the raw average rank.
+If \code{FALSE}, the function will return the average rank after correcting
+based on the IPW estimator. Defaults to \code{TRUE}.}
+
+\item{weight}{The name of the column that contains the weights for the IPW
+estimator. Defaults to \code{NULL}.}
 }
 \value{
 A data frame with the average rank of each item in the
