@@ -198,8 +198,8 @@ avg_rank <- function(x,
     ## Compute the average rank and the 95% CI
     out <- out %>%
       summarise(
-        mean = mean(!!as.name(rankings), na.rm = TRUE),
         qoi = "Average Rank",
+        mean = mean(!!as.name(rankings), na.rm = TRUE),
         se = sd(!!as.name(rankings), na.rm = TRUE) / sqrt(nrow(x)),
         lower = mean - 1.96 * se,
         upper = mean + 1.96 * se,
@@ -239,17 +239,18 @@ avg_rank <- function(x,
         item = outcome,
         qoi = "Average Rank"
       ) %>%
-      select(item, qoi, mean, lower, upper) %>%
       mutate(method = "IPW")
 
     if (is.data.frame(items)) {
       out <- out %>%
         rename(variable = item) %>%
         left_join(., items) %>%
-        select(-variable) %>%
-        select(item, qoi, mean, lower, upper, method)
+        select(-variable)
       items <- items$item
     }
+
+    out <- out %>%
+      mutate(item = factor(item, levels = items))
   }
 
   if (!is.null(items) & long == FALSE) {
@@ -268,5 +269,7 @@ avg_rank <- function(x,
       mutate(across(c(mean, lower, upper), ~ round(., digits = round)))
   }
 
-  return(out)
+  return(
+    as.data.frame(out) %>% select(item, qoi, mean, se, lower, upper, method)
+  )
 }
