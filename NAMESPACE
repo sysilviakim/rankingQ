@@ -2,6 +2,8 @@
 
 export(avg_rank)
 export(bootstrap_list)
+export(imprr_direct)
+export(imprr_weights)
 export(item_to_rank)
 export(ordinal_seq)
 export(permn_augment)
@@ -77,3 +79,4 @@ importFrom(tidyr,unite)
 importFrom(tidyselect,all_of)
 importFrom(tidyselect,any_of)
 importFrom(tidyselect,contains)
+importFrom(tidyselect,matches)
