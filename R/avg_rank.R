@@ -22,16 +22,18 @@
 #' based on the IPW estimator. Defaults to \code{TRUE}.
 #' @param weight The name of the column that contains the weights for the IPW
 #' estimator. Defaults to \code{NULL}.
+#' @param round The number of decimal places to round the output to.
+#' Defaults to \code{NULL}.
 #'
 #' @return A data frame with the average rank of each item in the
 #' reference choice set.
 #'
 #' @importFrom dplyr group_by summarise across everything `%>%` mutate
-#' select
+#' select left_join
 #' @importFrom tidyr pivot_longer pivot_wider
-#' @importFrom purrr map
+#' @importFrom purrr imap
 #' @importFrom stringr str_split
-#' @importFrom rlang !!
+#' @importFrom rlang !! set_names
 #' @importFrom tidyselect all_of
 #' @importFrom stats sd
 #' @importFrom estimatr lm_robust
@@ -67,9 +69,10 @@ avg_rank <- function(x,
                      items = NULL,
                      long = FALSE,
                      raw = TRUE,
-                     weight = NULL) {
+                     weight = NULL,
+                     round = NULL) {
   ## Suppress "no visible binding for global variable" warnings
-  . <- item <- lower <- upper <- se <-
+  . <- item <- lower <- upper <- se <- variable <- method <-
     estimate <- conf.low <- conf.high <- outcome <- qoi <- NULL
 
   if (long != FALSE & long != TRUE) {
@@ -91,11 +94,16 @@ avg_rank <- function(x,
   if (raw == TRUE & !is.null(weight)) {
     stop("If not using the IPW estimator, the weight variable must be NULL.")
   }
+  if (!is.null(weight)) {
+    if (!(weight %in% names(x))) {
+      stop("The weight variable is not contained in the given data frame.")
+    }
+  }
 
   ## Use the output from `item_to_rank` without having to specify input.
   if (
     is.null(rankings) & is.null(items) &
-    ncol(x) == 2 & ("rank" %in% names(x)) & ("item" %in% names(x))
+      ncol(x) == 2 & ("rank" %in% names(x)) & ("item" %in% names(x))
   ) {
     rankings <- "rank"
     items <- "item"
@@ -105,29 +113,34 @@ avg_rank <- function(x,
     rankings <- "rank"
   }
 
-  if (is.null(rankings) & !("rank" %in% names(x))) {
+  if (is.null(rankings) & !("rank" %in% names(x)) & raw == TRUE) {
     stop("The rankings variable must be specified.")
   }
 
   ## What is the J?
-  J <- max(nchar(x[[rankings]]))
+  if (!is.null(rankings)) {
+    J <- max(nchar(x[[rankings]]))
+  } else if (!is.null(items)) {
+    J <- length(items)
+  } else {
+    stop("There is no information about the number of items in the data frame.")
+  }
 
   ## Class sanity checks
   if (!("data.frame" %in% class(x))) {
     stop("x must be a data frame.")
   }
-  if (!("character" %in% class(rankings))) {
-    stop("'rankings' must be a character.")
+  if (!is.null(rankings)) {
+    if (!("character" %in% class(rankings))) {
+      stop("The rankings variable must be a character.")
+    }
+    if (!(rankings %in% colnames(x))) {
+      stop("The rankings variable is not contained in the given data frame.")
+    }
   }
 
   ## Sanity checks for "rankings" and "items" arguments.
-  if (!(rankings %in% colnames(x))) {
-    stop("The rankings variable is not contained in the given data frame.")
-  }
   if (!is.null(items)) {
-    if (!("character" %in% class(items))) {
-      stop("'items' must be a character.")
-    }
     if (long == FALSE) {
       if (J < length(items)) {
         stop(
@@ -191,9 +204,29 @@ avg_rank <- function(x,
         upper = mean + 1.96 * se
       )
   } else {
-    out <- items %>%
-      map(
-        ~ lm_robust(.x ~ 1, data = x) %>% tidy()
+    vars <- items
+    if (is.data.frame(items)) {
+      if (all(sort(colnames(items)) == c("item", "variable"))) {
+        vars <- items$variable
+      } else {
+        stop(
+          paste0(
+            "If items argument is a data frame, make sure that the columns are",
+            " named 'item' and 'variable'."
+          )
+        )
+      }
+    }
+
+    out <- vars %>%
+      set_names(., .) %>%
+      imap(
+        ~ lm_robust(
+          !!as.name(.x) ~ 1,
+          weights = !!as.name(weight), data = x
+        ) %>%
+          tidy() %>%
+          mutate(outcome = .y)
       ) %>%
       Reduce(rbind, .) %>%
       mutate(
@@ -204,7 +237,16 @@ avg_rank <- function(x,
         qoi = "Average Rank"
       ) %>%
       select(item, qoi, mean, lower, upper) %>%
-      mutate(method = "Raw Data")
+      mutate(method = "IPW")
+
+    if (is.data.frame(items)) {
+      out <- out %>%
+        rename(variable = item) %>%
+        left_join(., items) %>%
+        select(-variable) %>%
+        select(item, qoi, mean, lower, upper, method)
+      items <- items$item
+    }
   }
 
   if (!is.null(items) & long == FALSE) {
@@ -215,6 +257,12 @@ avg_rank <- function(x,
   } else if (!is.null(items) & long == TRUE) {
     out[[items]] <- factor(out[[items]], levels = items)
     out <- out[order(out[[items]]), ]
+  }
+
+  ## When printing, round if specified
+  if (!is.null(round)) {
+    out <- out %>%
+      mutate(across(c(mean, lower, upper), ~ round(., digits = round)))
   }
 
   return(out)

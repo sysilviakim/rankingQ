@@ -10,7 +10,8 @@ avg_rank(
   items = NULL,
   long = FALSE,
   raw = TRUE,
-  weight = NULL
+  weight = NULL,
+  round = NULL
 )
 }
 \arguments{
@@ -38,6 +39,9 @@ based on the IPW estimator. Defaults to \code{TRUE}.}
 
 \item{weight}{The name of the column that contains the weights for the IPW
 estimator. Defaults to \code{NULL}.}
+
+\item{round}{The number of decimal places to round the output to.
+Defaults to \code{NULL}.}
 }
 \value{
 A data frame with the average rank of each item in the
