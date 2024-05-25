@@ -150,14 +150,17 @@ avg_rank <- function(x,
     }
     rankings <- "rankings"
     out <- out %>%
-      group_by(name)
+      group_by(name) %>%
+      select(name, !!as.name(rankings))
   }
 
-  ## Compute the average rank
+  ## Compute the average rank and the 95% CI
   out <- out %>%
     summarise(
       mean = mean(!!as.name(rankings), na.rm = TRUE),
-      se = sd(!!as.name(rankings), na.rm = TRUE) / sqrt(nrow(x))
+      se = sd(!!as.name(rankings), na.rm = TRUE) / sqrt(nrow(x)),
+      lower = mean - 1.96 * se,
+      upper = mean + 1.96 * se
     )
   return(out)
 }
