@@ -162,5 +162,16 @@ avg_rank <- function(x,
       lower = mean - 1.96 * se,
       upper = mean + 1.96 * se
     )
+
+  if (!is.null(items) & long == FALSE) {
+    ## Must align the summary output by the item order given;
+    ## otherwise, the summary tibble appears in alphabetical order
+    out$name <- factor(out$name, levels = items)
+    out <- out[order(out$name), ]
+  } else if (!is.null(items) & long == TRUE) {
+    out[[items]] <- factor(out[[items]], levels = items)
+    out <- out[order(out[[items]]), ]
+  }
+
   return(out)
 }
