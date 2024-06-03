@@ -32,7 +32,8 @@ imprr_direct <- function(data,
                          anc_correct,
                          anc_correct_pattern = NULL,
                          n_bootstrap = 200,
-                         seed = 123456) {
+                         seed = 123456,
+                         weight = NULL) {
   ## Suppress global variable warning
   estimate <- g_U <- est.p.random <- item <- qoi <-
     outcome <- bc_estimate <- NULL
@@ -42,6 +43,11 @@ imprr_direct <- function(data,
   if (is.null(J)) {
     J <- nchar(data[[main_q]][[1]])
   }
+
+  if (is.null(weight)) {
+    weight <- rep(1, dim(data)[1])
+  }
+
 
   # Check the validity of the input arguments ==================================
 
@@ -116,24 +122,24 @@ imprr_direct <- function(data,
 
       # Step 2.2: Get raw estimates of
       ## Average ranks
-      m_rank_target <- lm_robust(Y_rank_target ~ 1) %>% tidy()
+      m_rank_target <- lm_robust(Y_rank_target ~ 1, weight) %>% tidy()
 
       ## Pairwise ranking probabilities
       m_pairwise <- list()
       for (k in 1:J_1) {
-        m_pairwise[[k]] <- lm_robust(Y_pairwise[[k]] ~ 1) %>% tidy()
+        m_pairwise[[k]] <- lm_robust(Y_pairwise[[k]] ~ 1, weight) %>% tidy()
       }
 
       ## Top-k ranking probabilities
       m_top <- list()
       for (k in 1:J_1) {
-        m_top[[k]] <- lm_robust(Y_top[[k]] ~ 1) %>% tidy()
+        m_top[[k]] <- lm_robust(Y_top[[k]] ~ 1, weight) %>% tidy()
       }
 
       ## Marginal ranking probabilities
       m_marginal <- list()
       for (k in 1:J) {
-        m_marginal[[k]] <- lm_robust(Y_marginal[[k]] ~ 1) %>% tidy()
+        m_marginal[[k]] <- lm_robust(Y_marginal[[k]] ~ 1, weight) %>% tidy()
       }
 
       # Step 3: Get the QOI based on random responses
