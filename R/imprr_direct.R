@@ -45,7 +45,7 @@ imprr_direct <- function(data,
   }
 
   if (is.null(weight)) {
-    weight <- rep(1, dim(data)[1])
+    weight <- rep(1, N)
   }
 
 
@@ -122,24 +122,24 @@ imprr_direct <- function(data,
 
       # Step 2.2: Get raw estimates of
       ## Average ranks
-      m_rank_target <- lm_robust(Y_rank_target ~ 1, weight) %>% tidy()
+      m_rank_target <- lm_robust(Y_rank_target ~ 1, weights = weight) %>% tidy()
 
       ## Pairwise ranking probabilities
       m_pairwise <- list()
       for (k in 1:J_1) {
-        m_pairwise[[k]] <- lm_robust(Y_pairwise[[k]] ~ 1, weight) %>% tidy()
+        m_pairwise[[k]] <- lm_robust(Y_pairwise[[k]] ~ 1, weights = weight) %>% tidy()
       }
 
       ## Top-k ranking probabilities
       m_top <- list()
       for (k in 1:J_1) {
-        m_top[[k]] <- lm_robust(Y_top[[k]] ~ 1, weight) %>% tidy()
+        m_top[[k]] <- lm_robust(Y_top[[k]] ~ 1, weights = weight) %>% tidy()
       }
 
       ## Marginal ranking probabilities
       m_marginal <- list()
       for (k in 1:J) {
-        m_marginal[[k]] <- lm_robust(Y_marginal[[k]] ~ 1, weight) %>% tidy()
+        m_marginal[[k]] <- lm_robust(Y_marginal[[k]] ~ 1, weights = weight) %>% tidy()
       }
 
       # Step 3: Get the QOI based on random responses
