@@ -32,7 +32,8 @@ imprr_weights <- function(data,
                           anc_correct,
                           anc_correct_pattern = NULL,
                           n_bootstrap = 200,
-                          seed = 123456) {
+                          seed = 123456,
+                          weight = NULL) {
   ## Suppress global variable warning
   count <- n <- n_adj <- n_renormalized <- prop <- ranking <- w <- NULL
 
@@ -40,6 +41,10 @@ imprr_weights <- function(data,
   N <- nrow(data)
   if (is.null(J)) {
     J <- nchar(data[[main_q]][[1]])
+  }
+
+  if (is.null(weight)) {
+    weight <- rep(1, N)
   }
 
   # Check the validity of the input arguments ==================================
@@ -63,10 +68,20 @@ imprr_weights <- function(data,
 
   # Step 3: Get the observed PMF based on raw data
   ## Get raw counts of ranking profiles
-  D_PMF_0 <- glo_app %>%
+  D_0 <- glo_app %>%
     unite(ranking, sep = "") %>%
+    mutate(survey_weight = weight)
+
+  ### Get a weighted table
+  tab_vec <- wtd.table(x = D_0$ranking, weights = D_0$survey_weight)%>%
+    tibble()
+
+  D_PMF_0 <- D_0 %>%
     group_by(ranking) %>%
     count()
+
+  # Over-write "n" with weighted results
+  D_PMF_0$n <- as.numeric(tab_vec$.)
 
   ## Create sample space to merge
   perm_j <- permn(1:J)
@@ -81,7 +96,7 @@ imprr_weights <- function(data,
     left_join(D_PMF_0, by = "ranking") %>%
     mutate(
       n = ifelse(is.na(n) == T, 0, n),
-      prop = n / sum(n),
+      prop = n / sum(weight),
       prop = ifelse(is.na(prop), 0, prop)
     ) %>%
     arrange(ranking)
