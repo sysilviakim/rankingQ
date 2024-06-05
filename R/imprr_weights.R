@@ -37,6 +37,9 @@ imprr_weights <- function(data,
   ## Suppress global variable warning
   count <- n <- n_adj <- n_renormalized <- prop <- ranking <- w <- NULL
 
+
+  library(questionr) # for wtd.table()
+
   # Setup ======================================================================
   N <- nrow(data)
   if (is.null(J)) {
