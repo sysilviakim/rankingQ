@@ -28,9 +28,9 @@
 imprr_direct <- function(data,
                          J = NULL,
                          main_q,
-                         anchor_q,
+                         # anchor_q,
                          anc_correct,
-                         anc_correct_pattern = NULL,
+                         # anc_correct_pattern = NULL,
                          n_bootstrap = 200,
                          seed = 123456,
                          weight = NULL) {
@@ -70,10 +70,11 @@ imprr_direct <- function(data,
     ## This is the bootstrapped data
     boostrap_dat <- data[index, ]
 
-    ## Anchor ranking only
-    loc_anc <- boostrap_dat %>%
-      select(matches(anchor_q)) %>%
-      select(matches("_[[:digit:]]$"))
+    # This will be cut out since we won't use it
+    # ## Anchor ranking only
+    # loc_anc <- boostrap_dat %>%
+    #   select(matches(anchor_q)) %>%
+    #   select(matches("_[[:digit:]]$"))
 
     ## Main ranking only (Silvia, I edited here slightly)
     loc_app <- boostrap_dat %>%
