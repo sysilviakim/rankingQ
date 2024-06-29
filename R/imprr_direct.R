@@ -28,11 +28,12 @@
 imprr_direct <- function(data,
                          J = NULL,
                          main_q,
-                         anchor_q,
+                         # anchor_q,
                          anc_correct,
-                         anc_correct_pattern = NULL,
+                         # anc_correct_pattern = NULL,
                          n_bootstrap = 200,
-                         seed = 123456) {
+                         seed = 123456,
+                         weight = NULL) {
   ## Suppress global variable warning
   estimate <- g_U <- est.p.random <- item <- qoi <-
     outcome <- bc_estimate <- NULL
@@ -42,6 +43,11 @@ imprr_direct <- function(data,
   if (is.null(J)) {
     J <- nchar(data[[main_q]][[1]])
   }
+
+  if (is.null(weight)) {
+    weight <- rep(1, N)
+  }
+
 
   # Check the validity of the input arguments ==================================
 
@@ -64,10 +70,11 @@ imprr_direct <- function(data,
     ## This is the bootstrapped data
     boostrap_dat <- data[index, ]
 
-    ## Anchor ranking only
-    loc_anc <- boostrap_dat %>%
-      select(matches(anchor_q)) %>%
-      select(matches("_[[:digit:]]$"))
+    # This will be cut out since we won't use it
+    # ## Anchor ranking only
+    # loc_anc <- boostrap_dat %>%
+    #   select(matches(anchor_q)) %>%
+    #   select(matches("_[[:digit:]]$"))
 
     ## Main ranking only (Silvia, I edited here slightly)
     loc_app <- boostrap_dat %>%
@@ -116,24 +123,24 @@ imprr_direct <- function(data,
 
       # Step 2.2: Get raw estimates of
       ## Average ranks
-      m_rank_target <- lm_robust(Y_rank_target ~ 1) %>% tidy()
+      m_rank_target <- lm_robust(Y_rank_target ~ 1, weights = weight) %>% tidy()
 
       ## Pairwise ranking probabilities
       m_pairwise <- list()
       for (k in 1:J_1) {
-        m_pairwise[[k]] <- lm_robust(Y_pairwise[[k]] ~ 1) %>% tidy()
+        m_pairwise[[k]] <- lm_robust(Y_pairwise[[k]] ~ 1, weights = weight) %>% tidy()
       }
 
       ## Top-k ranking probabilities
       m_top <- list()
       for (k in 1:J_1) {
-        m_top[[k]] <- lm_robust(Y_top[[k]] ~ 1) %>% tidy()
+        m_top[[k]] <- lm_robust(Y_top[[k]] ~ 1, weights = weight) %>% tidy()
       }
 
       ## Marginal ranking probabilities
       m_marginal <- list()
       for (k in 1:J) {
-        m_marginal[[k]] <- lm_robust(Y_marginal[[k]] ~ 1) %>% tidy()
+        m_marginal[[k]] <- lm_robust(Y_marginal[[k]] ~ 1, weights = weight) %>% tidy()
       }
 
       # Step 3: Get the QOI based on random responses
