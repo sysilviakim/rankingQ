@@ -25,10 +25,6 @@ table_to_tibble <- function(tab, tibble = TRUE) {
   ## Suppress "no visible binding for global variable" warnings
   freq <- prop <- ranking <- NULL
 
-  if (!is.table(tab)) {
-    stop("The input must be a table.")
-  }
-
   out <- enframe(tab, name = "ranking", value = "freq") %>%
     mutate(
       ranking = factor(ranking),
