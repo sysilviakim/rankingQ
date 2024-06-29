@@ -37,7 +37,8 @@ Imports:
   estimatr,
   generics,
   ggpubr,
-  assertthat
+  assertthat,
+  questionr
 Depends:
   R (>= 3.5.0)
 VignetteBuilder: utils, knitr

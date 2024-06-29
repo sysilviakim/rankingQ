@@ -4,7 +4,7 @@
 #' @description This function implements the bias correction of the ranking
 #' distribution using a paired anchor question.
 #'
-#' @importFrom dplyr `%>%` mutate select group_by arrange summarise
+#' @importFrom dplyr `%>%` mutate select group_by arrange summarise pull
 #' @importFrom tidyselect matches
 #' @importFrom estimatr lm_robust
 #'
@@ -12,14 +12,10 @@
 #' @param J The number of items in the ranking question. Defaults to NULL,
 #' in which case it will be inferred from the data.
 #' @param main_q Column name for the main ranking question to be analyzed.
-#' @param anchor_q Column name for the paired anchor question.
 #' @param anc_correct Indicator for passing the anchor question.
-#' @param anc_correct_pattern The correct pattern to pass the anchor question
-#' filter, given the reference set. Defaults to NULL.
-#' If NULL, it will taken on a J-length string with a natural progression of
-#' numbers, such as "123", "1234", "1234567", and so on.
 #' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param seed Seed for \code{set.seed} for reproducibility.
+#' @param weight A vector of weights. Defaults to NULL.
 #'
 #' @return A list.
 #'
@@ -28,9 +24,7 @@
 imprr_direct <- function(data,
                          J = NULL,
                          main_q,
-                         # anchor_q,
                          anc_correct,
-                         # anc_correct_pattern = NULL,
                          n_bootstrap = 200,
                          seed = 123456,
                          weight = NULL) {
@@ -47,7 +41,6 @@ imprr_direct <- function(data,
   if (is.null(weight)) {
     weight <- rep(1, N)
   }
-
 
   # Check the validity of the input arguments ==================================
 
@@ -70,24 +63,17 @@ imprr_direct <- function(data,
     ## This is the bootstrapped data
     boostrap_dat <- data[index, ]
 
-    # This will be cut out since we won't use it
-    # ## Anchor ranking only
-    # loc_anc <- boostrap_dat %>%
-    #   select(matches(anchor_q)) %>%
-    #   select(matches("_[[:digit:]]$"))
-
-    ## Main ranking only (Silvia, I edited here slightly)
+    ## Main ranking only
     loc_app <- boostrap_dat %>%
       select(matches(main_q)) %>%
       select(matches("_[[:digit:]]$"))
 
-    # Step 1: Get the proportion of random answers
+    # Step 1: Get the proportion of random answers -----------------------------
     ## This requires anchor questions and item order randomization
     p_non_random <- (mean(boostrap_dat[[anc_correct]]) - 1 / factorial(J)) /
       (1 - 1 / factorial(J))
 
-    # Step 2: Get the naive estimates of simple quantities
-
+    # Step 2: Get the naive estimates of simple quantities ---------------------
     item_names <- colnames(loc_app)
     J_1 <- J - 1
     all_qoi_list <- list()
@@ -104,7 +90,8 @@ imprr_direct <- function(data,
       ## Pairwise ranking indicator
       Y_pairwise <- list()
       for (k in 1:J_1) {
-        compar <- boostrap_dat[other_items[k]] %>% pull() # Comparison item
+        # Comparison item
+        compar <- boostrap_dat[other_items[k]] %>% pull()
         Y_pairwise[[k]] <- ifelse(Y_rank_target < compar, 1, 0)
       }
 
@@ -123,12 +110,14 @@ imprr_direct <- function(data,
 
       # Step 2.2: Get raw estimates of
       ## Average ranks
-      m_rank_target <- lm_robust(Y_rank_target ~ 1, weights = weight) %>% tidy()
+      m_rank_target <- lm_robust(Y_rank_target ~ 1, weights = weight) %>%
+        tidy()
 
       ## Pairwise ranking probabilities
       m_pairwise <- list()
       for (k in 1:J_1) {
-        m_pairwise[[k]] <- lm_robust(Y_pairwise[[k]] ~ 1, weights = weight) %>% tidy()
+        m_pairwise[[k]] <- lm_robust(Y_pairwise[[k]] ~ 1, weights = weight) %>%
+          tidy()
       }
 
       ## Top-k ranking probabilities
@@ -140,7 +129,8 @@ imprr_direct <- function(data,
       ## Marginal ranking probabilities
       m_marginal <- list()
       for (k in 1:J) {
-        m_marginal[[k]] <- lm_robust(Y_marginal[[k]] ~ 1, weights = weight) %>% tidy()
+        m_marginal[[k]] <- lm_robust(Y_marginal[[k]] ~ 1, weights = weight) %>%
+          tidy()
       }
 
       # Step 3: Get the QOI based on random responses

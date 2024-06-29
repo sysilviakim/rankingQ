@@ -9,11 +9,10 @@ imprr_weights(
   data,
   J = NULL,
   main_q,
-  anchor_q,
   anc_correct,
-  anc_correct_pattern = NULL,
   n_bootstrap = 200,
-  seed = 123456
+  seed = 123456,
+  weight = NULL
 )
 }
 \arguments{
@@ -24,18 +23,13 @@ in which case it will be inferred from the data.}
 
 \item{main_q}{Column name for the main ranking question to be analyzed.}
 
-\item{anchor_q}{Column name for the paired anchor question.}
-
 \item{anc_correct}{Indicator for passing the anchor question.}
-
-\item{anc_correct_pattern}{The correct pattern to pass the anchor question
-filter, given the reference set. Defaults to NULL.
-If NULL, it will taken on a J-length string with a natural progression of
-numbers, such as "123", "1234", "1234567", and so on.}
 
 \item{n_bootstrap}{Number of bootstraps. Defaults to 200.}
 
 \item{seed}{Seed for \code{set.seed} for reproducibility.}
+
+\item{weight}{A vector of weights. Defaults to NULL.}
 }
 \value{
 A list.

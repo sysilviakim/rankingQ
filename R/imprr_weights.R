@@ -7,19 +7,16 @@
 #' @importFrom dplyr `%>%` mutate select group_by left_join arrange summarise
 #' @importFrom tidyselect matches
 #' @importFrom combinat permn
+#' @importFrom questionr wtd.table
 #'
 #' @param data The input dataset with ranking data.
 #' @param J The number of items in the ranking question. Defaults to NULL,
 #' in which case it will be inferred from the data.
 #' @param main_q Column name for the main ranking question to be analyzed.
-#' @param anchor_q Column name for the paired anchor question.
 #' @param anc_correct Indicator for passing the anchor question.
-#' @param anc_correct_pattern The correct pattern to pass the anchor question
-#' filter, given the reference set. Defaults to NULL.
-#' If NULL, it will taken on a J-length string with a natural progression of
-#' numbers, such as "123", "1234", "1234567", and so on.
 #' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param seed Seed for \code{set.seed} for reproducibility.
+#' @param weight A vector of weights. Defaults to NULL.
 #'
 #' @return A list.
 #'
@@ -28,17 +25,12 @@
 imprr_weights <- function(data,
                           J = NULL,
                           main_q,
-                          # anchor_q,
                           anc_correct,
-                          # anc_correct_pattern = NULL,
                           n_bootstrap = 200,
                           seed = 123456,
                           weight = NULL) {
   ## Suppress global variable warning
   count <- n <- n_adj <- n_renormalized <- prop <- ranking <- w <- NULL
-
-
-  library(questionr) # for wtd.table()
 
   # Setup ======================================================================
   N <- nrow(data)
@@ -51,32 +43,25 @@ imprr_weights <- function(data,
   }
 
   # Check the validity of the input arguments ==================================
-
-  # This will be cut out since we won't use it
-  # ## Anchor ranking only
-  # glo_anc <- data %>%
-  #   select(matches(anchor_q)) %>%
-  #   select(matches("_[[:digit:]]$"))
-
   ## Main ranking only (Silvia, I edited here slightly)
   glo_app <- data %>%
     select(matches(main_q)) %>%
     select(matches("_[[:digit:]]$"))
 
-  # Step 1: Get the proportion of random answers
+  # Step 1: Get the proportion of random answers -------------------------------
   p_non_random <- (mean(data[[anc_correct]]) - 1 / factorial(J)) /
     (1 - 1 / factorial(J))
 
-  # Step 2: Get the uniform distribution
+  # Step 2: Get the uniform distribution ---------------------------------------
   U <- rep(1 / factorial(J), factorial(J))
 
-  # Step 3: Get the observed PMF based on raw data
+  # Step 3: Get the observed PMF based on raw data -----------------------------
   ## Get raw counts of ranking profiles
   D_0 <- glo_app %>%
     unite(ranking, sep = "") %>%
     mutate(survey_weight = weight)
 
-  ### Get a weighted table
+  ## Get a weighted table
   tab_vec <- wtd.table(x = D_0$ranking, weights = D_0$survey_weight)%>%
     tibble()
 
@@ -84,7 +69,7 @@ imprr_weights <- function(data,
     group_by(ranking) %>%
     count()
 
-  # Over-write "n" with weighted results
+  ## Over-write "n" with weighted results
   D_PMF_0$n <- as.numeric(tab_vec$.)
 
   ## Create sample space to merge
@@ -105,7 +90,7 @@ imprr_weights <- function(data,
     ) %>%
     arrange(ranking)
 
-  # Step 4: Get the bias-corrected PMF
+  # Step 4: Get the bias-corrected PMF -----------------------------------------
   ## Apply Equation A.11
   imp_PMF_0 <- (PMF_raw$prop - (U * (1 - p_non_random))) / p_non_random
 
@@ -113,8 +98,9 @@ imprr_weights <- function(data,
   imp_PMF_1 <- perm_j %>%
     mutate(n = imp_PMF_0)
 
-  # Step 5: Re-normalize the PMF
-  ## The previous step may produce outside-the-bound values (negative proportions)
+  # Step 5: Re-normalize the PMF -----------------------------------------------
+  ## The previous step may produce outside-the-bound values
+  ## (negative proportions)
   imp_PMF <- imp_PMF_1 %>%
     mutate(
       n_adj = ifelse(n < 0, 0, n),
@@ -127,7 +113,7 @@ imprr_weights <- function(data,
     ) %>%
     arrange(ranking)
 
-  # Step 6: Get the bias-correction weight vector
+  # Step 6: Get the bias-correction weight vector ------------------------------
   df_w <- perm_j %>%
     mutate(
       w = imp_PMF$prop_renormalized / PMF_raw$prop, # Inverse probability weight
@@ -136,7 +122,7 @@ imprr_weights <- function(data,
     ) %>% # NA arise from 0/0
     arrange(ranking)
 
-  # Summarize results
+  # Summarize results ----------------------------------------------------------
   return(
     list(
       est_p_random = 1 - p_non_random,
