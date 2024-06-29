@@ -35,16 +35,21 @@
 #' ## This respondent's true ranking reported is A-B-C-D.
 #' ## However, the items were presented in the order B-A-D-C.
 #' ## Therefore, the respondent's recorded response is 2-1-4-3.
-#' recover_recorded_responses("1234", "2143") ## Output: "2134"
+#' recover_recorded_responses(true_order = "1234", "2143") ## Output: "2143"
+#'
+#' ## This respondent's true ranking is reported as D-C-B-A.
+#' ## However, the items were presented in the order A-B-C-D.
+#' ## Therefore, the respondent's recorded response is 4-3-2-1.
+#' recover_recorded_responses(true_order = "4321", "1234") ## Output: "4321"
 #'
 #' ## This respondent's true ranking is reported as C-A-D-B.
 #' ## However, the items were presented in the order D-C-B-A.
 #' ## Therefore, the respondent's recorded response is 3-1-4-2.
-#' recover_recorded_responses("3142", "4321") ## Output: "3142"
+#' recover_recorded_responses(true_order = "2413", "4321") ## Output: "3142"
 #'
 #' @export
 
-recover_recorded_responses <- function(presented_order, true_order, df = NULL) {
+recover_recorded_responses <- function(true_order, presented_order, df = NULL) {
   if (is.null(df)) {
     presented_order <- strsplit(presented_order, "")[[1]]
     true_order <- strsplit(true_order, "")[[1]]

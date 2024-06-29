@@ -4,14 +4,14 @@
 \alias{recover_recorded_responses}
 \title{Recover the Recorded Responses Given that Ranking Items were Randomized}
 \usage{
-recover_recorded_responses(presented_order, true_order, df = NULL)
+recover_recorded_responses(true_order, presented_order, df = NULL)
 }
 \arguments{
-\item{presented_order}{A string representing the order of the items that
-were presented to the respondent.}
-
 \item{true_order}{A string representing the true ranking of the respondent
 with respect to the reference choice set.}
+
+\item{presented_order}{A string representing the order of the items that
+were presented to the respondent.}
 
 \item{df}{The input data frame. Defaults to NULL.
 If NULL, the function expects inputs as simple strings such as "321" or
@@ -44,11 +44,16 @@ The true order of the items is A, B, C, so the observed/true ranking is
 ## This respondent's true ranking reported is A-B-C-D.
 ## However, the items were presented in the order B-A-D-C.
 ## Therefore, the respondent's recorded response is 2-1-4-3.
-recover_recorded_responses("1234", "2143") ## Output: "2134"
+recover_recorded_responses(true_order = "1234", "2143") ## Output: "2143"
+
+## This respondent's true ranking is reported as D-C-B-A.
+## However, the items were presented in the order A-B-C-D.
+## Therefore, the respondent's recorded response is 4-3-2-1.
+recover_recorded_responses(true_order = "4321", "1234") ## Output: "4321"
 
 ## This respondent's true ranking is reported as C-A-D-B.
 ## However, the items were presented in the order D-C-B-A.
 ## Therefore, the respondent's recorded response is 3-1-4-2.
-recover_recorded_responses("3142", "4321") ## Output: "3142"
+recover_recorded_responses(true_order = "2413", "4321") ## Output: "3142"
 
 }
