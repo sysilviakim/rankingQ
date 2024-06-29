@@ -4,12 +4,14 @@
 \alias{permn_augment}
 \title{Augmenting Permutation Patterns}
 \usage{
-permn_augment(tab, J = 4)
+permn_augment(tab, J = NULL)
 }
 \arguments{
 \item{tab}{A table of observed permutation patterns.}
 
-\item{J}{The length of the reference choice set.}
+\item{J}{The length of the reference choice set.
+Defaults to NULL, in which it will count the number of characters
+in the first input.}
 }
 \value{
 A table of observed permutation patterns augmented with all possible
@@ -25,6 +27,9 @@ permutation patterns with a frequency of zero for unrealized patterns.
 }
 \examples{
 tab <- table(c(rep("123", 100), rep("321", 50)))
+permn_augment(tab, J = 3)
+
+tab <- table(c("123", "321", "213", "312", "132", "231"))
 permn_augment(tab, J = 3)
 
 }
