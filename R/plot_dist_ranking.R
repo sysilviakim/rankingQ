@@ -18,6 +18,7 @@
 #' @param family The font family of the text.
 #' @param vjust The vertical justification of the text.
 #' @param size The size of the text in `geom_text`.
+#' @param linetype The linetype in `geom_hline`.
 #'
 #' @return A ggplot2 object.
 #'
@@ -39,7 +40,8 @@ plot_dist_ranking <- function(tab,
                               xlab = "Recorded Rankings",
                               family = NULL,
                               vjust = -0.5,
-                              size = 3) {
+                              size = 3,
+                              linetype = "dashed") {
   ## Suppress "no visible binding for global variable" warnings
   prop <- NULL
 
@@ -53,7 +55,7 @@ plot_dist_ranking <- function(tab,
     xlab(xlab) +
     ylab("") +
     scale_y_continuous(labels = scales::percent, limits = c(0, ylim)) +
-    geom_hline(yintercept = 1 / factorial(J)) +
+    geom_hline(yintercept = 1 / factorial(J), linetype = linetype) +
     geom_text(
       aes(
         label = paste0(round(prop * 100, digits = 1), "%"),
