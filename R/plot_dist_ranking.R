@@ -62,7 +62,8 @@ plot_dist_ranking <- function(tab,
         family = family
       ),
       vjust = vjust,
-      size = size
+      size = size,
+      color = fill
     ) +
     theme(legend.position = "none")
 
