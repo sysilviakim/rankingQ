@@ -15,6 +15,7 @@
 #' @param ylim The upper limit of the y-axis.
 #' @param fill The color of the bars.
 #' @param xlab The label of the x-axis.
+#' Defaults to "Recorded Responses".
 #' @param family The font family of the text.
 #' @param vjust The vertical justification of the text.
 #' @param size The size of the text in `geom_text`.
@@ -39,7 +40,7 @@ plot_dist_ranking <- function(tab,
                               y = "prop",
                               ylim = 0.315,
                               fill = "firebrick4",
-                              xlab = "Recorded Rankings",
+                              xlab = "Recorded Responses",
                               family = NULL,
                               vjust = -0.5,
                               size = 3,
@@ -59,8 +60,10 @@ plot_dist_ranking <- function(tab,
     xlab(xlab) +
     ylab("") +
     scale_y_continuous(labels = scales::percent, limits = c(0, ylim)) +
-    geom_hline(yintercept = 1 / factorial(J),
-               linetype = linetype, color = h_color, alpha = h_alpha) +
+    geom_hline(
+      yintercept = 1 / factorial(J),
+      linetype = linetype, color = h_color, alpha = h_alpha
+    ) +
     geom_text(
       aes(
         label = paste0(round(prop * 100, digits = 1), "%"),
@@ -74,4 +77,3 @@ plot_dist_ranking <- function(tab,
 
   return(p)
 }
-

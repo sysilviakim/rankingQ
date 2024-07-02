@@ -10,10 +10,13 @@ plot_dist_ranking(
   y = "prop",
   ylim = 0.315,
   fill = "firebrick4",
-  xlab = "Recorded Rankings",
+  xlab = "Recorded Responses",
   family = NULL,
   vjust = -0.5,
-  size = 3
+  size = 3,
+  linetype = "dashed",
+  h_color = "black",
+  h_alpha = 0.5
 )
 }
 \arguments{
@@ -28,13 +31,20 @@ permutations.}
 
 \item{fill}{The color of the bars.}
 
-\item{xlab}{The label of the x-axis.}
+\item{xlab}{The label of the x-axis.
+Defaults to "Recorded Responses".}
 
 \item{family}{The font family of the text.}
 
 \item{vjust}{The vertical justification of the text.}
 
 \item{size}{The size of the text in `geom_text`.}
+
+\item{linetype}{The linetype in `geom_hline`.}
+
+\item{h_color}{The color in `geom_hline`.}
+
+\item{h_alpha}{The transparency in `geom_hline`.}
 }
 \value{
 A ggplot2 object.
