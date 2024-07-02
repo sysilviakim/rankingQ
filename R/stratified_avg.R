@@ -32,7 +32,23 @@ stratified_avg <- function(data, var_stratum, J = NULL,
                            weight = NULL, n_bootstrap = 200, ipw = FALSE) {
   . <- NULL
   set.seed(seed)
-  seed_list <- sample(1:n_bootstrap * 10, n_bootstrap, replace = FALSE)
+  seed_list <-
+    sample(1:max(n_bootstrap * 10, 1e5), n_bootstrap, replace = FALSE)
+
+  ## class check
+  if (!is.character(var_stratum)) {
+    stop("var_stratum must be a character.")
+  }
+  if (!is.character(main_q)) {
+    stop("main_q must be a character.")
+  }
+  if (!is.character(anc_correct)) {
+    stop("main_q must be a character.")
+  }
+
+  if (is.null(J)) {
+    J <- nchar(data[[main_q]][[1]])
+  }
 
   ## Initialize output ---------------------------------------------------------
   out_stratification <- vector("list", length = n_bootstrap)
