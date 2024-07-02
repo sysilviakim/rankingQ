@@ -19,6 +19,8 @@
 #' @param vjust The vertical justification of the text.
 #' @param size The size of the text in `geom_text`.
 #' @param linetype The linetype in `geom_hline`.
+#' @param h_color The color in `geom_hline`.
+#' @param h_alpha The transparency in `geom_hline`.
 #'
 #' @return A ggplot2 object.
 #'
@@ -41,7 +43,9 @@ plot_dist_ranking <- function(tab,
                               family = NULL,
                               vjust = -0.5,
                               size = 3,
-                              linetype = "dashed") {
+                              linetype = "dashed",
+                              h_color = "black",
+                              h_alpha = 0.5) {
   ## Suppress "no visible binding for global variable" warnings
   prop <- NULL
 
@@ -55,7 +59,8 @@ plot_dist_ranking <- function(tab,
     xlab(xlab) +
     ylab("") +
     scale_y_continuous(labels = scales::percent, limits = c(0, ylim)) +
-    geom_hline(yintercept = 1 / factorial(J), linetype = linetype) +
+    geom_hline(yintercept = 1 / factorial(J),
+               linetype = linetype, color = h_color. alpha = h_alpha) +
     geom_text(
       aes(
         label = paste0(round(prop * 100, digits = 1), "%"),
