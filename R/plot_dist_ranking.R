@@ -60,7 +60,7 @@ plot_dist_ranking <- function(tab,
     ylab("") +
     scale_y_continuous(labels = scales::percent, limits = c(0, ylim)) +
     geom_hline(yintercept = 1 / factorial(J),
-               linetype = linetype, color = h_color. alpha = h_alpha) +
+               linetype = linetype, color = h_color, alpha = h_alpha) +
     geom_text(
       aes(
         label = paste0(round(prop * 100, digits = 1), "%"),
