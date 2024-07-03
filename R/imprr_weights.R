@@ -14,7 +14,6 @@
 #' in which case it will be inferred from the data.
 #' @param main_q Column name for the main ranking question to be analyzed.
 #' @param anc_correct Indicator for passing the anchor question.
-#' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param seed Seed for \code{set.seed} for reproducibility.
 #' @param weight A vector of weights. Defaults to NULL.
 #'
@@ -26,7 +25,6 @@ imprr_weights <- function(data,
                           J = NULL,
                           main_q,
                           anc_correct,
-                          n_bootstrap = 200,
                           seed = 123456,
                           weight = NULL) {
   ## Suppress global variable warning
