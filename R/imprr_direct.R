@@ -16,6 +16,7 @@
 #' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param seed Seed for \code{set.seed} for reproducibility.
 #' @param weight A vector of weights. Defaults to NULL.
+#' @param verbose Indicator for verbose output. Defaults to FALSE.
 #'
 #' @return A list.
 #'
@@ -27,7 +28,8 @@ imprr_direct <- function(data,
                          anc_correct,
                          n_bootstrap = 200,
                          seed = 123456,
-                         weight = NULL) {
+                         weight = NULL,
+                         verbose = FALSE) {
   ## Suppress global variable warning
   estimate <- g_U <- est.p.random <- item <- qoi <-
     outcome <- bc_estimate <- NULL
@@ -189,7 +191,9 @@ imprr_direct <- function(data,
     list_prop[[i]] <- 1 - p_non_random # Estimated prop of random responses
     list_qoi[[i]] <- all_qoi_df # Bias-corrected estimates of several QOIs
   }
-  message("Bootstrapping finished.")
+  if (verbose) {
+    message("Bootstrapping finished.")
+  }
 
   # Summarize results
   ## Compute the mean and 95% CI based on bootstrapping

@@ -42,4 +42,4 @@ Imports:
 Depends:
   R (>= 3.5.0)
 VignetteBuilder: utils, knitr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2

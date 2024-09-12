@@ -10,7 +10,6 @@ imprr_weights(
   J = NULL,
   main_q,
   anc_correct,
-  n_bootstrap = 200,
   seed = 123456,
   weight = NULL
 )
@@ -24,8 +23,6 @@ in which case it will be inferred from the data.}
 \item{main_q}{Column name for the main ranking question to be analyzed.}
 
 \item{anc_correct}{Indicator for passing the anchor question.}
-
-\item{n_bootstrap}{Number of bootstraps. Defaults to 200.}
 
 \item{seed}{Seed for \code{set.seed} for reproducibility.}
 

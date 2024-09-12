@@ -12,7 +12,8 @@ imprr_direct(
   anc_correct,
   n_bootstrap = 200,
   seed = 123456,
-  weight = NULL
+  weight = NULL,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ in which case it will be inferred from the data.}
 \item{seed}{Seed for \code{set.seed} for reproducibility.}
 
 \item{weight}{A vector of weights. Defaults to NULL.}
+
+\item{verbose}{Indicator for verbose output. Defaults to FALSE.}
 }
 \value{
 A list.

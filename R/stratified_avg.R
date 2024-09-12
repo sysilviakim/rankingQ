@@ -22,6 +22,7 @@
 #' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param ipw Indicator for using inverse probability weighting. Defaults to
 #' FALSE, in which case direct bias estimation will be employed.
+#' @param verbose Indicator for verbose output. Defaults to FALSE.
 #'
 #' @return A data frame with the bootstrap-estimated average ranks.
 #'
@@ -29,7 +30,8 @@
 
 stratified_avg <- function(data, var_stratum, J = NULL,
                            main_q, anc_correct, labels = NULL, seed = 1234,
-                           weight = NULL, n_bootstrap = 200, ipw = FALSE) {
+                           weight = NULL, n_bootstrap = 200, ipw = FALSE,
+                           verbose = FALSE) {
   . <- NULL
   set.seed(seed)
   seed_list <-
@@ -89,7 +91,8 @@ stratified_avg <- function(data, var_stratum, J = NULL,
               anc_correct = anc_correct,
               weight = weights,
               n_bootstrap = 1,
-              seed = seed_list[b]
+              seed = seed_list[b],
+              verbose = verbose
             )
           }
         )

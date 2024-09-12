@@ -14,7 +14,8 @@ stratified_avg(
   seed = 1234,
   weight = NULL,
   n_bootstrap = 200,
-  ipw = FALSE
+  ipw = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ Defaults to NULL.}
 
 \item{ipw}{Indicator for using inverse probability weighting. Defaults to
 FALSE, in which case direct bias estimation will be employed.}
+
+\item{verbose}{Indicator for verbose output. Defaults to FALSE.}
 }
 \value{
 A data frame with the bootstrap-estimated average ranks.
