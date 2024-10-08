@@ -29,7 +29,7 @@ head(identity_ranking)
 
 ## Direct Bias Correction via `imprr_direct`
 
-`rankingQ` has two primary functions to perform bias correction. First, `imprr_direct` [impr]{.underline}oves [r]{.underline}anking data by applying [direct]{.underline} bias correction to four classes of quantities of interest, including:
+`rankingQ` has two primary functions to perform bias correction. First, `imprr_direct` **impr**oves **r**anking data by applying **direct** bias correction to four classes of quantities of interest, including:
 
 1.  average ranks
 2.  pairwise ranking probabilities
