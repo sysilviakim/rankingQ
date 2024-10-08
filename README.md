@@ -1,10 +1,10 @@
-# rankingq
+# rankingQ
 
-This package maintains a set of functions to handle measurement errors in ranking (rank-order) questions. More specifically, it focuses on producing quantities of interest from ranking survey questions after correcting for bias from random responses. For the underlying methodology, see preprint at [https://osf.io/preprints/osf/3ys8x](https://osf.io/preprints/osf/3ys8x) (conditionally accepted at *Poliitcal Analysis*).
+`rankingQ` implements design-based methods for correcting measurement errors in ranking questions due to random responses. `rankingQ` allows users to estimate various ranking-based quantities of interest, such as average ranks and pairwise ranking probabilities. Moreover, `rankingQ` also enables parametric modeling, such as in the Placket-Luce model, by including bias correction weights. For the underlying methodology, see Atsusaks and Kim (2024) "Addressing Measurement Errors in Ranking Questions for the Social Sciences" available at <https://osf.io/preprints/osf/3ys8x> (conditionally accepted at *Political Analysis*).
 
 For installation, use the following code:
 
-```r
+``` r
 remotes::install_github(
   "sysilviakim/rankingQ",
   INSTALL_opts = c("--no-multiarch"),
