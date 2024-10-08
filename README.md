@@ -52,7 +52,7 @@ When survey weights are available, they can be included by specifying `weight` i
 
 ## Weighting-Based Bias Correction via `imprr_weight`
 
-Next, `imprr_weight` [**imp**]{.underline}roves [**r**]{.underline}anking data by computing bias correction [**weights**]{.underline}, which can be used to correct for the bias in the inverse-probability weighting framework.
+Next, `imprr_weight` **impr**oves **r**anking data by computing bias correction **weights**, which can be used to correct for the bias in the inverse-probability weighting framework.
 
 ``` r
 
