@@ -1,8 +1,8 @@
 # `rankingQ`: Design-Based Methods for Ranking Questions
 
-`rankingQ` implements design-based methods for correcting measurement errors in ranking questions due to random responses. `rankingQ` allows users to estimate various ranking-based quantities of interest both non-parametrically and parametrically. `rankingQ` also offers several for detecting the bias and assessing the anchor-ranking question.\
+`rankingQ` implements design-based methods for correcting measurement errors in ranking questions due to random responses. `rankingQ` allows users to estimate various ranking-based quantities of interest both non-parametrically and parametrically. `rankingQ` also offers practical tools for detecting the bias and assessing the anchor-ranking question.\
 \
-For the underlying methodology, see Atsusaks and Kim (2024) (<https://osf.io/preprints/osf/3ys8x>).
+For the underlying methodology, see Atsusaka and Kim (2024) (<https://osf.io/preprints/osf/3ys8x>).
 
 ## Installation
 
@@ -29,7 +29,7 @@ head(identity_ranking)
 
 ## Direct Bias Correction via `imprr_direct`
 
-`rankingQ` has two primary functions to perform bias correction. First, `imprr_direct` [**impr**]{.underline}oves [**r**]{.underline}anking data by applying [**direct**]{.underline} bias correction to four classes of quantities of interest, including:
+`rankingQ` has two primary functions to perform bias correction. First, `imprr_direct` [impr]{.underline}oves [r]{.underline}anking data by applying [direct]{.underline} bias correction to four classes of quantities of interest, including:
 
 1.  average ranks
 2.  pairwise ranking probabilities
