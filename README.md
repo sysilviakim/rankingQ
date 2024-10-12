@@ -59,12 +59,7 @@ To perform bias correction, the data must have what we call the anchor ranking q
 
 ## Direct Bias Correction via `imprr_direct`
 
-`rankingQ` has two primary functions to perform bias correction. First, `imprr_direct` **impr**oves **r**anking data by applying **direct** bias correction to four classes of quantities of interest, including:
-
-1.  average ranks
-2.  pairwise ranking probabilities
-3.  top-k ranking probabilities
-4.  marginal ranking probabilities
+`rankingQ` has two primary functions to perform bias correction. First, `imprr_direct` **impr**oves **r**anking data by applying **direct** bias correction to several classes of quantities of interest.
 
 To apply the bias correction, we specify our dataset (`data`), the number of items (`J`), the prefix of column names that contain `J` items for the target ranking questions, and the prefix of column names for the anchor ranking questions.
 
@@ -85,6 +80,14 @@ out_direct <- imprr_direct(
 ```
 
 When survey weights are available, they can be included by specifying `weight` in the function.
+
+The quantities of interest include:
+
+1.  average ranks
+2.  pairwise ranking probabilities
+3.  top-k ranking probabilities
+4.  marginal ranking probabilities
+
 
 ## Weighting-Based Bias Correction via `imprr_weight`
 
