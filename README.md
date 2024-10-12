@@ -1,4 +1,4 @@
-# `rankingQ`: Design-Based Methods for Ranking Questions
+# `rankingQ`: Design-Based Methods for Improving Ranking Questions
 
 `rankingQ` implements design-based methods for correcting measurement errors in ranking questions due to random responses. `rankingQ` allows users to estimate various ranking-based quantities of interest both non-parametrically and parametrically. `rankingQ` also offers practical tools for detecting the bias and assessing the anchor-ranking question.\
 \
@@ -18,14 +18,44 @@ remotes::install_github(
 
 ## Example
 
-`rankingQ` assumes a dataset that contains (1) responses to ranking questions with `J` items and (2) a binary indicator for whether each respondent provides the correct answer to the anchor-ranking question---auxiliary ranking question whose correct answer(s) are known to researchers. For example, the package features a dataset `identity_ranking`, which store responses to a question that asks respondents to rank four sources of identity (partisanship, race, gender, and religion) based on their relative importance.
-
+`rankingQ` assumes a dataset that contains (1) responses to ranking questions with `J` items and (2) a binary indicator for whether each respondent provides the correct answer to the anchor-ranking question---auxiliary ranking question whose correct answer(s) are known to researchers. For example, the package features a dataset `identity_ranking`, which stores responses to a question that asks respondents to rank four sources of identity (partisanship, race, gender, and religion) based on their relative importance.
 ``` r
 library(rankingQ)
 
-data(identity_ranking)
+load("data/identity_ranking.Rda")
 head(identity_ranking)
+
+#   app_party app_religion app_gender app_race
+# 1         1            4          2        3
+# 2         1            4          2        3
+# 3         3            4          1        2
+# 4         1            4          2        3
+# 5         4            1          3        2
+# 6         3            1          2        4
+#   anc_federal anc_state anc_municipal anc_school
+# 1           1         2             3          4
+# 2           1         2             3          4
+# 3           1         2             3          4
+# 4           1         2             3          4
+# 5           1         3             2          4
+# 6           1         2             3          4
+#   anc_correct_identity  s_weight
+# 1                    1 0.8439999
+# 2                    1 0.8861603
+# 3                    1 2.9644222
+# 4                    1 0.9866697
+# 5                    0 1.7573136
+# 6                    1 0.4692241
 ```
+
+### Target ranking question
+
+Typically, ranking data are in the wide format, where multiple columns are used to represent different items and their values represent the items' marginal ranks. In `identity_ranking`, the four sources of identity are app_party, app_religion, app_gender, and app_race. For example, the first respondent ranked party first, gender second, race third, and religion fourth (i.e., "1423" is the respondent's outcome).
+
+### Anchor ranking question
+
+To perform bias correction, the data must have what we call the anchor ranking question. The anchor question is an auxiliary ranking question that looks similar to the target question, whose "correct" answer is known to researchers. For example, `identity_ranking` has responses to the anchor question that asked respondents to rank order four levels of government: federal, state, municipal, and school board. These responses are included in anc_federal, anc_state, anc_municipal, and anc_school. Here, the correct answer is assumed to be "1234." Based on theses responses, we code an indicator variable (anc_correct_identity) that takes 1 if respondents offer the correct answer and 0 otherwise.
+
 
 ## Direct Bias Correction via `imprr_direct`
 
@@ -39,6 +69,12 @@ head(identity_ranking)
 To apply the bias correction, we specify our dataset (`data`), the number of items (`J`), the prefix of column names that contain `J` items for the target ranking questions, and the prefix of column names for the anchor ranking questions.
 
 ``` r
+
+identity_ranking <- identity_ranking %>%
+  rename(app_identity_1 = app_party,
+         app_identity_2 = app_religion,
+         app_identity_3 = app_gender,
+         app_identity_4 = app_race)
 
 out_direct <- imprr_direct(
   data = identity_ranking,
