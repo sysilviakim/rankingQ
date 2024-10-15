@@ -66,8 +66,7 @@ To apply the bias correction, we specify our dataset (`data`), the number of ite
 
 ``` r
 
-# Rename the items with a common pre-fix
-
+# Rename the items with a common prefix
 identity_ranking <- identity_ranking %>%
   rename(app_identity_1 = app_party,
          app_identity_2 = app_religion,
@@ -76,7 +75,6 @@ identity_ranking <- identity_ranking %>%
 
 
 # Perform bias correction
-
 out_direct <- imprr_direct(
   data = identity_ranking,
   J = 4,
@@ -85,23 +83,32 @@ out_direct <- imprr_direct(
 )
 ```
 
-### Results: Estimated Proportion of Random Responses
+### View Results: Estimated Proportion of Random Responses
+
+The first output of `imprr_direct` is the estimated proportion of random responses. The vector `est_p_random` returns the estimated proportion along with the lower and upper ends of its corresponding 95% confidence interval.
 
 ``` r
 
 # Estimated proportion of random responses with a 95% CI 
-
 out_direct$est_p_random
 #        mean     lower     upper
 # 1 0.3153146 0.2864261 0.3481958
 ```
 
-### Results: Estimated Quantities of Interest
+### View Results: Estimated Quantities of Interest
+
+The other output is the bias-corrected estimates of four classes of ranking-based quantities, including
+
+1.  average ranks
+2.  pairwise ranking probabilities
+3.  top-k ranking probabilities
+4.  marginal ranking probabilities
+
+The output tibble `qoi` stores the estimated quantities and their corresponding 95% CIs.
 
 ``` r
 
 # View the results based on the quantity of interest
-
 out_direct$qoi %>%
    filter(qoi == "average rank")
 # A tibble: 4 × 6
@@ -114,7 +121,6 @@ out_direct$qoi %>%
 # 4 race     average rank Avg: app_identity_4  2.48  2.40  2.57
 
 # View the results based on the item
-
 out_direct$qoi %>%
    filter(item == "party")
    
@@ -134,13 +140,6 @@ out_direct$qoi %>%
 # 10 party top-k ranking    Top-2             0.308  0.269  0.347 
 # 11 party top-k ranking    Top-3             0.726  0.678  0.776 
 ```
-
-The quantities of interest include:
-
-1.  average ranks
-2.  pairwise ranking probabilities
-3.  top-k ranking probabilities
-4.  marginal ranking probabilities
 
 ## Weighting-Based Bias Correction via `imprr_weight`
 

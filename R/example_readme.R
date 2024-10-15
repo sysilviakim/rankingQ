@@ -39,10 +39,16 @@ out_direct$qoi <- out_direct$qoi %>%
 out_direct$qoi %>%
   filter(item == "party")
 
+out_direct$qoi %>%
+  filter(qoi == "average rank")
 
 
 out_direct$qoi %>%
-  filter(qoi == "average rank")
+  filter(qoi == "average rank") %>%
+  ggplot(aes(x = qoi, y = mean)) +
+  geom_point() +
+  geom_linerange(aes(ymin = lower, ymax = upper)) +
+  facet_grid(~ item)
 
 
 
