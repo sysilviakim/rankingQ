@@ -41,3 +41,9 @@ out_direct$qoi %>%
 
 
 
+out_direct$qoi %>%
+  filter(qoi == "average rank")
+
+
+
+
