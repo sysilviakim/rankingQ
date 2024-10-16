@@ -143,10 +143,11 @@ out_direct$qoi %>%
 
 ## Weighting-Based Bias Correction via `imprr_weight`
 
-Next, `imprr_weight` **impr**oves **r**anking data by computing bias correction **weights**, which can be used to correct for the bias in the inverse-probability weighting framework.
+The alternative methods for bias correction is based on the idea of inverse-prbability weighting. `imprr_weight` **impr**oves **r**anking data by computing bias correction **weights**, which can be used to correct for the bias in the inverse-probability weighting framework. The same arguments previously used can be used as follows:    
 
 ``` r
 
+# Perform bias correction
 out_weight <- imprr_weight(
   data = identity_ranking,
   J = 4,

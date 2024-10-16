@@ -19,6 +19,7 @@ identity_ranking <- identity_ranking %>%
          app_identity_4 = app_race)
 
 
+# Perform bias correction
 out_direct <- imprr_direct(
   data = identity_ranking,
   J = 4,
@@ -36,13 +37,7 @@ out_direct$qoi <- out_direct$qoi %>%
                           item == "app_identity_3" ~ "gender",
                           item == "app_identity_4" ~ "race"))
 
-out_direct$qoi %>%
-  filter(item == "party")
-
-out_direct$qoi %>%
-  filter(qoi == "average rank")
-
-
+# Perform bias correction
 out_direct$qoi %>%
   filter(qoi == "average rank") %>%
   ggplot(aes(x = qoi, y = mean)) +
@@ -50,6 +45,19 @@ out_direct$qoi %>%
   geom_linerange(aes(ymin = lower, ymax = upper)) +
   facet_grid(~ item)
 
+# View the results based on the quantity of interest
+out_direct$qoi %>%
+  filter(qoi == "average rank")
 
+# View the results based on the item
+out_direct$qoi %>%
+  filter(item == "party")
 
+# Perform bias correction
+out_weight <- imprr_weight(
+  data = identity_ranking,
+  J = 4,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity"
+)
 
