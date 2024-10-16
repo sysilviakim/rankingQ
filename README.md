@@ -173,6 +173,18 @@ wtd.table(
   )
 ```
 
+## Details
+
+### Uniformity Test for Detecting Random Responses
+
+`rankingQ` provides a tool to perform statistical testing with a null hypothesis that no random response exists in the input data. 
+
+
+### Calibration of Coding Based on the Anchor Question
+
+
+
+
 ## References
 
 Atsusaka, Y., & Kim, S.S. (2024). Addressing Measurement Errors in Ranking Questions for the Social Sciences. *Political Analysis* (conditionally accepted). <https://osf.io/preprints/osf/3ys8x>
