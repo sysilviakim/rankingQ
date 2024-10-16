@@ -143,7 +143,7 @@ out_direct$qoi %>%
 
 For example, one can visualize the result for average ranks as follows:
 
-<img src="man/figures/average-rank.png" width="80%" style="display: block; margin: auto;"/>
+<img src="man/figures/average-rank.png" width="50%" style="display: block; margin: auto;"/>
 
 ## Weighting-Based Bias Correction via `imprr_weight`
 
