@@ -143,7 +143,19 @@ out_direct$qoi %>%
 
 For example, one can visualize the result for average ranks as follows:
 
-<img src="man/figures/average-rank.png" width="50%" style="display: block; margin: auto;"/>
+``` r
+# Plot the result
+out_direct$qoi %>%
+  filter(qoi == "average rank") %>%
+  ggplot(aes(x = mean, y = item)) +
+  geom_point() +
+  geom_linerange(aes(xmin = lower, xmax = upper)) +
+  theme_bw() +
+  xlab("average rank") +
+  ylab("")
+```
+
+<img src="man/figures/average-rank.png" width="55%" style="display: block; margin: auto;"/>
 
 ## Weighting-Based Bias Correction via `imprr_weight`
 
