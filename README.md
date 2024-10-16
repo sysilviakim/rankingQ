@@ -141,9 +141,13 @@ out_direct$qoi %>%
 # 11 party top-k ranking    Top-3             0.726  0.678  0.776 
 ```
 
+For example, one can visualize the result for average ranks as follows:
+
+<img src="man/figures/average-rank.png" width="80%" style="display: block; margin: auto;"/>
+
 ## Weighting-Based Bias Correction via `imprr_weight`
 
-The alternative methods for bias correction is based on the idea of inverse-prbability weighting. `imprr_weight` **impr**oves **r**anking data by computing bias correction **weights**, which can be used to correct for the bias in the inverse-probability weighting framework. The same arguments previously used can be used as follows:    
+The alternative methods for bias correction is based on the idea of inverse-prbability weighting. `imprr_weight` **impr**oves **r**anking data by computing bias correction **weights**, which can be used to correct for the bias in the inverse-probability weighting framework. The same arguments previously used can be used as follows:
 
 ``` r
 
@@ -177,13 +181,9 @@ wtd.table(
 
 ### Uniformity Test for Detecting Random Responses
 
-`rankingQ` provides a tool to perform statistical testing with a null hypothesis that no random response exists in the input data. 
-
+`rankingQ` provides a tool to perform statistical testing with a null hypothesis that no random response exists in the input data.
 
 ### Calibration of Coding Based on the Anchor Question
-
-
-
 
 ## References
 
