@@ -172,7 +172,105 @@ out_weight <- imprr_weight(
 )
 ```
 
-The output of `imprr_weight` contains the set of weights for all possible ranking profiles with `J` items. For example, when `J = 3`, the set has `{123, 132, 213, 231, 312, 321}` and each profile now has an estimated weight.
+### View Results: Estimated Weights
+
+The output of `imprr_weight` contains the set of weights for all possible ranking profiles with `J` items. For example, when `J = 4`, the set has `{1234, 1243, ..., 4321}` and each profile now has an estimated weight.
+
+``` r
+
+# View the estimated weights
+out_weights$weights
+#    ranking         w
+# 1     1234 0.0000000
+# 2     1243 0.0000000
+# 3     1324 0.0000000
+# 4     1342 0.0000000
+# 5     1423 1.0158812
+# 6     1432 0.4078355
+# 7     2134 0.8582397
+# 8     2143 0.8070574
+# 9     2314 0.7456387
+# 10    2341 0.0000000
+# 11    2413 1.1316994
+# 12    2431 0.5767371
+# 13    3124 1.0238295
+# 14    3142 0.5400194
+# 15    3214 0.8251218
+# 16    3241 0.0000000
+# 17    3412 1.2733020
+# 18    3421 1.0314721
+# 19    4123 1.2628998
+# 20    4132 1.1045545
+# 21    4213 1.0388263
+# 22    4231 0.4999637
+# 23    4312 1.2711103
+# 24    4321 1.0593130
+```
+
+### View Results: Estimated PMF with Raw Data and Bias Corrected Data
+
+`imprr_weight` also returns the estimated probability mass function of all ranking profile before and after bias correction.
+
+``` r
+
+# View the estimated PMF with raw data and weighted data
+> out_weights$corrected_pmf %>% 
+select(ranking, prop, prop_renormalized)
+
+#    ranking          prop prop_renormalized
+# 1     1234 -0.0003526508       0.000000000
+# 2     1243 -0.0044081345       0.000000000
+# 3     1324 -0.0003526508       0.000000000
+# 4     1342 -0.0098154461       0.000000000
+# 5     1423  0.0483131539       0.046944603
+# 6     1432  0.0077583167       0.007538549
+# 7     2134  0.0293875632       0.028555111
+# 8     2143  0.0253320795       0.024614506
+# 9     2314  0.0212765957       0.020673901
+# 10    2341 -0.0111672740       0.000000000
+# 11    2413  0.0753497120       0.073215306
+# 12    2431  0.0131656283       0.012792690
+# 13    3124  0.0496649818       0.048258138
+# 14    3142  0.0118138004       0.011479155
+# 15    3214  0.0266839074       0.025928041
+# 16    3241 -0.0030563066       0.000000000
+# 17    3412  0.1659221817       0.161222159
+# 18    3421  0.0510168097       0.049571673
+# 19    4123  0.1537557306       0.149400343
+# 20    4132  0.0672387446       0.065334095
+# 21    4213  0.0523686376       0.050885208
+# 22    4231  0.0104619725       0.010165620
+# 23    4312  0.1632185259       0.158595089
+# 24    4321  0.0564241213       0.054825814
+```
+
+### Merge Estimated Weights with Original Data
+
+``` r
+
+# Turn the results into a tibble
+tibble_w <- out_weights$weights %>% tibble()
+
+
+# Merge the weights back to the original data
+identity_ranking_w <- identity_ranking %>%
+  unite(ranking, starts_with("app_identity"), sep = "", remove = F) %>%
+  left_join(tibble_w, by = "ranking") %>%
+  select(w, everything())
+
+head(identity_ranking_w)
+#       w ranking app_identity_1 app_identity_2 app_identity_3
+#   <dbl> <chr>            <dbl>          <dbl>          <dbl>
+# 1  1.02 1423                 1              4              2
+# 2  1.02 1423                 1              4              2
+# 3  1.27 3412                 3              4              1
+# 4  1.02 1423                 1              4              2
+# 5  1.10 4132                 4              1              3
+# 6  1.02 3124                 3              1              2
+
+```
+
+
 
 To perform subsequent analyses, we merge the bias-correction weights to our original data. After this process, we can perform any analyses. For example, to study the distribution of unique ranking profiles, we can call `questionr::wtd.table()` with the estimated weights:
 
