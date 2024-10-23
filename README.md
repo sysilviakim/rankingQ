@@ -289,35 +289,6 @@ lm_robust(party ~ 1, identity_ranking_w, weights = w) %>% tidy()
 
 While this illustrative example provides a valid point estimate, its confidence interval does not account for the estimation uncertainty around the estimated weights. Thus, in practice, `imprr_weights` must be used along with bootstrapping, such as the one available in `rsample` ([example](https://declaredesign.org/r/estimatr/articles/estimatr-in-the-tidyverse.html#bootstrap-using-rsample)).
 
-````{=html}
-<!--
-
-To perform subsequent analyses, we merge the bias-correction weights to our original data. After this process, we can perform any analyses. For example, to study the distribution of unique ranking profiles, we can call `questionr::wtd.table()` with the estimated weights:
-
-``` r
-library(questionr)
-
-identity_ranking <- identity_ranking %>%
-  left_join(out_weight$weights, by = "ranking") 
-
-
-wtd.table(
-  x = identity_ranking$app_identity,
-  weights = identity_ranking$weights
-  )
-```
-
-## Details
-
-### Uniformity Test for Detecting Random Responses
-
-`rankingQ` provides a tool to perform statistical testing with a null hypothesis that no random response exists in the input data.
-
-### Calibration of Coding Based on the Anchor Question
-
--->
-````
-
 ## References
 
 Atsusaka, Y., & Kim, S.S. (2024). Addressing Measurement Errors in Ranking Questions for the Social Sciences. *Political Analysis* (conditionally accepted). <https://osf.io/preprints/osf/3ys8x>
