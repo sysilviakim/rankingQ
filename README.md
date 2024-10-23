@@ -164,7 +164,7 @@ The alternative methods for bias correction is based on the idea of inverse-prba
 ``` r
 
 # Perform bias correction
-out_weight <- imprr_weight(
+out_weights <- imprr_weights(
   data = identity_ranking,
   J = 4,
   main_q = "app_identity",
@@ -174,7 +174,7 @@ out_weight <- imprr_weight(
 
 ### View Results: Estimated Weights
 
-The output of `imprr_weight` contains the set of weights for all possible ranking profiles with `J` items. For example, when `J = 4`, the set has `{1234, 1243, ..., 4321}` and each profile now has an estimated weight.
+The output of `imprr_weights` contains the set of weights for all possible ranking profiles with `J` items. For example, when `J = 4`, the set has `{1234, 1243, ..., 4321}` and each profile now has an estimated weight.
 
 ``` r
 
@@ -256,21 +256,41 @@ tibble_w <- out_weights$weights %>% tibble()
 identity_ranking_w <- identity_ranking %>%
   unite(ranking, starts_with("app_identity"), sep = "", remove = F) %>%
   left_join(tibble_w, by = "ranking") %>%
-  select(w, everything())
+  select(w, everything()) %>%
+  mutate(item = case_when(item == "app_identity_1" ~ "party",
+                          item == "app_identity_2" ~ "religion",
+                          item == "app_identity_3" ~ "gender",
+                          item == "app_identity_4" ~ "race"))
 
-head(identity_ranking_w)
-#       w ranking app_identity_1 app_identity_2 app_identity_3
-#   <dbl> <chr>            <dbl>          <dbl>          <dbl>
-# 1  1.02 1423                 1              4              2
-# 2  1.02 1423                 1              4              2
-# 3  1.27 3412                 3              4              1
-# 4  1.02 1423                 1              4              2
-# 5  1.10 4132                 4              1              3
-# 6  1.02 3124                 3              1              2
-
+# head(identity_ranking_w)
+#       w ranking party religion gender  race anc_federal anc_state
+#   <dbl> <chr>   <dbl>    <dbl>  <dbl> <dbl>       <dbl>     <dbl>
+# 1  1.02 1423        1        4      2     3           1         2
+# 2  1.02 1423        1        4      2     3           1         2
+# 3  1.27 3412        3        4      1     2           1         2
+# 4  1.02 1423        1        4      2     3           1         2
+# 5  1.10 4132        4        1      3     2           1         3
+# 6  1.02 3124        3        1      2     4           1         2
 ```
 
+### Analysis
 
+The estimated weights can be used to perform any analyses. For example, to estimate the average rank of party, one can leverage linear regression as follows:
+
+``` r
+library(estimatr)
+lm_robust(party ~ 1, identity_ranking_w, weights = w) %>% tidy()
+
+#          term estimate  std.error statistic p.value conf.low
+# 1 (Intercept) 3.220388 0.02790142  115.4202       0 3.165641
+#   conf.high   df outcome
+# 1  3.275135 1081   party
+```
+
+While this illustrative example provides a valid point estimate, its confidence interval does not account for the estimation uncertainty around the estimated weights. Thus, in practice, `imprr_weights` must be used along with bootstrapping, such as the one available in `rsample` ([example](https://declaredesign.org/r/estimatr/articles/estimatr-in-the-tidyverse.html#bootstrap-using-rsample)).
+
+````{=html}
+<!--
 
 To perform subsequent analyses, we merge the bias-correction weights to our original data. After this process, we can perform any analyses. For example, to study the distribution of unique ranking profiles, we can call `questionr::wtd.table()` with the estimated weights:
 
@@ -294,6 +314,9 @@ wtd.table(
 `rankingQ` provides a tool to perform statistical testing with a null hypothesis that no random response exists in the input data.
 
 ### Calibration of Coding Based on the Anchor Question
+
+-->
+````
 
 ## References
 
