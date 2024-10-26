@@ -11,7 +11,6 @@ For the underlying methodology, see Atsusaka and Kim (2024) (<https://osf.io/pre
 ``` r
 remotes::install_github(
   "sysilviakim/rankingQ",
-  INSTALL_opts = c("--no-multiarch"),
   dependencies = TRUE
 )
 ```
