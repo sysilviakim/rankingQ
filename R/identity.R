@@ -7,7 +7,7 @@
 #'
 #' @docType data
 #'
-#' @usage data(identity_ranking)
+#' @usage data(identity)
 #'
 #' @format An object of class \code{"data.frame"}
 #' \describe{
@@ -27,7 +27,7 @@
 #' @keywords datasets
 #' @examples
 #'
-#' data(identity_ranking)
-#' head(identity_ranking)
+#' data(identity)
+#' head(identity)
 #'
-"identity_ranking"
+"identity"

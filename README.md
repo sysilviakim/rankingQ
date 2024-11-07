@@ -17,14 +17,14 @@ remotes::install_github(
 
 ## Example
 
-`rankingQ` assumes a dataset that contains (1) responses to ranking questions with `J` items and (2) a binary indicator for whether each respondent provides the correct answer to the anchor-ranking question---auxiliary ranking question whose correct answer(s) are known to researchers. For example, the package features a dataset `identity_ranking`, which stores responses to a question that asks respondents to rank four sources of identity (partisanship, race, gender, and religion) based on their relative importance.
+`rankingQ` assumes a dataset that contains (1) responses to ranking questions with `J` items and (2) a binary indicator for whether each respondent provides the correct answer to the anchor-ranking question---auxiliary ranking question whose correct answer(s) are known to researchers. For example, the package features a dataset `identity`, which stores responses to a question that asks respondents to rank four sources of identity (partisanship, race, gender, and religion) based on their relative importance.
 
 ``` r
 library(rankingQ)
 library(tidyverse)
 
-data("identity_ranking")
-head(identity_ranking)
+data("identity")
+head(identity)
 
 #   app_party app_religion app_gender app_race
 # 1         1            4          2        3
@@ -33,7 +33,7 @@ head(identity_ranking)
 # 4         1            4          2        3
 # 5         4            1          3        2
 # 6         3            1          2        4
-#   anc_federal anc_state anc_municipal anc_school
+#   anc_house anc_neighborhood anc_city anc_state
 # 1           1         2             3          4
 # 2           1         2             3          4
 # 3           1         2             3          4
@@ -51,11 +51,11 @@ head(identity_ranking)
 
 ### Target ranking question
 
-Ranking data are expected to be in the wide format, where multiple columns are used to represent different items and their values represent the items' marginal ranks. In `identity_ranking`, the four sources of identity are app_party, app_religion, app_gender, and app_race. For example, the first respondent ranked party first, gender second, race third, and religion fourth (i.e., "1423" is the respondent's outcome).
+Ranking data are expected to be in the wide format, where multiple columns are used to represent different items and their values represent the items' marginal ranks. In `identity`, the four sources of identity are app_party, app_religion, app_gender, and app_race. For example, the first respondent ranked party first, gender second, race third, and religion fourth (i.e., "1423" is the respondent's outcome).
 
 ### Anchor ranking question
 
-To perform bias correction, the data must have what we call the anchor ranking question. The anchor question is an auxiliary ranking question that looks similar to the target question, whose "correct" answer is known to researchers. For example, `identity_ranking` has responses to the anchor question that asked respondents to rank order four levels of government: federal, state, municipal, and school board. These responses are included in anc_federal, anc_state, anc_municipal, and anc_school. Here, the correct answer is assumed to be "1234." Based on theses responses, we code an indicator variable (anc_correct_identity) that takes 1 if respondents offer the correct answer and 0 otherwise.
+To perform bias correction, the data must have what we call the anchor ranking question. The anchor question is an auxiliary ranking question that looks similar to the target question, whose "correct" answer is known to researchers. For example, `identity` has responses to the anchor question that asked respondents to rank order four levels of government: house, state, municipal, and school board. These responses are included in anc_house, anc_neighborhood, anc_city, and anc_state. Here, the correct answer is assumed to be "1234." Based on theses responses, we code an indicator variable (anc_correct_identity) that takes 1 if respondents offer the correct answer and 0 otherwise.
 
 ## Direct Bias Correction via `imprr_direct`
 
@@ -66,7 +66,7 @@ To apply the bias correction, we specify our dataset (`data`), the number of ite
 ``` r
 
 # Rename the items with a common prefix
-identity_ranking <- identity_ranking %>%
+identity <- identity %>%
   rename(app_identity_1 = app_party,
          app_identity_2 = app_religion,
          app_identity_3 = app_gender,
@@ -75,7 +75,7 @@ identity_ranking <- identity_ranking %>%
 
 # Perform bias correction
 out_direct <- imprr_direct(
-  data = identity_ranking,
+  data = identity,
   J = 4,
   main_q = "app_identity",
   anc_correct = "anc_correct_identity"
@@ -164,7 +164,7 @@ The alternative methods for bias correction is based on the idea of inverse-prba
 
 # Perform bias correction
 out_weights <- imprr_weights(
-  data = identity_ranking,
+  data = identity,
   J = 4,
   main_q = "app_identity",
   anc_correct = "anc_correct_identity"
@@ -252,7 +252,7 @@ tibble_w <- out_weights$weights %>% tibble()
 
 
 # Merge the weights back to the original data
-identity_ranking_w <- identity_ranking %>%
+identity_w <- identity %>%
   unite(ranking, starts_with("app_identity"), sep = "", remove = F) %>%
   left_join(tibble_w, by = "ranking") %>%
   select(w, everything()) %>%
@@ -261,8 +261,8 @@ identity_ranking_w <- identity_ranking %>%
                           item == "app_identity_3" ~ "gender",
                           item == "app_identity_4" ~ "race"))
 
-# head(identity_ranking_w)
-#       w ranking party religion gender  race anc_federal anc_state
+# head(identity_w)
+#       w ranking party religion gender  race anc_house anc_neighborhood
 #   <dbl> <chr>   <dbl>    <dbl>  <dbl> <dbl>       <dbl>     <dbl>
 # 1  1.02 1423        1        4      2     3           1         2
 # 2  1.02 1423        1        4      2     3           1         2
@@ -278,7 +278,7 @@ The estimated weights can be used to perform any analyses. For example, to estim
 
 ``` r
 library(estimatr)
-lm_robust(party ~ 1, identity_ranking_w, weights = w) %>% tidy()
+lm_robust(party ~ 1, identity_w, weights = w) %>% tidy()
 
 #          term estimate  std.error statistic p.value conf.low
 # 1 (Intercept) 3.220388 0.02790142  115.4202       0 3.165641
