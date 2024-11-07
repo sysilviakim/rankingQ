@@ -15,10 +15,10 @@
 #'  \item{app_religion}{Marginal rank of religion (double)}
 #'  \item{app_gender}{Marginal rank of gender (double)}
 #'  \item{app_race}{Marginal rank of race (double)}
-#'  \item{anc_federal}{Marginal rank of XX}
-#'  \item{anc_state}{Marginal rank of XX}
-#'  \item{anc_municipal}{Marginal rank of XX}
-#'  \item{anc_school}{Marginal rank of XXX}
+#'  \item{anc_house}{Marginal rank of household}
+#'  \item{anc_neighborhood}{Marginal rank of neighborhood}
+#'  \item{anc_city}{Marginal rank of city}
+#'  \item{anc_state}{Marginal rank of state}
 #'  \item{anc_correct_identity}{A binary variable that takes 1 if the respondent correctly answers the anchor ranking question}
 #'  \item{s_weight}{Survey weight}
 #'
