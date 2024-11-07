@@ -23,7 +23,7 @@ remotes::install_github(
 library(rankingQ)
 library(tidyverse)
 
-load("data/identity_ranking.Rda")
+data("identity_ranking")
 head(identity_ranking)
 
 #   app_party app_religion app_gender app_race
