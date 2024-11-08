@@ -2,25 +2,20 @@ Package: rankingQ
 Type: Package
 Title: Design-Based Methods for Improving Ranking Questions
 Version: 0.1.0
-Authors@R: person("Seo-young Silvia", "Kim", 
-  email = "sskim.research@gmail.com",
-  role = c("aut", "cre")),
-  person("Yuki", "Atsusaka", 
-  email = "yuki.atsusaka@gmail.com",
-  role = c("aut", "cre"),
-  comment = c(ORCID="0000-0001-5365-1876"))
+Authors@R: c(
+  person("Seo-young Silvia", "Kim", email = "sskim.research@gmail.com",
+  role = c("aut")),
+  person("Yuki", "Atsusaka", email = "yuki.atsusaka@gmail.com",
+  role = c("aut", "cre"), comment = c(ORCID="0000-0001-5365-1876"))
+  )
 Maintainer: The package maintainer <sskim.research@gmail.com>
-Description: Design-Based Methods for Improving Ranking Questions.
+Description: A system for implement bias correction that addresses 
+   measurement errors due to random responses in ranking survey questions.
+URL: https://github.com/sysilviakim/rankingQ
+BugReports: https://github.com/sysilviakim/rankingQ/issues
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Suggests:
-    knitr,
-    rmarkdown,
-    utils,
-    stats,
-    cli,
-    testthat (>= 3.0.0)
 Imports:
   dplyr,
   tidyr,
@@ -41,6 +36,13 @@ Imports:
   ggpubr,
   assertthat,
   questionr
+Suggests:
+    knitr,
+    rmarkdown,
+    utils,
+    stats,
+    cli,
+    testthat (>= 3.0.0)
 Depends:
   R (>= 3.5.0)
 VignetteBuilder: utils, knitr
