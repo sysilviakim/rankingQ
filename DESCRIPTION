@@ -14,11 +14,12 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Suggests:
-  knitr,
-  rmarkdown,
-  utils,
-  stats,
-  cli
+    knitr,
+    rmarkdown,
+    utils,
+    stats,
+    cli,
+    testthat (>= 3.0.0)
 Imports:
   dplyr,
   tidyr,
@@ -43,3 +44,4 @@ Depends:
   R (>= 3.5.0)
 VignetteBuilder: utils, knitr
 RoxygenNote: 7.3.2
+Config/testthat/edition: 3
