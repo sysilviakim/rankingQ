@@ -1,15 +1,16 @@
 Package: rankingQ
 Type: Package
-Title: Wrangling and Analyzing Ranking Data
+Title: Design-Based Methods for Improving Ranking Questions
 Version: 0.1.0
 Authors@R: person("Seo-young Silvia", "Kim", 
   email = "sskim.research@gmail.com",
-  role = c("aut", "cre"))
+  role = c("aut", "cre")),
+  person("Yuki", "Atsusaka", 
+  email = "yuki.atsusaka@gmail.com",
+  role = c("aut", "cre"),
+  comment = c(ORCID="0000-0001-5365-1876"))
 Maintainer: The package maintainer <sskim.research@gmail.com>
-Description: Functions that wrangle and analyze ranking data. 
-  The package includes functions to wrangle ranking data into a 
-  tidy format, to calculate various quantities of interest associated 
-  with ranking data, and to visualize the results.
+Description: Design-Based Methods for Improving Ranking Questions.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
