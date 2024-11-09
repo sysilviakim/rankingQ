@@ -1,4 +1,4 @@
-#' Relative partisanship data
+#' Identity-ranking data analyzed in Atsusaka and Kim (2024)
 #'
 #' @description
 #'
@@ -7,22 +7,27 @@
 #' Addressing Measurement Errors in Ranking Questions for the Social Sciences.
 #' Political Analysis (conditionally accepted).
 #' https://osf.io/preprints/osf/3ys8x
-#' The data contains 1,082 respondents' rankings to the main identity ranking
+#'
+#' This data contains Americans' rankings of four sources of their identity,
+#' including political party, religion, gender, and race, for 1,082 respondents.
+#' The columns consist of marginal rankings to the main identity ranking
 #' question and the corresponding anchor question, as well as whether they have
-#' answered the anchor questions "correctly."
+#' answered the anchor questions "correctly." The anchor ranking question is
+#' used to estimate the proportion of random responses and
+#' to correct for measurement error bias.
 #'
 #' @format ## `identity`
 #' A data frame with 1,082 rows and 10 columns:
 #' \describe{
-#'   \item{app_party}{Ranking for party (main identity ranking question).}
-#'   \item{app_religion}{Ranking for religion (main identity ranking question).}
-#'   \item{app_gender}{Ranking for gender (main identity ranking question).}
-#'   \item{app_race}{Ranking for race (main identity ranking question).}
-#'   \item{anc_house}{Ranking for household (anchor question).}
-#'   \item{anc_neighborhood}{Ranking for neighborhood (anchor question).}
-#'   \item{anc_city}{Ranking for city (anchor question).}
-#'   \item{anc_state}{Ranking for state (anchor question).}
-#'   \item{anc_correct_identity}{Whether the respondent answered the anchor questions correctly.}
+#'   \item{app_party}{Marginal ranking for party (main identity ranking question).}
+#'   \item{app_religion}{Marginal ranking for religion (main identity ranking question).}
+#'   \item{app_gender}{Marginal ranking for gender (main identity ranking question).}
+#'   \item{app_race}{Marginal ranking for race (main identity ranking question).}
+#'   \item{anc_house}{Marginal ranking for household (anchor question).}
+#'   \item{anc_neighborhood}{Marginal ranking for neighborhood (anchor question).}
+#'   \item{anc_city}{Marginal ranking for city (anchor question).}
+#'   \item{anc_state}{Marginal ranking for state (anchor question).}
+#'   \item{anc_correct_identity}{Whether the respondent answered the anchor questions correctly. This is a binary variable that 1 if the respondent correctly answers the anchor ranking question and 0 if otherwise.}
 #'   \item{s_weight}{Survey weight.}
 #' }
 #' @source <https://github.com/sysilviakim/ranking_error>
