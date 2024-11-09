@@ -258,9 +258,6 @@ avg_rank <- function(x,
     ## otherwise, the summary tibble appears in alphabetical order
     out$item <- factor(out$item, levels = items)
     out <- out[order(out$item), ]
-  } else if (!is.null(items) & long == TRUE) {
-    out[[items]] <- factor(out[[items]], levels = items)
-    out <- out[order(out[[items]]), ]
   }
 
   ## When printing, round if specified
@@ -269,7 +266,14 @@ avg_rank <- function(x,
       mutate(across(c(mean, lower, upper), ~ round(., digits = round)))
   }
 
-  return(
-    as.data.frame(out) %>% select(item, qoi, mean, se, lower, upper, method)
-  )
+  if (long == TRUE) {
+    return(
+      as.data.frame(out) %>%
+        select(!!items, qoi, mean, se, lower, upper, method)
+    )
+  } else {
+    return(
+      as.data.frame(out) %>% select(item, qoi, mean, se, lower, upper, method)
+    )
+  }
 }
