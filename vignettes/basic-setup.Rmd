@@ -1,0 +1,43 @@
+---
+title: "Basic Setup"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Basic Setup}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+In this vignette, we show what the typical input data look like for the `rankingQ` package using the `identity` dataset.
+
+`rankingQ` assumes a dataset that contains (1) responses to ranking questions with `J` items and (2) a binary indicator for whether each respondent provides the correct answer to an anchor-ranking question---an auxiliary ranking question whose correct answer(s) are known to researchers. For example, the package features a dataset `identity`, which stores real-world survey responses to a question that asks 1,082 respondents to rank four sources of identity (partisanship, race, gender, and religion) based on their relative importance to them.
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r identity-data}
+library(rankingQ)
+data("identity")
+```
+
+### Target ranking question
+
+Ranking data are expected to be in the wide format, where multiple columns are used to represent different items and their values represent the items' marginal ranks. In `identity`, the four sources of identity are `app_party`, `app_religion`, `app_gender`, and `app_race.` For example, the first respondent ranked party first, gender second, race third, and religion fourth---i.e., "1423" is the respondent's outcome, given the reference choice set of party-religion-gender-race/ethnicity.
+
+```{r main-data}
+head(identity)
+```
+
+### Anchor ranking question
+
+To perform bias correction, the data must have what we call the anchor ranking question. The anchor question is an auxiliary ranking question that looks similar to the target question, whose "correct" answer is known to researchers. For example, `identity` has responses to the anchor question that asked respondents to rank order four levels of government: house, state, municipal, and school board. These responses are included in `anc_house`, `anc_neighborhood`, `anc_city`, and `anc_state.` Here, the correct answer is assumed to be "1234." Based on theses responses, we code an indicator variable (`anc_correct_identity`) that takes 1 if respondents offer the correct answer and 0 otherwise.
+
+For example, in the following dataset, the first and third respondent has provided a "wrong" answer for the anchor question, whereas the rest of them have provided the correct answer. 
+
+```{r anchor-data}
+identity[, c("anc_house", "anc_neighborhood", "anc_city", "anc_state", "anc_correct_identity")] |>
+  tail()
+```
