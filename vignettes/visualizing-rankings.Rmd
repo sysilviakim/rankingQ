@@ -1,7 +1,6 @@
 ---
 title: "Visualizing Rankings"
 author: "Yuki Atsusaka and Seo-young Silvia Kim"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Visualizing Rankings}

@@ -1,5 +1,6 @@
 ---
 title: "Basic Setup"
+author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Basic Setup}
