@@ -1,0 +1,136 @@
+---
+title: "Correcting Bias in Ranking Data"
+author: "Yuki Atsusaka and Seo-young Silvia Kim"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bias-correction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Direct Bias Correction via `imprr_direct`
+
+`rankingQ` has two primary functions to perform bias correction. First, `imprr_direct` **impr**oves **r**anking data by applying **direct** bias correction to several classes of quantities of interest.
+
+To apply the bias correction, we specify our dataset (`data`), the number of items (`J`), the prefix of column names that contain `J` items for the target ranking questions, and the prefix of column names for the anchor ranking questions. When survey weights are available, they can be included by specifying `weight` in the function.
+
+```{r}
+# Rename the items with a common prefix
+identity <- identity %>%
+  rename(
+    app_identity_1 = app_party,
+    app_identity_2 = app_religion,
+    app_identity_3 = app_gender,
+    app_identity_4 = app_race
+  )
+
+# Perform bias correction
+out_direct <- imprr_direct(
+  data = identity,
+  J = 4,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity"
+)
+```
+
+### Results: Estimated Proportion of Random Responses
+
+The first output of `imprr_direct` is the estimated proportion of random responses. The vector `est_p_random` returns the estimated proportion along with the lower and upper ends of its corresponding 95% confidence interval.
+
+```{r}
+# Estimated proportion of random responses with a 95% CI 
+out_direct$est_p_random
+```
+
+### Results: Estimated Quantities of Interest
+
+The other output is the bias-corrected estimates of four classes of ranking-based quantities, including
+
+1.  average ranks
+2.  pairwise ranking probabilities
+3.  top-k ranking probabilities
+4.  marginal ranking probabilities
+
+The output tibble `qoi` stores the estimated quantities and their corresponding 95% CIs.
+
+```{r}
+# View the results based on the quantity of interest
+out_direct$qoi %>%
+   filter(qoi == "average rank")
+
+# View the results based on the item
+out_direct$qoi %>%
+  filter(item == "party")
+```
+
+For example, one can visualize the result for average ranks as follows:
+
+```{r}
+# Plot the result
+out_direct$qoi %>%
+  filter(qoi == "average rank") %>%
+  ggplot(aes(x = mean, y = item)) +
+  geom_point() +
+  geom_linerange(aes(xmin = lower, xmax = upper)) +
+  theme_bw() +
+  xlab("average rank") +
+  ylab("")
+```
+
+<img src="man/figures/average-rank.png" width="85%" style="display: block; margin: auto;"/>
+
+# Weighting-Based Bias Correction via `imprr_weight`
+
+The alternative methods for bias correction is based on the idea of inverse-prbability weighting. `imprr_weight` **impr**oves **r**anking data by computing bias correction **weights**, which can be used to correct for the bias in the inverse-probability weighting framework. The same arguments previously used can be used as follows:
+
+```{r}
+# Perform bias correction
+out_weights <- imprr_weights(
+  data = identity,
+  J = 4,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity"
+)
+```
+
+## Results: Estimated Weights
+
+The output of `imprr_weights` contains the set of weights for all possible ranking profiles with `J` items. For example, when `J = 4`, the set has `{1234, 1243, ..., 4321}` and each profile now has an estimated weight.
+
+```{r}
+# View the estimated weights
+out_weights$weights
+```
+
+## Results: Estimated PMF with Raw Data and Bias Corrected Data
+
+`imprr_weight` also returns the estimated probability mass function of all ranking profile before and after bias correction.
+
+```{r}
+# View the estimated PMF with raw data and weighted data
+out_weights$corrected_pmf %>%
+  select(ranking, prop, prop_renormalized)
+```
+
+# Merge Estimated Weights with Original Data
+
+```{r}
+# Turn the results into a tibble
+tibble_w <- out_weights$weights %>% tibble()
+
+# Merge the weights back to the original data
+identity_w <- identity %>%
+  unite(ranking, starts_with("app_identity"), sep = "", remove = F) %>%
+  left_join(tibble_w, by = "ranking") %>%
+  select(w, everything()) %>%
+  mutate(
+    item = case_when(
+      item == "app_identity_1" ~ "party",
+      item == "app_identity_2" ~ "religion",
+      item == "app_identity_3" ~ "gender",
+      item == "app_identity_4" ~ "race"
+    )
+  )
+
+head(identity_w)
+```
