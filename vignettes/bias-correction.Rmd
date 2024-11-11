@@ -15,6 +15,9 @@ vignette: >
 To apply the bias correction, we specify our dataset (`data`), the number of items (`J`), the prefix of column names that contain `J` items for the target ranking questions, and the prefix of column names for the anchor ranking questions. When survey weights are available, they can be included by specifying `weight` in the function.
 
 ```{r}
+library(rankingQ)
+library(tidyverse)
+
 # Rename the items with a common prefix
 identity <- identity %>%
   rename(
@@ -77,8 +80,6 @@ out_direct$qoi %>%
   ylab("")
 ```
 
-<img src="man/figures/average-rank.png" width="85%" style="display: block; margin: auto;"/>
-
 # Weighting-Based Bias Correction via `imprr_weight`
 
 The alternative methods for bias correction is based on the idea of inverse-prbability weighting. `imprr_weight` **impr**oves **r**anking data by computing bias correction **weights**, which can be used to correct for the bias in the inverse-probability weighting framework. The same arguments previously used can be used as follows:
@@ -120,17 +121,8 @@ tibble_w <- out_weights$weights %>% tibble()
 
 # Merge the weights back to the original data
 identity_w <- identity %>%
-  unite(ranking, starts_with("app_identity"), sep = "", remove = F) %>%
+  unite(ranking, starts_with("app_identity"), sep = "", remove = FALSE) %>%
   left_join(tibble_w, by = "ranking") %>%
-  select(w, everything()) %>%
-  mutate(
-    item = case_when(
-      item == "app_identity_1" ~ "party",
-      item == "app_identity_2" ~ "religion",
-      item == "app_identity_3" ~ "gender",
-      item == "app_identity_4" ~ "race"
-    )
-  )
-
+  select(w, everything())
 head(identity_w)
 ```
