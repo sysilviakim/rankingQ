@@ -3,7 +3,7 @@ title: "4. Visualizing Rankings"
 author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Visualizing Rankings}
+  %\VignetteIndexEntry{4. Visualizing Rankings}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

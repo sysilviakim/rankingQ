@@ -3,7 +3,7 @@ title: "2. Correcting Bias in Ranking Data"
 author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{bias-correction}
+  %\VignetteIndexEntry{2. Correcting Bias in Ranking Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
