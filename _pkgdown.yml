@@ -2,3 +2,8 @@ url: http://sysilviakim.com/rankingQ/
 template:
   bootstrap: 5
 
+authors:
+  Yuki Atsusaka:
+    href: "https://atsusaka.org"
+  Seo-young Silvia Kim:
+    href: "https://sysilviakim.com"
