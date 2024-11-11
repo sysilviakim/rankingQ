@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Visualizing Rankings • rankingQ</title>
+<title>Analysis of Bias-corrected Ranking Data • rankingQ</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Visualizing Rankings">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Analysis of Bias-corrected Ranking Data">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -58,38 +58,38 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Visualizing Rankings</h1>
+      <h1>Analysis of Bias-corrected Ranking Data</h1>
                         <h4 data-toc-skip class="author">Yuki Atsusaka
 and Seo-young Silvia Kim</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/sysilviakim/rankingQ/blob/main/vignettes/visualizing-rankings.Rmd" class="external-link"><code>vignettes/visualizing-rankings.Rmd</code></a></small>
-      <div class="d-none name"><code>visualizing-rankings.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/sysilviakim/rankingQ/blob/main/vignettes/analysis.Rmd" class="external-link"><code>vignettes/analysis.Rmd</code></a></small>
+      <div class="d-none name"><code>analysis.Rmd</code></div>
     </div>
 
     
     
-<p>The following code chunk shows how to plot the distribution of
-ranking profiles.</p>
+<p>The estimated weights from <code>imprr_weights</code> can be used to
+perform any analyses. For example, to estimate the average rank of
+party, one can leverage linear regression as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">combinat</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'combinat'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:utils':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     combn</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sysilviakim/rankingQ" class="external-link">rankingQ</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sysilviakim/rankingQ" class="external-link">rankingQ</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Registered S3 method overwritten by 'GGally':</span></span>
 <span><span class="co">#&gt;   method from   </span></span>
 <span><span class="co">#&gt;   +.gg   ggplot2</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://declaredesign.org/r/estimatr/" class="external-link">estimatr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/combinat/man/permn.html" class="external-link">permn</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>, <span class="va">paste0</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">30</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/table_to_tibble.html">table_to_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/plot_dist_ranking.html">plot_dist_ranking</a></span><span class="op">(</span><span class="va">tab</span>, ylim <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="visualizing-rankings_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">identity_w</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://declaredesign.org/r/estimatr/reference/lm_robust.html" class="external-link">lm_robust</a></span><span class="op">(</span><span class="va">party</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">identity_w</span>, weights <span class="op">=</span> <span class="va">w</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          term estimate  std.error statistic p.value conf.low conf.high   df</span></span>
+<span><span class="co">#&gt; 1 (Intercept) 3.220388 0.02790142  115.4202       0 3.165641  3.275135 1081</span></span>
+<span><span class="co">#&gt;   outcome</span></span>
+<span><span class="co">#&gt; 1   party</span></span></code></pre></div>
+<p>While this illustrative example provides a valid point estimate, its
+confidence interval does not account for the estimation uncertainty
+around the estimated weights. Thus, in practice,
+<code>imprr_weights</code> must be used along with bootstrapping, such
+as the one available in <code>rsample</code> (<a href="https://declaredesign.org/r/estimatr/articles/estimatr-in-the-tidyverse.html#bootstrap-using-rsample" class="external-link">example</a>).</p>
   </main>
 </div>
 
