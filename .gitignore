@@ -50,4 +50,6 @@ rsconnect/
 inst/doc
 /doc/
 /Meta/
-docs
+# docs
+# https://github.com/r-lib/pkgdown/issues/2087
+
