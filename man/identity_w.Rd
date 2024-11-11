@@ -10,10 +10,10 @@ A data frame with 1,082 rows and 12 columns:
 \describe{
   \item{w}{Estimated weight based on inverse probability weighting.}
   \item{ranking}{Ranking pattern that the respondent provided.}
-  \item{app_party}{Marginal ranking for party (main identity ranking question).}
-  \item{app_religion}{Marginal ranking for religion (main identity ranking question).}
-  \item{app_gender}{Marginal ranking for gender (main identity ranking question).}
-  \item{app_race}{Marginal ranking for race (main identity ranking question).}
+  \item{party}{Marginal ranking for party (main identity ranking question).}
+  \item{religion}{Marginal ranking for religion (main identity ranking question).}
+  \item{gender}{Marginal ranking for gender (main identity ranking question).}
+  \item{race}{Marginal ranking for race (main identity ranking question).}
   \item{anc_house}{Marginal ranking for household (anchor question).}
   \item{anc_neighborhood}{Marginal ranking for neighborhood (anchor question).}
   \item{anc_city}{Marginal ranking for city (anchor question).}
