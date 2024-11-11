@@ -265,19 +265,25 @@ function of all ranking profile before and after bias correction.</p>
 <span><span class="va">identity_w</span> <span class="op">&lt;-</span> <span class="va">identity</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unite.html" class="external-link">unite</a></span><span class="op">(</span><span class="va">ranking</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"app_identity"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span>, remove <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">tibble_w</span>, by <span class="op">=</span> <span class="st">"ranking"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">w</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">w</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span></span>
+<span>    party <span class="op">=</span> <span class="va">app_identity_1</span>,</span>
+<span>    religion <span class="op">=</span> <span class="va">app_identity_2</span>,</span>
+<span>    gender <span class="op">=</span> <span class="va">app_identity_3</span>,</span>
+<span>    race <span class="op">=</span> <span class="va">app_identity_4</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">identity_w</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 12</span></span></span>
-<span><span class="co">##       w ranking app_identity_1 app_identity_2 app_identity_3 app_identity_4</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>  1.02 1423                 1              4              2              3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>  1.02 1423                 1              4              2              3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>  1.27 3412                 3              4              1              2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>  1.02 1423                 1              4              2              3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span>  1.10 4132                 4              1              3              2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span>  1.02 3124                 3              1              2              4</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 6 more variables: anc_house &lt;dbl&gt;, anc_neighborhood &lt;dbl&gt;, anc_city &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   anc_state &lt;dbl&gt;, anc_correct_identity &lt;dbl&gt;, s_weight &lt;dbl&gt;</span></span></span></code></pre>
+<span><span class="co">##       w ranking party religion gender  race anc_house anc_neighborhood anc_city</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span>  1.02 1423        1        4      2     3         1                2        3</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span>  1.02 1423        1        4      2     3         1                2        3</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span>  1.27 3412        3        4      1     2         1                2        3</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span>  1.02 1423        1        4      2     3         1                2        3</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span>  1.10 4132        4        1      3     2         1                3        2</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span>  1.02 3124        3        1      2     4         1                2        3</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 3 more variables: anc_state &lt;dbl&gt;, anc_correct_identity &lt;dbl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   s_weight &lt;dbl&gt;</span></span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -286,7 +292,7 @@ function of all ranking profile before and after bias correction.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Seo-young Silvia Kim, Yuki Atsusaka.</p>
+  <p>Developed by <a href="https://sysilviakim.com" class="external-link">Seo-young Silvia Kim</a>, <a href="https://atsusaka.org" class="external-link">Yuki Atsusaka</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
