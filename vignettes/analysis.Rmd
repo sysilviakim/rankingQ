@@ -1,5 +1,5 @@
 ---
-title: "Analysis of Bias-corrected Ranking Data"
+title: "3. Analysis of Bias-corrected Ranking Data"
 author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >

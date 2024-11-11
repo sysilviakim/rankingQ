@@ -1,5 +1,5 @@
 ---
-title: "Visualizing Rankings"
+title: "4. Visualizing Rankings"
 author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >
