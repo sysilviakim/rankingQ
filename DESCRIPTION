@@ -11,7 +11,7 @@ Authors@R: c(
 Maintainer: The package maintainer <sskim.research@gmail.com>
 Description: A system for implement bias correction that addresses 
    measurement errors due to random responses in ranking survey questions.
-URL: https://github.com/sysilviakim/rankingQ
+URL: https://github.com/sysilviakim/rankingQ, http://sysilviakim.com/rankingQ/
 BugReports: https://github.com/sysilviakim/rankingQ/issues
 License: GPL (>= 3)
 Encoding: UTF-8

@@ -5,3 +5,8 @@
 ^LICENSE\.md$
 ^doc$
 ^Meta$
+^doc/Vignette.html$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
