@@ -2,11 +2,11 @@ pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  analysis: analysis.html
-  basic-setup: basic-setup.html
-  bias-correction: bias-correction.html
-  visualizing-rankings: visualizing-rankings.html
-last_built: 2024-11-11T14:34Z
+  1-basic-setup: 1-basic-setup.html
+  2-bias-correction: 2-bias-correction.html
+  3-analysis: 3-analysis.html
+  4-visualizing-rankings: 4-visualizing-rankings.html
+last_built: 2024-11-11T14:38Z
 urls:
   reference: http://sysilviakim.com/rankingQ/reference
   article: http://sysilviakim.com/rankingQ/articles
