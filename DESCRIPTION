@@ -4,7 +4,7 @@ Title: Design-Based Methods for Improving Ranking Questions
 Version: 0.1.0
 Authors@R: c(
   person("Seo-young Silvia", "Kim", email = "sskim.research@gmail.com",
-  role = c("aut")),
+  role = c("aut", "cre"), comment = c(ORCID="0000-0002-8801-9210")),
   person("Yuki", "Atsusaka", email = "yuki.atsusaka@gmail.com",
   role = c("aut", "cre"), comment = c(ORCID="0000-0001-5365-1876"))
   )
