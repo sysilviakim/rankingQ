@@ -14,9 +14,11 @@ vignette: >
 
 To apply the bias correction, we specify our dataset (`data`), the number of items (`J`), the prefix of column names that contain `J` items for the target ranking questions, and the prefix of column names for the anchor ranking questions. When survey weights are available, they can be included by specifying `weight` in the function.
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(rankingQ)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
 
 # Rename the items with a common prefix
 identity <- identity %>%
