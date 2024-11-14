@@ -37,6 +37,7 @@
     <li><a class="dropdown-item" href="../articles/2-bias-correction.html">2. Correcting Bias in Ranking Data</a></li>
     <li><a class="dropdown-item" href="../articles/3-analysis.html">3. Analysis of Bias-corrected Ranking Data</a></li>
     <li><a class="dropdown-item" href="../articles/4-visualizing-rankings.html">4. Visualizing Rankings</a></li>
+    <li><a class="dropdown-item" href="../articles/5-uniformity-test.html">5. Uniformity Tests</a></li>
   </ul>
 </li>
       </ul>
@@ -104,9 +105,9 @@ specifying <code>weight</code> in the function.</p>
 <span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
 <span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="results-estimated-proportion-of-random-responses">Results: Estimated Proportion of Random Responses<a class="anchor" aria-label="anchor" href="#results-estimated-proportion-of-random-responses"></a>
-</h4>
+<div class="section level3">
+<h3 id="results-estimated-proportion-of-random-responses">Results: Estimated Proportion of Random Responses<a class="anchor" aria-label="anchor" href="#results-estimated-proportion-of-random-responses"></a>
+</h3>
 <p>The first output of <code>imprr_direct</code> is the estimated
 proportion of random responses. The vector <code>est_p_random</code>
 returns the estimated proportion along with the lower and upper ends of
@@ -117,9 +118,9 @@ its corresponding 95% confidence interval.</p>
 <pre><code><span><span class="co">##        mean     lower     upper</span></span>
 <span><span class="co">## 1 0.3153146 0.2864261 0.3481958</span></span></code></pre>
 </div>
-<div class="section level4">
-<h4 id="results-estimated-quantities-of-interest">Results: Estimated Quantities of Interest<a class="anchor" aria-label="anchor" href="#results-estimated-quantities-of-interest"></a>
-</h4>
+<div class="section level3">
+<h3 id="results-estimated-quantities-of-interest">Results: Estimated Quantities of Interest<a class="anchor" aria-label="anchor" href="#results-estimated-quantities-of-interest"></a>
+</h3>
 <p>The other output is the bias-corrected estimates of four classes of
 ranking-based quantities, including</p>
 <ol style="list-style-type: decimal">

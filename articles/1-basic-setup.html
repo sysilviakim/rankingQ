@@ -37,6 +37,7 @@
     <li><a class="dropdown-item" href="../articles/2-bias-correction.html">2. Correcting Bias in Ranking Data</a></li>
     <li><a class="dropdown-item" href="../articles/3-analysis.html">3. Analysis of Bias-corrected Ranking Data</a></li>
     <li><a class="dropdown-item" href="../articles/4-visualizing-rankings.html">4. Visualizing Rankings</a></li>
+    <li><a class="dropdown-item" href="../articles/5-uniformity-test.html">5. Uniformity Tests</a></li>
   </ul>
 </li>
       </ul>
@@ -87,13 +88,14 @@ relative importance to them.</p>
 <span><span class="co">#&gt;   method from   </span></span>
 <span><span class="co">#&gt;   +.gg   ggplot2</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"identity"</span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="target-ranking-question">Target ranking question<a class="anchor" aria-label="anchor" href="#target-ranking-question"></a>
-</h3>
+<div class="section level2">
+<h2 id="target-ranking-question">Target ranking question<a class="anchor" aria-label="anchor" href="#target-ranking-question"></a>
+</h2>
 <p>Ranking data are expected to be in the wide format, where multiple
 columns are used to represent different items and their values represent
-the items’ marginal ranks. In <code>identity</code>, the four sources of
-identity are <code>app_party</code>, <code>app_religion</code>,
+the items’ marginal ranks.</p>
+<p>For example, in <code>identity</code>, the four sources of identity
+are <code>app_party</code>, <code>app_religion</code>,
 <code>app_gender</code>, and <code>app_race.</code> For example, the
 first respondent ranked party first, gender second, race third, and
 religion fourth—i.e., “1423” is the respondent’s outcome, given the
@@ -112,9 +114,9 @@ reference choice set of party-religion-gender-race/ethnicity.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: anc_state &lt;dbl&gt;, anc_correct_identity &lt;dbl&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   s_weight &lt;dbl&gt;</span></span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="anchor-ranking-question">Anchor ranking question<a class="anchor" aria-label="anchor" href="#anchor-ranking-question"></a>
-</h3>
+<div class="section level2">
+<h2 id="anchor-ranking-question">Anchor ranking question<a class="anchor" aria-label="anchor" href="#anchor-ranking-question"></a>
+</h2>
 <p>To perform bias correction, the data must have what we call the
 anchor ranking question. The anchor question is an auxiliary ranking
 question that looks similar to the target question, whose “correct”
