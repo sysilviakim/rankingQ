@@ -24,15 +24,17 @@ library(rankingQ)
 data("identity")
 ```
 
-### Target ranking question
+## Target ranking question
 
-Ranking data are expected to be in the wide format, where multiple columns are used to represent different items and their values represent the items' marginal ranks. In `identity`, the four sources of identity are `app_party`, `app_religion`, `app_gender`, and `app_race.` For example, the first respondent ranked party first, gender second, race third, and religion fourth---i.e., "1423" is the respondent's outcome, given the reference choice set of party-religion-gender-race/ethnicity.
+Ranking data are expected to be in the wide format, where multiple columns are used to represent different items and their values represent the items' marginal ranks. 
+
+For example, in `identity`, the four sources of identity are `app_party`, `app_religion`, `app_gender`, and `app_race.` For example, the first respondent ranked party first, gender second, race third, and religion fourth---i.e., "1423" is the respondent's outcome, given the reference choice set of party-religion-gender-race/ethnicity.
 
 ```{r main-data}
 head(identity)
 ```
 
-### Anchor ranking question
+## Anchor ranking question
 
 To perform bias correction, the data must have what we call the anchor ranking question. The anchor question is an auxiliary ranking question that looks similar to the target question, whose "correct" answer is known to researchers. For example, `identity` has responses to the anchor question that asked respondents to rank order four levels of government: house, state, municipal, and school board. These responses are included in `anc_house`, `anc_neighborhood`, `anc_city`, and `anc_state.` Here, the correct answer is assumed to be "1234." Based on theses responses, we code an indicator variable (`anc_correct_identity`) that takes 1 if respondents offer the correct answer and 0 otherwise.
 

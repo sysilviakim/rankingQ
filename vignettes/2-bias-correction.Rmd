@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Direct Bias Correction via `imprr_direct`
+## Direct Bias Correction via `imprr_direct`
 
 `rankingQ` has two primary functions to perform bias correction. First, `imprr_direct` **impr**oves **r**anking data by applying **direct** bias correction to several classes of quantities of interest.
 
@@ -82,7 +82,7 @@ out_direct$qoi %>%
   ylab("")
 ```
 
-# Weighting-Based Bias Correction via `imprr_weight`
+## Weighting-Based Bias Correction via `imprr_weight`
 
 The alternative methods for bias correction is based on the idea of inverse-probability weighting. `imprr_weight` **impr**oves **r**anking data by computing bias correction **weights**, which can be used to correct for the bias in the inverse-probability weighting framework. The same arguments previously used can be used as follows:
 
@@ -96,7 +96,7 @@ out_weights <- imprr_weights(
 )
 ```
 
-## Results: Estimated Weights
+### Results: Estimated Weights
 
 The output of `imprr_weights` contains the set of weights for all possible ranking profiles with `J` items. For example, when `J = 4`, the set has `{1234, 1243, ..., 4321}` and each profile now has an estimated weight.
 
@@ -105,7 +105,7 @@ The output of `imprr_weights` contains the set of weights for all possible ranki
 out_weights$weights
 ```
 
-## Results: Estimated PMF with Raw Data and Bias Corrected Data
+### Results: Estimated PMF with Raw Data and Bias Corrected Data
 
 `imprr_weight` also returns the estimated probability mass function of all ranking profile before and after bias correction.
 
@@ -115,7 +115,7 @@ out_weights$corrected_pmf %>%
   select(ranking, prop, prop_renormalized)
 ```
 
-# Merge Estimated Weights with Original Data
+## Merge Estimated Weights with Original Data
 
 ```{r}
 # Turn the results into a tibble
