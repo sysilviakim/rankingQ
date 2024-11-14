@@ -1,0 +1,37 @@
+---
+title: "5. Uniformity Tests"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{5. Uniformity Tests}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In this vignette, we show how to detect the presence of random responses using the uniformity test, which shows that given respondent-level item order randomization, recorded responses will follow a uniform distribution in the absence of random responses.
+
+```{r setup}
+library(rankingQ)
+```
+
+## Recorded Responses
+
+In an earlier vignette, we have shown how to perform the bias correction on ranking questions using the anchor question. But how do we know if there is a need for bias correction in the first place?
+
+Distribution of rankings of recorded responses can show whether there are indeed random responses. First, what are recorded responses?
+
+## Uniformity Test
+
+In this example, given there are 4! = 24 possible ways to rank the items, the proportion of recorded responses for each possible ranking should converge to 1/24 = 0.0417, in the absence of random responses. 
+
+## Validity of the Anchor Question
+
+Checking for uniformity also validates the usage of the anchor question. 
+
+
