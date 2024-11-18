@@ -15,13 +15,15 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r, message=FALSE, warning=FALSE}
+library(rankingQ)
+library(estimatr)
+data(identity_w)
+```
+
 The estimated weights from `imprr_weights` can be used to perform any analyses. For example, to estimate the average rank of party, one can leverage linear regression as follows:
 
 ```{r}
-library(rankingQ)
-library(estimatr)
-
-data(identity_w)
 lm_robust(party ~ 1, data = identity_w, weights = w) |> tidy()
 ```
 
