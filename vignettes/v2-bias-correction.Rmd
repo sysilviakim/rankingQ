@@ -16,6 +16,8 @@ To apply the bias correction, we specify our dataset (`data`), the number of ite
 
 ```{r, message = FALSE, warning = FALSE}
 library(rankingQ)
+data(identity)
+
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -73,6 +75,12 @@ For example, one can visualize the result for average ranks as follows:
 ```{r}
 # Plot the result
 out_direct$qoi %>%
+  mutate(
+    item = factor(
+      item, levels = paste0("app_identity_", seq(4)),
+      labels = c("party", "religion", "gender", "race")
+    )
+  ) %>%
   filter(qoi == "average rank") %>%
   ggplot(aes(x = mean, y = item)) +
   geom_point() +
@@ -123,7 +131,11 @@ tibble_w <- out_weights$weights %>% tibble()
 
 # Merge the weights back to the original data
 identity_w <- identity %>%
-  unite(ranking, starts_with("app_identity"), sep = "", remove = FALSE) %>%
+  unite(
+    ranking, 
+    app_identity_1, app_identity_2, app_identity_3, app_identity_4,
+    sep = "", remove = FALSE
+  ) %>%
   left_join(tibble_w, by = "ranking") %>%
   select(w, everything()) %>%
   rename(
@@ -133,4 +145,5 @@ identity_w <- identity %>%
     race = app_identity_4
   )
 head(identity_w)
+## save(identity_w, file = "data/identity_w.Rda")
 ```
