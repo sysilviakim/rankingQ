@@ -16,8 +16,9 @@ knitr::opts_chunk$set(
 
 In this vignette, we show how to detect the presence of random responses using the uniformity test, which shows that given respondent-level item order randomization, recorded responses will follow a uniform distribution in the absence of random responses.
 
-```{r setup}
+```{r setup, message=FALSE, warning=FALSE}
 library(rankingQ)
+data(identity)
 ```
 
 ## Recorded Responses
@@ -51,14 +52,29 @@ Now suppose that random responses occur in patterns such as panels B and E. If 5
 The uniformity test checks whether the recorded responses follow a uniform distribution. Non-uniformity in the test suggests the presence of random responses.
 
 ```{r}
-library(rankingQ)
-data(identity)
-chisq.test(rep(1/24, 24), p = rep(1/24, 24))
+tab <- table(identity$app_identity_recorded)
+chisq.test(tab, p = rep(1 / length(tab), length(tab)))
 ```
 
+The results indicate that the recorded responses are not uniformly distributed, suggesting random responses in the main identity ranking question.
 
 ## Validity of the Anchor Question
 
-Checking for uniformity also validates the usage of the anchor question. 
+Checking for uniformity also validates the usage of the anchor question. Although the assumption in the paper is simply that the proportion of random responses is the same in the main and the anchor question, the more implicit assumption is that those who are answering the anchor question correctly are not providing random responses to the anchor question.
 
+We can check this by comparing the recorded responses of those who
+answered the anchor question correctly and incorrectly.
 
+```{r}
+## Correctly answered the anchor question
+tab <- table(identity$anc_identity_recorded[identity$anc_correct_identity == 1])
+round(prop.table(tab) * 100, digits = 1)
+chisq.test(tab, p = rep(1 / length(tab), length(tab)))
+
+## Incorrectly answered the anchor question
+tab <- table(identity$anc_identity_recorded[identity$anc_correct_identity == 0])
+round(prop.table(tab) * 100, digits = 1)
+chisq.test(tab, p = rep(1 / length(tab), length(tab)))
+```
+
+As can be seen, while there is insufficient evidence to reject the null hypothesis for those who answered the anchor question correctly, the recorded responses of those who answered the anchor question incorrectly offer clear evidence for non-uniformity, where about 20% of respondents submitted either 1234 or 4321.
