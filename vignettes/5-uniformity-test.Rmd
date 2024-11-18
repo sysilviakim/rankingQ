@@ -24,11 +24,26 @@ library(rankingQ)
 
 In an earlier vignette, we have shown how to perform the bias correction on ranking questions using the anchor question. But how do we know if there is a need for bias correction in the first place?
 
-Distribution of rankings of recorded responses can show whether there are indeed random responses. First, what are recorded responses?
+Distribution of rankings of *recorded responses* can show whether there are indeed random responses. Before we demonstrate this, first, we must ask: what are recorded responses? The following figure shows the difference between *observed ranking* and *recorded response*, given respondent-level item order randomization. 
+
+<img src="man/figures/AtsusakaKimFigA1.jpg" width="100%" style="display: block; margin: auto;"/>
+
+Suppose that I prefer items a-b-c in that order, and in the ranking exercise, they were presented in the order of a-b-c. Then, given the ordered reference set a-b-c, my observed ranking and recorded response are both 1-2-3. Recorded responses are identical to observed rankings when item orders are fixed. However, when an item order is not fixed, the observed choice set differs across respondents.
+
+If, for example, the items were presented in the order of c-b-a, then my observed ranking is 1-2-3, but my recorded response is 3-2-1. This is because the *observed ranking* is the ranking of the items in the order of the reference set, regardless of the order in which they were presented. On the other hand, the *recorded response* is the ranking of the items in the order in which they were presented.
 
 ## Uniformity Test
 
-In this example, given there are 4! = 24 possible ways to rank the items, the proportion of recorded responses for each possible ranking should converge to 1/24 = 0.0417, in the absence of random responses. 
+In Atsusaka and Kim (2024), we prove that once there is item order randomization, the recorded responses will follow a uniform distribution in the absence of random responses. Suppose, for example, that everyone prefers a-b-c in that order. Some respondents will have a recorded response of 1-2-3, while others will have 3-2-1, given the differently observed sets of items. Then, in the absence of random responses, the proportion of recorded responses for each possible ranking should converge to 1/24 = 0.0417, given that there are 4! = 24 possible ways to rank the items.
+
+What happens with random responses? If half of the respondents are inattentive and randomly submit 1-2-3, regardless of what items were presented in what order, then the proportion of recorded responses for 1-2-3 will be 0.5 or more.
+
+The uniformity test checks whether the recorded responses follow a uniform distribution. Non-uniformity in the test suggests the presence of random responses.
+
+```{r}
+chisq.test(rep(1/24, 24), p = rep(1/24, 24))
+```
+
 
 ## Validity of the Anchor Question
 
