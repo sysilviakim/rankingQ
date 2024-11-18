@@ -6,7 +6,7 @@
 \title{Identity-ranking data analyzed in Atsusaka and Kim (2024)}
 \format{
 ## `identity`
-A data frame with 1,082 rows and 10 columns:
+A data frame with 1,082 rows and 12 columns:
 \describe{
   \item{app_party}{Marginal ranking for party (main identity ranking question).}
   \item{app_religion}{Marginal ranking for religion (main identity ranking question).}
@@ -17,6 +17,8 @@ A data frame with 1,082 rows and 10 columns:
   \item{anc_city}{Marginal ranking for city (anchor question).}
   \item{anc_state}{Marginal ranking for state (anchor question).}
   \item{anc_correct_identity}{Whether the respondent answered the anchor questions correctly. This is a binary variable that 1 if the respondent correctly answers the anchor ranking question and 0 if otherwise.}
+  \item{app_identity_recorded}{Recorded responses for the main identity ranking question.}
+  \item{anc_identity_recorded}{Recorded responses for the anchor ranking question.}
   \item{s_weight}{Survey weight.}
 }
 }

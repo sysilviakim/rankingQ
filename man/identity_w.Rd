@@ -6,7 +6,7 @@
 \title{Identity-ranking data with estimated weights based on inverse probability weighting}
 \format{
 ## `identity_w`
-A data frame with 1,082 rows and 12 columns:
+A data frame with 1,082 rows and 14 columns:
 \describe{
   \item{w}{Estimated weight based on inverse probability weighting.}
   \item{ranking}{Ranking pattern that the respondent provided.}
@@ -19,6 +19,8 @@ A data frame with 1,082 rows and 12 columns:
   \item{anc_city}{Marginal ranking for city (anchor question).}
   \item{anc_state}{Marginal ranking for state (anchor question).}
   \item{anc_correct_identity}{Whether the respondent answered the anchor questions correctly. This is a binary variable that 1 if the respondent correctly answers the anchor ranking question and 0 if otherwise.}
+  \item{app_identity_recorded}{Recorded responses for the main identity ranking question.}
+  \item{anc_identity_recorded}{Recorded responses for the anchor ranking question.}
   \item{s_weight}{Survey weight.}
 }
 }
