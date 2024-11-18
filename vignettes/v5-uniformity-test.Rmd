@@ -34,13 +34,25 @@ If, for example, the items were presented in the order of c-b-a, then my observe
 
 ## Uniformity Test
 
+### Theory
+
 In Atsusaka and Kim (2024), we prove that once there is item order randomization, the recorded responses will follow a uniform distribution in the absence of random responses. Suppose, for example, that everyone prefers a-b-c in that order. Some respondents will have a recorded response of 1-2-3, while others will have 3-2-1, given the differently observed sets of items. Then, in the absence of random responses, the proportion of recorded responses for each possible ranking should converge to 1/24 = 0.0417, given that there are 4! = 24 possible ways to rank the items.
 
-What happens with random responses? If half of the respondents are inattentive and randomly submit 1-2-3, regardless of what items were presented in what order, then the proportion of recorded responses for 1-2-3 will be 0.5 or more.
+What happens with random responses? The figure below shows some likely scenario.
+
+<img src="../man/figures/AtsusakaKimFigB2.jpg" width="100%" style="display: block; margin: auto;"/>
+
+In this hypothetical world, suppose everyone prefers items in the order of c-b-a. With a reference item set of (a, b, c), the recorded responses will always be 3-2-1 (panel A). If item order is randomized, recorded responses will be uniformly distributed (panel D).
+
+Now suppose that random responses occur in patterns such as panels B and E. If 50% of responses are random, recorded responses will be like panel C if the reference set is fixed for all respondents, or like panel F if the reference set is randomized!
+
+### Test
 
 The uniformity test checks whether the recorded responses follow a uniform distribution. Non-uniformity in the test suggests the presence of random responses.
 
 ```{r}
+library(rankingQ)
+data(identity)
 chisq.test(rep(1/24, 24), p = rep(1/24, 24))
 ```
 
