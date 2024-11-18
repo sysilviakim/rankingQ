@@ -26,7 +26,7 @@ In an earlier vignette, we have shown how to perform the bias correction on rank
 
 Distribution of rankings of *recorded responses* can show whether there are indeed random responses. Before we demonstrate this, first, we must ask: what are recorded responses? The following figure shows the difference between *observed ranking* and *recorded response*, given respondent-level item order randomization. 
 
-<img src="man/figures/AtsusakaKimFigA1.jpg" width="100%" style="display: block; margin: auto;"/>
+<img src="../man/figures/AtsusakaKimFigA1.jpg" width="100%" style="display: block; margin: auto;"/>
 
 Suppose that I prefer items a-b-c in that order, and in the ranking exercise, they were presented in the order of a-b-c. Then, given the ordered reference set a-b-c, my observed ranking and recorded response are both 1-2-3. Recorded responses are identical to observed rankings when item orders are fixed. However, when an item order is not fixed, the observed choice set differs across respondents.
 
