@@ -2,12 +2,12 @@ pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  1-basic-setup: 1-basic-setup.html
-  2-bias-correction: 2-bias-correction.html
-  3-analysis: 3-analysis.html
-  4-visualizing-rankings: 4-visualizing-rankings.html
-  5-uniformity-test: 5-uniformity-test.html
-last_built: 2024-11-18T05:36Z
+  v1-basic-setup: v1-basic-setup.html
+  v2-bias-correction: v2-bias-correction.html
+  v3-analysis: v3-analysis.html
+  v4-visualizing-rankings: v4-visualizing-rankings.html
+  v5-uniformity-test: v5-uniformity-test.html
+last_built: 2024-11-18T18:28Z
 urls:
   reference: http://sysilviakim.com/rankingQ/reference
   article: http://sysilviakim.com/rankingQ/articles

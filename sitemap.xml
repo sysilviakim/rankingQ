@@ -1,12 +1,12 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>http://sysilviakim.com/rankingQ/404.html</loc></url>
 <url><loc>http://sysilviakim.com/rankingQ/LICENSE.html</loc></url>
-<url><loc>http://sysilviakim.com/rankingQ/articles/1-basic-setup.html</loc></url>
-<url><loc>http://sysilviakim.com/rankingQ/articles/2-bias-correction.html</loc></url>
-<url><loc>http://sysilviakim.com/rankingQ/articles/3-analysis.html</loc></url>
-<url><loc>http://sysilviakim.com/rankingQ/articles/4-visualizing-rankings.html</loc></url>
-<url><loc>http://sysilviakim.com/rankingQ/articles/5-uniformity-test.html</loc></url>
 <url><loc>http://sysilviakim.com/rankingQ/articles/index.html</loc></url>
+<url><loc>http://sysilviakim.com/rankingQ/articles/v1-basic-setup.html</loc></url>
+<url><loc>http://sysilviakim.com/rankingQ/articles/v2-bias-correction.html</loc></url>
+<url><loc>http://sysilviakim.com/rankingQ/articles/v3-analysis.html</loc></url>
+<url><loc>http://sysilviakim.com/rankingQ/articles/v4-visualizing-rankings.html</loc></url>
+<url><loc>http://sysilviakim.com/rankingQ/articles/v5-uniformity-test.html</loc></url>
 <url><loc>http://sysilviakim.com/rankingQ/authors.html</loc></url>
 <url><loc>http://sysilviakim.com/rankingQ/index.html</loc></url>
 <url><loc>http://sysilviakim.com/rankingQ/reference/avg_rank.html</loc></url>
