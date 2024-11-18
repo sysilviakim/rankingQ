@@ -8,8 +8,8 @@
 <title>5. Uniformity Tests • rankingQ</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="5. Uniformity Tests">
 </head>
 <body>
@@ -83,16 +83,53 @@ follow a uniform distribution in the absence of random responses.</p>
 <p>In an earlier vignette, we have shown how to perform the bias
 correction on ranking questions using the anchor question. But how do we
 know if there is a need for bias correction in the first place?</p>
-<p>Distribution of rankings of recorded responses can show whether there
-are indeed random responses. First, what are recorded responses?</p>
+<p>Distribution of rankings of <em>recorded responses</em> can show
+whether there are indeed random responses. Before we demonstrate this,
+first, we must ask: what are recorded responses? The following figure
+shows the difference between <em>observed ranking</em> and <em>recorded
+response</em>, given respondent-level item order randomization.</p>
+<p><img src="reference/figures/AtsusakaKimFigA1.jpg" width="100%" style="display: block; margin: auto;"></p>
+<p>Suppose that I prefer items a-b-c in that order, and in the ranking
+exercise, they were presented in the order of a-b-c. Then, given the
+ordered reference set a-b-c, my observed ranking and recorded response
+are both 1-2-3. Recorded responses are identical to observed rankings
+when item orders are fixed. However, when an item order is not fixed,
+the observed choice set differs across respondents.</p>
+<p>If, for example, the items were presented in the order of c-b-a, then
+my observed ranking is 1-2-3, but my recorded response is 3-2-1. This is
+because the <em>observed ranking</em> is the ranking of the items in the
+order of the reference set, regardless of the order in which they were
+presented. On the other hand, the <em>recorded response</em> is the
+ranking of the items in the order in which they were presented.</p>
 </div>
 <div class="section level2">
 <h2 id="uniformity-test">Uniformity Test<a class="anchor" aria-label="anchor" href="#uniformity-test"></a>
 </h2>
-<p>In this example, given there are 4! = 24 possible ways to rank the
-items, the proportion of recorded responses for each possible ranking
-should converge to 1/24 = 0.0417, in the absence of random
-responses.</p>
+<p>In Atsusaka and Kim (2024), we prove that once there is item order
+randomization, the recorded responses will follow a uniform distribution
+in the absence of random responses. Suppose, for example, that everyone
+prefers a-b-c in that order. Some respondents will have a recorded
+response of 1-2-3, while others will have 3-2-1, given the differently
+observed sets of items. Then, in the absence of random responses, the
+proportion of recorded responses for each possible ranking should
+converge to 1/24 = 0.0417, given that there are 4! = 24 possible ways to
+rank the items.</p>
+<p>What happens with random responses? If half of the respondents are
+inattentive and randomly submit 1-2-3, regardless of what items were
+presented in what order, then the proportion of recorded responses for
+1-2-3 will be 0.5 or more.</p>
+<p>The uniformity test checks whether the recorded responses follow a
+uniform distribution. Non-uniformity in the test suggests the presence
+of random responses.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">24</span>, <span class="fl">24</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">24</span>, <span class="fl">24</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in chisq.test(rep(1/24, 24), p = rep(1/24, 24)): Chi-squared</span></span>
+<span><span class="co">#&gt; approximation may be incorrect</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Chi-squared test for given probabilities</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data:  rep(1/24, 24)</span></span>
+<span><span class="co">#&gt; X-squared = 0, df = 23, p-value = 1</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="validity-of-the-anchor-question">Validity of the Anchor Question<a class="anchor" aria-label="anchor" href="#validity-of-the-anchor-question"></a>
