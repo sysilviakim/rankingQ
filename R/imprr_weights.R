@@ -105,20 +105,22 @@ imprr_weights <- function(data,
       n_renormalized = n_adj / sum(n_adj)
     ) %>%
     rename(
-      prop = n,
-      prop_adj = n_adj,
-      prop_renormalized = n_renormalized
+      prop.raw = n,
+      prop.adj = n_adj,
+      prop = n_renormalized
     ) %>%
     arrange(ranking)
 
   # Step 6: Get the bias-correction weight vector ------------------------------
   df_w <- perm_j %>%
     mutate(
-      w = imp_PMF$prop_renormalized / PMF_raw$prop, # Inverse probability weight
+      w = imp_PMF$prop / PMF_raw$prop, # Inverse probability weight
       w = ifelse(w == Inf, 0, w),
       w = ifelse(is.na(w), 0, w)
     ) %>% # NA arise from 0/0
     arrange(ranking)
+
+
 
   # Summarize results ----------------------------------------------------------
   return(
