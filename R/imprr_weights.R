@@ -1,10 +1,9 @@
-#' Bias-correct the Distribution of Ranking Permutations
-#' (IPW Estimator Version)
+#' Computes Bias-Correction Weights for Ranking Data
 #'
 #' @description This function implements the bias correction of the ranking
 #' distribution using a paired anchor question, using the IPW estimator.
 #'
-#' @importFrom dplyr `%>%` mutate select group_by left_join arrange summarise
+#' @importFrom dplyr `%>%` mutate select group_by left_join arrange summarise count
 #' @importFrom tidyselect matches
 #' @importFrom combinat permn
 #' @importFrom questionr wtd.table
@@ -66,7 +65,7 @@ imprr_weights <- function(data,
 
   D_PMF_0 <- D_0 %>%
     group_by(ranking) %>%
-    dplyr::count()
+    count()
 
   ## Over-write "n" with weighted results
   D_PMF_0$n <- as.numeric(tab_vec$.)

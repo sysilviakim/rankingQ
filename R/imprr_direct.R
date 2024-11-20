@@ -1,5 +1,4 @@
-#' Bias-correct the Distribution of Ranking Permutations
-#' Using a Paired Anchor Question and Produce De-biased Average Rankings
+#' Implements Plug-in Bias-Corrected Estimators for Ranking Data
 #'
 #' @description This function implements the bias correction of the ranking
 #' distribution using a paired anchor question.
