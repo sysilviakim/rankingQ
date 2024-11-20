@@ -113,7 +113,7 @@ The output of `imprr_weights` contains the set of weights for all possible ranki
 out_weights$weights
 ```
 
-### Results: Estimated PMF with Raw Data and Bias Corrected Data
+### Results: Estimated PMF with Bias Corrected Data
 
 `imprr_weight` also returns the estimated probability mass function of all ranking profile before and after bias correction.
 
@@ -126,8 +126,12 @@ out_weights$corrected_pmf %>%
 ## Estimated Weights with Original Data
 
 ```{r}
-identity_w <- out_weights$data
+identity_w <- out_weights$data %>%
+  rename(party = app_identity_1,
+         religion = app_identity_2,
+         gender = app_identity_3,
+         race = app_identity_4)
 
 head(identity_w)
-## save(identity_w, file = "data/identity_w.Rda")
+# save(identity_w, file = "data/identity_w.Rda")
 ```
