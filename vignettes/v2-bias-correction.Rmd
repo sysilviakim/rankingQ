@@ -118,32 +118,16 @@ out_weights$weights
 `imprr_weight` also returns the estimated probability mass function of all ranking profile before and after bias correction.
 
 ```{r}
-# View the estimated PMF with raw data and weighted data
+# View the estimated corrected PMF
 out_weights$corrected_pmf %>%
-  select(ranking, prop, prop_renormalized)
+  select(ranking, prop)
 ```
 
-## Merge Estimated Weights with Original Data
+## Estimated Weights with Original Data
 
 ```{r}
-# Turn the results into a tibble
-tibble_w <- out_weights$weights %>% tibble()
+identity_w <- out_weights$data
 
-# Merge the weights back to the original data
-identity_w <- identity %>%
-  unite(
-    ranking, 
-    app_identity_1, app_identity_2, app_identity_3, app_identity_4,
-    sep = "", remove = FALSE
-  ) %>%
-  left_join(tibble_w, by = "ranking") %>%
-  select(w, everything()) %>%
-  rename(
-    party = app_identity_1,
-    religion = app_identity_2,
-    gender = app_identity_3,
-    race = app_identity_4
-  )
 head(identity_w)
 ## save(identity_w, file = "data/identity_w.Rda")
 ```
