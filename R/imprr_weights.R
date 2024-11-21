@@ -20,6 +20,10 @@
 #' @param anc_correct Indicator for passing the anchor question.
 #' @param seed Seed for \code{set.seed} for reproducibility.
 #' @param weight A vector of weights. Defaults to NULL.
+#' @param ranking The name of the column that will store the full ranking
+#' profile. Defaults to "ranking". If `main_q` exists in the data, the produced
+#' column should be identical to `main_q`. However, the function defaults to
+#' creating another column by combining marginal rankings, just in case.
 #'
 #' @return A list.
 #'
@@ -30,16 +34,22 @@ imprr_weights <- function(data,
                           main_q,
                           anc_correct,
                           seed = 123456,
-                          weight = NULL) {
+                          weight = NULL,
+                          ranking = "ranking") {
   ## Suppress global variable warning
   count <- n <- n_adj <- n_renormalized <- prop <- w <- NULL
 
-  if (main_q %in% names(data)) {
+  if (is.null(ranking) & main_q %in% names(data)) {
     ranking <- main_q
-  } else if (!("ranking" %in% names(data))) {
-    ranking <- "ranking"
-  } else {
-    ranking <- main_q
+  }
+
+  if ("ranking" %in% names(data)) {
+    stop(
+      paste0(
+        "Specify another variable for the full ranking profile, ",
+        "or use NULL for the `ranking` argument."
+      )
+    )
   }
 
   # Setup ======================================================================
@@ -78,7 +88,8 @@ imprr_weights <- function(data,
 
   D_PMF_0 <- D_0 %>%
     group_by(!!as.name(ranking)) %>%
-    count()
+    count() %>%
+    ungroup()
 
   ## Over-write "n" with weighted results
   D_PMF_0$n <- as.numeric(tab_vec$.)
@@ -140,7 +151,7 @@ imprr_weights <- function(data,
   var_vec <- paste0(main_q, "_", 1:J)
 
   # Merge the weights back to the original data
-  if (!(main_q %in% names(data))) {
+  if (!(ranking %in% names(data))) {
     data_w <- data %>%
       unite(
         !!as.name(ranking),
@@ -149,7 +160,7 @@ imprr_weights <- function(data,
       )
   }
 
-  data_w <- data %>%
+  data_w <- data_w %>%
     left_join(tibble_w, by = ranking) %>%
     select(w, everything())
 

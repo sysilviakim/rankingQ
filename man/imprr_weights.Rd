@@ -10,7 +10,8 @@ imprr_weights(
   main_q,
   anc_correct,
   seed = 123456,
-  weight = NULL
+  weight = NULL,
+  ranking = "ranking"
 )
 }
 \arguments{
@@ -31,6 +32,11 @@ with an underbar separator followed by numbers.}
 \item{seed}{Seed for \code{set.seed} for reproducibility.}
 
 \item{weight}{A vector of weights. Defaults to NULL.}
+
+\item{ranking}{The name of the column that will store the full ranking
+profile. Defaults to "ranking". If `main_q` exists in the data, the produced
+column should be identical to `main_q`. However, the function defaults to
+creating another column by combining marginal rankings, just in case.}
 }
 \value{
 A list.

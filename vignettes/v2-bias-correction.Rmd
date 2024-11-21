@@ -120,7 +120,7 @@ out_weights$weights
 ```{r}
 # View the estimated corrected PMF
 out_weights$corrected_pmf %>%
-  select(app_identity, prop)
+  select(ranking, prop)
 ```
 
 ## Estimated Weights with Original Data
