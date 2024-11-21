@@ -32,7 +32,15 @@ imprr_weights <- function(data,
                           seed = 123456,
                           weight = NULL) {
   ## Suppress global variable warning
-  count <- n <- n_adj <- n_renormalized <- prop <- ranking <- w <- NULL
+  count <- n <- n_adj <- n_renormalized <- prop <- w <- NULL
+
+  if (main_q %in% names(data)) {
+    ranking <- main_q
+  } else if (!("ranking" %in% names(data))) {
+    ranking <- "ranking"
+  } else {
+    ranking <- main_q
+  }
 
   # Setup ======================================================================
   N <- nrow(data)
@@ -61,15 +69,15 @@ imprr_weights <- function(data,
   # Step 3: Get the observed PMF based on raw data -----------------------------
   ## Get raw counts of ranking profiles
   D_0 <- glo_app %>%
-    unite(ranking, sep = "") %>%
+    unite(!!as.name(ranking), sep = "") %>%
     mutate(survey_weight = weight)
 
   ## Get a weighted table
-  tab_vec <- wtd.table(x = D_0$ranking, weights = D_0$survey_weight)%>%
+  tab_vec <- wtd.table(x = D_0[[ranking]], weights = D_0$survey_weight)%>%
     tibble()
 
   D_PMF_0 <- D_0 %>%
-    group_by(ranking) %>%
+    group_by(!!as.name(ranking)) %>%
     count()
 
   ## Over-write "n" with weighted results
@@ -79,19 +87,20 @@ imprr_weights <- function(data,
   perm_j <- permn(1:J)
   perm_j <- do.call(rbind.data.frame, perm_j)
   colnames(perm_j) <- c(paste0("position_", 1:J))
+
   perm_j <- perm_j %>%
-    unite(col = "ranking", sep = "") %>%
-    arrange(ranking)
+    unite(!!as.name(ranking), sep = "") %>%
+    arrange(!!as.name(ranking))
 
   ## We need this because some rankings may not appear in the data
   PMF_raw <- perm_j %>%
-    left_join(D_PMF_0, by = "ranking") %>%
+    left_join(D_PMF_0, by = ranking) %>%
     mutate(
       n = ifelse(is.na(n) == T, 0, n),
       prop = n / sum(weight),
       prop = ifelse(is.na(prop), 0, prop)
     ) %>%
-    arrange(ranking)
+    arrange(!!as.name(ranking))
 
   # Step 4: Get the bias-corrected PMF -----------------------------------------
   ## Apply Equation A.11
@@ -114,7 +123,7 @@ imprr_weights <- function(data,
       prop.adj = n_adj,
       prop = n_renormalized
     ) %>%
-    arrange(ranking)
+    arrange(!!as.name(ranking))
 
   # Step 6: Get the bias-correction weight vector ------------------------------
   df_w <- perm_j %>%
@@ -123,8 +132,7 @@ imprr_weights <- function(data,
       w = ifelse(w == Inf, 0, w),
       w = ifelse(is.na(w), 0, w)
     ) %>% # NA arise from 0/0
-    arrange(ranking)
-
+    arrange(!!as.name(ranking))
 
   # Turn the results into a tibble
   tibble_w <- df_w %>% tibble()
@@ -132,15 +140,18 @@ imprr_weights <- function(data,
   var_vec <- paste0(main_q, "_", 1:J)
 
   # Merge the weights back to the original data
-  data_w <- data %>%
-    unite(
-      ranking,
-      matches(var_vec),
-      sep = "", remove = FALSE
-    ) %>%
-    left_join(tibble_w, by = "ranking") %>%
-    select(w, everything())
+  if (!(main_q %in% names(data))) {
+    data_w <- data %>%
+      unite(
+        !!as.name(ranking),
+        matches(var_vec),
+        sep = "", remove = FALSE
+      )
+  }
 
+  data_w <- data %>%
+    left_join(tibble_w, by = ranking) %>%
+    select(w, everything())
 
   # Summarize results ----------------------------------------------------------
   return(
