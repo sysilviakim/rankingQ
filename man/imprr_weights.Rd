@@ -2,8 +2,7 @@
 % Please edit documentation in R/imprr_weights.R
 \name{imprr_weights}
 \alias{imprr_weights}
-\title{Bias-correct the Distribution of Ranking Permutations
-(IPW Estimator Version)}
+\title{Computes Bias-Correction Weights for Ranking Data}
 \usage{
 imprr_weights(
   data,

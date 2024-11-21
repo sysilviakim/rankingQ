@@ -2,8 +2,7 @@
 % Please edit documentation in R/imprr_direct.R
 \name{imprr_direct}
 \alias{imprr_direct}
-\title{Bias-correct the Distribution of Ranking Permutations
-Using a Paired Anchor Question and Produce De-biased Average Rankings}
+\title{Implements Plug-in Bias-Corrected Estimators for Ranking Data}
 \usage{
 imprr_direct(
   data,

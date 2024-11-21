@@ -22,7 +22,7 @@ A data frame of rankings of t items for n assessors.
 }
 \description{
 This function draws samples from the Plackett-Luce model, using
-Algorithm 2.1, "Efficient Sampling from Plackett-Luce," in Xia (2019),
+Algorithm 2.1, "Efficient Sampling from Plackett-Luce," in [Xia (2019)](https://link.springer.com/book/10.1007/978-3-031-01582-3),
 page 20, Section 2.2.3 Sampling from Random Utility Models.
 The name \code{rpluce} is a convention that follows random generations of
 numbers from statistical distributions such as \code{rnorm} or

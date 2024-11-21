@@ -1,10 +1,9 @@
-#' Bias-correct the Distribution of Ranking Permutations
-#' (IPW Estimator Version)
+#' Computes Bias-Correction Weights for Ranking Data
 #'
 #' @description This function implements the bias correction of the ranking
 #' distribution using a paired anchor question, using the IPW estimator.
 #'
-#' @importFrom dplyr `%>%` mutate select group_by left_join arrange summarise
+#' @importFrom dplyr `%>%` mutate select group_by left_join arrange summarise count
 #' @importFrom tidyselect matches
 #' @importFrom combinat permn
 #' @importFrom questionr wtd.table
@@ -41,7 +40,8 @@ imprr_weights <- function(data,
   }
 
   # Check the validity of the input arguments ==================================
-  ## Main ranking only (Silvia, I edited here slightly)
+  ## Main ranking only
+
   glo_app <- data %>%
     select(matches(main_q)) %>%
     select(matches("_[[:digit:]]$"))
@@ -105,20 +105,37 @@ imprr_weights <- function(data,
       n_renormalized = n_adj / sum(n_adj)
     ) %>%
     rename(
-      prop = n,
-      prop_adj = n_adj,
-      prop_renormalized = n_renormalized
+      prop.raw = n,
+      prop.adj = n_adj,
+      prop = n_renormalized
     ) %>%
     arrange(ranking)
 
   # Step 6: Get the bias-correction weight vector ------------------------------
   df_w <- perm_j %>%
     mutate(
-      w = imp_PMF$prop_renormalized / PMF_raw$prop, # Inverse probability weight
+      w = imp_PMF$prop / PMF_raw$prop, # Inverse probability weight
       w = ifelse(w == Inf, 0, w),
       w = ifelse(is.na(w), 0, w)
     ) %>% # NA arise from 0/0
     arrange(ranking)
+
+
+  # Turn the results into a tibble
+  tibble_w <- df_w %>% tibble()
+
+  var_vec <- paste0(main_q, "_", 1:J)
+
+  # Merge the weights back to the original data
+  data_w <- data %>%
+    unite(
+      ranking,
+      matches(var_vec),
+      sep = "", remove = FALSE
+    ) %>%
+    left_join(tibble_w, by = "ranking") %>%
+    select(w, everything())
+
 
   # Summarize results ----------------------------------------------------------
   return(
@@ -126,7 +143,8 @@ imprr_weights <- function(data,
       est_p_random = 1 - p_non_random,
       obs_pmf = PMF_raw,
       corrected_pmf = imp_PMF,
-      weights = df_w
+      weights = df_w,
+      data = data_w
     )
   )
 }
