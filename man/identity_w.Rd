@@ -21,6 +21,10 @@ A data frame with 1,082 rows and 14 columns:
   \item{anc_correct_identity}{Whether the respondent answered the anchor questions correctly. This is a binary variable that 1 if the respondent correctly answers the anchor ranking question and 0 if otherwise.}
   \item{app_identity_recorded}{Recorded responses for the main identity ranking question.}
   \item{anc_identity_recorded}{Recorded responses for the anchor ranking question.}
+  \item{app_identity}{Full ranking profile for the main identity ranking question.}
+  \item{app_identity_row_rnd}{The order in which the items were randomly presented for the respondent in the main ranking question.}
+  \item{anc_identity}{Full ranking profile for the anchor ranking question.}
+  \item{anc_identity_row_rnd}{The order in which the items were randomly presented for the respondent in the anchor ranking question.}
   \item{s_weight}{Survey weight.}
 }
 }
