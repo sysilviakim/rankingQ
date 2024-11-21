@@ -16,7 +16,8 @@ A vector of ordinal strings.
 \description{
 This function generates an ordinal sequence of an arbitrary length. For
 example, if the length is 3, the function will return the vector
-\code{c("1st", "2nd", "3rd")}.
+\code{c("1st", "2nd", "3rd")}. This function is used within \code{avg_rank}
+and such functions.
 }
 \examples{
 ordinal_seq(11)

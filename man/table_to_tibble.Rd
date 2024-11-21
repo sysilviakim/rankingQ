@@ -18,6 +18,8 @@ A tibble or data frame, depending on the \code{tibble} argument.
 \description{
 This function converts a frequency table to a tibble or data frame.
 It also creates a proportion variable as well as the frequency variable.
+This function is useful when plotting distribution of ranking patterns;
+see relevant vignette.
 }
 \examples{
 tab <- lapply(combinat::permn(seq(3)), paste0, collapse = "") |>
