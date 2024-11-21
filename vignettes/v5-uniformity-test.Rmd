@@ -99,3 +99,13 @@ chisq.test(tab, p = rep(1 / length(tab), length(tab)))
 ```
 
 As can be seen, while there is insufficient evidence to reject the null hypothesis for those who answered the anchor question correctly, the recorded responses of those who answered the anchor question incorrectly offer clear evidence for non-uniformity, where about 20% of respondents submitted either 1234 or 4321.
+
+## Caveat: Augment Missing Permutation Patterns
+
+One thing to note: in a small sample size, some ranking patterns might not be realized. For example, in a sample of 10 respondents, it is possible that the pattern 1234 is not observed. In such cases, it is important to augment the missing permutation patterns with a count of 0, which can be done with `permn_augment`.
+
+```{r}
+tab <- table(head(identity$app_identity_recorded))
+tab ## only five patterns out of twenty-four possible patterns
+permn_augment(tab)
+```
