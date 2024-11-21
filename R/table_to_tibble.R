@@ -2,6 +2,8 @@
 #'
 #' This function converts a frequency table to a tibble or data frame.
 #' It also creates a proportion variable as well as the frequency variable.
+#' This function is useful when plotting distribution of ranking patterns;
+#' see relevant vignette.
 #'
 #' @param tab A frequency table.
 #' @param tibble A logical value indicating whether the output should be
