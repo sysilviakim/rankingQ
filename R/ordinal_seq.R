@@ -2,7 +2,8 @@
 #'
 #' This function generates an ordinal sequence of an arbitrary length. For
 #' example, if the length is 3, the function will return the vector
-#' \code{c("1st", "2nd", "3rd")}.
+#' \code{c("1st", "2nd", "3rd")}. This function is used within \code{avg_rank}
+#' and such functions.
 #'
 #' @param length The length of the ordinal sequence to generate.
 #' It should be a numeric value of length 1.
