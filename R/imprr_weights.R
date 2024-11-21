@@ -44,12 +44,7 @@ imprr_weights <- function(data,
   }
 
   if ("ranking" %in% names(data)) {
-    stop(
-      paste0(
-        "Specify another variable for the full ranking profile, ",
-        "or use NULL for the `ranking` argument."
-      )
-    )
+    message("Existing 'ranking' column will be overwritten.")
   }
 
   # Setup ======================================================================
