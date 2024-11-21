@@ -69,11 +69,16 @@ distribution using a paired anchor question, using the IPW estimator.</p>
 
 <dt id="arg-j">J<a class="anchor" aria-label="anchor" href="#arg-j"></a></dt>
 <dd><p>The number of items in the ranking question. Defaults to NULL,
-in which case it will be inferred from the data.</p></dd>
+in which case it will be inferred from the data, only if the column for
+`main_q` exists in the data.</p></dd>
 
 
 <dt id="arg-main-q">main_q<a class="anchor" aria-label="anchor" href="#arg-main-q"></a></dt>
-<dd><p>Column name for the main ranking question to be analyzed.</p></dd>
+<dd><p>Column name for the main ranking question to be analyzed.
+Using this argument, the function automatically looks for columns with
+marginal rankings. For example, if `main_q` is `app_identity`, the function
+looks for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on,
+with an underbar separator followed by numbers.</p></dd>
 
 
 <dt id="arg-anc-correct">anc_correct<a class="anchor" aria-label="anchor" href="#arg-anc-correct"></a></dt>

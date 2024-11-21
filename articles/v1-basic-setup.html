@@ -103,18 +103,19 @@ reference choice set of party-religion-gender-race/ethnicity.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">identity</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 16</span></span></span>
-<span><span class="co">#&gt;   s_weight app_party app_religion app_gender app_race anc_house anc_neighborhood</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    0.844         1            4          2        3         1                2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>    0.886         1            4          2        3         1                2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>    2.96          3            4          1        2         1                2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>    0.987         1            4          2        3         1                2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>    1.76          4            1          3        2         1                3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>    0.469         3            1          2        4         1                2</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 9 more variables: anc_city &lt;dbl&gt;, anc_state &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   anc_correct_identity &lt;dbl&gt;, app_identity_recorded &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   anc_identity_recorded &lt;chr&gt;, app_identity &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   app_identity_row_rnd &lt;chr&gt;, anc_identity &lt;chr&gt;, anc_identity_row_rnd &lt;chr&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   s_weight app_identity app_identity_1 app_identity_2 app_identity_3</span></span>
+<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    0.844 1423                      1              4              2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>    0.886 1423                      1              4              2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>    2.96  3412                      3              4              1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>    0.987 1423                      1              4              2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>    1.76  4132                      4              1              3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>    0.469 3124                      3              1              2</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 11 more variables: app_identity_4 &lt;dbl&gt;, anc_identity &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   anc_identity_1 &lt;dbl&gt;, anc_identity_2 &lt;dbl&gt;, anc_identity_3 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   anc_identity_4 &lt;dbl&gt;, anc_correct_identity &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   app_identity_recorded &lt;chr&gt;, anc_identity_recorded &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   app_identity_row_rnd &lt;chr&gt;, anc_identity_row_rnd &lt;chr&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="anchor-ranking-question">Anchor ranking question<a class="anchor" aria-label="anchor" href="#anchor-ranking-question"></a>
@@ -135,17 +136,18 @@ the correct answer and 0 otherwise.</p>
 has provided a “wrong” answer for the anchor question, whereas the rest
 of them have provided the correct answer.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">identity</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anc_house"</span>, <span class="st">"anc_neighborhood"</span>, <span class="st">"anc_city"</span>, <span class="st">"anc_state"</span>, <span class="st">"anc_correct_identity"</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">identity</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"anc_identity_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span>, <span class="st">"anc_correct_identity"</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
-<span><span class="co">#&gt;   anc_house anc_neighborhood anc_city anc_state anc_correct_identity</span></span>
-<span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>         3                1        2         4                    0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>         1                2        3         4                    1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>         4                3        2         1                    0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>         1                2        3         4                    1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>         1                2        3         4                    1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>         1                2        3         4                    1</span></span></code></pre></div>
+<span><span class="co">#&gt;   anc_identity_1 anc_identity_2 anc_identity_3 anc_identity_4</span></span>
+<span><span class="co">#&gt;            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>              3              1              2              4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>              1              2              3              4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>              4              3              2              1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>              1              2              3              4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>              1              2              3              4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>              1              2              3              4</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: anc_correct_identity &lt;dbl&gt;</span></span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

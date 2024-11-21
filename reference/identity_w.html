@@ -61,34 +61,40 @@ provided, united into a single column.</p>
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
     <p>## `identity_w`
-A data frame with 1,082 rows and 14 columns:</p><dl><dt>w</dt>
+A data frame with 1,082 rows and 17 columns:</p><dl><dt>w</dt>
 <dd><p>Estimated weight based on inverse probability weighting.</p></dd>
 
-  <dt>ranking</dt>
-<dd><p>Ranking pattern that the respondent provided.</p></dd>
+  <dt>s_weight</dt>
+<dd><p>Survey weight.</p></dd>
 
-  <dt>party</dt>
+  <dt>app_identity</dt>
+<dd><p>Full ranking profile for the main identity ranking question.</p></dd>
+
+  <dt>app_identity_1</dt>
 <dd><p>Marginal ranking for party (main identity ranking question).</p></dd>
 
-  <dt>religion</dt>
+  <dt>app_identity_2</dt>
 <dd><p>Marginal ranking for religion (main identity ranking question).</p></dd>
 
-  <dt>gender</dt>
+  <dt>app_identity_3</dt>
 <dd><p>Marginal ranking for gender (main identity ranking question).</p></dd>
 
-  <dt>race</dt>
+  <dt>app_identity_4</dt>
 <dd><p>Marginal ranking for race (main identity ranking question).</p></dd>
 
-  <dt>anc_house</dt>
+  <dt>anc_identity</dt>
+<dd><p>Full ranking profile for the anchor ranking question.</p></dd>
+
+  <dt>anc_identity_1</dt>
 <dd><p>Marginal ranking for household (anchor question).</p></dd>
 
-  <dt>anc_neighborhood</dt>
+  <dt>anc_identity_2</dt>
 <dd><p>Marginal ranking for neighborhood (anchor question).</p></dd>
 
-  <dt>anc_city</dt>
+  <dt>anc_identity_3</dt>
 <dd><p>Marginal ranking for city (anchor question).</p></dd>
 
-  <dt>anc_state</dt>
+  <dt>anc_identity_4</dt>
 <dd><p>Marginal ranking for state (anchor question).</p></dd>
 
   <dt>anc_correct_identity</dt>
@@ -100,20 +106,11 @@ A data frame with 1,082 rows and 14 columns:</p><dl><dt>w</dt>
   <dt>anc_identity_recorded</dt>
 <dd><p>Recorded responses for the anchor ranking question.</p></dd>
 
-  <dt>app_identity</dt>
-<dd><p>Full ranking profile for the main identity ranking question.</p></dd>
-
   <dt>app_identity_row_rnd</dt>
 <dd><p>The order in which the items were randomly presented for the respondent in the main ranking question.</p></dd>
 
-  <dt>anc_identity</dt>
-<dd><p>Full ranking profile for the anchor ranking question.</p></dd>
-
   <dt>anc_identity_row_rnd</dt>
 <dd><p>The order in which the items were randomly presented for the respondent in the anchor ranking question.</p></dd>
-
-  <dt>s_weight</dt>
-<dd><p>Survey weight.</p></dd>
 
 
 </dl></div>

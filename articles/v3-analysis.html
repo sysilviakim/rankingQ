@@ -78,11 +78,11 @@ and Seo-young Silvia Kim</h4>
 perform any analyses. For example, to estimate the average rank of
 party, one can leverage linear regression as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://declaredesign.org/r/estimatr/reference/lm_robust.html" class="external-link">lm_robust</a></span><span class="op">(</span><span class="va">party</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">identity_w</span>, weights <span class="op">=</span> <span class="va">w</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://declaredesign.org/r/estimatr/reference/lm_robust.html" class="external-link">lm_robust</a></span><span class="op">(</span><span class="va">app_identity_1</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">identity_w</span>, weights <span class="op">=</span> <span class="va">w</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          term estimate  std.error statistic p.value conf.low conf.high   df</span></span>
 <span><span class="co">#&gt; 1 (Intercept) 3.220388 0.02790142  115.4202       0 3.165641  3.275135 1081</span></span>
-<span><span class="co">#&gt;   outcome</span></span>
-<span><span class="co">#&gt; 1   party</span></span></code></pre></div>
+<span><span class="co">#&gt;          outcome</span></span>
+<span><span class="co">#&gt; 1 app_identity_1</span></span></code></pre></div>
 <p>While this illustrative example provides a valid point estimate, its
 confidence interval does not account for the estimation uncertainty
 around the estimated weights. Thus, in practice,
