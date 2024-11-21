@@ -22,20 +22,20 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 
-# Rename the items with a common prefix
-identity <- identity %>%
-  rename(
-    app_identity_1 = app_party,
-    app_identity_2 = app_religion,
-    app_identity_3 = app_gender,
-    app_identity_4 = app_race
-  )
+## app_identity_1 indicates marginal rank for party
+## app_identity_2 indicates marginal rank for religion
+## app_identity_3 indicates marginal rank for gender
+## app_identity_4 indicates marginal rank for race
 
 # Perform bias correction
 out_direct <- imprr_direct(
   data = identity,
-  J = 4,
-  main_q = "app_identity",
+  ## Not strictly necessary if app_identity, the input for `main_q`,
+  ## is specified. In that case, will look for J if unspecified
+  J = 4, 
+  ## automatically looks for 
+  ## app_identity_1, app_identity_2, app_identity_3, app_identity_4
+  main_q = "app_identity", 
   anc_correct = "anc_correct_identity"
 )
 ```
@@ -120,18 +120,13 @@ out_weights$weights
 ```{r}
 # View the estimated corrected PMF
 out_weights$corrected_pmf %>%
-  select(ranking, prop)
+  select(app_identity, prop)
 ```
 
 ## Estimated Weights with Original Data
 
 ```{r}
-identity_w <- out_weights$data %>%
-  rename(party = app_identity_1,
-         religion = app_identity_2,
-         gender = app_identity_3,
-         race = app_identity_4)
-
+identity_w <- out_weights$data
 head(identity_w)
-# save(identity_w, file = "data/identity_w.Rda")
+# save(identity_w, file = "data/identity_w.rda")
 ```

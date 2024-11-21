@@ -41,6 +41,6 @@ To perform bias correction, the data must have what we call the anchor ranking q
 For example, in the following dataset, the first and third respondent has provided a "wrong" answer for the anchor question, whereas the rest of them have provided the correct answer. 
 
 ```{r anchor-data}
-identity[, c("anc_house", "anc_neighborhood", "anc_city", "anc_state", "anc_correct_identity")] |>
+identity[, c(paste0("anc_identity_", seq(4)), "anc_correct_identity")] |>
   tail()
 ```
