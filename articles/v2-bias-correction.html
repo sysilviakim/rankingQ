@@ -202,31 +202,31 @@ estimated weight.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View the estimated weights</span></span>
 <span><span class="va">out_weights</span><span class="op">$</span><span class="va">weights</span></span></code></pre></div>
-<pre><code><span><span class="co">##    app_identity         w</span></span>
-<span><span class="co">## 1          1234 0.0000000</span></span>
-<span><span class="co">## 2          1243 0.0000000</span></span>
-<span><span class="co">## 3          1324 0.0000000</span></span>
-<span><span class="co">## 4          1342 0.0000000</span></span>
-<span><span class="co">## 5          1423 1.0158812</span></span>
-<span><span class="co">## 6          1432 0.4078355</span></span>
-<span><span class="co">## 7          2134 0.8582397</span></span>
-<span><span class="co">## 8          2143 0.8070574</span></span>
-<span><span class="co">## 9          2314 0.7456387</span></span>
-<span><span class="co">## 10         2341 0.0000000</span></span>
-<span><span class="co">## 11         2413 1.1316994</span></span>
-<span><span class="co">## 12         2431 0.5767371</span></span>
-<span><span class="co">## 13         3124 1.0238295</span></span>
-<span><span class="co">## 14         3142 0.5400194</span></span>
-<span><span class="co">## 15         3214 0.8251218</span></span>
-<span><span class="co">## 16         3241 0.0000000</span></span>
-<span><span class="co">## 17         3412 1.2733020</span></span>
-<span><span class="co">## 18         3421 1.0314721</span></span>
-<span><span class="co">## 19         4123 1.2628998</span></span>
-<span><span class="co">## 20         4132 1.1045545</span></span>
-<span><span class="co">## 21         4213 1.0388263</span></span>
-<span><span class="co">## 22         4231 0.4999637</span></span>
-<span><span class="co">## 23         4312 1.2711103</span></span>
-<span><span class="co">## 24         4321 1.0593130</span></span></code></pre>
+<pre><code><span><span class="co">##    ranking         w</span></span>
+<span><span class="co">## 1     1234 0.0000000</span></span>
+<span><span class="co">## 2     1243 0.0000000</span></span>
+<span><span class="co">## 3     1324 0.0000000</span></span>
+<span><span class="co">## 4     1342 0.0000000</span></span>
+<span><span class="co">## 5     1423 1.0158812</span></span>
+<span><span class="co">## 6     1432 0.4078355</span></span>
+<span><span class="co">## 7     2134 0.8582397</span></span>
+<span><span class="co">## 8     2143 0.8070574</span></span>
+<span><span class="co">## 9     2314 0.7456387</span></span>
+<span><span class="co">## 10    2341 0.0000000</span></span>
+<span><span class="co">## 11    2413 1.1316994</span></span>
+<span><span class="co">## 12    2431 0.5767371</span></span>
+<span><span class="co">## 13    3124 1.0238295</span></span>
+<span><span class="co">## 14    3142 0.5400194</span></span>
+<span><span class="co">## 15    3214 0.8251218</span></span>
+<span><span class="co">## 16    3241 0.0000000</span></span>
+<span><span class="co">## 17    3412 1.2733020</span></span>
+<span><span class="co">## 18    3421 1.0314721</span></span>
+<span><span class="co">## 19    4123 1.2628998</span></span>
+<span><span class="co">## 20    4132 1.1045545</span></span>
+<span><span class="co">## 21    4213 1.0388263</span></span>
+<span><span class="co">## 22    4231 0.4999637</span></span>
+<span><span class="co">## 23    4312 1.2711103</span></span>
+<span><span class="co">## 24    4321 1.0593130</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="results-estimated-pmf-with-bias-corrected-data">Results: Estimated PMF with Bias Corrected Data<a class="anchor" aria-label="anchor" href="#results-estimated-pmf-with-bias-corrected-data"></a>
@@ -236,32 +236,32 @@ function of all ranking profile before and after bias correction.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View the estimated corrected PMF</span></span>
 <span><span class="va">out_weights</span><span class="op">$</span><span class="va">corrected_pmf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">app_identity</span>, <span class="va">prop</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    app_identity        prop</span></span>
-<span><span class="co">## 1          1234 0.000000000</span></span>
-<span><span class="co">## 2          1243 0.000000000</span></span>
-<span><span class="co">## 3          1324 0.000000000</span></span>
-<span><span class="co">## 4          1342 0.000000000</span></span>
-<span><span class="co">## 5          1423 0.046944603</span></span>
-<span><span class="co">## 6          1432 0.007538549</span></span>
-<span><span class="co">## 7          2134 0.028555111</span></span>
-<span><span class="co">## 8          2143 0.024614506</span></span>
-<span><span class="co">## 9          2314 0.020673901</span></span>
-<span><span class="co">## 10         2341 0.000000000</span></span>
-<span><span class="co">## 11         2413 0.073215306</span></span>
-<span><span class="co">## 12         2431 0.012792690</span></span>
-<span><span class="co">## 13         3124 0.048258138</span></span>
-<span><span class="co">## 14         3142 0.011479155</span></span>
-<span><span class="co">## 15         3214 0.025928041</span></span>
-<span><span class="co">## 16         3241 0.000000000</span></span>
-<span><span class="co">## 17         3412 0.161222159</span></span>
-<span><span class="co">## 18         3421 0.049571673</span></span>
-<span><span class="co">## 19         4123 0.149400343</span></span>
-<span><span class="co">## 20         4132 0.065334095</span></span>
-<span><span class="co">## 21         4213 0.050885208</span></span>
-<span><span class="co">## 22         4231 0.010165620</span></span>
-<span><span class="co">## 23         4312 0.158595089</span></span>
-<span><span class="co">## 24         4321 0.054825814</span></span></code></pre>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ranking</span>, <span class="va">prop</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    ranking        prop</span></span>
+<span><span class="co">## 1     1234 0.000000000</span></span>
+<span><span class="co">## 2     1243 0.000000000</span></span>
+<span><span class="co">## 3     1324 0.000000000</span></span>
+<span><span class="co">## 4     1342 0.000000000</span></span>
+<span><span class="co">## 5     1423 0.046944603</span></span>
+<span><span class="co">## 6     1432 0.007538549</span></span>
+<span><span class="co">## 7     2134 0.028555111</span></span>
+<span><span class="co">## 8     2143 0.024614506</span></span>
+<span><span class="co">## 9     2314 0.020673901</span></span>
+<span><span class="co">## 10    2341 0.000000000</span></span>
+<span><span class="co">## 11    2413 0.073215306</span></span>
+<span><span class="co">## 12    2431 0.012792690</span></span>
+<span><span class="co">## 13    3124 0.048258138</span></span>
+<span><span class="co">## 14    3142 0.011479155</span></span>
+<span><span class="co">## 15    3214 0.025928041</span></span>
+<span><span class="co">## 16    3241 0.000000000</span></span>
+<span><span class="co">## 17    3412 0.161222159</span></span>
+<span><span class="co">## 18    3421 0.049571673</span></span>
+<span><span class="co">## 19    4123 0.149400343</span></span>
+<span><span class="co">## 20    4132 0.065334095</span></span>
+<span><span class="co">## 21    4213 0.050885208</span></span>
+<span><span class="co">## 22    4231 0.010165620</span></span>
+<span><span class="co">## 23    4312 0.158595089</span></span>
+<span><span class="co">## 24    4321 0.054825814</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -270,18 +270,18 @@ function of all ranking profile before and after bias correction.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">identity_w</span> <span class="op">&lt;-</span> <span class="va">out_weights</span><span class="op">$</span><span class="va">data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">identity_w</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 17</span></span></span>
-<span><span class="co">##       w s_weight app_identity app_identity_1 app_identity_2 app_identity_3</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>  1.02    0.844 1423                      1              4              2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>  1.02    0.886 1423                      1              4              2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>  1.27    2.96  3412                      3              4              1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>  1.02    0.987 1423                      1              4              2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span>  1.10    1.76  4132                      4              1              3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span>  1.02    0.469 3124                      3              1              2</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 11 more variables: app_identity_4 &lt;dbl&gt;, anc_identity &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   anc_identity_1 &lt;dbl&gt;, anc_identity_2 &lt;dbl&gt;, anc_identity_3 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   anc_identity_4 &lt;dbl&gt;, anc_correct_identity &lt;dbl&gt;,</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 18</span></span></span>
+<span><span class="co">##       w s_weight app_identity ranking app_identity_1 app_identity_2</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span>  1.02    0.844 1423         1423                 1              4</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span>  1.02    0.886 1423         1423                 1              4</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span>  1.27    2.96  3412         3412                 3              4</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span>  1.02    0.987 1423         1423                 1              4</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span>  1.10    1.76  4132         4132                 4              1</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span>  1.02    0.469 3124         3124                 3              1</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 12 more variables: app_identity_3 &lt;dbl&gt;, app_identity_4 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   anc_identity &lt;chr&gt;, anc_identity_1 &lt;dbl&gt;, anc_identity_2 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   anc_identity_3 &lt;dbl&gt;, anc_identity_4 &lt;dbl&gt;, anc_correct_identity &lt;dbl&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   app_identity_recorded &lt;chr&gt;, anc_identity_recorded &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   app_identity_row_rnd &lt;chr&gt;, anc_identity_row_rnd &lt;chr&gt;</span></span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
