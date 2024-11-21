@@ -17,9 +17,14 @@ imprr_weights(
 \item{data}{The input dataset with ranking data.}
 
 \item{J}{The number of items in the ranking question. Defaults to NULL,
-in which case it will be inferred from the data.}
+in which case it will be inferred from the data, only if the column for
+`main_q` exists in the data.}
 
-\item{main_q}{Column name for the main ranking question to be analyzed.}
+\item{main_q}{Column name for the main ranking question to be analyzed.
+Using this argument, the function automatically looks for columns with
+marginal rankings. For example, if `main_q` is `app_identity`, the function
+looks for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on,
+with an underbar separator followed by numbers.}
 
 \item{anc_correct}{Indicator for passing the anchor question.}
 
