@@ -8,20 +8,45 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## Direct Bias Correction via `imprr_direct`
 
-`rankingQ` has two primary functions to perform bias correction. First, `imprr_direct` **impr**oves **r**anking data by applying **direct** bias correction to several classes of quantities of interest.
-
-To apply the bias correction, we specify our dataset (`data`), the number of items (`J`), the prefix of column names that contain `J` items for the target ranking questions, and the prefix of column names for the anchor ranking questions. When survey weights are available, they can be included by specifying `weight` in the function.
-
-```{r, message = FALSE, warning = FALSE}
+```{r setup, message = FALSE, warning = FALSE}
 library(rankingQ)
 data(identity)
 
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+```
 
+## Estimating the Proportion of Random Responses
+
+In the `identity` dataset, given `anc_correct_identity`, the raw proportion of those who have correctly or incorrectly answered the anchor question is as follows:
+
+```{r}
+round(prop.table(table(identity$anc_correct_identity)) * 100, digits = 1)
+```
+The 69.7% seen here, however, is likely an upwardly biased estimate of the percentage of non-random responses, because we must account for respondents accidentally answering the question correctly. For an unbiased estimation of random responses, we use `unbiased_correct_prop`. 
+
+```{r}
+identity$random_identity <- case_when(
+  identity$anc_correct_identity == 1 ~ 0,
+  TRUE ~ 1
+)
+
+unbiased_correct_prop(
+  sum(identity$random_identity == 0) / sum(!is.na(identity$random_identity)),
+  J = 4
+)
+```
+The revised estimate of non-random responses is 68.4%. That is to say, roughly 31.6% of the respondents are randomly responding.
+
+## Direct Bias Correction via `imprr_direct`
+
+`rankingQ` has two primary functions to perform bias correction. First, `imprr_direct` **impr**oves **r**anking data by applying **direct** bias correction to several classes of quantities of interest.
+
+To apply the bias correction, we specify our dataset (`data`), the number of items (`J`), the prefix of column names that contain `J` items for the target ranking questions, and the prefix of column names for the anchor ranking questions. When survey weights are available, they can be included by specifying `weight` in the function.
+
+```{r}
 ## app_identity_1 indicates marginal rank for party
 ## app_identity_2 indicates marginal rank for religion
 ## app_identity_3 indicates marginal rank for gender
