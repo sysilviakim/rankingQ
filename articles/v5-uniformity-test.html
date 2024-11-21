@@ -251,6 +251,26 @@ the recorded responses of those who answered the anchor question
 incorrectly offer clear evidence for non-uniformity, where about 20% of
 respondents submitted either 1234 or 4321.</p>
 </div>
+<div class="section level2">
+<h2 id="caveat-augment-missing-permutation-patterns">Caveat: Augment Missing Permutation Patterns<a class="anchor" aria-label="anchor" href="#caveat-augment-missing-permutation-patterns"></a>
+</h2>
+<p>One thing to note: in a small sample size, some ranking patterns
+might not be realized. For example, in a sample of 10 respondents, it is
+possible that the pattern 1234 is not observed. In such cases, it is
+important to augment the missing permutation patterns with a count of 0,
+which can be done with <code>permn_augment</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">identity</span><span class="op">$</span><span class="va">app_identity_recorded</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tab</span> <span class="co">## only five patterns out of twenty-four possible patterns</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; 1243 1432 2341 4132 4312 </span></span>
+<span><span class="co">#&gt;    1    1    1    1    2</span></span>
+<span><span class="fu"><a href="../reference/permn_augment.html">permn_augment</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 1234 1243 1324 1342 1423 1432 2134 2143 2314 2341 2413 2431 3124 3142 3214 3241 </span></span>
+<span><span class="co">#&gt;    0    1    0    0    0    1    0    0    0    1    0    0    0    0    0    0 </span></span>
+<span><span class="co">#&gt; 3412 3421 4123 4132 4213 4231 4312 4321 </span></span>
+<span><span class="co">#&gt;    0    0    0    1    0    0    2    0</span></span></code></pre></div>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
