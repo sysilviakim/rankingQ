@@ -104,6 +104,58 @@ response</em> is the ranking of the items in the order in which they
 were presented.</p>
 </div>
 <div class="section level2">
+<h2 id="recovering-recorded-responses">Recovering Recorded Responses<a class="anchor" aria-label="anchor" href="#recovering-recorded-responses"></a>
+</h2>
+<p>The function <code>recover_recorded_responses</code> recovers the
+recorded responses from the observed rankings and the item order
+randomization. The function takes the <code>true_order</code>,
+<code>presented_order</code>, and <code>df</code> for data frame as
+arguments.</p>
+<p>For example, in <code>identity</code>, the <code>app_identity</code>
+column contains the observed rankings, and the
+<code>app_identity_row_rnd</code> column contains the how the items were
+presented via item order randomization. Thus the presented order is
+<code>app_identity_row_rnd</code> and the true order is
+<code>app_identity</code>.</p>
+<p>For the first respondent, with the reference choice set of {party,
+religion, gender, race}, this respondent ranked
+party-gender-race-religion (1-4-2-3, i.e., party is first place,
+religion is fourth place, gender is second place, and race is third
+place). However, the items were presented to the respondent in the order
+of religion-party-race-gender (2-1-4-3). Thus, the recorded response is
+4-1-3-2 (first option shown was religion, thus fourth place, second
+option shown was party, thus first place, the third option shown was
+race, thus third place, and the fourth and last option shown was gender,
+thus second place). It’s a bit tricky at first, so please read this
+explanation carefully!</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/recover_recorded_responses.html">recover_recorded_responses</a></span><span class="op">(</span></span>
+<span>  presented_order <span class="op">=</span> <span class="st">"app_identity_row_rnd"</span>,</span>
+<span>  true_order <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
+<span>  df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">identity</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"app_identity"</span>, <span class="st">"app_identity_row_rnd"</span><span class="op">)</span><span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 3</span></span></span>
+<span><span class="co">#&gt;    app_identity app_identity_row_rnd app_identity_recorded</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 1423         2143                 4132                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 1423         1324                 1243                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 3412         2134                 4312                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 1423         3421                 2341                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 4132         2134                 1432                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 3124         4123                 4312                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 1234         3124                 3124                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 4312         1234                 4312                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 3124         4132                 4321                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 4321         1432                 4123</span></span>
+<span></span>
+<span><span class="co">## Alternatively, for the first respondent</span></span>
+<span><span class="fu"><a href="../reference/recover_recorded_responses.html">recover_recorded_responses</a></span><span class="op">(</span></span>
+<span>  presented_order <span class="op">=</span> <span class="st">"2143"</span>,</span>
+<span>  true_order <span class="op">=</span> <span class="st">"1423"</span>,</span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "4132"</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="uniformity-test">Uniformity Test<a class="anchor" aria-label="anchor" href="#uniformity-test"></a>
 </h2>
 <div class="section level3">
@@ -138,7 +190,7 @@ F if the reference set is randomized.</p>
 <p>The uniformity test checks whether the recorded responses follow a
 uniform distribution. Non-uniformity in the test suggests the presence
 of random responses.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">identity</span><span class="op">$</span><span class="va">app_identity_recorded</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test</a></span><span class="op">(</span><span class="va">tab</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -163,7 +215,7 @@ the anchor question correctly are not providing random responses to the
 anchor question.</p>
 <p>We can check this by comparing the recorded responses of those who
 answered the anchor question correctly and incorrectly.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Correctly answered the anchor question</span></span>
 <span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">identity</span><span class="op">$</span><span class="va">anc_identity_recorded</span><span class="op">[</span><span class="va">identity</span><span class="op">$</span><span class="va">anc_correct_identity</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
