@@ -33,6 +33,28 @@ Suppose that we prefer items a-b-c in that order. And in the ranking exercise, t
 
 If, for example, the items were presented in the order of c-b-a, then our observed ranking is 1-2-3, while our recorded response is 3-2-1. This is because the *observed ranking* is the ranking of the items in the order of the reference set, regardless of the order in which they were presented. On the other hand, the *recorded response* is the ranking of the items in the order in which they were presented.
 
+## Recovering Recorded Responses
+
+The function `recover_recorded_responses` recovers the recorded responses from the observed rankings and the item order randomization. The function takes the `true_order`, `presented_order`, and `df` for data frame as arguments.
+
+For example, in `identity`, the `app_identity` column contains the observed rankings, and the `app_identity_row_rnd` column contains the how the items were presented via item order randomization. Thus the presented order is `app_identity_row_rnd` and the true order is `app_identity`. 
+
+For the first respondent, with the reference choice set of {party, religion, gender, race}, this respondent ranked party-gender-race-religion (1-4-2-3, i.e., party is first place, religion is fourth place, gender is second place, and race is third place). However, the items were presented to the respondent in the order of religion-party-race-gender (2-1-4-3). Thus, the recorded response is 4-1-3-2 (first option shown was religion, thus fourth place, second option shown was party, thus first place, the third option shown was race, thus third place, and the fourth and last option shown was gender, thus second place). It's a bit tricky at first, so please read this explanation carefully!
+
+```{r}
+recover_recorded_responses(
+  presented_order = "app_identity_row_rnd",
+  true_order = "app_identity",
+  df = head(identity[, c("app_identity", "app_identity_row_rnd")], 10)
+)
+
+## Alternatively, for the first respondent
+recover_recorded_responses(
+  presented_order = "2143",
+  true_order = "1423",
+)
+```
+
 ## Uniformity Test
 
 ### Theory
