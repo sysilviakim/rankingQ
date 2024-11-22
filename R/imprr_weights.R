@@ -153,6 +153,8 @@ imprr_weights <- function(data,
         matches(var_vec),
         sep = "", remove = FALSE
       )
+  } else {
+    data_w <- data
   }
 
   data_w <- data_w %>%
