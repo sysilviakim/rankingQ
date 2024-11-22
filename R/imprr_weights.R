@@ -5,8 +5,11 @@
 #'
 #' @importFrom dplyr `%>%` mutate select group_by left_join arrange summarise count
 #' @importFrom tidyselect matches
+#' @importFrom tidyr unite
+#' @importFrom tibble tibble
 #' @importFrom combinat permn
 #' @importFrom questionr wtd.table
+#' @importFrom stats quantile
 #'
 #' @param data The input dataset with ranking data.
 #' @param J The number of items in the ranking question. Defaults to NULL,
