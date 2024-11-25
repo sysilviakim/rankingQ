@@ -29,7 +29,7 @@
 #' reference choice set.
 #'
 #' @importFrom dplyr group_by summarise across everything `%>%` mutate
-#' select left_join
+#' select left_join rename
 #' @importFrom tidyr pivot_longer pivot_wider
 #' @importFrom purrr imap
 #' @importFrom stringr str_split

@@ -3,12 +3,11 @@
 #' @description This function implements the bias correction of the ranking
 #' distribution using a paired anchor question, using the IPW estimator.
 #'
-#' @importFrom dplyr `%>%` mutate select group_by left_join arrange summarise count
+#' @importFrom dplyr `%>%` mutate select group_by left_join arrange summarise count rename
 #' @importFrom tidyselect matches
 #' @importFrom tidyr unite
 #' @importFrom tibble tibble
 #' @importFrom combinat permn
-#' @importFrom questionr wtd.table
 #' @importFrom stats quantile
 #'
 #' @param data The input dataset with ranking data.
@@ -81,7 +80,7 @@ imprr_weights <- function(data,
     mutate(survey_weight = weight)
 
   ## Get a weighted table
-  tab_vec <- wtd.table(x = D_0[[ranking]], weights = D_0$survey_weight)%>%
+  tab_vec <- wtd.table(x = D_0[[ranking]], weights = D_0$survey_weight) %>%
     tibble()
 
   D_PMF_0 <- D_0 %>%
@@ -174,4 +173,65 @@ imprr_weights <- function(data,
       data = data_w
     )
   )
+}
+
+#' Copied from questionr::wtd.table
+#' Not exported
+
+wtd.table <- function(
+    x, y = NULL, weights = NULL, digits = 3, normwt = FALSE,
+    useNA = c("no", "ifany", "always"), na.rm = TRUE, na.show = FALSE, exclude = NULL) {
+  if (is.null(weights)) {
+    warning("no weights argument given, using uniform weights of 1")
+    weights <- rep(1, length(x))
+  }
+  if (length(x) != length(weights)) stop("x and weights lengths must be the same")
+  if (!is.null(y) & (length(x) != length(y))) stop("x and y lengths must be the same")
+  miss.usena <- missing(useNA)
+  useNA <- match.arg(useNA)
+  weights[is.na(weights)] <- 0
+  if (normwt) {
+    weights <- weights * length(x) / sum(weights)
+  }
+
+  if (!missing(na.show) || !missing(na.rm)) {
+    warning("'na.rm' and 'na.show' are ignored when 'useNA' is provided.")
+  }
+  if (useNA != "no" || (na.show && miss.usena)) {
+    if (match(NA, exclude, nomatch = 0L)) {
+      warning("'exclude' containing NA and 'useNA' != \"no\"' are a bit contradicting")
+    }
+    x <- addNA(x)
+    if (!is.null(y)) y <- addNA(y)
+  }
+  if (useNA == "no" || (na.rm && miss.usena)) {
+    s <- !is.na(x) & !is.na(weights)
+    if (!is.null(y)) s <- s & !is.na(y)
+    x <- x[s, drop = FALSE]
+    if (!is.null(y)) y <- y[s, drop = FALSE]
+    weights <- weights[s]
+  }
+  if (!is.null(exclude)) {
+    s <- !(x %in% exclude)
+    if (!is.null(y)) s <- s & !(y %in% exclude)
+    x <- factor(x[s, drop = FALSE])
+    if (!is.null(y)) y <- factor(y[s, drop = FALSE])
+    weights <- weights[s]
+  }
+  if (is.null(y)) {
+    result <- tapply(weights, x, sum, simplify = TRUE)
+  } else {
+    result <- tapply(weights, list(x, y), sum, simplify = TRUE)
+  }
+  result[is.na(result)] <- 0
+  tab <- as.table(result)
+  if (useNA == "ifany") {
+    if (!is.null(y)) {
+      if (sum(tab[, is.na(colnames(tab))]) == 0) tab <- tab[, !is.na(colnames(tab))]
+      if (sum(tab[is.na(rownames(tab)), ]) == 0) tab <- tab[!is.na(rownames(tab)), ]
+    } else {
+      if (tab[is.na(names(tab))] == 0) tab <- tab[!is.na(names(tab))]
+    }
+  }
+  tab
 }
