@@ -5,7 +5,7 @@
 #'
 #' @importFrom dplyr `%>%` mutate select group_by arrange summarise pull
 #' @importFrom tidyselect matches
-#' @importFrom estimatr lm_robust
+#' @importFrom estimatr lm_robust tidy
 #'
 #' @param data The input dataset with ranking data.
 #' @param J The number of items in the ranking question. Defaults to NULL,
