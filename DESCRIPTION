@@ -28,10 +28,7 @@ Imports:
   scales,
   combinat,
   PLMIX,
-  estimatr,
-  generics,
-  ggpubr,
-  questionr
+  estimatr
 Suggests:
     knitr,
     rmarkdown,
