@@ -2,8 +2,7 @@
 % Please edit documentation in R/imprr_weights.R
 \name{wtd.table}
 \alias{wtd.table}
-\title{Copied from questionr::wtd.table
-Not exported}
+\title{Weighted one-way and two-way frequency tables.}
 \usage{
 wtd.table(
   x,
@@ -17,7 +16,25 @@ wtd.table(
   exclude = NULL
 )
 }
+\arguments{
+\item{x}{a vector}
+
+\item{y}{another optional vector for a two-way frequency table. Must be the same length as x}
+
+\item{weights}{vector of weights, must be the same length as x}
+
+\item{digits}{Number of significant digits.}
+
+\item{normwt}{if TRUE, normalize weights so that the total weighted count is the same as the unweighted one}
+
+\item{useNA}{whether to include NA values in the table}
+
+\item{na.rm}{(deprecated) if TRUE, remove NA values before computation}
+
+\item{na.show}{(deprecated) if TRUE, show NA count in table output}
+
+\item{exclude}{values to remove from x and y. To exclude NA, use na.rm argument.}
+}
 \description{
-Copied from questionr::wtd.table
-Not exported
+Copied from questionr::wtd.table. Not exported
 }
