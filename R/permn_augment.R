@@ -5,6 +5,8 @@
 #'
 #' This function augments the given table with all possible observed
 #' permutation patterns with a frequency of zero for unrealized patterns.
+#' Currently, this only takes full rankings into account, as opposed to partial
+#' rankings.
 #'
 #' @param tab A table of observed permutation patterns.
 #' @param J The length of the reference choice set.
