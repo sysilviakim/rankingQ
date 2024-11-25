@@ -74,8 +74,7 @@ Now suppose that random responses occur in patterns such as panels B and E. If 5
 The uniformity test checks whether the recorded responses follow a uniform distribution. Non-uniformity in the test suggests the presence of random responses.
 
 ```{r}
-tab <- table(identity$app_identity_recorded)
-chisq.test(tab, p = rep(1 / length(tab), length(tab)))
+uniformity_test(identity, "app_identity")
 ```
 
 The results indicate that the recorded responses are not uniformly distributed, suggesting random responses in the main identity ranking question. The uniformity test was also applied to detect ballot order effects in ranked-choice voting (e.g., [Atsusaka (2024)](https://doi.org/10.1017/pan.2024.9)).
@@ -90,12 +89,12 @@ We can check this by comparing the recorded responses of those who answered the 
 ## Correctly answered the anchor question
 tab <- table(identity$anc_identity_recorded[identity$anc_correct_identity == 1])
 round(prop.table(tab) * 100, digits = 1)
-chisq.test(tab, p = rep(1 / length(tab), length(tab)))
+uniformity_test(tab)
 
 ## Incorrectly answered the anchor question
 tab <- table(identity$anc_identity_recorded[identity$anc_correct_identity == 0])
 round(prop.table(tab) * 100, digits = 1)
-chisq.test(tab, p = rep(1 / length(tab), length(tab)))
+uniformity_test(tab)
 ```
 
 As can be seen, while there is insufficient evidence to reject the null hypothesis for those who answered the anchor question correctly, the recorded responses of those who answered the anchor question incorrectly offer clear evidence for non-uniformity, where about 20% of respondents submitted either 1234 or 4321.
@@ -109,3 +108,4 @@ tab <- table(head(identity$app_identity_recorded))
 tab ## only five patterns out of twenty-four possible patterns
 permn_augment(tab)
 ```
+Within \code{uniformity_test}, the function \code{permn_augment} is already called.

@@ -4,13 +4,10 @@
 \alias{uniformity_test}
 \title{Uniformity Test for Ranking Patterns}
 \usage{
-uniformity_test(data, table = FALSE, var = NULL)
+uniformity_test(data, var = NULL)
 }
 \arguments{
 \item{data}{The input dataset with ranking data.}
-
-\item{table}{Logical value indicating whether the data
-is already in a table format. Defaults to FALSE.}
 
 \item{var}{The variable within \code{data} to be used in the test.
 Defaults to NULL.}
