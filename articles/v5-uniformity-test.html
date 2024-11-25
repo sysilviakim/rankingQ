@@ -191,13 +191,12 @@ F if the reference set is randomized.</p>
 uniform distribution. Non-uniformity in the test suggests the presence
 of random responses.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">identity</span><span class="op">$</span><span class="va">app_identity_recorded</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test</a></span><span class="op">(</span><span class="va">tab</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/uniformity_test.html">uniformity_test</a></span><span class="op">(</span><span class="va">identity</span>, <span class="st">"app_identity"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Chi-squared test for given probabilities</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; data:  tab</span></span>
-<span><span class="co">#&gt; X-squared = 121.59, df = 23, p-value = 2.149e-15</span></span></code></pre></div>
+<span><span class="co">#&gt; X-squared = 765.6, df = 23, p-value &lt; 2.2e-16</span></span></code></pre></div>
 <p>The results indicate that the recorded responses are not uniformly
 distributed, suggesting random responses in the main identity ranking
 question. The uniformity test was also applied to detect ballot order
@@ -224,11 +223,11 @@ answered the anchor question correctly and incorrectly.</p>
 <span><span class="co">#&gt;  6.5  3.8  3.1  4.2  5.0  4.2  3.1  2.8  3.6  3.3  5.2  4.1  3.8  4.2  5.6  3.2 </span></span>
 <span><span class="co">#&gt; 3412 3421 4123 4132 4213 4231 4312 4321 </span></span>
 <span><span class="co">#&gt;  4.5  4.4  3.4  4.8  4.0  4.5  4.8  3.8</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test</a></span><span class="op">(</span><span class="va">tab</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/uniformity_test.html">uniformity_test</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Chi-squared test for given probabilities</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data:  tab</span></span>
+<span><span class="co">#&gt; data:  data</span></span>
 <span><span class="co">#&gt; X-squared = 31.698, df = 23, p-value = 0.1066</span></span>
 <span></span>
 <span><span class="co">## Incorrectly answered the anchor question</span></span>
@@ -239,11 +238,11 @@ answered the anchor question correctly and incorrectly.</p>
 <span><span class="co">#&gt; 13.1  6.4  2.7  2.4  4.3  4.9  7.0  4.6  5.2  3.7  2.4  2.7  3.0  2.1  2.4  3.0 </span></span>
 <span><span class="co">#&gt; 3412 3421 4123 4132 4213 4231 4312 4321 </span></span>
 <span><span class="co">#&gt;  0.9  3.7  4.0  2.7  3.0  4.6  4.0  7.0</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test</a></span><span class="op">(</span><span class="va">tab</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/uniformity_test.html">uniformity_test</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Chi-squared test for given probabilities</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data:  tab</span></span>
+<span><span class="co">#&gt; data:  data</span></span>
 <span><span class="co">#&gt; X-squared = 107.95, df = 23, p-value = 5.793e-13</span></span></code></pre></div>
 <p>As can be seen, while there is insufficient evidence to reject the
 null hypothesis for those who answered the anchor question correctly,
@@ -270,6 +269,7 @@ which can be done with <code>permn_augment</code>.</p>
 <span><span class="co">#&gt;    0    1    0    0    0    1    0    0    0    1    0    0    0    0    0    0 </span></span>
 <span><span class="co">#&gt; 3412 3421 4123 4132 4213 4231 4312 4321 </span></span>
 <span><span class="co">#&gt;    0    0    0    1    0    0    2    0</span></span></code></pre></div>
+<p>Within , the function is already called.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
