@@ -25,17 +25,16 @@ Imports:
   stringr,
   ggplot2,
   rlang,
-  scales,
   combinat,
   PLMIX,
   estimatr
 Suggests:
-    knitr,
-    rmarkdown,
-    utils,
-    stats,
-    cli,
-    testthat (>= 3.0.0)
+  knitr,
+  rmarkdown,
+  utils,
+  stats,
+  cli,
+  testthat (>= 3.0.0)
 Depends:
   R (>= 3.5.0)
 VignetteBuilder: utils, knitr

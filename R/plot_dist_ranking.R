@@ -6,7 +6,6 @@
 #'
 #' @importFrom ggplot2 ggplot geom_col scale_fill_manual scale_y_continuous
 #' @importFrom ggplot2 geom_hline geom_text aes xlab ylab theme
-#' @importFrom scales percent
 #'
 #' @param tab A table in which the frequencies of ranking patterns are recorded.
 #' @param x Name of the column that contains permutation patterns.
@@ -59,7 +58,10 @@ plot_dist_ranking <- function(tab,
     scale_fill_manual(values = fill) +
     xlab(xlab) +
     ylab("") +
-    scale_y_continuous(labels = scales::percent, limits = c(0, ylim)) +
+    scale_y_continuous(
+      labels = function(x) sprintf("%.0f%%", x * 100),
+      limits = c(0, ylim)
+    ) +
     geom_hline(
       yintercept = 1 / factorial(J),
       linetype = linetype, color = h_color, alpha = h_alpha
