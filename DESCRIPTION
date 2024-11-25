@@ -27,14 +27,10 @@ Imports:
   rlang,
   scales,
   combinat,
-  clarify,
-  mlogit,
-  dfidx,
   PLMIX,
   estimatr,
   generics,
   ggpubr,
-  assertthat,
   questionr
 Suggests:
     knitr,
