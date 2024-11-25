@@ -15,12 +15,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-The following code chunk shows how to plot the distribution of ranking profiles.
+The following code chunk shows how to plot the distribution of ranking profiles. This can help eyeball whether the ranking data is uniformly distributed, which can of course be formally tested.
 
 ```{r}
 library(combinat)
 library(rankingQ)
 
+set.seed(100)
 tab <- lapply(permn(seq(3)), paste0, collapse = "") |>
   sample(30, replace = TRUE) |>
   unlist() |>
