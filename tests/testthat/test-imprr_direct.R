@@ -1,6 +1,13 @@
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
+test_that("plug-in estimation works", {
+
+data("identity")
+
+example_direct <- imprr_direct(identity,
+                               J = 4,
+                               main_q = "app_identity",
+                               anc_correct = "anc_correct_identity",
+                               n_bootstrap = 10)
+
+
 })
 
-# This is a example test
-# --- must be replaced with an actual test
