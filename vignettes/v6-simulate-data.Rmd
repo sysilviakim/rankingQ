@@ -14,7 +14,13 @@ knitr::opts_chunk$set(
 )
 ```
 
+
 In this vignette, we describe our helper function `rpluce` to simulate ranking data based on the Plackett-Luce model, also known as the rank-order logit or random utility model. To draw from the PL, `rpluce` requires a vector of probabilities that `t` items will be selected as the first choice, respectively. For each unit, the output provides a full ordering of `t` items with distinct alphabet letters.
+
+```{r setup, message = FALSE, warning = FALSE}
+library(rankingQ)
+```
+
 
 ```{r}
 draw <- rpluce(n = 50,
