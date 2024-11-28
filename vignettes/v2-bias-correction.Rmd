@@ -87,19 +87,19 @@ The output tibble `qoi` stores the estimated quantities and their corresponding 
 
 ```{r}
 # View the results based on the quantity of interest
-out_direct$qoi %>%
+out_direct$results %>%
    filter(qoi == "average rank")
 
 # View the results based on the item
-out_direct$qoi %>%
-  filter(item == "party")
+out_direct$results %>%
+  filter(item == "app_identity_1")
 ```
 
 For example, one can visualize the result for average ranks as follows:
 
 ```{r}
 # Plot the result
-out_direct$qoi %>%
+out_direct$results %>%
   mutate(
     item = factor(
       item, levels = paste0("app_identity_", seq(4)),
@@ -135,7 +135,8 @@ The output of `imprr_weights` contains the set of weights for all possible ranki
 
 ```{r}
 # View the estimated weights
-out_weights$weights
+out_weights$rankings %>%
+  select(ranking, weights)
 ```
 
 ### Results: Estimated PMF with Bias Corrected Data
@@ -144,14 +145,14 @@ out_weights$weights
 
 ```{r}
 # View the estimated corrected PMF
-out_weights$corrected_pmf %>%
-  select(ranking, prop)
+out_weights$rankings %>%
+  select(ranking, prop_obs, prop_bc)
 ```
 
 ## Estimated Weights with Original Data
 
 ```{r}
-identity_w <- out_weights$data
+identity_w <- out_weights$results
 head(identity_w)
 # save(identity_w, file = "data/identity_w.rda")
 ```

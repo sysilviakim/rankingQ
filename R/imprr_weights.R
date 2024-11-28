@@ -105,14 +105,14 @@ imprr_weights <- function(data,
     left_join(D_PMF_0, by = ranking) %>%
     mutate(
       n = ifelse(is.na(n) == T, 0, n),
-      prop = n / sum(weight),
-      prop = ifelse(is.na(prop), 0, prop)
+      prop_obs = n / sum(weight),
+      prop_obs = ifelse(is.na(prop_obs), 0, prop_obs)
     ) %>%
     arrange(!!as.name(ranking))
 
   # Step 4: Get the bias-corrected PMF -----------------------------------------
   ## Apply Equation A.11
-  imp_PMF_0 <- (PMF_raw$prop - (U * (1 - p_non_random))) / p_non_random
+  imp_PMF_0 <- (PMF_raw$prop_obs - (U * (1 - p_non_random))) / p_non_random
 
   ## Recombine with ranking ID
   imp_PMF_1 <- perm_j %>%
@@ -127,18 +127,18 @@ imprr_weights <- function(data,
       n_renormalized = n_adj / sum(n_adj)
     ) %>%
     rename(
-      prop.raw = n,
-      prop.adj = n_adj,
-      prop = n_renormalized
+      prop_bc_raw = n,
+      prop_bc_adj = n_adj,
+      prop_bc = n_renormalized
     ) %>%
     arrange(!!as.name(ranking))
 
   # Step 6: Get the bias-correction weight vector ------------------------------
   df_w <- perm_j %>%
     mutate(
-      w = imp_PMF$prop / PMF_raw$prop, # Inverse probability weight
-      w = ifelse(w == Inf, 0, w),
-      w = ifelse(is.na(w), 0, w)
+      weights = imp_PMF$prop_bc / PMF_raw$prop_obs, # Inverse probability weight
+      weights = ifelse(weights == Inf, 0, weights),
+      weights = ifelse(is.na(weights), 0, weights)
     ) %>% # NA arise from 0/0
     arrange(!!as.name(ranking))
 
@@ -161,16 +161,20 @@ imprr_weights <- function(data,
 
   data_w <- data_w %>%
     left_join(tibble_w, by = ranking) %>%
-    select(w, everything())
+    select(weights, everything())
+
+  out_rankings <- PMF_raw %>%
+    left_join(imp_PMF, by = "ranking") %>%
+    left_join(df_w, by = "ranking") %>%
+    dplyr::select(ranking, n, prop_obs, prop_bc, weights,
+                  everything())
 
   # Summarize results ----------------------------------------------------------
   return(
     list(
       est_p_random = 1 - p_non_random,
-      obs_pmf = PMF_raw,
-      corrected_pmf = imp_PMF,
-      weights = df_w,
-      data = data_w
+      results = data_w,
+      rankings = out_rankings
     )
   )
 }
