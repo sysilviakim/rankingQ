@@ -224,7 +224,7 @@ imprr_direct <- function(data,
   return(
     list(
       est_p_random = df_random_summary,
-      qoi = df_qoi_summary
+      results = df_qoi_summary
     )
   )
 }
