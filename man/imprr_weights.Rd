@@ -9,6 +9,8 @@ imprr_weights(
   J = NULL,
   main_q,
   anc_correct,
+  population = "non-random",
+  assumption = "contaminated",
   seed = 123456,
   weight = NULL,
   ranking = "ranking"
@@ -28,6 +30,11 @@ looks for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on,
 with an underbar separator followed by numbers.}
 
 \item{anc_correct}{Indicator for passing the anchor question.}
+
+\item{population}{Choice of the target population out of
+non-random respondents (default) or all respondents.}
+
+\item{assumption}{Choice of the identifying assumption if `population` is set to all}
 
 \item{seed}{Seed for \code{set.seed} for reproducibility.}
 

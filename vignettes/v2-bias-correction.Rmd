@@ -88,7 +88,7 @@ out_direct_uniform <- imprr_direct(
 Similarly, the contaminated sampling assumption can be specified as follows:
 
 ```{r}
-# Perform bias correction for the entire population with the uniform preference assumption
+# Perform bias correction for the entire population with the contaminated sampling assumption
 
 out_direct_contaminated <- imprr_direct(
   data = identity,
@@ -165,6 +165,36 @@ out_weights <- imprr_weights(
   anc_correct = "anc_correct_identity"
 )
 ```
+
+
+By default, `imprr_weights` assumes that the target population is a set of non-random respondents. When researchers wish to study the entire population as a target group, additional arguments must be specified, including `population` and `assumption`. For example, the uniform preference assumption can be specified as follows:
+
+```{r}
+# Perform bias correction with the uniform preference assumption
+out_weights_uniform <- imprr_weights(
+  data = identity,
+  J = 4,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity",
+  population = "all",
+  assumption = "uniform"
+)
+```
+
+Similarly, the contaminated sampling assumption can be specified as follows:
+
+```{r}
+# Perform bias correction with the uniform preference assumption
+out_weights_contaminated <- imprr_weights(
+  data = identity,
+  J = 4,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity",
+  population = "all",
+  assumption = "contaminated"
+)
+```
+
 
 ### Results: Estimated Weights
 
