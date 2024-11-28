@@ -17,6 +17,9 @@
 #' looks for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on,
 #' with an underbar separator followed by numbers.
 #' @param anc_correct Indicator for passing the anchor question.
+#' @param population Choice of the target population out of
+#' non-random respondents (default) or all respondents.
+#' @param assumption Choice of the identifying assumption if `population` is set to all
 #' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param seed Seed for \code{set.seed} for reproducibility.
 #' @param weight A vector of weights. Defaults to NULL.
@@ -30,6 +33,8 @@ imprr_direct <- function(data,
                          J = NULL,
                          main_q,
                          anc_correct,
+                         population = "non-random",
+                         assumption = "contaminated",
                          n_bootstrap = 200,
                          seed = 123456,
                          weight = NULL,
@@ -46,6 +51,10 @@ imprr_direct <- function(data,
 
   if (is.null(weight)) {
     weight <- rep(1, N)
+  }
+
+  if (population == "all" & assumption == "uniform"){
+    data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
   }
 
   # Check the validity of the input arguments ==================================

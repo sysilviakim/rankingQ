@@ -67,6 +67,41 @@ out_direct <- imprr_direct(
 )
 ```
 
+
+By default, `imprr_direct` assumes that the target population is a set of non-random respondents. When researchers wish to study the entire population as a target group, additional arguments must be specified, including `population` and `assumption`. For example, the uniform preference assumption can be specified as follows:
+
+
+```{r}
+# Perform bias correction for the entire population with the uniform preference assumption
+
+out_direct_uniform <- imprr_direct(
+  data = identity,
+  J = 4, 
+  main_q = "app_identity", 
+  anc_correct = "anc_correct_identity",
+  population = "all",
+  assumption= "uniform",
+  n_bootstrap = 10
+)
+```
+
+Similarly, the contaminated sampling assumption can be specified as follows:
+
+```{r}
+# Perform bias correction for the entire population with the uniform preference assumption
+
+out_direct_contaminated <- imprr_direct(
+  data = identity,
+  J = 4, 
+  main_q = "app_identity", 
+  anc_correct = "anc_correct_identity",
+  population = "all",
+  assumption= "contaminated",
+  n_bootstrap = 10
+)
+```
+
+
 ### Results: Estimated Proportion of Random Responses
 
 The first output of `imprr_direct` is the estimated proportion of random responses. The vector `est_p_random` returns the estimated proportion along with the lower and upper ends of its corresponding 95% confidence interval.
