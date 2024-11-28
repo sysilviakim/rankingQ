@@ -7,7 +7,8 @@ articles:
   v3-analysis: v3-analysis.html
   v4-visualizing-rankings: v4-visualizing-rankings.html
   v5-uniformity-test: v5-uniformity-test.html
-last_built: 2024-11-28T20:08Z
+  v6-simulate-data: v6-simulate-data.html
+last_built: 2024-11-28T20:30Z
 urls:
   reference: http://sysilviakim.com/rankingQ/reference
   article: http://sysilviakim.com/rankingQ/articles
