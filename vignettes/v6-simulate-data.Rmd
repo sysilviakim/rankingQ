@@ -20,6 +20,5 @@ In this vignette, we describe our helper function `rpluce` to simulate ranking d
 draw <- rpluce(n = 50,
                t = 4,
                prob = c(0.4, 0.2, 0.2, 0.2))
-
 head(draw)
 ```
