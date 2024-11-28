@@ -161,7 +161,7 @@ can be specified as follows:</p>
 <p>Similarly, the contaminated sampling assumption can be specified as
 follows:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Perform bias correction for the entire population with the uniform preference assumption</span></span>
+<code class="sourceCode R"><span><span class="co"># Perform bias correction for the entire population with the contaminated sampling assumption</span></span>
 <span></span>
 <span><span class="va">out_direct_contaminated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
@@ -267,6 +267,34 @@ arguments previously used can be used as follows:</p>
 <span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
 <span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>By default, <code>imprr_weights</code> assumes that the target
+population is a set of non-random respondents. When researchers wish to
+study the entire population as a target group, additional arguments must
+be specified, including <code>population</code> and
+<code>assumption</code>. For example, the uniform preference assumption
+can be specified as follows:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Perform bias correction with the uniform preference assumption</span></span>
+<span><span class="va">out_weights_uniform</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_weights.html">imprr_weights</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
+<span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
+<span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
+<span>  population <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  assumption <span class="op">=</span> <span class="st">"uniform"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Similarly, the contaminated sampling assumption can be specified as
+follows:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Perform bias correction with the uniform preference assumption</span></span>
+<span><span class="va">out_weights_contaminated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_weights.html">imprr_weights</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
+<span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
+<span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
+<span>  population <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  assumption <span class="op">=</span> <span class="st">"contaminated"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="results-estimated-weights">Results: Estimated Weights<a class="anchor" aria-label="anchor" href="#results-estimated-weights"></a>
 </h3>
@@ -275,7 +303,7 @@ for all possible ranking profiles with <code>J</code> items. For
 example, when <code>J = 4</code>, the set has
 <code>{1234, 1243, ..., 4321}</code> and each profile now has an
 estimated weight.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View the estimated weights</span></span>
 <span><span class="va">out_weights</span><span class="op">$</span><span class="va">rankings</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ranking</span>, <span class="va">weights</span><span class="op">)</span></span></code></pre></div>
@@ -310,7 +338,7 @@ estimated weight.</p>
 </h3>
 <p><code>imprr_weight</code> also returns the estimated probability mass
 function of all ranking profile before and after bias correction.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View the estimated corrected PMF</span></span>
 <span><span class="va">out_weights</span><span class="op">$</span><span class="va">rankings</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ranking</span>, <span class="va">prop_obs</span>, <span class="va">prop_bc</span><span class="op">)</span></span></code></pre></div>
@@ -344,7 +372,7 @@ function of all ranking profile before and after bias correction.</p>
 <div class="section level2">
 <h2 id="estimated-weights-with-original-data">Estimated Weights with Original Data<a class="anchor" aria-label="anchor" href="#estimated-weights-with-original-data"></a>
 </h2>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">identity_w</span> <span class="op">&lt;-</span> <span class="va">out_weights</span><span class="op">$</span><span class="va">results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">identity_w</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 19</span></span></span>
@@ -362,7 +390,7 @@ function of all ranking profile before and after bias correction.</p>
 <span><span class="co">## <span style="color: #949494;">#   app_identity_recorded &lt;chr&gt;, anc_identity_recorded &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   app_identity_row_rnd &lt;chr&gt;, anc_identity_row_rnd &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   random_identity &lt;dbl&gt;</span></span></span></code></pre>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save(identity_w, file = "data/identity_w.rda")</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
