@@ -140,6 +140,38 @@ specifying <code>weight</code> in the function.</p>
 <span>  <span class="co"># setting to 10 only for our vignette</span></span>
 <span>  n_bootstrap <span class="op">=</span> <span class="fl">10</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>By default, <code>imprr_direct</code> assumes that the target
+population is a set of non-random respondents. When researchers wish to
+study the entire population as a target group, additional arguments must
+be specified, including <code>population</code> and
+<code>assumption</code>. For example, the uniform preference assumption
+can be specified as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Perform bias correction for the entire population with the uniform preference assumption</span></span>
+<span></span>
+<span><span class="va">out_direct_uniform</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
+<span>  J <span class="op">=</span> <span class="fl">4</span>, </span>
+<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>, </span>
+<span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
+<span>  population <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  assumption<span class="op">=</span> <span class="st">"uniform"</span>,</span>
+<span>  n_bootstrap <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Similarly, the contaminated sampling assumption can be specified as
+follows:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Perform bias correction for the entire population with the uniform preference assumption</span></span>
+<span></span>
+<span><span class="va">out_direct_contaminated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
+<span>  J <span class="op">=</span> <span class="fl">4</span>, </span>
+<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>, </span>
+<span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
+<span>  population <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  assumption<span class="op">=</span> <span class="st">"contaminated"</span>,</span>
+<span>  n_bootstrap <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="results-estimated-proportion-of-random-responses">Results: Estimated Proportion of Random Responses<a class="anchor" aria-label="anchor" href="#results-estimated-proportion-of-random-responses"></a>
 </h3>
@@ -147,7 +179,7 @@ specifying <code>weight</code> in the function.</p>
 proportion of random responses. The vector <code>est_p_random</code>
 returns the estimated proportion along with the lower and upper ends of
 its corresponding 95% confidence interval.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimated proportion of random responses with a 95% CI </span></span>
 <span><span class="va">out_direct</span><span class="op">$</span><span class="va">est_p_random</span></span></code></pre></div>
 <pre><code><span><span class="co">##        mean     lower     upper</span></span>
@@ -166,7 +198,7 @@ ranking-based quantities, including</p>
 </ol>
 <p>The output tibble <code>qoi</code> stores the estimated quantities
 and their corresponding 95% CIs.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View the results based on the quantity of interest</span></span>
 <span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qoi</span> <span class="op">==</span> <span class="st">"average rank"</span><span class="op">)</span></span></code></pre></div>
@@ -178,7 +210,7 @@ and their corresponding 95% CIs.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> app_identity_2 average rank Avg: app_identity_2  2.59  2.48  2.64</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> app_identity_3 average rank Avg: app_identity_3  1.66  1.61  1.74</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">4</span> app_identity_4 average rank Avg: app_identity_4  2.48  2.43  2.54</span></span></code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View the results based on the item</span></span>
 <span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">item</span> <span class="op">==</span> <span class="st">"app_identity_1"</span><span class="op">)</span></span></code></pre></div>
@@ -199,7 +231,7 @@ and their corresponding 95% CIs.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">11</span> app_identity_1 top-k ranking    Top-3               0.726  0.697  0.770</span></span></code></pre>
 <p>For example, one can visualize the result for average ranks as
 follows:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the result</span></span>
 <span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
@@ -215,7 +247,7 @@ follows:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"average rank"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span></code></pre></div>
-<p><img src="v2-bias-correction_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="v2-bias-correction_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
 </div>
 <div class="section level2">
@@ -227,7 +259,7 @@ inverse-probability weighting. <code>imprr_weight</code>
 bias correction <strong>weights</strong>, which can be used to correct
 for the bias in the inverse-probability weighting framework. The same
 arguments previously used can be used as follows:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Perform bias correction</span></span>
 <span><span class="va">out_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_weights.html">imprr_weights</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
@@ -243,7 +275,7 @@ for all possible ranking profiles with <code>J</code> items. For
 example, when <code>J = 4</code>, the set has
 <code>{1234, 1243, ..., 4321}</code> and each profile now has an
 estimated weight.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View the estimated weights</span></span>
 <span><span class="va">out_weights</span><span class="op">$</span><span class="va">rankings</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ranking</span>, <span class="va">weights</span><span class="op">)</span></span></code></pre></div>
@@ -278,7 +310,7 @@ estimated weight.</p>
 </h3>
 <p><code>imprr_weight</code> also returns the estimated probability mass
 function of all ranking profile before and after bias correction.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View the estimated corrected PMF</span></span>
 <span><span class="va">out_weights</span><span class="op">$</span><span class="va">rankings</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ranking</span>, <span class="va">prop_obs</span>, <span class="va">prop_bc</span><span class="op">)</span></span></code></pre></div>
@@ -312,7 +344,7 @@ function of all ranking profile before and after bias correction.</p>
 <div class="section level2">
 <h2 id="estimated-weights-with-original-data">Estimated Weights with Original Data<a class="anchor" aria-label="anchor" href="#estimated-weights-with-original-data"></a>
 </h2>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">identity_w</span> <span class="op">&lt;-</span> <span class="va">out_weights</span><span class="op">$</span><span class="va">results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">identity_w</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 19</span></span></span>
@@ -330,7 +362,7 @@ function of all ranking profile before and after bias correction.</p>
 <span><span class="co">## <span style="color: #949494;">#   app_identity_recorded &lt;chr&gt;, anc_identity_recorded &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   app_identity_row_rnd &lt;chr&gt;, anc_identity_row_rnd &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   random_identity &lt;dbl&gt;</span></span></span></code></pre>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save(identity_w, file = "data/identity_w.rda")</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

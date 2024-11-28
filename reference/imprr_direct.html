@@ -55,6 +55,8 @@ distribution using a paired anchor question.</p>
 <span>  J <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">main_q</span>,</span>
 <span>  <span class="va">anc_correct</span>,</span>
+<span>  population <span class="op">=</span> <span class="st">"non-random"</span>,</span>
+<span>  assumption <span class="op">=</span> <span class="st">"contaminated"</span>,</span>
 <span>  n_bootstrap <span class="op">=</span> <span class="fl">200</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">123456</span>,</span>
 <span>  weight <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -86,6 +88,15 @@ with an underbar separator followed by numbers.</p></dd>
 
 <dt id="arg-anc-correct">anc_correct<a class="anchor" aria-label="anchor" href="#arg-anc-correct"></a></dt>
 <dd><p>Indicator for passing the anchor question.</p></dd>
+
+
+<dt id="arg-population">population<a class="anchor" aria-label="anchor" href="#arg-population"></a></dt>
+<dd><p>Choice of the target population out of
+non-random respondents (default) or all respondents.</p></dd>
+
+
+<dt id="arg-assumption">assumption<a class="anchor" aria-label="anchor" href="#arg-assumption"></a></dt>
+<dd><p>Choice of the identifying assumption if `population` is set to all</p></dd>
 
 
 <dt id="arg-n-bootstrap">n_bootstrap<a class="anchor" aria-label="anchor" href="#arg-n-bootstrap"></a></dt>
