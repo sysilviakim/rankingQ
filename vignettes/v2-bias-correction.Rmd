@@ -61,7 +61,9 @@ out_direct <- imprr_direct(
   ## automatically looks for 
   ## app_identity_1, app_identity_2, app_identity_3, app_identity_4
   main_q = "app_identity", 
-  anc_correct = "anc_correct_identity"
+  anc_correct = "anc_correct_identity",
+  # setting to 10 only for our vignette
+  n_bootstrap = 10
 )
 ```
 
