@@ -143,13 +143,7 @@ out_direct$results %>%
       labels = c("party", "religion", "gender", "race")
     )
   ) %>%
-  filter(qoi == "average rank") %>%
-  ggplot(aes(x = mean, y = item)) +
-  geom_point() +
-  geom_linerange(aes(xmin = lower, xmax = upper)) +
-  theme_bw() +
-  xlab("average rank") +
-  ylab("")
+  plot_average_rank()
 ```
 
 ## Weighting-Based Bias Correction via `imprr_weight`
