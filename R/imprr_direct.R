@@ -45,6 +45,10 @@ imprr_direct <- function(data,
 
   # Setup ======================================================================
   N <- nrow(data)
+  if (is.null(N)) {
+    stop("There is no data to analyze. Please check the input data.")
+  }
+
   if (is.null(J)) {
     J <- nchar(data[[main_q]][[1]])
   }
