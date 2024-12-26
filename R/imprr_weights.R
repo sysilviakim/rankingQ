@@ -44,7 +44,8 @@ imprr_weights <- function(data,
                           weight = NULL,
                           ranking = "ranking") {
   ## Suppress global variable warning
-  count <- n <- n_adj <- n_renormalized <- prop <- w <- NULL
+  count <- n <- n_adj <- n_renormalized <- prop <- w <-
+    prop_obs <- weights <- prop_bc <- NULL
 
   if (is.null(ranking) & main_q %in% names(data)) {
     ranking <- main_q
