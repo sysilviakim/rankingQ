@@ -117,15 +117,6 @@ avg_rank <- function(x,
     stop("The rankings variable must be specified.")
   }
 
-  ## What is the J?
-  if (!is.null(rankings)) {
-    J <- max(nchar(x[[rankings]]))
-  } else if (!is.null(items)) {
-    J <- length(items)
-  } else {
-    stop("There is no information about the number of items in the data frame.")
-  }
-
   ## Class sanity checks
   if (!("data.frame" %in% class(x))) {
     stop("x must be a data frame.")
@@ -137,6 +128,15 @@ avg_rank <- function(x,
     if (!(rankings %in% colnames(x))) {
       stop("The rankings variable is not contained in the given data frame.")
     }
+  }
+
+  ## What is the J?
+  if (!is.null(rankings)) {
+    J <- max(nchar(x[[rankings]]))
+  } else if (!is.null(items)) {
+    J <- length(items)
+  } else {
+    stop("There is no information about the number of items in the data frame.")
   }
 
   ## Sanity checks for "rankings" and "items" arguments.
