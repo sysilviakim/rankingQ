@@ -2,7 +2,7 @@
 
 `rankingQ` implements design-based methods for correcting measurement errors in ranking questions due to random responses. `rankingQ` allows users to estimate various ranking-based quantities of interest both non-parametrically and parametrically. `rankingQ` also offers practical tools for detecting the bias and assessing the anchor-ranking question.\
 \
-For the underlying methodology, see [Atsusaka and Kim (2024)](https://osf.io/3ys8x). Addressing Measurement Errors in Ranking Questions for the Social Sciences. *Political Analysis* (conditionally accepted).
+For the underlying methodology, see [Atsusaka and Kim (2024)](https://osf.io/3ys8x). Addressing Measurement Errors in Ranking Questions for the Social Sciences. *Political Analysis* (conditionally accepted). Please visit the [package site](https://sysilviakim.com/rankingQ/) for all vignettes and references.
 
 ## Installation
 
@@ -16,6 +16,8 @@ remotes::install_github(
 ```
 
 ## Example
+
+The following is a simplified example of how this package can be used. For a full demonstration, visit [https://sysilviakim.com/rankingQ/](https://sysilviakim.com/rankingQ/).
 
 ``` r
 data("identity")
@@ -74,7 +76,3 @@ head(out_weights$rankings)
 # 5    1423 50 0.046210721 0.046944603 1.0158812  0.0483131539 0.048313154
 # 6    1432 20 0.018484288 0.007538549 0.4078355  0.0077583167 0.007758317
 ```
-
-## Website
-
-Please visit the [package site](https://sysilviakim.com/rankingQ/) for vignettes and references.
