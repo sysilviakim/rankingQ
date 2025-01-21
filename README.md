@@ -1,4 +1,4 @@
-# `rankingQ`: Design-Based Methods for Improving Ranking Questions
+# `rankingQ`: Design-Based Methods for Improving Ranking Questions <img src="man/figures/logo.png" align="right" width="150"/>
 
 `rankingQ` implements design-based methods for correcting measurement errors in ranking questions due to random responses. `rankingQ` allows users to estimate various ranking-based quantities of interest both non-parametrically and parametrically. `rankingQ` also offers practical tools for detecting the bias and assessing the anchor-ranking question.\
 \
@@ -17,7 +17,7 @@ remotes::install_github(
 
 ## Example
 
-The following is a simplified example of how this package can be used. For a full demonstration, visit [https://sysilviakim.com/rankingQ/](https://sysilviakim.com/rankingQ/).
+The following is a simplified example of how this package can be used. For a full demonstration, visit <https://sysilviakim.com/rankingQ/>.
 
 ``` r
 data("identity")
