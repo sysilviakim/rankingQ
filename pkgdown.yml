@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   v1-basic-setup: v1-basic-setup.html
@@ -8,7 +8,7 @@ articles:
   v4-visualizing-rankings: v4-visualizing-rankings.html
   v5-uniformity-test: v5-uniformity-test.html
   v6-simulate-data: v6-simulate-data.html
-last_built: 2025-01-23T04:12Z
+last_built: 2025-06-24T07:25Z
 urls:
   reference: http://sysilviakim.com/rankingQ/reference
   article: http://sysilviakim.com/rankingQ/articles
