@@ -2,7 +2,7 @@
 
 `rankingQ` implements design-based methods for correcting measurement errors in ranking questions due to random responses. `rankingQ` allows users to estimate various ranking-based quantities of interest both non-parametrically and parametrically. `rankingQ` also offers practical tools for detecting the bias and assessing the anchor-ranking question.\
 \
-For the underlying methodology, see [Atsusaka and Kim (2025)](https://doi.org/10.1017/pan.2024.33). Addressing Measurement Errors in Ranking Questions for the Social Sciences. *Political Analysis* (online first view). Please visit the [package site](https://sysilviakim.com/rankingQ/) for all vignettes and references.
+For the underlying methodology, see [Atsusaka and Kim (2025)](https://doi.org/10.1017/pan.2024.33). "Addressing Measurement Errors in Ranking Questions for the Social Sciences." *Political Analysis* Volume 33 , Issue 4 , October 2025 , pp. 339 - 360. Please visit the [package site](https://sysilviakim.com/rankingQ/) for all vignettes and references.
 
 ## Installation
 
