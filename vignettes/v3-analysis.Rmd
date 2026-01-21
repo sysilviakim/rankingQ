@@ -28,3 +28,24 @@ lm_robust(app_identity_1 ~ 1, data = identity_w, weights = w) |> tidy()
 ```
 
 While this illustrative example provides a valid point estimate, its confidence interval does not account for the estimation uncertainty around the estimated weights. Thus, in practice, `imprr_weights` must be used along with bootstrapping, such as the one available in `rsample` ([example](https://declaredesign.org/r/estimatr/articles/estimatr-in-the-tidyverse.html#bootstrap-using-rsample)).
+
+## Computing Average Ranks
+
+The `avg_rank` function provides a convenient way to compute average ranks for all items:
+
+```{r}
+# Raw average ranks (without bias correction)
+avg_rank(identity_w, rankings = "app_identity",
+         items = c("Party", "Religion", "Gender", "Race"))
+```
+
+For bias-corrected estimates using IPW weights, use the marginal ranking columns:
+
+```{r}
+# IPW-corrected average ranks
+items_df <- data.frame(
+  variable = paste0("app_identity_", 1:4),
+  item = c("Party", "Religion", "Gender", "Race")
+)
+avg_rank(identity_w, items = items_df, weight = "w", raw = FALSE)
+```

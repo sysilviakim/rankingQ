@@ -8,9 +8,10 @@ Authors@R: c(
   person("Yuki", "Atsusaka", email = "yuki.atsusaka@gmail.com",
   role = c("aut"), comment = c(ORCID="0000-0001-5365-1876"))
   )
-Maintainer: The package maintainer <sskim.research@gmail.com>
-Description: A system for implement bias correction that addresses 
-   measurement errors due to random responses in ranking survey questions.
+Maintainer: Seo-young Silvia Kim <sskim.research@gmail.com>
+Description: Implements design-based bias correction methods that address
+    measurement errors due to random responses in ranking survey questions.
+    Based on Atsusaka and Kim (2025) <doi:10.1017/pan.2024.33>.
 URL: https://github.com/sysilviakim/rankingQ, http://sysilviakim.com/rankingQ/
 BugReports: https://github.com/sysilviakim/rankingQ/issues
 License: GPL (>= 3)
@@ -27,16 +28,16 @@ Imports:
   rlang,
   combinat,
   PLMIX,
-  estimatr
+  estimatr,
+  stats
 Suggests:
   knitr,
   rmarkdown,
   utils,
-  stats,
   cli,
   testthat (>= 3.0.0)
 Depends:
-  R (>= 3.5.0)
+  R (>= 4.1.0)
 VignetteBuilder: utils, knitr
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Config/testthat/edition: 3

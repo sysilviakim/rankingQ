@@ -69,6 +69,9 @@ imprr_weights <- function(data,
     data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
   }
 
+  # Pre-compute factorial for efficiency
+  J_factorial <- factorial(J)
+
   # Check the validity of the input arguments ==================================
   ## Main ranking only
 
@@ -77,11 +80,11 @@ imprr_weights <- function(data,
     select(matches("_[[:digit:]]$"))
 
   # Step 1: Get the proportion of random answers -------------------------------
-  p_non_random <- (mean(data[[anc_correct]]) - 1 / factorial(J)) /
-    (1 - 1 / factorial(J))
+  p_non_random <- (mean(data[[anc_correct]]) - 1 / J_factorial) /
+    (1 - 1 / J_factorial)
 
   # Step 2: Get the uniform distribution ---------------------------------------
-  U <- rep(1 / factorial(J), factorial(J))
+  U <- rep(1 / J_factorial, J_factorial)
 
   # Step 3: Get the observed PMF based on raw data -----------------------------
   ## Get raw counts of ranking profiles
@@ -191,17 +194,19 @@ imprr_weights <- function(data,
 
 #' Weighted one-way and two-way frequency tables.
 #'
-#' Copied from questionr::wtd.table. Not exported
+#' Internal function adapted from questionr::wtd.table.
 #'
-#' @param x	a vector
-#' @param y	another optional vector for a two-way frequency table. Must be the same length as x
-#' @param weights	 vector of weights, must be the same length as x
+#' @param x a vector
+#' @param y another optional vector for a two-way frequency table. Must be the same length as x
+#' @param weights vector of weights, must be the same length as x
 #' @param digits Number of significant digits.
 #' @param normwt if TRUE, normalize weights so that the total weighted count is the same as the unweighted one
 #' @param useNA whether to include NA values in the table
-#' @param na.rm	 (deprecated) if TRUE, remove NA values before computation
-#' @param na.show	 (deprecated) if TRUE, show NA count in table output
+#' @param na.rm (deprecated) if TRUE, remove NA values before computation
+#' @param na.show (deprecated) if TRUE, show NA count in table output
 #' @param exclude values to remove from x and y. To exclude NA, use na.rm argument.
+#'
+#' @keywords internal
 
 wtd.table <- function(
     x, y = NULL, weights = NULL, digits = 3, normwt = FALSE,

@@ -36,5 +36,6 @@ wtd.table(
 \item{exclude}{values to remove from x and y. To exclude NA, use na.rm argument.}
 }
 \description{
-Copied from questionr::wtd.table. Not exported
+Internal function adapted from questionr::wtd.table.
 }
+\keyword{internal}

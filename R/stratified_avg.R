@@ -45,7 +45,7 @@ stratified_avg <- function(data, var_stratum, J = NULL,
     stop("main_q must be a character.")
   }
   if (!is.character(anc_correct)) {
-    stop("main_q must be a character.")
+    stop("anc_correct must be a character.")
   }
 
   if (is.null(J)) {

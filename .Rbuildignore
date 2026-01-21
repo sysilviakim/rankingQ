@@ -10,3 +10,7 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+^\.claude$
+^atsusaka-kim-pa\.pdf$
+^rankingQ\.Rcheck$
+^rankingQ_.*\.tar\.gz$

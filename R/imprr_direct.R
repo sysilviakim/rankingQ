@@ -61,6 +61,13 @@ imprr_direct <- function(data,
     data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
   }
 
+  # Pre-compute constants for efficiency =======================================
+  J_factorial <- factorial(J)
+  J_1 <- J - 1
+  uniform_avg_rank <- (1 + J) / 2
+  uniform_pairwise <- 0.5
+  uniform_prob <- 1 / J
+
   # Check the validity of the input arguments ==================================
 
   ## List for bootstrapped results
@@ -89,12 +96,11 @@ imprr_direct <- function(data,
 
     # Step 1: Get the proportion of random answers -----------------------------
     ## This requires anchor questions and item order randomization
-    p_non_random <- (mean(boostrap_dat[[anc_correct]]) - 1 / factorial(J)) /
-      (1 - 1 / factorial(J))
+    p_non_random <- (mean(boostrap_dat[[anc_correct]]) - 1 / J_factorial) /
+      (1 - 1 / J_factorial)
 
     # Step 2: Get the naive estimates of simple quantities ---------------------
     item_names <- colnames(loc_app)
-    J_1 <- J - 1
     all_qoi_list <- list()
 
     for (j in 1:J) {
@@ -159,7 +165,7 @@ imprr_direct <- function(data,
         mutate(
           outcome = paste0("Avg:", " ", target_item),
           qoi = "average rank",
-          g_U = (1 + J) / 2
+          g_U = uniform_avg_rank
         )
 
       gg_pairwise <- do.call(rbind.data.frame, m_pairwise) %>%
@@ -167,7 +173,7 @@ imprr_direct <- function(data,
         mutate(
           outcome = paste0("v.", " ", other_items),
           qoi = "pairwise ranking",
-          g_U = 0.5
+          g_U = uniform_pairwise
         )
 
       gg_topk <- do.call(rbind.data.frame, m_top) %>%
@@ -175,7 +181,7 @@ imprr_direct <- function(data,
         mutate(
           outcome = paste0("Top-", "", 1:J_1),
           qoi = "top-k ranking",
-          g_U = 1 / J
+          g_U = uniform_prob
         )
 
       gg_marginal <- do.call(rbind.data.frame, m_marginal) %>%
@@ -183,7 +189,7 @@ imprr_direct <- function(data,
         mutate(
           outcome = paste0("Ranked", " ", 1:J),
           qoi = "marginal ranking",
-          g_U = 1 / J
+          g_U = uniform_prob
         )
 
       # Step 4: Directly apply bias-correction (Equation 6)
