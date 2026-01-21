@@ -29,7 +29,10 @@ Imports:
   combinat,
   PLMIX,
   estimatr,
-  stats
+  stats,
+  Rcpp
+LinkingTo:
+  Rcpp
 Suggests:
   knitr,
   rmarkdown,
