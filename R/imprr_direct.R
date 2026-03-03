@@ -6,6 +6,7 @@
 #' @importFrom dplyr `%>%` mutate select group_by arrange summarise pull
 #' @importFrom tidyselect matches
 #' @importFrom estimatr lm_robust tidy
+#' @importFrom stats runif
 #'
 #' @param data The input dataset with ranking data.
 #' @param J The number of items in the ranking question. Defaults to NULL,
@@ -25,7 +26,15 @@
 #' @param weight A vector of weights. Defaults to NULL.
 #' @param verbose Indicator for verbose output. Defaults to FALSE.
 #'
-#' @return A list.
+#' @return A list with two elements:
+#' \describe{
+#'   \item{est_p_random}{A data frame with summary statistics for the
+#'     estimated proportion of random respondents, including columns
+#'     \code{mean}, \code{lower}, and \code{upper} (95\% confidence interval).}
+#'   \item{results}{A tibble with bias-corrected estimates grouped by
+#'     \code{item}, \code{qoi} (quantity of interest), and \code{outcome},
+#'     including columns \code{mean}, \code{lower}, and \code{upper}.}
+#' }
 #'
 #' @export
 
@@ -81,7 +90,14 @@ imprr_direct <- function(data,
   ### j: over J items
   ### k: over K estimates
 
+  ## Save and restore RNG state
+  if (!exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
+    runif(1)
+  }
+  old_seed <- get(".Random.seed", envir = globalenv())
+  on.exit(assign(".Random.seed", old_seed, envir = globalenv()), add = TRUE)
   set.seed(seed)
+
   for (i in 1:n_bootstrap) {
     ## Sample indices
     index <- sample(1:nrow(data), size = nrow(data), replace = TRUE)

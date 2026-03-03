@@ -30,7 +30,17 @@
 #' column should be identical to `main_q`. However, the function defaults to
 #' creating another column by combining marginal rankings, just in case.
 #'
-#' @return A list.
+#' @return A list with three elements:
+#' \describe{
+#'   \item{est_p_random}{A numeric value representing the estimated proportion
+#'     of random responses.}
+#'   \item{results}{A data frame with the original data augmented with a
+#'     \code{weights} column containing inverse probability weights and a
+#'     \code{ranking} column with unified ranking patterns.}
+#'   \item{rankings}{A data frame with ranking patterns, observed proportions
+#'     (\code{prop_obs}), bias-corrected proportions (\code{prop_bc}), and
+#'     inverse probability weights (\code{weights}) for each permutation.}
+#' }
 #'
 #' @export
 
