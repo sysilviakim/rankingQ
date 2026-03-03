@@ -46,7 +46,15 @@ non-random respondents (default) or all respondents.}
 \item{verbose}{Indicator for verbose output. Defaults to FALSE.}
 }
 \value{
-A list.
+A list with two elements:
+\describe{
+  \item{est_p_random}{A data frame with summary statistics for the
+    estimated proportion of random respondents, including columns
+    \code{mean}, \code{lower}, and \code{upper} (95\% confidence interval).}
+  \item{results}{A tibble with bias-corrected estimates grouped by
+    \code{item}, \code{qoi} (quantity of interest), and \code{outcome},
+    including columns \code{mean}, \code{lower}, and \code{upper}.}
+}
 }
 \description{
 This function implements the bias correction of the ranking
