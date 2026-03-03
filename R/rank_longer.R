@@ -29,7 +29,7 @@
 #' you can provide a character vector.
 #'
 #' @importFrom dplyr arrange left_join select `%>%`
-#' @importFrom tidyr pivot_longer separate
+#' @importFrom tidyr pivot_longer separate_wider_position
 #' @importFrom tidyselect any_of all_of
 #'
 #' @return A data frame in long format with columns recording rankings.
@@ -138,7 +138,10 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
   if (length(cols) == 1) {
     ## Split the column into N = max_ranking columns
     x <- x %>%
-      separate(cols, into = reference, sep = 1:max_ranking) %>%
+      separate_wider_position(
+        all_of(cols),
+        widths = setNames(rep(1L, max_ranking), reference)
+      ) %>%
       mutate(across(all_of(reference), as.numeric))
     cols <- reference
   }
