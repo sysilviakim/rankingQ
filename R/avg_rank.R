@@ -30,9 +30,8 @@
 #'
 #' @importFrom dplyr group_by summarise across everything `%>%` mutate
 #' select left_join rename
-#' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom tidyr pivot_longer separate_wider_position
 #' @importFrom purrr imap
-#' @importFrom stringr str_split
 #' @importFrom rlang !! set_names
 #' @importFrom tidyselect all_of
 #' @importFrom stats sd
@@ -171,7 +170,10 @@ avg_rank <- function(x,
       if (is.null(items)) {
         ## Just use the ranking positions to identify the items
         out <- x %>%
-          separate(!!as.name(rankings), sep = seq(J), into = ordinal_seq(J)) %>%
+          separate_wider_position(
+            !!as.name(rankings),
+            widths = setNames(rep(1L, J), ordinal_seq(J))
+          ) %>%
           mutate(across(all_of(ordinal_seq(J)), as.numeric)) %>%
           pivot_longer(
             all_of(ordinal_seq(J)),
@@ -181,7 +183,10 @@ avg_rank <- function(x,
       } else {
         ## Use the items variable as item names
         out <- x %>%
-          separate(!!as.name(rankings), sep = seq(J), into = items) %>%
+          separate_wider_position(
+            !!as.name(rankings),
+            widths = setNames(rep(1L, J), items)
+          ) %>%
           mutate(across(all_of(items), as.numeric)) %>%
           pivot_longer(
             all_of(items),
