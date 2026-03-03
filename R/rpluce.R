@@ -37,8 +37,13 @@
 #' @export
 
 rpluce <- function(n, t, prob, choices = NULL, seed = NULL) {
-  ## Set the seed if specified
+  ## Set the seed if specified, saving and restoring RNG state
   if (!is.null(seed)) {
+    if (!exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
+      runif(1)
+    }
+    old_seed <- get(".Random.seed", envir = globalenv())
+    on.exit(assign(".Random.seed", old_seed, envir = globalenv()), add = TRUE)
     set.seed(seed)
   }
 
