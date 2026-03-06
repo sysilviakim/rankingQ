@@ -16,7 +16,7 @@ test_that("rpluce output contains only valid items", {
   # Each row should be a permutation of a, b, c
   items <- c("a", "b", "c")
   for (i in seq_len(nrow(result))) {
-    expect_true(setequal(as.character(result[i, ]), items))
+    expect_true(setequal(as.character(unlist(result[i, ])), items))
   }
 })
 
