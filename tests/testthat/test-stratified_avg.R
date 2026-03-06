@@ -67,3 +67,37 @@ test_that("stratified_avg errors on non-character anc_correct", {
     "anc_correct must be a character."
   )
 })
+
+test_that("stratified_avg uses provided weight vector", {
+  skip_on_cran()
+
+  identity <- rankingQ::identity
+  set.seed(2)
+  identity$test_stratum <- sample(c("group1", "group2"), nrow(identity), TRUE)
+
+  w1 <- rep(1, nrow(identity))
+  w2 <- c(rep(10, nrow(identity) / 2), rep(1, nrow(identity) - nrow(identity) / 2))
+
+  out1 <- stratified_avg(
+    data = identity,
+    var_stratum = "test_stratum",
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    weight = w1,
+    n_bootstrap = 3,
+    seed = 123
+  )
+  out2 <- stratified_avg(
+    data = identity,
+    var_stratum = "test_stratum",
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    weight = w2,
+    n_bootstrap = 3,
+    seed = 123
+  )
+
+  expect_false(isTRUE(all.equal(out1$mean, out2$mean)))
+})

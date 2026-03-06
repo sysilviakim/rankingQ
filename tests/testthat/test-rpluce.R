@@ -67,3 +67,9 @@ test_that("rpluce errors on invalid choices argument", {
     "The specified choices must be of length t."
   )
 })
+
+test_that("rpluce accepts floating-point probabilities that sum to 1 within tolerance", {
+  expect_no_error(
+    rpluce(n = 5, t = 3, prob = c(0.1, 0.2, 0.7), seed = 99)
+  )
+})

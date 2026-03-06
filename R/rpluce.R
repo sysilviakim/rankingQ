@@ -57,7 +57,7 @@ rpluce <- function(n, t, prob, choices = NULL, seed = NULL) {
   if (any(prob < 0) | any(prob > 1)) {
     stop("The specified probability must be between 0 and 1.")
   }
-  if (sum(prob) != 1) {
+  if (!isTRUE(all.equal(sum(prob), 1, tolerance = sqrt(.Machine$double.eps)))) {
     stop("The specified probability must sum to 1.")
   }
   if (length(prob) != t) {

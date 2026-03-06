@@ -35,3 +35,21 @@ test_that("IPW weights sum to approximately 1", {
   # Bias-corrected probabilities should sum to 1
   expect_equal(sum(example_ipw$rankings$prop_bc), 1, tolerance = 1e-10)
 })
+
+test_that("imprr_weights errors when estimated non-random rate is too small", {
+  bad <- data.frame(
+    q_1 = c(1, 1, 1, 1),
+    q_2 = c(2, 2, 2, 2),
+    anc_correct = c(0, 0, 0, 0)
+  )
+
+  expect_error(
+    imprr_weights(
+      bad,
+      J = 2,
+      main_q = "q",
+      anc_correct = "anc_correct"
+    ),
+    "non-random response rate"
+  )
+})

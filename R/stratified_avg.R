@@ -55,6 +55,20 @@ stratified_avg <- function(data, var_stratum, J = NULL,
     stop("anc_correct must be a character.")
   }
 
+  if (!is.null(weight)) {
+    if (is.character(weight) && length(weight) == 1 && weight %in% names(data)) {
+      weight_vec <- data[[weight]]
+    } else if (is.numeric(weight) && length(weight) == nrow(data)) {
+      weight_vec <- weight
+    } else {
+      stop("weight must be either a numeric vector of nrow(data) or a column name.")
+    }
+    data[[".weight__"]] <- weight_vec
+    weight_col <- ".weight__"
+  } else {
+    weight_col <- NULL
+  }
+
   if (is.null(J)) {
     J <- nchar(data[[main_q]][[1]])
   }
@@ -84,10 +98,10 @@ stratified_avg <- function(data, var_stratum, J = NULL,
         map(
           ~ {
             ## First, the weights in vector format
-            if (is.null(weight)) {
+            if (is.null(weight_col)) {
               weights <- NULL
             } else {
-              weights <- .x[["weight"]]
+              weights <- .x[[weight_col]]
             }
 
             ## Direct bias correction
@@ -108,10 +122,10 @@ stratified_avg <- function(data, var_stratum, J = NULL,
         map(
           ~ {
             ## First, the weights in vector format
-            if (is.null(weight)) {
+            if (is.null(weight_col)) {
               weights <- NULL
             } else {
-              weights <- .x[["weight"]]
+              weights <- .x[[weight_col]]
             }
 
             ## IPW bias correction

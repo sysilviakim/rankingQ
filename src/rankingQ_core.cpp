@@ -233,6 +233,22 @@ List bootstrap_qoi_cpp(NumericMatrix data, NumericVector anc_correct,
     }
     double prop_correct = sum_correct / sum_w;
     double p_non_random = (prop_correct - 1.0/J_factorial) / (1.0 - 1.0/J_factorial);
+    if (!R_finite(p_non_random) || p_non_random <= 1e-12) {
+      p_random_boot[b] = NA_REAL;
+      for (int j = 0; j < J; j++) {
+        avg_ranks_boot(b, j) = NA_REAL;
+      }
+      for (int c = 0; c < n_pairwise; c++) {
+        pairwise_boot(b, c) = NA_REAL;
+      }
+      for (int c = 0; c < n_topk; c++) {
+        topk_boot(b, c) = NA_REAL;
+      }
+      for (int c = 0; c < n_marginal; c++) {
+        marginal_boot(b, c) = NA_REAL;
+      }
+      continue;
+    }
     p_random_boot[b] = 1.0 - p_non_random;
 
     // Compute QOI for each item

@@ -42,12 +42,19 @@ item_to_rank <- function(item_rank,
   }
 
   if (!is.null(reference)) {
+    if (!is.character(reference)) {
+      stop("reference must be a character vector.")
+    }
+    if (length(reference) < ncol(item_rank)) {
+      stop("reference must have at least as many labels as there are ranked items.")
+    }
     item_crosswalk <- data.frame(
-      name = reference, item_no = paste0("Item_", seq(length(letters)))
+      name = reference, item_no = paste0("Item_", seq(length(reference)))
     )
   } else {
+    default_names <- unique_alphabets(ncol(item_rank))
     item_crosswalk <- data.frame(
-      name = letters, item_no = paste0("Item_", seq(length(letters)))
+      name = default_names, item_no = paste0("Item_", seq(length(default_names)))
     )
   }
 

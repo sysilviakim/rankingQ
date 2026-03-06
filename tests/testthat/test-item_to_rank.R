@@ -48,3 +48,11 @@ test_that("item_to_rank errors on invalid long argument", {
     "The 'long' argument must be either TRUE or FALSE."
   )
 })
+
+test_that("item_to_rank handles more than 26 items without NA names", {
+  df <- as.data.frame(matrix(sample(1:30, 90, replace = TRUE), ncol = 30))
+  out <- item_to_rank(df)
+
+  expect_equal(ncol(out), 30)
+  expect_false(any(is.na(names(out))))
+})

@@ -74,6 +74,12 @@ imprr_weights <- function(data,
   if (is.null(weight)) {
     weight <- rep(1, N)
   }
+  if (length(weight) != N) {
+    stop("weight must have the same length as the number of rows in data.")
+  }
+  if (!missing(seed) && !is.null(seed)) {
+    warning("'seed' is currently ignored because imprr_weights is deterministic.")
+  }
 
   if (population == "all" & assumption == "uniform"){
     data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
@@ -92,6 +98,12 @@ imprr_weights <- function(data,
   # Step 1: Get the proportion of random answers -------------------------------
   p_non_random <- (mean(data[[anc_correct]]) - 1 / J_factorial) /
     (1 - 1 / J_factorial)
+  if (!is.finite(p_non_random) || p_non_random <= sqrt(.Machine$double.eps)) {
+    stop(
+      "Estimated non-random response rate is too small/non-finite. ",
+      "Check anc_correct, weights, and J."
+    )
+  }
 
   # Step 2: Get the uniform distribution ---------------------------------------
   U <- rep(1 / J_factorial, J_factorial)
@@ -102,17 +114,14 @@ imprr_weights <- function(data,
     unite(!!as.name(ranking), sep = "") %>%
     mutate(survey_weight = weight)
 
-  ## Get a weighted table
-  tab_vec <- wtd.table(x = D_0[[ranking]], weights = D_0$survey_weight) %>%
-    tibble()
-
-  D_PMF_0 <- D_0 %>%
-    group_by(!!as.name(ranking)) %>%
-    count() %>%
-    ungroup()
-
-  ## Over-write "n" with weighted results
-  D_PMF_0$n <- as.numeric(tab_vec$.)
+  ## Get weighted counts by ranking profile (fast path via Rcpp)
+  tab_vec <- weighted_table_cpp(D_0[[ranking]], D_0$survey_weight)
+  D_PMF_0 <- data.frame(
+    ranking_value = names(tab_vec),
+    n = as.numeric(tab_vec),
+    stringsAsFactors = FALSE
+  )
+  names(D_PMF_0)[1] <- ranking
 
   ## Create sample space to merge
   perm_j <- permn(1:J)
@@ -155,6 +164,9 @@ imprr_weights <- function(data,
       prop_bc = n_renormalized
     ) %>%
     arrange(!!as.name(ranking))
+  if (!is.finite(sum(imp_PMF$prop_bc)) || sum(imp_PMF$prop_bc_adj) <= 0) {
+    stop("Bias-corrected PMF could not be normalized to a valid distribution.")
+  }
 
   # Step 6: Get the bias-correction weight vector ------------------------------
   df_w <- perm_j %>%
