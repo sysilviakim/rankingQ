@@ -172,7 +172,7 @@ avg_rank <- function(x,
         out <- x %>%
           separate_wider_position(
             !!as.name(rankings),
-            widths = setNames(rep(1L, J), ordinal_seq(J))
+            widths = stats::setNames(rep(1L, J), ordinal_seq(J))
           ) %>%
           mutate(across(all_of(ordinal_seq(J)), as.numeric)) %>%
           pivot_longer(
@@ -185,7 +185,7 @@ avg_rank <- function(x,
         out <- x %>%
           separate_wider_position(
             !!as.name(rankings),
-            widths = setNames(rep(1L, J), items)
+            widths = stats::setNames(rep(1L, J), items)
           ) %>%
           mutate(across(all_of(items), as.numeric)) %>%
           pivot_longer(

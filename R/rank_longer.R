@@ -140,7 +140,7 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
     x <- x %>%
       separate_wider_position(
         all_of(cols),
-        widths = setNames(rep(1L, max_ranking), reference)
+        widths = stats::setNames(rep(1L, max_ranking), reference)
       ) %>%
       mutate(across(all_of(reference), as.numeric))
     cols <- reference
