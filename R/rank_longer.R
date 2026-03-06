@@ -28,7 +28,7 @@
 #' @param reference If you wish to specify the reference choice set,
 #' you can provide a character vector.
 #'
-#' @importFrom dplyr arrange left_join select `%>%`
+#' @importFrom dplyr arrange left_join select mutate across `%>%`
 #' @importFrom tidyr pivot_longer separate_wider_position
 #' @importFrom tidyselect any_of all_of
 #'
