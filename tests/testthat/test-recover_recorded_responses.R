@@ -53,3 +53,27 @@ test_that("recover_recorded_responses handles NA in df input", {
   result <- recover_recorded_responses("app_true", "app_row_rnd", df = df)
   expect_true(is.na(result$app_recorded[2]))
 })
+
+test_that("recover_recorded_responses validates malformed string indices", {
+  expect_error(
+    recover_recorded_responses("1234", "21a4"),
+    "presented_order must contain only numeric position codes."
+  )
+  expect_error(
+    recover_recorded_responses("1234", "2145"),
+    "presented_order contains indices outside the range of true_order."
+  )
+})
+
+test_that("recover_recorded_responses validates malformed df indices", {
+  df <- data.frame(
+    app_row_rnd      = "2145",
+    app_true         = "1234",
+    stringsAsFactors = FALSE
+  )
+
+  expect_error(
+    recover_recorded_responses("app_true", "app_row_rnd", df = df),
+    "Row 1: presented_order contains indices outside the range of true_order."
+  )
+})
