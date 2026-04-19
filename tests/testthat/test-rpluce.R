@@ -73,3 +73,22 @@ test_that("rpluce accepts floating-point probabilities that sum to 1 within tole
     rpluce(n = 5, t = 3, prob = c(0.1, 0.2, 0.7), seed = 99)
   )
 })
+
+test_that("rpluce errors cleanly on invalid n and t boundary values", {
+  expect_error(
+    rpluce(n = 0, t = 3, prob = c(0.5, 0.3, 0.2)),
+    "The specified n must be a positive whole number."
+  )
+  expect_error(
+    rpluce(n = 1.5, t = 3, prob = c(0.5, 0.3, 0.2)),
+    "The specified n must be a positive whole number."
+  )
+  expect_error(
+    rpluce(n = 5, t = 1, prob = 1),
+    "The specified t must be a whole number greater than or equal to 2."
+  )
+  expect_error(
+    rpluce(n = 5, t = 2.5, prob = c(0.5, 0.5)),
+    "The specified t must be a whole number greater than or equal to 2."
+  )
+})
