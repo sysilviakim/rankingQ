@@ -37,6 +37,17 @@
 #' @export
 
 rpluce <- function(n, t, prob, choices = NULL, seed = NULL) {
+  ## Sanity check on the sample-size arguments.
+  if (!is.numeric(n) || length(n) != 1 || is.na(n) || n < 1 || n != as.integer(n)) {
+    stop("The specified n must be a positive whole number.")
+  }
+  if (!is.numeric(t) || length(t) != 1 || is.na(t) || t < 2 || t != as.integer(t)) {
+    stop("The specified t must be a whole number greater than or equal to 2.")
+  }
+
+  n <- as.integer(n)
+  t <- as.integer(t)
+
   ## Set the seed if specified, saving and restoring RNG state
   if (!is.null(seed)) {
     if (!exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
@@ -79,9 +90,9 @@ rpluce <- function(n, t, prob, choices = NULL, seed = NULL) {
 
   ## Draw samples from the Plackett-Luce model using a loop
   ## R, A, and Gamma are all notations from Xia (2019)
-  for (j in 1:n) {
+  for (j in seq_len(n)) {
     ## Initialization: storage of rankings
-    R <- vector("character", t - 1)
+    R <- vector("character", t)
 
     ## Initial choice set: vector of items to be ranked
     A <- unique_alphabets(t)
@@ -90,7 +101,7 @@ rpluce <- function(n, t, prob, choices = NULL, seed = NULL) {
     Gamma <- prob
 
     ## Loop over the number of items - 1 within one assessor
-    for (i in seq(t - 1)) {
+    for (i in seq_len(t - 1)) {
       ## Draw from a multinomial PMF
       draw <- as.vector(rmultinom(n = 1, size = 1, prob = Gamma))
 
