@@ -30,7 +30,17 @@
 #' column should be identical to `main_q`. However, the function defaults to
 #' creating another column by combining marginal rankings, just in case.
 #'
-#' @return A list.
+#' @return A list with three elements:
+#' \describe{
+#'   \item{est_p_random}{A numeric value representing the estimated proportion
+#'     of random responses.}
+#'   \item{results}{A data frame with the original data augmented with a
+#'     \code{weights} column containing inverse probability weights and a
+#'     \code{ranking} column with unified ranking patterns.}
+#'   \item{rankings}{A data frame with ranking patterns, observed proportions
+#'     (\code{prop_obs}), bias-corrected proportions (\code{prop_bc}), and
+#'     inverse probability weights (\code{weights}) for each permutation.}
+#' }
 #'
 #' @export
 
@@ -64,10 +74,19 @@ imprr_weights <- function(data,
   if (is.null(weight)) {
     weight <- rep(1, N)
   }
+  if (length(weight) != N) {
+    stop("weight must have the same length as the number of rows in data.")
+  }
+  if (!missing(seed) && !is.null(seed)) {
+    warning("'seed' is currently ignored because imprr_weights is deterministic.")
+  }
 
   if (population == "all" & assumption == "uniform"){
     data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
   }
+
+  # Pre-compute factorial for efficiency
+  J_factorial <- factorial(J)
 
   # Check the validity of the input arguments ==================================
   ## Main ranking only
@@ -77,11 +96,17 @@ imprr_weights <- function(data,
     select(matches("_[[:digit:]]$"))
 
   # Step 1: Get the proportion of random answers -------------------------------
-  p_non_random <- (mean(data[[anc_correct]]) - 1 / factorial(J)) /
-    (1 - 1 / factorial(J))
+  p_non_random <- (mean(data[[anc_correct]]) - 1 / J_factorial) /
+    (1 - 1 / J_factorial)
+  if (!is.finite(p_non_random) || p_non_random <= sqrt(.Machine$double.eps)) {
+    stop(
+      "Estimated non-random response rate is too small/non-finite. ",
+      "Check anc_correct, weights, and J."
+    )
+  }
 
   # Step 2: Get the uniform distribution ---------------------------------------
-  U <- rep(1 / factorial(J), factorial(J))
+  U <- rep(1 / J_factorial, J_factorial)
 
   # Step 3: Get the observed PMF based on raw data -----------------------------
   ## Get raw counts of ranking profiles
@@ -89,17 +114,14 @@ imprr_weights <- function(data,
     unite(!!as.name(ranking), sep = "") %>%
     mutate(survey_weight = weight)
 
-  ## Get a weighted table
-  tab_vec <- wtd.table(x = D_0[[ranking]], weights = D_0$survey_weight) %>%
-    tibble()
-
-  D_PMF_0 <- D_0 %>%
-    group_by(!!as.name(ranking)) %>%
-    count() %>%
-    ungroup()
-
-  ## Over-write "n" with weighted results
-  D_PMF_0$n <- as.numeric(tab_vec$.)
+  ## Get weighted counts by ranking profile (fast path via Rcpp)
+  tab_vec <- weighted_table_cpp(D_0[[ranking]], D_0$survey_weight)
+  D_PMF_0 <- data.frame(
+    ranking_value = names(tab_vec),
+    n = as.numeric(tab_vec),
+    stringsAsFactors = FALSE
+  )
+  names(D_PMF_0)[1] <- ranking
 
   ## Create sample space to merge
   perm_j <- permn(1:J)
@@ -142,6 +164,9 @@ imprr_weights <- function(data,
       prop_bc = n_renormalized
     ) %>%
     arrange(!!as.name(ranking))
+  if (!is.finite(sum(imp_PMF$prop_bc)) || sum(imp_PMF$prop_bc_adj) <= 0) {
+    stop("Bias-corrected PMF could not be normalized to a valid distribution.")
+  }
 
   # Step 6: Get the bias-correction weight vector ------------------------------
   df_w <- perm_j %>%
@@ -191,17 +216,19 @@ imprr_weights <- function(data,
 
 #' Weighted one-way and two-way frequency tables.
 #'
-#' Copied from questionr::wtd.table. Not exported
+#' Internal function adapted from questionr::wtd.table.
 #'
-#' @param x	a vector
-#' @param y	another optional vector for a two-way frequency table. Must be the same length as x
-#' @param weights	 vector of weights, must be the same length as x
+#' @param x a vector
+#' @param y another optional vector for a two-way frequency table. Must be the same length as x
+#' @param weights vector of weights, must be the same length as x
 #' @param digits Number of significant digits.
 #' @param normwt if TRUE, normalize weights so that the total weighted count is the same as the unweighted one
 #' @param useNA whether to include NA values in the table
-#' @param na.rm	 (deprecated) if TRUE, remove NA values before computation
-#' @param na.show	 (deprecated) if TRUE, show NA count in table output
+#' @param na.rm (deprecated) if TRUE, remove NA values before computation
+#' @param na.show (deprecated) if TRUE, show NA count in table output
 #' @param exclude values to remove from x and y. To exclude NA, use na.rm argument.
+#'
+#' @keywords internal
 
 wtd.table <- function(
     x, y = NULL, weights = NULL, digits = 3, normwt = FALSE,

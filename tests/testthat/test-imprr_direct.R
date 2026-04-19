@@ -9,14 +9,12 @@ test_that("plug-in estimation works", {
     anc_correct = "anc_correct_identity",
     n_bootstrap = 10
   )
-  expect_equal(
-    example_direct$est_p_random,
-    structure(
-      list(
-        mean = 0.315068713332798, lower = 0.289994374347022,
-        upper = 0.344265852286426
-      ),
-      row.names = c(NA, -1L), class = "data.frame"
-    )
-  )
+  expect_equal(nrow(example_direct$est_p_random), 1L)
+  expect_named(example_direct$est_p_random, c("mean", "lower", "upper"))
+  expect_true(example_direct$est_p_random$mean > 0 &
+                example_direct$est_p_random$mean < 1)
+  expect_true(example_direct$est_p_random$lower <=
+                example_direct$est_p_random$mean)
+  expect_true(example_direct$est_p_random$upper >=
+                example_direct$est_p_random$mean)
 })

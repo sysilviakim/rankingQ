@@ -50,19 +50,33 @@
 #' @export
 
 recover_recorded_responses <- function(true_order, presented_order, df = NULL) {
+  recover_one <- function(true_chars, presented_chars) {
+    if (any(is.na(true_chars)) || any(is.na(presented_chars))) {
+      return(NA_character_)
+    }
+
+    indices <- suppressWarnings(as.integer(presented_chars))
+
+    if (length(indices) != length(true_chars)) {
+      stop("presented_order and true_order must have the same length.")
+    }
+    if (any(is.na(indices))) {
+      stop("presented_order must contain only numeric position codes.")
+    }
+    if (any(indices < 1L | indices > length(true_chars))) {
+      stop("presented_order contains indices outside the range of true_order.")
+    }
+    if (!identical(sort(indices), seq_along(true_chars))) {
+      stop("presented_order must be a permutation of positions in true_order.")
+    }
+
+    paste(true_chars[indices], collapse = "")
+  }
+
   if (is.null(df)) {
     presented_order <- strsplit(presented_order, "")[[1]]
     true_order <- strsplit(true_order, "")[[1]]
-    recovered_order <- vector("character", length = length(true_order))
-
-    # Iterate through each character in the respondent's response string
-    for (i in seq(length(presented_order))) {
-      recovered_order[i] <- true_order[[as.numeric(presented_order[i])]]
-    }
-
-    # Concatenate the characters
-    # to form a string representing the recovered order
-    return(paste(recovered_order, collapse = ""))
+    return(recover_one(true_order, presented_order))
   } else {
     if (!(presented_order %in% names(df))) {
       stop("Presented order variable is not in the dataframe.")
@@ -80,16 +94,12 @@ recover_recorded_responses <- function(true_order, presented_order, df = NULL) {
     recovered_order <- seq(length(true_order)) %>%
       map(
         ~ {
-          out <- vector("character", length = length(true_order[[.x]]))
-          if (any(is.na(true_order[[.x]]))) {
-            out <- NA
-            return(out)
-          } else {
-            for (i in seq(length(presented_order[[.x]]))) {
-              out[i] <- true_order[[.x]][[as.numeric(presented_order[[.x]][i])]]
+          tryCatch(
+            recover_one(true_order[[.x]], presented_order[[.x]]),
+            error = function(e) {
+              stop(sprintf("Row %d: %s", .x, conditionMessage(e)), call. = FALSE)
             }
-            return(paste(out, collapse = ""))
-          }
+          )
         }
       ) %>%
       unlist()

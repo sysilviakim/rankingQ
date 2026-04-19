@@ -6,6 +6,7 @@
 #' @importFrom dplyr `%>%` mutate select group_by arrange summarise pull
 #' @importFrom tidyselect matches
 #' @importFrom estimatr lm_robust tidy
+#' @importFrom stats runif
 #'
 #' @param data The input dataset with ranking data.
 #' @param J The number of items in the ranking question. Defaults to NULL,
@@ -25,7 +26,15 @@
 #' @param weight A vector of weights. Defaults to NULL.
 #' @param verbose Indicator for verbose output. Defaults to FALSE.
 #'
-#' @return A list.
+#' @return A list with two elements:
+#' \describe{
+#'   \item{est_p_random}{A data frame with summary statistics for the
+#'     estimated proportion of random respondents, including columns
+#'     \code{mean}, \code{lower}, and \code{upper} (95\% confidence interval).}
+#'   \item{results}{A tibble with bias-corrected estimates grouped by
+#'     \code{item}, \code{qoi} (quantity of interest), and \code{outcome},
+#'     including columns \code{mean}, \code{lower}, and \code{upper}.}
+#' }
 #'
 #' @export
 
@@ -56,15 +65,34 @@ imprr_direct <- function(data,
   if (is.null(weight)) {
     weight <- rep(1, N)
   }
+  if (length(weight) != N) {
+    stop("weight must have the same length as the number of rows in data.")
+  }
 
   if (population == "all" & assumption == "uniform"){
     data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
   }
 
+  # Pre-compute constants for efficiency =======================================
+  J_factorial <- factorial(J)
+  J_1 <- J - 1
+  uniform_avg_rank <- (1 + J) / 2
+  uniform_pairwise <- 0.5
+  uniform_prob <- 1 / J
+  min_p_non_random <- sqrt(.Machine$double.eps)
+
   # Check the validity of the input arguments ==================================
 
   ## List for bootstrapped results
-  list_weights <- list_qoi <- list_prop <- vector("list", length = n_bootstrap)
+  list_qoi <- list_prop <- vector("list", length = n_bootstrap)
+
+  weighted_mean_safe <- function(x, w) {
+    keep <- !is.na(x) & !is.na(w)
+    if (!any(keep)) {
+      return(NA_real_)
+    }
+    sum(x[keep] * w[keep]) / sum(w[keep])
+  }
 
   # Boostrapping ===============================================================
   ## We bootstrap to account for uncertainty from the estimation of Pr(random)
@@ -74,13 +102,21 @@ imprr_direct <- function(data,
   ### j: over J items
   ### k: over K estimates
 
+  ## Save and restore RNG state
+  if (!exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
+    runif(1)
+  }
+  old_seed <- get(".Random.seed", envir = globalenv())
+  on.exit(assign(".Random.seed", old_seed, envir = globalenv()), add = TRUE)
   set.seed(seed)
+
   for (i in 1:n_bootstrap) {
     ## Sample indices
     index <- sample(1:nrow(data), size = nrow(data), replace = TRUE)
 
     ## This is the bootstrapped data
     boostrap_dat <- data[index, ]
+    bootstrap_weight <- weight[index]
 
     ## Main ranking only
     loc_app <- boostrap_dat %>%
@@ -89,12 +125,19 @@ imprr_direct <- function(data,
 
     # Step 1: Get the proportion of random answers -----------------------------
     ## This requires anchor questions and item order randomization
-    p_non_random <- (mean(boostrap_dat[[anc_correct]]) - 1 / factorial(J)) /
-      (1 - 1 / factorial(J))
+    prop_correct <- sum(boostrap_dat[[anc_correct]] * bootstrap_weight) /
+      sum(bootstrap_weight)
+    p_non_random <- (prop_correct - 1 / J_factorial) /
+      (1 - 1 / J_factorial)
+    if (!is.finite(p_non_random) || p_non_random <= min_p_non_random) {
+      stop(
+        "Estimated non-random response rate is too small/non-finite. ",
+        "Check anc_correct, weights, and J."
+      )
+    }
 
     # Step 2: Get the naive estimates of simple quantities ---------------------
     item_names <- colnames(loc_app)
-    J_1 <- J - 1
     all_qoi_list <- list()
 
     for (j in 1:J) {
@@ -102,88 +145,56 @@ imprr_direct <- function(data,
       target_item <- item_names[j]
       other_items <- item_names[-j]
 
-      # Step 2.1: Locally code a few quantities
-      ## Marginal rank
-      Y_rank_target <- boostrap_dat[target_item] %>% pull()
+      # Step 2.1: Compute weighted raw estimates directly
+      Y_rank_target <- as.numeric(boostrap_dat[[target_item]])
 
-      ## Pairwise ranking indicator
-      Y_pairwise <- list()
-      for (k in 1:J_1) {
-        # Comparison item
-        compar <- boostrap_dat[other_items[k]] %>% pull()
-        Y_pairwise[[k]] <- ifelse(Y_rank_target < compar, 1, 0)
-      }
-
-      # Top-k ranking indicator
-      Y_top <- list()
-      for (k in 1:J_1) {
-        Y_top[[k]] <- ifelse(Y_rank_target <= k, 1, 0)
-      }
-
-      # Marginal ranking indicator
-      Y_marginal <- list()
-      tgt <- boostrap_dat[target_item] %>% pull()
-      for (k in 1:J) {
-        Y_marginal[[k]] <- ifelse(tgt == k, 1, 0)
-      }
-
-      # Step 2.2: Get raw estimates of
-      ## Average ranks
-      m_rank_target <- lm_robust(Y_rank_target ~ 1, weights = weight) %>%
-        tidy()
-
-      ## Pairwise ranking probabilities
-      m_pairwise <- list()
-      for (k in 1:J_1) {
-        m_pairwise[[k]] <- lm_robust(Y_pairwise[[k]] ~ 1, weights = weight) %>%
-          tidy()
-      }
-
-      ## Top-k ranking probabilities
-      m_top <- list()
-      for (k in 1:J_1) {
-        m_top[[k]] <- lm_robust(Y_top[[k]] ~ 1, weights = weight) %>% tidy()
-      }
-
-      ## Marginal ranking probabilities
-      m_marginal <- list()
-      for (k in 1:J) {
-        m_marginal[[k]] <- lm_robust(Y_marginal[[k]] ~ 1, weights = weight) %>%
-          tidy()
-      }
+      m_rank_target <- weighted_mean_safe(Y_rank_target, bootstrap_weight)
+      m_pairwise <- vapply(
+        other_items,
+        FUN.VALUE = numeric(1),
+        FUN = function(comp_item) {
+          weighted_mean_safe(Y_rank_target < as.numeric(boostrap_dat[[comp_item]]), bootstrap_weight)
+        }
+      )
+      m_top <- vapply(
+        seq_len(J_1),
+        FUN.VALUE = numeric(1),
+        FUN = function(k) weighted_mean_safe(Y_rank_target <= k, bootstrap_weight)
+      )
+      m_marginal <- vapply(
+        seq_len(J),
+        FUN.VALUE = numeric(1),
+        FUN = function(k) weighted_mean_safe(Y_rank_target == k, bootstrap_weight)
+      )
 
       # Step 3: Get the QOI based on random responses
       ## g(random)---QOI based on uniform distribution
-      gg_averagerank <- m_rank_target %>%
-        select(estimate) %>%
+      gg_averagerank <- data.frame(estimate = m_rank_target) %>%
         mutate(
           outcome = paste0("Avg:", " ", target_item),
           qoi = "average rank",
-          g_U = (1 + J) / 2
+          g_U = uniform_avg_rank
         )
 
-      gg_pairwise <- do.call(rbind.data.frame, m_pairwise) %>%
-        select(estimate) %>%
+      gg_pairwise <- data.frame(estimate = as.numeric(m_pairwise)) %>%
         mutate(
           outcome = paste0("v.", " ", other_items),
           qoi = "pairwise ranking",
-          g_U = 0.5
+          g_U = uniform_pairwise
         )
 
-      gg_topk <- do.call(rbind.data.frame, m_top) %>%
-        select(estimate) %>%
+      gg_topk <- data.frame(estimate = as.numeric(m_top)) %>%
         mutate(
           outcome = paste0("Top-", "", 1:J_1),
           qoi = "top-k ranking",
-          g_U = 1 / J
+          g_U = (1:J_1) / J
         )
 
-      gg_marginal <- do.call(rbind.data.frame, m_marginal) %>%
-        select(estimate) %>%
+      gg_marginal <- data.frame(estimate = as.numeric(m_marginal)) %>%
         mutate(
           outcome = paste0("Ranked", " ", 1:J),
           qoi = "marginal ranking",
-          g_U = 1 / J
+          g_U = uniform_prob
         )
 
       # Step 4: Directly apply bias-correction (Equation 6)

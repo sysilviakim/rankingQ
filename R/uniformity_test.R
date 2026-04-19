@@ -35,7 +35,7 @@ uniformity_test <- function(data, var = NULL) {
       return(chisq.test(tab, p = rep(1 / length(tab), length(tab))))
     }
   } else if ("table" %in% class(data)) {
-    tab <- permn_augment(tab)
-    return(chisq.test(data, p = rep(1 / length(data), length(data))))
+    tab <- permn_augment(data)
+    return(chisq.test(tab, p = rep(1 / length(tab), length(tab))))
   }
 }

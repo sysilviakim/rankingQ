@@ -53,3 +53,10 @@ inst/doc
 # docs
 # https://github.com/r-lib/pkgdown/issues/2087
 
+# Compiled C/C++ code
+src/*.o
+src/*.so
+src/*.dll
+
+# Claude settings
+.claude/
