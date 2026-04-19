@@ -64,6 +64,9 @@ imprr_direct_rcpp <- function(data,
   if (is.null(weight)) {
     weight <- rep(1.0, N)
   }
+  if (length(weight) != N) {
+    stop("weight must have the same length as the number of rows in data.")
+  }
 
   if (population == "all" && assumption == "uniform") {
     data[[anc_correct]] <- rep(1, N)

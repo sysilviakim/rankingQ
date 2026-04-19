@@ -103,6 +103,23 @@ test_that("imprr_direct_rcpp handles custom weights", {
   expect_true(result$est_p_random$mean >= 0)
 })
 
+test_that("imprr_direct_rcpp errors on malformed weight length", {
+  data(identity_w)
+
+  expect_error(
+    imprr_direct_rcpp(
+      data = identity_w,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      n_bootstrap = 10,
+      seed = 789,
+      weight = 1
+    ),
+    "weight must have the same length as the number of rows in data."
+  )
+})
+
 test_that("imprr_direct_rcpp with verbose output", {
   data(identity_w)
 
