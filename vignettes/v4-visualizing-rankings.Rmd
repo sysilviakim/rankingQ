@@ -32,7 +32,7 @@ plot_dist_ranking(tab, ylim = 0.5)
 
 ## Visualizing Average Ranks
 
-The `plot_average_rank` function creates a visualization of average ranks with confidence intervals:
+The `plot_avg_ranking` function creates a visualization of average ranks with confidence intervals:
 
 ```{r}
 data(identity)
@@ -57,5 +57,5 @@ out_direct$results |>
       labels = c("Party", "Religion", "Gender", "Race")
     )
   ) |>
-  plot_average_rank()
+  plot_avg_ranking()
 ```
