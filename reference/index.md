@@ -11,6 +11,8 @@
   probability weighting
 - [`imprr_direct()`](http://sysilviakim.com/rankingQ/reference/imprr_direct.md)
   : Implements Plug-in Bias-Corrected Estimators for Ranking Data
+- [`imprr_direct_rcpp()`](http://sysilviakim.com/rankingQ/reference/imprr_direct_rcpp.md)
+  : Implements Plug-in Bias-Corrected Estimators for Ranking Data (Rcpp)
 - [`imprr_weights()`](http://sysilviakim.com/rankingQ/reference/imprr_weights.md)
   : Computes Bias-Correction Weights for Ranking Data
 - [`item_to_rank()`](http://sysilviakim.com/rankingQ/reference/item_to_rank.md)
@@ -19,7 +21,7 @@
   : Generate an Ordinal Sequence from a Number
 - [`permn_augment()`](http://sysilviakim.com/rankingQ/reference/permn_augment.md)
   : Augmenting Permutation Patterns
-- [`plot_average_rank()`](http://sysilviakim.com/rankingQ/reference/plot_average_rank.md)
+- [`plot_avg_ranking()`](http://sysilviakim.com/rankingQ/reference/plot_avg_ranking.md)
   : Plot Average Rank Results
 - [`plot_dist_ranking()`](http://sysilviakim.com/rankingQ/reference/plot_dist_ranking.md)
   : Plot the Distribution of Rankings Over the Permutation Space
@@ -40,5 +42,3 @@
   Responses
 - [`uniformity_test()`](http://sysilviakim.com/rankingQ/reference/uniformity_test.md)
   : Uniformity Test for Ranking Patterns
-- [`wtd.table()`](http://sysilviakim.com/rankingQ/reference/wtd.table.md)
-  : Weighted one-way and two-way frequency tables.

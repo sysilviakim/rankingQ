@@ -41,6 +41,7 @@
     <li><a class="dropdown-item" href="../articles/v6-simulate-data.html">6. Simulating Ranking Data</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -88,7 +89,38 @@ confidence interval does not account for the estimation uncertainty
 around the estimated weights. Thus, in practice,
 <code>imprr_weights</code> must be used along with bootstrapping, such
 as the one available in <code>rsample</code> (<a href="https://declaredesign.org/r/estimatr/articles/estimatr-in-the-tidyverse.html#bootstrap-using-rsample" class="external-link">example</a>).</p>
-  </main>
+<div class="section level2">
+<h2 id="computing-average-ranks">Computing Average Ranks<a class="anchor" aria-label="anchor" href="#computing-average-ranks"></a>
+</h2>
+<p>The <code>avg_rank</code> function provides a convenient way to
+compute average ranks for all items:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Raw average ranks (without bias correction)</span></span>
+<span><span class="fu"><a href="../reference/avg_rank.html">avg_rank</a></span><span class="op">(</span><span class="va">identity_w</span>, rankings <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
+<span>         items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party"</span>, <span class="st">"Religion"</span>, <span class="st">"Gender"</span>, <span class="st">"Race"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       item          qoi     mean         se    lower    upper   method</span></span>
+<span><span class="co">#&gt; 1    Party Average Rank 3.024954 0.03094894 2.964294 3.085614 Raw Data</span></span>
+<span><span class="co">#&gt; 2 Religion Average Rank 2.572089 0.03745515 2.498677 2.645501 Raw Data</span></span>
+<span><span class="co">#&gt; 3   Gender Average Rank 1.912200 0.02922013 1.854928 1.969471 Raw Data</span></span>
+<span><span class="co">#&gt; 4     Race Average Rank 2.490758 0.02883352 2.434244 2.547272 Raw Data</span></span></code></pre></div>
+<p>For bias-corrected estimates using IPW weights, use the marginal
+ranking columns:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># IPW-corrected average ranks</span></span>
+<span><span class="va">items_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"app_identity_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>,</span>
+<span>  item <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party"</span>, <span class="st">"Religion"</span>, <span class="st">"Gender"</span>, <span class="st">"Race"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/avg_rank.html">avg_rank</a></span><span class="op">(</span><span class="va">identity_w</span>, items <span class="op">=</span> <span class="va">items_df</span>, weight <span class="op">=</span> <span class="st">"w"</span>, raw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Joining with `by = join_by(variable)`</span></span>
+<span><span class="co">#&gt;       item          qoi     mean         se    lower    upper method</span></span>
+<span><span class="co">#&gt; 1    Party Average Rank 3.220388 0.02790142 3.165641 3.275135    IPW</span></span>
+<span><span class="co">#&gt; 2 Religion Average Rank 2.609023 0.04051924 2.529518 2.688529    IPW</span></span>
+<span><span class="co">#&gt; 3   Gender Average Rank 1.706054 0.02448379 1.658013 1.754095    IPW</span></span>
+<span><span class="co">#&gt; 4     Race Average Rank 2.464535 0.02616016 2.413204 2.515865    IPW</span></span></code></pre></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

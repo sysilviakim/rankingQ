@@ -1,6 +1,6 @@
 # Weighted one-way and two-way frequency tables.
 
-Copied from questionr::wtd.table. Not exported
+Internal function adapted from questionr::wtd.table.
 
 ## Usage
 

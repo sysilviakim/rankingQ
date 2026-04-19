@@ -70,4 +70,21 @@ imprr_weights(
 
 ## Value
 
-A list.
+A list with three elements:
+
+- est_p_random:
+
+  A numeric value representing the estimated proportion of random
+  responses.
+
+- results:
+
+  A data frame with the original data augmented with a `weights` column
+  containing inverse probability weights and a `ranking` column with
+  unified ranking patterns.
+
+- rankings:
+
+  A data frame with ranking patterns, observed proportions (`prop_obs`),
+  bias-corrected proportions (`prop_bc`), and inverse probability
+  weights (`weights`) for each permutation.

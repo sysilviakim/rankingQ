@@ -1,12 +1,13 @@
-# Implements Plug-in Bias-Corrected Estimators for Ranking Data
+# Implements Plug-in Bias-Corrected Estimators for Ranking Data (Rcpp)
 
 This function implements the bias correction of the ranking distribution
-using a paired anchor question.
+using a paired anchor question. This is a fast Rcpp-based implementation
+that is approximately 200-300x faster than the tidyverse version.
 
 ## Usage
 
 ``` r
-imprr_direct(
+imprr_direct_rcpp(
   data,
   J = NULL,
   main_q,
@@ -75,12 +76,11 @@ A list with two elements:
 
 - est_p_random:
 
-  A data frame with summary statistics for the estimated proportion of
-  random respondents, including columns `mean`, `lower`, and `upper`
-  (95% confidence interval).
+  Summary statistics for the estimated proportion of random respondents
+  (mean, lower, upper)
 
 - results:
 
-  A tibble with bias-corrected estimates grouped by `item`, `qoi`
-  (quantity of interest), and `outcome`, including columns `mean`,
-  `lower`, and `upper`.
+  A tibble with bias-corrected estimates for all items, including
+  average ranks, pairwise probabilities, top-k probabilities, and
+  marginal probabilities

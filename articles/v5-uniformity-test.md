@@ -170,7 +170,7 @@ uniformity_test(tab)
 #> 
 #>  Chi-squared test for given probabilities
 #> 
-#> data:  data
+#> data:  tab
 #> X-squared = 31.698, df = 23, p-value = 0.1066
 
 ## Incorrectly answered the anchor question
@@ -185,7 +185,7 @@ uniformity_test(tab)
 #> 
 #>  Chi-squared test for given probabilities
 #> 
-#> data:  data
+#> data:  tab
 #> X-squared = 107.95, df = 23, p-value = 5.793e-13
 ```
 

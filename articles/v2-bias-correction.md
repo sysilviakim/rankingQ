@@ -128,7 +128,7 @@ out_direct$est_p_random
 ```
 
     ##        mean     lower     upper
-    ## 1 0.3150687 0.2899944 0.3442659
+    ## 1 0.3158402 0.2875352 0.3451338
 
 ### Results: Estimated Quantities of Interest
 
@@ -153,10 +153,10 @@ out_direct$results %>%
     ## # Groups:   item, qoi [4]
     ##   item           qoi          outcome              mean lower upper
     ##   <chr>          <chr>        <chr>               <dbl> <dbl> <dbl>
-    ## 1 app_identity_1 average rank Avg: app_identity_1  3.27  3.24  3.33
-    ## 2 app_identity_2 average rank Avg: app_identity_2  2.59  2.48  2.64
+    ## 1 app_identity_1 average rank Avg: app_identity_1  3.27  3.21  3.30
+    ## 2 app_identity_2 average rank Avg: app_identity_2  2.60  2.49  2.66
     ## 3 app_identity_3 average rank Avg: app_identity_3  1.66  1.61  1.74
-    ## 4 app_identity_4 average rank Avg: app_identity_4  2.48  2.43  2.54
+    ## 4 app_identity_4 average rank Avg: app_identity_4  2.48  2.42  2.53
 
 ``` r
 # View the results based on the item
@@ -168,17 +168,17 @@ out_direct$results %>%
     ## # Groups:   item, qoi [4]
     ##    item           qoi              outcome               mean  lower  upper
     ##    <chr>          <chr>            <chr>                <dbl>  <dbl>  <dbl>
-    ##  1 app_identity_1 average rank     Avg: app_identity_1 3.27   3.24   3.33  
-    ##  2 app_identity_1 marginal ranking Ranked 1            0.0407 0.0232 0.0496
-    ##  3 app_identity_1 marginal ranking Ranked 2            0.150  0.137  0.163 
-    ##  4 app_identity_1 marginal ranking Ranked 3            0.305  0.275  0.336 
-    ##  5 app_identity_1 marginal ranking Ranked 4            0.504  0.475  0.541 
-    ##  6 app_identity_1 pairwise ranking v. app_identity_2   0.357  0.333  0.374 
-    ##  7 app_identity_1 pairwise ranking v. app_identity_3   0.108  0.0739 0.136 
-    ##  8 app_identity_1 pairwise ranking v. app_identity_4   0.262  0.238  0.284 
-    ##  9 app_identity_1 top-k ranking    Top-1               0.0407 0.0232 0.0496
-    ## 10 app_identity_1 top-k ranking    Top-2               0.306  0.291  0.339 
-    ## 11 app_identity_1 top-k ranking    Top-3               0.726  0.697  0.770
+    ##  1 app_identity_1 average rank     Avg: app_identity_1 3.27   3.21   3.30  
+    ##  2 app_identity_1 marginal ranking Ranked 1            0.0427 0.0309 0.0638
+    ##  3 app_identity_1 marginal ranking Ranked 2            0.151  0.133  0.171 
+    ##  4 app_identity_1 marginal ranking Ranked 3            0.304  0.289  0.336 
+    ##  5 app_identity_1 marginal ranking Ranked 4            0.503  0.488  0.520 
+    ##  6 app_identity_1 pairwise ranking v. app_identity_2   0.359  0.335  0.382 
+    ##  7 app_identity_1 pairwise ranking v. app_identity_3   0.109  0.0807 0.143 
+    ##  8 app_identity_1 pairwise ranking v. app_identity_4   0.266  0.257  0.287 
+    ##  9 app_identity_1 top-k ranking    Top-1               0.0427 0.0309 0.0638
+    ## 10 app_identity_1 top-k ranking    Top-2               0.194  0.172  0.213 
+    ## 11 app_identity_1 top-k ranking    Top-3               0.497  0.480  0.512
 
 For example, one can visualize the result for average ranks as follows:
 
@@ -191,7 +191,7 @@ out_direct$results %>%
       labels = c("party", "religion", "gender", "race")
     )
   ) %>%
-  plot_average_rank()
+  plot_avg_ranking()
 ```
 
 ![](v2-bias-correction_files/figure-html/unnamed-chunk-8-1.png)

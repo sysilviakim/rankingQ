@@ -61,7 +61,7 @@ theses responses, we code an indicator variable (`anc_correct_identity`)
 that takes 1 if respondents offer the correct answer and 0 otherwise.
 
 For example, in the following dataset, the first and third respondent
-has provided a “wrong” answer for the anchor question, whereas the rest
+have provided a “wrong” answer for the anchor question, whereas the rest
 of them have provided the correct answer.
 
 ``` r

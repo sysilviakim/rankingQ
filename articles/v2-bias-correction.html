@@ -41,6 +41,7 @@
     <li><a class="dropdown-item" href="../articles/v6-simulate-data.html">6. Simulating Ranking Data</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -182,7 +183,7 @@ its corresponding 95% confidence interval.</p>
 <code class="sourceCode R"><span><span class="co"># Estimated proportion of random responses with a 95% CI </span></span>
 <span><span class="va">out_direct</span><span class="op">$</span><span class="va">est_p_random</span></span></code></pre></div>
 <pre><code><span><span class="co">##        mean     lower     upper</span></span>
-<span><span class="co">## 1 0.3150687 0.2899944 0.3442659</span></span></code></pre>
+<span><span class="co">## 1 0.3158402 0.2875352 0.3451338</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="results-estimated-quantities-of-interest">Results: Estimated Quantities of Interest<a class="anchor" aria-label="anchor" href="#results-estimated-quantities-of-interest"></a>
@@ -205,10 +206,10 @@ and their corresponding 95% CIs.</p>
 <span><span class="co">## <span style="color: #949494;"># Groups:   item, qoi [4]</span></span></span>
 <span><span class="co">##   item           qoi          outcome              mean lower upper</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> app_identity_1 average rank Avg: app_identity_1  3.27  3.24  3.33</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> app_identity_2 average rank Avg: app_identity_2  2.59  2.48  2.64</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> app_identity_1 average rank Avg: app_identity_1  3.27  3.21  3.30</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> app_identity_2 average rank Avg: app_identity_2  2.60  2.49  2.66</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> app_identity_3 average rank Avg: app_identity_3  1.66  1.61  1.74</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> app_identity_4 average rank Avg: app_identity_4  2.48  2.43  2.54</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> app_identity_4 average rank Avg: app_identity_4  2.48  2.42  2.53</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View the results based on the item</span></span>
 <span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -217,17 +218,17 @@ and their corresponding 95% CIs.</p>
 <span><span class="co">## <span style="color: #949494;"># Groups:   item, qoi [4]</span></span></span>
 <span><span class="co">##    item           qoi              outcome               mean  lower  upper</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> app_identity_1 average rank     Avg: app_identity_1 3.27   3.24   3.33  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> app_identity_1 marginal ranking Ranked 1            0.040<span style="text-decoration: underline;">7</span> 0.023<span style="text-decoration: underline;">2</span> 0.049<span style="text-decoration: underline;">6</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> app_identity_1 marginal ranking Ranked 2            0.150  0.137  0.163 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> app_identity_1 marginal ranking Ranked 3            0.305  0.275  0.336 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> app_identity_1 marginal ranking Ranked 4            0.504  0.475  0.541 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> app_identity_1 pairwise ranking v. app_identity_2   0.357  0.333  0.374 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> app_identity_1 pairwise ranking v. app_identity_3   0.108  0.073<span style="text-decoration: underline;">9</span> 0.136 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> app_identity_1 pairwise ranking v. app_identity_4   0.262  0.238  0.284 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> app_identity_1 top-k ranking    Top-1               0.040<span style="text-decoration: underline;">7</span> 0.023<span style="text-decoration: underline;">2</span> 0.049<span style="text-decoration: underline;">6</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> app_identity_1 top-k ranking    Top-2               0.306  0.291  0.339 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">11</span> app_identity_1 top-k ranking    Top-3               0.726  0.697  0.770</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> app_identity_1 average rank     Avg: app_identity_1 3.27   3.21   3.30  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> app_identity_1 marginal ranking Ranked 1            0.042<span style="text-decoration: underline;">7</span> 0.030<span style="text-decoration: underline;">9</span> 0.063<span style="text-decoration: underline;">8</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> app_identity_1 marginal ranking Ranked 2            0.151  0.133  0.171 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> app_identity_1 marginal ranking Ranked 3            0.304  0.289  0.336 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> app_identity_1 marginal ranking Ranked 4            0.503  0.488  0.520 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> app_identity_1 pairwise ranking v. app_identity_2   0.359  0.335  0.382 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> app_identity_1 pairwise ranking v. app_identity_3   0.109  0.080<span style="text-decoration: underline;">7</span> 0.143 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> app_identity_1 pairwise ranking v. app_identity_4   0.266  0.257  0.287 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> app_identity_1 top-k ranking    Top-1               0.042<span style="text-decoration: underline;">7</span> 0.030<span style="text-decoration: underline;">9</span> 0.063<span style="text-decoration: underline;">8</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> app_identity_1 top-k ranking    Top-2               0.194  0.172  0.213 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">11</span> app_identity_1 top-k ranking    Top-3               0.497  0.480  0.512</span></span></code></pre>
 <p>For example, one can visualize the result for average ranks as
 follows:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -239,7 +240,7 @@ follows:</p>
 <span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="st">"religion"</span>, <span class="st">"gender"</span>, <span class="st">"race"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/plot_average_rank.html">plot_average_rank</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/plot_avg_ranking.html">plot_avg_ranking</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="v2-bias-correction_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 </div>

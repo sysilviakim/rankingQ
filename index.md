@@ -25,13 +25,10 @@ and references.
 
 ## Installation
 
-`rankingQ` can be installed using the following code:
+Currently, you can install the development version from GitHub:
 
 ``` r
-remotes::install_github(
-  "sysilviakim/rankingQ",
-  dependencies = TRUE
-)
+remotes::install_github("sysilviakim/rankingQ", dependencies = TRUE)
 ```
 
 ## Key Features
@@ -90,8 +87,7 @@ out_direct$results
 #  9 app_identity_1 top-k ranking  Top-1   0.0407 0.0232 0.0496
 # 10 app_identity_1 top-k ranking  Top-2   0.306  0.291  0.339
 
-
-# Perform bias correction via IPW
+# Perform bias correction via inverse-probability weighting (IPW)
 out_weights <- imprr_weights(
   data = identity,
   J = 4,
