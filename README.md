@@ -1,8 +1,14 @@
 # `rankingQ`: Design-Based Methods for Improving Ranking Questions <img src="man/figures/logo.png" align="right" width="150"/>
 
-`rankingQ` implements design-based methods for correcting measurement errors in ranking questions due to random responses. `rankingQ` allows users to estimate various ranking-based quantities of interest both non-parametrically and parametrically. `rankingQ` also offers practical tools for detecting the bias and assessing the anchor-ranking question.\
-\
-For the underlying methodology, see [Atsusaka and Kim (2025)](https://doi.org/10.1017/pan.2024.33). "Addressing Measurement Errors in Ranking Questions for the Social Sciences." *Political Analysis* Volume 33 , Issue 4 , October 2025 , pp. 339 - 360. Please visit the [package site](https://sysilviakim.com/rankingQ/) for all vignettes and references.
+[![DOI](https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue)](https://doi.org/10.1017/pan.2024.33)
+
+## Overview
+
+Survey ranking questions are prone to random responses — respondents who answer carelessly or arbitrarily. `rankingQ` corrects for this measurement error using anchor-ranking items, enabling unbiased estimates of ranking-based quantities like average ranks, marginal rank probabilities, and pairwise preferences.
+
+`rankingQ` implements design-based methods for correcting measurement error in survey ranking questions caused by random responses. It supports non-parametric and parametric estimation of ranking-based quantities of interest, and provides tools for bias detection and anchor-ranking question assessment.
+
+For the underlying methodology, see [Atsusaka and Kim (2025)](https://doi.org/10.1017/pan.2024.33). "Addressing Measurement Errors in Ranking Questions for the Social Sciences." *Political Analysis* Volume 33, Issue 4, October 2025, pp. 339–360. Please visit the [package site](https://sysilviakim.com/rankingQ/) for all vignettes and references.
 
 ## Installation
 
@@ -11,6 +17,13 @@ Currently, you can install the development version from GitHub:
 ``` r
 remotes::install_github("sysilviakim/rankingQ", dependencies = TRUE)
 ```
+
+## Key Features
+
+-   **Bias correction via plug-in estimator** (`imprr_direct`): estimates average ranks, marginal rank probabilities, pairwise preferences, and top-k rankings with confidence intervals
+-   **Bias correction via IPW** (`imprr_weights`): reweights observed ranking distributions to correct for random responses
+-   **Visualization** (`plot_avg_ranking`): plots corrected average rankings with uncertainty bounds
+-   **Diagnostics**: tools for detecting bias and assessing the anchor-ranking question
 
 ## Example
 
@@ -34,8 +47,8 @@ head(identity)
 # Perform bias correction via plug-in estimator
 out_direct <- imprr_direct(
   data = identity,
-  J = 4, 
-  main_q = "app_identity", 
+  J = 4,
+  main_q = "app_identity",
   anc_correct = "anc_correct_identity"
 )
 
@@ -44,14 +57,14 @@ out_direct$results
 # # Groups:   item, qoi [16]
 #    item           qoi            outcome   mean  lower  upper
 #    <chr>          <chr>          <chr>    <dbl>  <dbl>  <dbl>
-#  1 app_identity_1 average rank   Avg: a… 3.27   3.24   3.33  
+#  1 app_identity_1 average rank   Avg: a… 3.27   3.24   3.33
 #  2 app_identity_1 marginal rank… Ranked… 0.0407 0.0232 0.0496
-#  3 app_identity_1 marginal rank… Ranked… 0.150  0.137  0.163 
-#  4 app_identity_1 marginal rank… Ranked… 0.305  0.275  0.336 
-#  5 app_identity_1 marginal rank… Ranked… 0.504  0.475  0.541 
-#  6 app_identity_1 pairwise rank… v. app… 0.357  0.333  0.374 
-#  7 app_identity_1 pairwise rank… v. app… 0.108  0.0739 0.136 
-#  8 app_identity_1 pairwise rank… v. app… 0.262  0.238  0.284 
+#  3 app_identity_1 marginal rank… Ranked… 0.150  0.137  0.163
+#  4 app_identity_1 marginal rank… Ranked… 0.305  0.275  0.336
+#  5 app_identity_1 marginal rank… Ranked… 0.504  0.475  0.541
+#  6 app_identity_1 pairwise rank… v. app… 0.357  0.333  0.374
+#  7 app_identity_1 pairwise rank… v. app… 0.108  0.0739 0.136
+#  8 app_identity_1 pairwise rank… v. app… 0.262  0.238  0.284
 #  9 app_identity_1 top-k ranking  Top-1   0.0407 0.0232 0.0496
 # 10 app_identity_1 top-k ranking  Top-2   0.306  0.291  0.339
 
@@ -62,7 +75,13 @@ out_weights <- imprr_weights(
   main_q = "app_identity",
   anc_correct = "anc_correct_identity"
 )
+```
 
+<details>
+
+<summary>View <code>out_weights\$rankings</code> output</summary>
+
+``` r
 head(out_weights$rankings)
 #   ranking  n    prop_obs     prop_bc   weights   prop_bc_raw prop_bc_adj
 # 1    1234 14 0.012939002 0.000000000 0.0000000 -0.0003526508 0.000000000
@@ -71,4 +90,25 @@ head(out_weights$rankings)
 # 4    1342  7 0.006469501 0.000000000 0.0000000 -0.0098154461 0.000000000
 # 5    1423 50 0.046210721 0.046944603 1.0158812  0.0483131539 0.048313154
 # 6    1432 20 0.018484288 0.007538549 0.4078355  0.0077583167 0.007758317
+```
+
+</details>
+
+## Citation
+
+If you use `rankingQ`, please cite:
+
+> Atsusaka, Yuki and Seo-young Silvia Kim (2025). "Addressing Measurement Errors in Ranking Questions for the Social Sciences." *Political Analysis* 33(4): 339–360. <https://doi.org/10.1017/pan.2024.33>
+
+``` bibtex
+@article{atsusaka2025,
+  author  = {Atsusaka, Yuki and Kim, Seo-young Silvia},
+  title   = {Addressing Measurement Errors in Ranking Questions for the Social Sciences},
+  journal = {Political Analysis},
+  volume  = {33},
+  number  = {4},
+  pages   = {339--360},
+  year    = {2025},
+  doi     = {10.1017/pan.2024.33}
+}
 ```

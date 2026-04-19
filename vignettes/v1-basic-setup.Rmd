@@ -26,7 +26,7 @@ data("identity")
 
 ## Target ranking question
 
-Ranking data are expected to be in the wide format, where multiple columns are used to represent different items and their values represent the items' marginal ranks. 
+Ranking data are expected to be in the wide format, where multiple columns are used to represent different items and their values represent the items' marginal ranks.
 
 For example, in `identity`, the four sources of identity are `app_party`, `app_religion`, `app_gender`, and `app_race.` For example, the first respondent ranked party first, gender second, race third, and religion fourth---i.e., "1423" is the respondent's outcome, given the reference choice set of party-religion-gender-race/ethnicity.
 
