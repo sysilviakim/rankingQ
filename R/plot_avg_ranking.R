@@ -12,6 +12,7 @@
 #' @param qoi_filter The quantity of interest (QOI) to filter for.
 #' Defaults to "average rank".
 #' @param xlab The x-axis label. Defaults to NULL.
+#' If NULL, the default ggplot x-axis label is used after simple capitalization.
 #' If you'd like it to be empty, specify an empty string.
 #' @param ylab The y-axis label. Defaults to an empty string.
 #'
@@ -21,24 +22,23 @@
 #'
 #' @export
 #'
-plot_average_rank <- function(data,
-                              qoi_filter = "average rank",
-                              xlab = NULL,
-                              ylab = "") {
+plot_avg_ranking <- function(data,
+                             qoi_filter = "average rank",
+                             xlab = NULL,
+                             ylab = "") {
   item <- lower <- upper <- NULL
 
   if (!is.null(qoi_filter)) {
     data <- data[data$qoi == qoi_filter, ]
-    if (is.null(xlab)) {
-      ## Simple capitalization
-      s <- strsplit(qoi_filter, " ")[[1]]
-      xlab <- paste(
-        toupper(substring(s, 1, 1)),
-        substring(s, 2), sep = "", collapse = " "
-      )
-    } else {
-      xlab <- ""
-    }
+  }
+
+  if (is.null(xlab)) {
+    ## simple capitalization
+    s <- strsplit(qoi_filter, " ")[[1]]
+    xlab <- paste(
+      toupper(substring(s, 1, 1)),
+      substring(s, 2), sep = "", collapse = " "
+    )
   }
 
   # Level/label setting should be done outside the function
@@ -48,8 +48,8 @@ plot_average_rank <- function(data,
     geom_point() +
     geom_linerange(aes(xmin = lower, xmax = upper)) +
     theme_bw() +
-    xlab(xlab) +
-    ylab(ylab)
+    ylab(ylab) +
+    xlab(xlab)
 
   return(p)
 }
