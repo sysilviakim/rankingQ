@@ -23,6 +23,7 @@ test_that("plot_avg_ranking with qoi_filter = NULL returns a ggplot object", {
   )
   p <- plot_avg_ranking(df, qoi_filter = NULL)
   expect_s3_class(p, "ggplot")
+  expect_null(p$labels$x)
 })
 
 test_that("plot_avg_ranking preserves a user-provided xlab", {

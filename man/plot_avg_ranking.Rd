@@ -15,8 +15,10 @@ are the same as the output from the `imprr_direct` function.}
 Defaults to "average rank".}
 
 \item{xlab}{The x-axis label. Defaults to NULL.
-If NULL, the default ggplot x-axis label is used after simple capitalization.
-If you'd like it to be empty, specify an empty string.}
+If NULL and `qoi_filter` is provided, a simple capitalized label based on
+`qoi_filter` is used. If `qoi_filter` is NULL, the default ggplot x-axis
+label is left unchanged. If you'd like it to be empty, specify an empty
+string.}
 
 \item{ylab}{The y-axis label. Defaults to an empty string.}
 }
