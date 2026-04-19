@@ -68,7 +68,8 @@ out_direct <- imprr_direct(
   data = identity,
   J = 4,
   main_q = "app_identity",
-  anc_correct = "anc_correct_identity"
+  anc_correct = "anc_correct_identity",
+  weight = identity$w_weight
 )
 
 out_direct$results
