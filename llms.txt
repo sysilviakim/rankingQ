@@ -1,7 +1,5 @@
 # `rankingQ`: Design-Based Methods for Improving Ranking Questions
 
-![](reference/figures/logo.png)
-
 [![DOI](https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue)](https://doi.org/10.1017/pan.2024.33)
 
 ## Overview
@@ -46,15 +44,14 @@ remotes::install_github("sysilviakim/rankingQ", dependencies = TRUE)
 
 ## Example
 
-The following is a simplified example of how the package can be used.
-For a fuller demonstration, visit
-[sysilviakim.com/rankingQ](https://sysilviakim.com/rankingQ/).
+The following walkthrough uses the `identity` data to illustrate the
+main `rankingQ` workflow. For a more structured introduction, see the
+[Getting Started
+vignette](http://sysilviakim.com/rankingQ/articles/v1-getting-started.md).
 
 ``` r
 library(rankingQ)
-
 data("identity")
-
 head(identity)
 
 # Perform bias correction via the plug-in estimator
@@ -142,7 +139,7 @@ If you use `rankingQ`, please cite:
 > <https://doi.org/10.1017/pan.2024.33>
 
 ``` bibtex
-@article{atsusaka2025,
+@article{atsusaka_addressing_2025,
   author  = {Atsusaka, Yuki and Kim, Seo-young Silvia},
   title   = {Addressing Measurement Errors in Ranking Questions for the Social Sciences},
   journal = {Political Analysis},
