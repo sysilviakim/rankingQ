@@ -130,6 +130,12 @@ imprr_direct_rcpp <- function(data,
     data_matrix, anc_vec, weights_vec,
     as.integer(J), as.integer(n_bootstrap), as.integer(seed)
   )
+  if (anyNA(result_cpp$p_random)) {
+    stop(
+      "Estimated non-random response rate is too small/non-finite. ",
+      "Check anc_correct, weights, and J."
+    )
+  }
   if (verbose) message("Bootstrapping finished.")
 
   # Format results to match original output format =============================

@@ -200,6 +200,27 @@ test_that("imprr_direct_rcpp rejects empty data", {
   )
 })
 
+test_that("imprr_direct_rcpp errors when bootstrap draws imply invalid non-random rate", {
+  bad <- data.frame(
+    q = "123",
+    q_1 = 1,
+    q_2 = 2,
+    q_3 = 3,
+    anc = c(1, NA, 1)
+  )
+
+  expect_error(
+    imprr_direct_rcpp(
+      data = bad,
+      main_q = "q",
+      anc_correct = "anc",
+      n_bootstrap = 2,
+      seed = 1
+    ),
+    "Estimated non-random response rate is too small/non-finite."
+  )
+})
+
 test_that("imprr_direct_rcpp uses exact ranking column names", {
   df <- data.frame(
     q10_1 = c(1, 2, 1, 2),
