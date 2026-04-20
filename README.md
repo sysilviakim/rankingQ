@@ -1,5 +1,10 @@
-# `rankingQ`: Design-Based Methods for Improving Ranking Questions [![pkgdown](https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml) [![DOI](https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue)](https://doi.org/10.1017/pan.2024.33)
-<img src="man/figures/logo.png" align="right" width="150"/>
+# `rankingQ`: Design-Based Methods for Improving Ranking Questions <a href="https://sysilviakim.com/rankingQ/"><img src="man/figures/logo.png" align="right" height="138" /></a>
+
+<!-- badges: start -->
+
+[![pkgdown](https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml) [![DOI](https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue)](https://doi.org/10.1017/pan.2024.33)
+
+<!-- badges: end -->
 
 ## Overview
 
