@@ -9,8 +9,8 @@
 #'
 #' @param tab A table in which the frequencies of ranking patterns are recorded.
 #' @param x Name of the column that contains permutation patterns.
-#' @param y Name of the column that contains the proportion of ranking
-#' permutations.
+#' @param y Name of the column that contains the plotted values
+#' (for example, proportions or frequencies).
 #' @param ylim The upper limit of the y-axis.
 #' @param fill The color of the bars.
 #' @param xlab The label of the x-axis.
@@ -47,10 +47,23 @@ plot_dist_ranking <- function(tab,
                               h_color = "black",
                               h_alpha = 0.5) {
   ## Suppress "no visible binding for global variable" warnings
-  prop <- NULL
+  .tmp_label <- NULL
 
   ## The size of the reference choice set.
   J <- nchar(as.character(tab[[x]][[1]]))
+  tab[[".tmp_label"]] <- if (identical(y, "prop")) {
+    paste0(round(tab[[y]] * 100, digits = 1), "%")
+  } else {
+    as.character(tab[[y]])
+  }
+  y_scale <- if (identical(y, "prop")) {
+    scale_y_continuous(
+      labels = function(x) sprintf("%.0f%%", x * 100),
+      limits = c(0, ylim)
+    )
+  } else {
+    scale_y_continuous(limits = c(0, ylim))
+  }
 
   ## ggplot2
   p <- ggplot(tab, aes(x = !!as.name(x), y = !!as.name(y), fill = "1")) +
@@ -58,19 +71,13 @@ plot_dist_ranking <- function(tab,
     scale_fill_manual(values = fill) +
     xlab(xlab) +
     ylab("") +
-    scale_y_continuous(
-      labels = function(x) sprintf("%.0f%%", x * 100),
-      limits = c(0, ylim)
-    ) +
+    y_scale +
     geom_hline(
       yintercept = 1 / factorial(J),
       linetype = linetype, color = h_color, alpha = h_alpha
     ) +
     geom_text(
-      aes(
-        label = paste0(round(prop * 100, digits = 1), "%"),
-        family = family
-      ),
+      aes(label = .tmp_label, family = family),
       vjust = vjust,
       size = size,
       color = fill
