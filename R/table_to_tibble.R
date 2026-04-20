@@ -26,12 +26,13 @@
 table_to_tibble <- function(tab, tibble = TRUE) {
   ## Suppress "no visible binding for global variable" warnings
   freq <- prop <- ranking <- NULL
+  total_freq <- sum(tab)
 
   out <- enframe(tab, name = "ranking", value = "freq") %>%
     mutate(
       ranking = factor(ranking),
       freq = as.numeric(freq),
-      prop = freq / sum(freq)
+      prop = if (total_freq > 0) freq / total_freq else 0
     )
 
   if (!tibble) {

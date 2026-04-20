@@ -464,6 +464,40 @@ test_that(
   }
 )
 
+test_that(
+  "imprr_direct_rcpp all-population uniform falls back to no correction",
+  {
+  data(identity_w)
+
+  expect_message(
+    out_uniform <- imprr_direct_rcpp(
+      data = identity_w,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      population = "all",
+      assumption = "uniform",
+      n_bootstrap = 10,
+      seed = 123
+    ),
+    "population = 'all' with assumption = 'uniform' implies no correction"
+  )
+
+  out_no_correction <- imprr_direct(
+    data = identity_w,
+    J = 4,
+    main_q = "app_identity",
+    p_random = 0,
+    n_bootstrap = 10,
+    seed = 123
+  )
+
+  expect_equal(as.numeric(out_uniform$est_p_random[1, ]), c(0, 0, 0))
+  expect_equal(out_uniform$est_p_random, out_no_correction$est_p_random)
+  expect_equal(out_uniform$results, out_no_correction$results)
+  }
+)
+
 test_that("imprr_direct_rcpp accepts common input variants", {
   data(identity_w)
 

@@ -86,15 +86,28 @@ test_that("table_to_tibble handles single-element tables", {
   expect_equal(result$prop, 1)
 })
 
+test_that("table_to_tibble returns zero proportions for all-zero tables", {
+  tab <- structure(
+    c(A = 0, B = 0, C = 0),
+    class = "table"
+  )
+
+  result <- table_to_tibble(tab)
+
+  expect_equal(result$freq, c(0, 0, 0))
+  expect_equal(result$prop, c(0, 0, 0))
+  expect_false(any(is.nan(result$prop)))
+})
+
 test_that(".resolve_weight_vector rejects negative weights", {
   df <- data.frame(w = c(1, -1, 2))
 
   expect_error(
     rankingQ:::.resolve_weight_vector(df, c(1, -1, 2), 3),
-    "Weights must be non-negative."
+    "weight values cannot be negative."
   )
   expect_error(
     rankingQ:::.resolve_weight_vector(df, "w", 3),
-    "Weights must be non-negative."
+    "weight values cannot be negative."
   )
 })
