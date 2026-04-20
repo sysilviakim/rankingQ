@@ -32,6 +32,7 @@ test_that("Long-format data.", {
   expect_equal(nrow(result), 3)
   expect_equal(result$item, c("A", "B", "C"))
   expect_equal(result$mean, c(2.0, 1.5, 2.5))
+  expect_equal(result$se, c(1.0, 0.5, 0.5))
 })
 
 test_that("Error is thrown for incorrect arguments", {

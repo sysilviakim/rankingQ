@@ -207,7 +207,14 @@ avg_rank <- function(x,
       summarise(
         qoi = "Average Rank",
         mean = mean(!!as.name(rankings), na.rm = TRUE),
-        se = sd(!!as.name(rankings), na.rm = TRUE) / sqrt(nrow(x)),
+        se = {
+          n_obs <- sum(!is.na(!!as.name(rankings)))
+          if (n_obs > 1) {
+            sd(!!as.name(rankings), na.rm = TRUE) / sqrt(n_obs)
+          } else {
+            NA_real_
+          }
+        },
         lower = mean - 1.96 * se,
         upper = mean + 1.96 * se,
         method = "Raw Data"
