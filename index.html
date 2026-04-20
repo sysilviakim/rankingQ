@@ -60,17 +60,18 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="rankingq-design-based-methods-for-improving-ranking-questions-">
-<code>rankingQ</code>: Design-Based Methods for Improving Ranking Questions <a class="anchor" aria-label="anchor" href="#rankingq-design-based-methods-for-improving-ranking-questions-"></a>
+<img src="logo.png" class="logo" alt=""><h1 id="rankingq-design-based-methods-for-improving-ranking-questions">
+<code>rankingQ</code>: Design-Based Methods for Improving Ranking Questions<a class="anchor" aria-label="anchor" href="#rankingq-design-based-methods-for-improving-ranking-questions"></a>
 </h1>
 </div>
+<p><img src="reference/figures/logo.png" align="right" width="150"></p>
 <p><a href="https://doi.org/10.1017/pan.2024.33" class="external-link"><img src="https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue" alt="DOI"></a></p>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>Survey ranking questions are prone to random responses — respondents who answer carelessly or arbitrarily. <code>rankingQ</code> corrects for this measurement error using anchor-ranking items, enabling unbiased estimates of ranking-based quantities like average ranks, marginal rank probabilities, and pairwise preferences.</p>
-<p><code>rankingQ</code> implements design-based methods for correcting measurement error in survey ranking questions caused by random responses. It supports non-parametric and parametric estimation of ranking-based quantities of interest, and provides tools for bias detection and anchor-ranking question assessment.</p>
-<p>For the underlying methodology, see <a href="https://doi.org/10.1017/pan.2024.33" class="external-link">Atsusaka and Kim (2025)</a>. “Addressing Measurement Errors in Ranking Questions for the Social Sciences.” <em>Political Analysis</em> Volume 33, Issue 4, October 2025, pp. 339–360. Please visit the <a href="https://sysilviakim.com/rankingQ/" class="external-link">package site</a> for all vignettes and references.</p>
+<p>Survey ranking questions are prone to random responses, where respondents answer carelessly or arbitrarily. <code>rankingQ</code> corrects this measurement error using anchor-ranking items, enabling unbiased estimates of ranking-based quantities such as average ranks, marginal rank probabilities, and pairwise preferences.</p>
+<p><code>rankingQ</code> implements design-based methods for correcting measurement error in survey ranking questions caused by random responding. It provides direct bias correction, inverse-probability weighting (IPW), visualization helpers, and diagnostics for assessing anchor-ranking questions.</p>
+<p>For the underlying methodology, see <a href="https://doi.org/10.1017/pan.2024.33" class="external-link">Atsusaka and Kim (2025)</a>, “Addressing Measurement Errors in Ranking Questions for the Social Sciences,” <em>Political Analysis</em>, 33(4), 339-360. Visit the <a href="https://sysilviakim.com/rankingQ/" class="external-link">package site</a> for vignettes and references.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -90,52 +91,28 @@
 <li>
 <strong>Visualization</strong> (<code>plot_avg_ranking</code>): plots corrected average rankings with uncertainty bounds</li>
 <li>
-<strong>Diagnostics</strong>: tools for detecting bias and assessing the anchor-ranking question</li>
+<strong>Diagnostics</strong>: tools for detecting bias and assessing anchor-ranking questions</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>The following is a simplified example of how this package can be used. For a full demonstration, visit <a href="https://sysilviakim.com/rankingQ/" class="external-link uri">https://sysilviakim.com/rankingQ/</a>.</p>
+<p>The following is a simplified example of how the package can be used. For a fuller demonstration, visit <a href="https://sysilviakim.com/rankingQ/" class="external-link">sysilviakim.com/rankingQ</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"identity"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sysilviakim/rankingQ" class="external-link">rankingQ</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"identity"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">identity</span><span class="op">)</span></span>
-<span><span class="co"># # A tibble: 6 × 16</span></span>
-<span><span class="co">#   s_weight app_identity app_identity_1 app_identity_2 app_identity_3 app_identity_4</span></span>
-<span><span class="co">#      &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co"># 1    0.844 1423                      1              4              2              3</span></span>
-<span><span class="co"># 2    0.886 1423                      1              4              2              3</span></span>
-<span><span class="co"># 3    2.96  3412                      3              4              1              2</span></span>
-<span><span class="co"># 4    0.987 1423                      1              4              2              3</span></span>
-<span><span class="co"># 5    1.76  4132                      4              1              3              2</span></span>
-<span><span class="co"># 6    0.469 3124                      3              1              2              4</span></span>
 <span></span>
-<span></span>
-<span><span class="co"># Perform bias correction via plug-in estimator</span></span>
+<span><span class="co"># Perform bias correction via the plug-in estimator</span></span>
 <span><span class="va">out_direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
 <span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
 <span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
-<span>  weight <span class="op">=</span> <span class="va">identity</span><span class="op">$</span><span class="va">w_weight</span></span>
+<span>  weight <span class="op">=</span> <span class="st">"s_weight"</span></span>
 <span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span></span>
-<span><span class="co"># # A tibble: 44 × 6</span></span>
-<span><span class="co"># # Groups:   item, qoi [16]</span></span>
-<span><span class="co">#    item           qoi            outcome   mean  lower  upper</span></span>
-<span><span class="co">#    &lt;chr&gt;          &lt;chr&gt;          &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></span>
-<span><span class="co">#  1 app_identity_1 average rank   Avg: a… 3.27   3.24   3.33</span></span>
-<span><span class="co">#  2 app_identity_1 marginal rank… Ranked… 0.0407 0.0232 0.0496</span></span>
-<span><span class="co">#  3 app_identity_1 marginal rank… Ranked… 0.150  0.137  0.163</span></span>
-<span><span class="co">#  4 app_identity_1 marginal rank… Ranked… 0.305  0.275  0.336</span></span>
-<span><span class="co">#  5 app_identity_1 marginal rank… Ranked… 0.504  0.475  0.541</span></span>
-<span><span class="co">#  6 app_identity_1 pairwise rank… v. app… 0.357  0.333  0.374</span></span>
-<span><span class="co">#  7 app_identity_1 pairwise rank… v. app… 0.108  0.0739 0.136</span></span>
-<span><span class="co">#  8 app_identity_1 pairwise rank… v. app… 0.262  0.238  0.284</span></span>
-<span><span class="co">#  9 app_identity_1 top-k ranking  Top-1   0.0407 0.0232 0.0496</span></span>
-<span><span class="co"># 10 app_identity_1 top-k ranking  Top-2   0.306  0.291  0.339</span></span>
 <span></span>
 <span><span class="co"># Perform bias correction via inverse-probability weighting (IPW)</span></span>
 <span><span class="va">out_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/imprr_weights.html">imprr_weights</a></span><span class="op">(</span></span>
@@ -145,8 +122,44 @@
 <span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <details><summary>
-View <code>out_weights$rankings</code> output
+View <code>head(identity)</code> output
 </summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">identity</span><span class="op">)</span></span>
+<span><span class="co"># A tibble: 6 x 16</span></span>
+<span><span class="co">#   s_weight app_identity app_identity_1 app_identity_2 app_identity_3</span></span>
+<span><span class="co">#      &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co"># 1    0.844 1423                      1              4              2</span></span>
+<span><span class="co"># 2    0.886 1423                      1              4              2</span></span>
+<span><span class="co"># 3    2.96  3412                      3              4              1</span></span>
+<span><span class="co"># 4    0.987 1423                      1              4              2</span></span>
+<span><span class="co"># 5    1.76  4132                      4              1              3</span></span>
+<span><span class="co"># 6    0.469 3124                      3              1              2</span></span>
+<span><span class="co"># ... with 11 more variables: app_identity_4 &lt;dbl&gt;, anc_identity &lt;chr&gt;,</span></span>
+<span><span class="co">#   anc_identity_1 &lt;dbl&gt;, anc_identity_2 &lt;dbl&gt;, anc_identity_3 &lt;dbl&gt;,</span></span>
+<span><span class="co">#   anc_identity_4 &lt;dbl&gt;, anc_correct_identity &lt;dbl&gt;,</span></span>
+<span><span class="co">#   app_identity_recorded &lt;chr&gt;, anc_identity_recorded &lt;chr&gt;,</span></span>
+<span><span class="co">#   app_identity_row_rnd &lt;chr&gt;, anc_identity_row_rnd &lt;chr&gt;</span></span></code></pre></div>
+</details><details><summary>
+View <code>head(out_direct$results, 10)</code> output
+</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co"># A tibble: 10 x 6</span></span>
+<span><span class="co"># Groups:   item, qoi [4]</span></span>
+<span><span class="co">#    item           qoi              outcome               mean   lower  upper</span></span>
+<span><span class="co">#    &lt;chr&gt;          &lt;chr&gt;            &lt;chr&gt;                &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#  1 app_identity_1 average rank     Avg: app_identity_1 3.27   3.13    3.40</span></span>
+<span><span class="co">#  2 app_identity_1 marginal ranking Ranked 1            0.0512 0.00568 0.0958</span></span>
+<span><span class="co">#  3 app_identity_1 marginal ranking Ranked 2            0.132  0.0863  0.178</span></span>
+<span><span class="co">#  4 app_identity_1 marginal ranking Ranked 3            0.310  0.263   0.371</span></span>
+<span><span class="co">#  5 app_identity_1 marginal ranking Ranked 4            0.507  0.452   0.573</span></span>
+<span><span class="co">#  6 app_identity_1 pairwise ranking v. app_identity_2   0.361  0.302   0.420</span></span>
+<span><span class="co">#  7 app_identity_1 pairwise ranking v. app_identity_3   0.107  0.0428  0.165</span></span>
+<span><span class="co">#  8 app_identity_1 pairwise ranking v. app_identity_4   0.260  0.196   0.315</span></span>
+<span><span class="co">#  9 app_identity_1 top-k ranking    Top-1               0.0512 0.00568 0.0958</span></span>
+<span><span class="co"># 10 app_identity_1 top-k ranking    Top-2               0.183  0.115   0.243</span></span></code></pre></div>
+</details><details><summary>
+View <code>head(out_weights$rankings)</code> output
+</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">out_weights</span><span class="op">$</span><span class="va">rankings</span><span class="op">)</span></span>
 <span><span class="co">#   ranking  n    prop_obs     prop_bc   weights   prop_bc_raw prop_bc_adj</span></span>
 <span><span class="co"># 1    1234 14 0.012939002 0.000000000 0.0000000 -0.0003526508 0.000000000</span></span>
@@ -155,25 +168,25 @@ View <code>out_weights$rankings</code> output
 <span><span class="co"># 4    1342  7 0.006469501 0.000000000 0.0000000 -0.0098154461 0.000000000</span></span>
 <span><span class="co"># 5    1423 50 0.046210721 0.046944603 1.0158812  0.0483131539 0.048313154</span></span>
 <span><span class="co"># 6    1432 20 0.018484288 0.007538549 0.4078355  0.0077583167 0.007758317</span></span></code></pre></div>
-</details>
+</details><p>The <code>out_weights$results</code> data frame includes a <code>weights</code> column that can be reused in downstream analyses such as <code>avg_rank(..., raw = FALSE, weight = "weights")</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>If you use <code>rankingQ</code>, please cite:</p>
 <blockquote>
-<p>Atsusaka, Yuki and Seo-young Silvia Kim (2025). “Addressing Measurement Errors in Ranking Questions for the Social Sciences.” <em>Political Analysis</em> 33(4): 339–360. <a href="https://doi.org/10.1017/pan.2024.33" class="external-link uri">https://doi.org/10.1017/pan.2024.33</a></p>
+<p>Atsusaka, Yuki, and Seo-young Silvia Kim. 2025. “Addressing Measurement Errors in Ranking Questions for the Social Sciences.” <em>Political Analysis</em> 33(4): 339-360. <a href="https://doi.org/10.1017/pan.2024.33" class="external-link uri">https://doi.org/10.1017/pan.2024.33</a></p>
 </blockquote>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="va">@article</span>{<span class="ot">atsusaka2025</span>,</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="dt">author</span>  = {Atsusaka, Yuki and Kim, Seo-young Silvia},</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="dt">title</span>   = {Addressing Measurement Errors in Ranking Questions for the Social Sciences},</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="dt">journal</span> = {Political Analysis},</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="dt">volume</span>  = {33},</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="dt">number</span>  = {4},</span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="dt">pages</span>   = {339--360},</span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="dt">year</span>    = {2025},</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="dt">doi</span>     = {10.1017/pan.2024.33}</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="va">@article</span>{<span class="ot">atsusaka2025</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="dt">author</span>  = {Atsusaka, Yuki and Kim, Seo-young Silvia},</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="dt">title</span>   = {Addressing Measurement Errors in Ranking Questions for the Social Sciences},</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="dt">journal</span> = {Political Analysis},</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="dt">volume</span>  = {33},</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="dt">number</span>  = {4},</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="dt">pages</span>   = {339--360},</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="dt">year</span>    = {2025},</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="dt">doi</span>     = {10.1017/pan.2024.33}</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
