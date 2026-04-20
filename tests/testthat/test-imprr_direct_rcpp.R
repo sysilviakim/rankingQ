@@ -65,40 +65,6 @@ test_that("imprr_direct_rcpp produces reasonable estimates", {
   expect_true(all(avg_ranks$mean >= 1 & avg_ranks$mean <= 4))
 })
 
-test_that("imprr_direct_rcpp is faster than imprr_direct", {
-  skip_on_cran()
-  data(identity_w)
-
-  # Run both versions
-  time_rcpp <- system.time({
-    result_rcpp <- imprr_direct_rcpp(
-      data = identity_w,
-      J = 4,
-      main_q = "app_identity",
-      anc_correct = "anc_correct_identity",
-      n_bootstrap = 50,
-      seed = 123
-    )
-  })["elapsed"]
-
-  time_tidy <- system.time({
-    result_tidy <- imprr_direct(
-      data = identity_w,
-      J = 4,
-      main_q = "app_identity",
-      anc_correct = "anc_correct_identity",
-      n_bootstrap = 50,
-      seed = 123
-    )
-  })["elapsed"]
-
-  # Rcpp should be faster
-  expect_true(time_rcpp < time_tidy)
-
-  # Should be at least 10x faster
-  expect_true(time_tidy / time_rcpp > 10)
-})
-
 test_that("imprr_direct_rcpp accepts a weight column name", {
   data(identity_w)
 

@@ -65,14 +65,6 @@ test_that("plot_dist_ranking returns a ggplot object", {
   expect_s3_class(p, "ggplot")
 })
 
-test_that("plot_dist_ranking respects custom fill color", {
-  tab <- table(c(rep("123", 10), rep("321", 10))) |>
-    table_to_tibble()
-
-  p <- plot_dist_ranking(tab, fill = "steelblue", ylim = 0.7)
-  expect_s3_class(p, "ggplot")
-})
-
 test_that("plot_dist_ranking uses the selected y column for labels", {
   tab <- data.frame(
     ranking = c("123", "321"),

@@ -13,7 +13,8 @@
 #'
 #' @param data The input dataset with ranking data.
 #' @param J The number of items in the ranking question. Defaults to NULL,
-#' in which case it will be inferred from the data. When `main_q` is a single
+#' in which case it will be inferred from the data.
+#' @param main_q Ranking question to be analyzed. When `main_q` is a single
 #' column name or unquoted symbol such as `app_identity`, the function looks
 #' for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on. You may
 #' also supply `main_q` directly as a character vector or unquoted
