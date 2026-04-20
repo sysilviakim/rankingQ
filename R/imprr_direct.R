@@ -3,7 +3,7 @@
 #' @description This function implements the bias correction of the ranking
 #' distribution using a paired anchor question.
 #'
-#' @importFrom dplyr `%>%` mutate select group_by arrange summarise pull
+#' @importFrom dplyr `%>%` mutate select group_by summarise pull
 #' @importFrom tidyselect matches
 #' @importFrom estimatr lm_robust tidy
 #' @importFrom stats runif
@@ -134,7 +134,7 @@ imprr_direct <- function(data,
     sum(x[keep] * w[keep]) / sum(w[keep])
   }
 
-  # Boostrapping ===============================================================
+  # Bootstrapping ==============================================================
   ## We bootstrap to account for uncertainty from the estimation of Pr(random)
   ## Sample with replacement
   ## There are three loops here with
@@ -280,7 +280,6 @@ imprr_direct <- function(data,
 
   df_qoi_summary <- do.call(rbind.data.frame, list_qoi) %>%
     group_by(item, qoi, outcome) %>%
-    arrange(bc_estimate) %>%
     summarise(
       mean = mean(bc_estimate),
       lower = quantile(bc_estimate, 0.025),
