@@ -54,8 +54,8 @@ stratified_avg(
 
 - weight:
 
-  Either a numeric vector of weights with length `nrow(data)` or the
-  name of a weight column in `data`. Defaults to `NULL`.
+  Either a numeric vector of weights with length \`nrow(data)\` or the
+  name of a weight column in \`data\`. Defaults to \`NULL\`.
 
 - n_bootstrap:
 

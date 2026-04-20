@@ -98,7 +98,6 @@ z <- rank_longer(
   reference = c("Money", "Power", "Respect")
 )
 #> One column selected. Parsing column by character length.
-#> Joining with `by = join_by(item_name)`
 avg_rank(z, "ranking", items = "item_name", long = TRUE)
 #>   item_name          qoi     mean        se     lower    upper   method
 #> 1     Money Average Rank 2.000000 0.5773503 0.8683935 3.131607 Raw Data

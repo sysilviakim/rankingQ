@@ -69,7 +69,6 @@ rank_longer(x)
 #> No ID column specified. Using row number.
 #> Multiple columns selected.
 #> Using input column order as ranking order.
-#> Joining with `by = join_by(item_name)`
 #> # A tibble: 9 × 4
 #>      id reference_no item_name ranking
 #>   <int>        <int> <chr>       <dbl>
@@ -90,7 +89,6 @@ y <- data.frame(
 rank_longer(y, cols = "rank", id = "id")
 #> One column selected. Parsing column by character length.
 #> No reference choice set specified. Using general column names.
-#> Joining with `by = join_by(item_name)`
 #> # A tibble: 9 × 4
 #>   id     reference_no item_name ranking
 #>   <chr>         <int> <chr>       <dbl>
@@ -109,7 +107,6 @@ rank_longer(
   reference = c("Money", "Power", "Respect")
 )
 #> One column selected. Parsing column by character length.
-#> Joining with `by = join_by(item_name)`
 #> # A tibble: 9 × 4
 #>   id     reference_no item_name ranking
 #>   <chr>         <int> <chr>       <dbl>

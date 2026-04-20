@@ -58,7 +58,6 @@ items_df <- data.frame(
   item = c("Party", "Religion", "Gender", "Race")
 )
 avg_rank(identity_w, items = items_df, weight = "weights", raw = FALSE)
-#> Joining with `by = join_by(variable)`
 #>       item          qoi     mean         se    lower    upper method
 #> 1    Party Average Rank 3.220388 0.02790142 3.165641 3.275135    IPW
 #> 2 Religion Average Rank 2.609023 0.04051924 2.529518 2.688529    IPW

@@ -113,7 +113,6 @@ Eventually, a <code>data.table</code> option will be added for large datasets.</
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No ID column specified. Using row number.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Multiple columns selected.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using input column order as ranking order.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(item_name)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id reference_no item_name ranking</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -134,7 +133,6 @@ Eventually, a <code>data.table</code> option will be added for large datasets.</
 <span class="r-in"><span><span class="fu">rank_longer</span><span class="op">(</span><span class="va">y</span>, cols <span class="op">=</span> <span class="st">"rank"</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> One column selected. Parsing column by character length.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No reference choice set specified. Using general column names.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(item_name)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id     reference_no item_name ranking</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -153,7 +151,6 @@ Eventually, a <code>data.table</code> option will be added for large datasets.</
 <span class="r-in"><span>  reference <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Money"</span>, <span class="st">"Power"</span>, <span class="st">"Respect"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> One column selected. Parsing column by character length.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(item_name)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id     reference_no item_name ranking</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>

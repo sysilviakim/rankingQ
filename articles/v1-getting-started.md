@@ -151,7 +151,6 @@ avg_rank(
   weight = "weights",
   raw = FALSE
 )
-#> Joining with `by = join_by(variable)`
 #>       item          qoi     mean         se    lower    upper method
 #> 1    Party Average Rank 3.226655 0.02751980 3.172656 3.280653    IPW
 #> 2 Religion Average Rank 2.600988 0.04074443 2.521041 2.680935    IPW
