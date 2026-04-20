@@ -1,5 +1,5 @@
 # `rankingQ`: Design-Based Methods for Improving Ranking Questions
-<img src="man/figures/logo.png" align="right" width="150"/>
+<img src="man/figures/logo.png" alt="rankingQ logo" width="150"/>
 
 [![DOI](https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue)](https://doi.org/10.1017/pan.2024.33)
 

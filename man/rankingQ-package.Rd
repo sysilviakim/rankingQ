@@ -14,7 +14,7 @@ Provides design-based methods to reduce measurement error from random responding
 Useful links:
 \itemize{
   \item \url{https://github.com/sysilviakim/rankingQ}
-  \item \url{http://sysilviakim.com/rankingQ/}
+  \item \url{https://sysilviakim.com/rankingQ/}
   \item Report bugs at \url{https://github.com/sysilviakim/rankingQ/issues}
 }
 

@@ -15,7 +15,7 @@ Description: Provides design-based methods to reduce measurement error from
     distributions. Includes tools for visualization, format conversion,
     simulation, and diagnostic checks for ranking data. Based on Atsusaka and
     Kim (2025) <doi:10.1017/pan.2024.33>.
-URL: https://github.com/sysilviakim/rankingQ, http://sysilviakim.com/rankingQ/
+URL: https://github.com/sysilviakim/rankingQ, https://sysilviakim.com/rankingQ/
 BugReports: https://github.com/sysilviakim/rankingQ/issues
 License: GPL (>= 3)
 Encoding: UTF-8
