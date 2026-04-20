@@ -1,9 +1,9 @@
 # Identity-ranking data with estimated weights based on inverse probability weighting
 
-This data has two extra columns from the original \`identity\` data:
-\`w\` and \`ranking\`, which are respectively the estimated weights
-based on inverse probability weighting and the ranking pattern that the
-respondent provided, united into a single column.
+This data is the \`results\` element returned by applying
+\`imprr_weights()\` to \`identity\`. It adds two columns to the original
+\`identity\` data: \`weights\`, the estimated inverse probability
+weights, and \`ranking\`, the pasted full ranking profile.
 
 ## Usage
 
@@ -13,11 +13,11 @@ identity_w
 
 ## Format
 
-\## \`identity_w\` A data frame with 1,082 rows and 17 columns:
+\## \`identity_w\` A data frame with 1,082 rows and 18 columns:
 
-- w:
+- weights:
 
-  Estimated weight based on inverse probability weighting.
+  Estimated weights based on inverse probability weighting.
 
 - s_weight:
 
@@ -86,6 +86,11 @@ identity_w
 
   The order in which the items were randomly presented for the
   respondent in the anchor ranking question.
+
+- ranking:
+
+  Pasted full ranking profile reconstructed from the marginal ranking
+  columns. In this dataset, it matches `app_identity`.
 
 ## Source
 

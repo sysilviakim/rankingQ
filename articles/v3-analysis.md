@@ -11,7 +11,12 @@ analyses. For example, to estimate the average rank of party, one can
 leverage linear regression as follows:
 
 ``` r
-lm_robust(app_identity_1 ~ 1, data = identity_w, weights = w) |> tidy()
+lm_robust(
+  app_identity_1 ~ 1,
+  data = identity_w,
+  weights = identity_w$weights
+) |>
+  tidy()
 #>          term estimate  std.error statistic p.value conf.low conf.high   df
 #> 1 (Intercept) 3.220388 0.02790142  115.4202       0 3.165641  3.275135 1081
 #>          outcome
@@ -51,7 +56,7 @@ items_df <- data.frame(
   variable = paste0("app_identity_", 1:4),
   item = c("Party", "Religion", "Gender", "Race")
 )
-avg_rank(identity_w, items = items_df, weight = "w", raw = FALSE)
+avg_rank(identity_w, items = items_df, weight = "weights", raw = FALSE)
 #> Joining with `by = join_by(variable)`
 #>       item          qoi     mean         se    lower    upper method
 #> 1    Party Average Rank 3.220388 0.02790142 3.165641 3.275135    IPW

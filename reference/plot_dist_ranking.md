@@ -35,8 +35,8 @@ plot_dist_ranking(
 
 - y:
 
-  Name of the column that contains the proportion of ranking
-  permutations.
+  Name of the column that contains the plotted values (for example,
+  proportions or frequencies).
 
 - ylim:
 

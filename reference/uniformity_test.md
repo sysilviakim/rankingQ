@@ -1,7 +1,7 @@
 # Uniformity Test for Ranking Patterns
 
 This function implements the uniformity test for ranking permutation
-patterns documented in Atsusaka and Kim (2024).
+patterns documented in Atsusaka and Kim (2025).
 
 ## Usage
 

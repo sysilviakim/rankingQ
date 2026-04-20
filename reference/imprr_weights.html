@@ -95,7 +95,10 @@ non-random respondents (default) or all respondents.</p></dd>
 
 
 <dt id="arg-assumption">assumption<a class="anchor" aria-label="anchor" href="#arg-assumption"></a></dt>
-<dd><p>Choice of the identifying assumption if `population` is set to all</p></dd>
+<dd><p>Choice of identifying assumption when
+`population = "all"`: `uniform` assumes random respondents would have
+uniform counterfactual preferences, while `contaminated` assumes their
+counterfactual preferences match those of non-random respondents.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
@@ -103,7 +106,8 @@ non-random respondents (default) or all respondents.</p></dd>
 
 
 <dt id="arg-weight">weight<a class="anchor" aria-label="anchor" href="#arg-weight"></a></dt>
-<dd><p>A vector of weights. Defaults to NULL.</p></dd>
+<dd><p>The name of the weight column in <code>data</code>. Defaults to
+<code>NULL</code>, which uses equal weights.</p></dd>
 
 
 <dt id="arg-ranking">ranking<a class="anchor" aria-label="anchor" href="#arg-ranking"></a></dt>

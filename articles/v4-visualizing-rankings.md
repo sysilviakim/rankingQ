@@ -40,6 +40,7 @@ out_direct <- imprr_direct(
   anc_correct = "anc_correct_identity",
   n_bootstrap = 10
 )
+#> No weight column supplied; using equal weights for all observations.
 
 # Plot average ranks
 library(dplyr)

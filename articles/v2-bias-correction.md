@@ -78,6 +78,8 @@ out_direct <- imprr_direct(
 )
 ```
 
+    ## No weight column supplied; using equal weights for all observations.
+
 By default, `imprr_direct` assumes that the target population is a set
 of non-random respondents. When researchers wish to study the entire
 population as a target group, additional arguments must be specified,
@@ -98,6 +100,8 @@ out_direct_uniform <- imprr_direct(
 )
 ```
 
+    ## No weight column supplied; using equal weights for all observations.
+
 Similarly, the contaminated sampling assumption can be specified as
 follows:
 
@@ -114,6 +118,8 @@ out_direct_contaminated <- imprr_direct(
   n_bootstrap = 10
 )
 ```
+
+    ## No weight column supplied; using equal weights for all observations.
 
 ### Results: Estimated Proportion of Random Responses
 
@@ -150,7 +156,6 @@ out_direct$results %>%
 ```
 
     ## # A tibble: 4 × 6
-    ## # Groups:   item, qoi [4]
     ##   item           qoi          outcome              mean lower upper
     ##   <chr>          <chr>        <chr>               <dbl> <dbl> <dbl>
     ## 1 app_identity_1 average rank Avg: app_identity_1  3.27  3.21  3.30
@@ -165,7 +170,6 @@ out_direct$results %>%
 ```
 
     ## # A tibble: 11 × 6
-    ## # Groups:   item, qoi [4]
     ##    item           qoi              outcome               mean  lower  upper
     ##    <chr>          <chr>            <chr>                <dbl>  <dbl>  <dbl>
     ##  1 app_identity_1 average rank     Avg: app_identity_1 3.27   3.21   3.30  
@@ -215,6 +219,8 @@ out_weights <- imprr_weights(
 )
 ```
 
+    ## No weight column supplied; using equal weights for all observations.
+
 By default, `imprr_weights` assumes that the target population is a set
 of non-random respondents. When researchers wish to study the entire
 population as a target group, additional arguments must be specified,
@@ -233,6 +239,8 @@ out_weights_uniform <- imprr_weights(
 )
 ```
 
+    ## No weight column supplied; using equal weights for all observations.
+
 Similarly, the contaminated sampling assumption can be specified as
 follows:
 
@@ -247,6 +255,8 @@ out_weights_contaminated <- imprr_weights(
   assumption = "contaminated"
 )
 ```
+
+    ## No weight column supplied; using equal weights for all observations.
 
 ### Results: Estimated Weights
 

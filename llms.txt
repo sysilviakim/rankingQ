@@ -139,7 +139,7 @@ If you use `rankingQ`, please cite:
 - [`avg_rank()`](http://sysilviakim.com/rankingQ/reference/avg_rank.md)
   : Compute the Average Rank of All Items
 - [`identity`](http://sysilviakim.com/rankingQ/reference/identity.md) :
-  Identity-ranking data analyzed in Atsusaka and Kim (2024)
+  Identity-ranking data analyzed in Atsusaka and Kim (2025)
 - [`identity_w`](http://sysilviakim.com/rankingQ/reference/identity_w.md)
   : Identity-ranking data with estimated weights based on inverse
   probability weighting

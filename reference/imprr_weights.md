@@ -50,7 +50,10 @@ imprr_weights(
 
 - assumption:
 
-  Choice of the identifying assumption if \`population\` is set to all
+  Choice of identifying assumption when \`population = "all"\`:
+  \`uniform\` assumes random respondents would have uniform
+  counterfactual preferences, while \`contaminated\` assumes their
+  counterfactual preferences match those of non-random respondents.
 
 - seed:
 
@@ -58,7 +61,8 @@ imprr_weights(
 
 - weight:
 
-  A vector of weights. Defaults to NULL.
+  The name of the weight column in `data`. Defaults to `NULL`, which
+  uses equal weights.
 
 - ranking:
 
