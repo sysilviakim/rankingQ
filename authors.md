@@ -3,9 +3,10 @@
 ## Authors
 
 - **[Seo-young Silvia Kim](https://sysilviakim.com)**. Author,
-  maintainer. [](https://orcid.org/0000-0002-8801-9210)
+  maintainer, copyright holder.
+  [](https://orcid.org/0000-0002-8801-9210)
 
-- **[Yuki Atsusaka](https://atsusaka.org)**. Author.
+- **[Yuki Atsusaka](https://atsusaka.org)**. Author, copyright holder.
   [](https://orcid.org/0000-0001-5365-1876)
 
 ## Citation
