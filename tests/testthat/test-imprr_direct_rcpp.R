@@ -168,6 +168,22 @@ test_that("imprr_direct_rcpp validates anc_correct column presence", {
   )
 })
 
+test_that("imprr_direct_rcpp rejects empty data", {
+  data(identity_w)
+
+  expect_error(
+    imprr_direct_rcpp(
+      data = identity_w[0, ],
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      n_bootstrap = 1,
+      seed = 789
+    ),
+    "There is no data to analyze. Please check the input data."
+  )
+})
+
 test_that("imprr_direct_rcpp uses exact ranking column names", {
   df <- data.frame(
     q10_1 = c(1, 2, 1, 2),

@@ -64,6 +64,21 @@ test_that("imprr_direct validates anc_correct column presence", {
   )
 })
 
+test_that("imprr_direct rejects empty data", {
+  identity <- rankingQ::identity[0, ]
+
+  expect_error(
+    imprr_direct(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      n_bootstrap = 1
+    ),
+    "There is no data to analyze. Please check the input data."
+  )
+})
+
 test_that("imprr_direct uses exact ranking column names", {
   df <- data.frame(
     q10_1 = c(1, 2, 1, 2),

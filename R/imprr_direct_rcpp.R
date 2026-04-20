@@ -55,7 +55,7 @@ imprr_direct_rcpp <- function(data,
 
   # Setup ======================================================================
   N <- nrow(data)
-  if (is.null(N)) {
+  if (is.null(N) || N == 0) {
     stop("There is no data to analyze. Please check the input data.")
   }
 
