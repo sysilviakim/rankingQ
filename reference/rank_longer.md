@@ -1,4 +1,4 @@
-# Turn Column(s) Recording Rankings in Wide Format into a Long Data Format
+# Convert Ranking Columns from Wide to Long Format
 
 This function takes a data frame in wide format with columns recording
 rankings into a long data format.

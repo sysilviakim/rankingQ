@@ -182,8 +182,7 @@ If you use `rankingQ`, please cite:
 - [`plot_dist_ranking()`](http://sysilviakim.com/rankingQ/reference/plot_dist_ranking.md)
   : Plot the Distribution of Rankings Over the Permutation Space
 - [`rank_longer()`](http://sysilviakim.com/rankingQ/reference/rank_longer.md)
-  : Turn Column(s) Recording Rankings in Wide Format into a Long Data
-  Format
+  : Convert Ranking Columns from Wide to Long Format
 - [`rank_wider()`](http://sysilviakim.com/rankingQ/reference/rank_wider.md)
   : Turn Long Ranking Data into a Wide Format
 - [`recover_recorded_responses()`](http://sysilviakim.com/rankingQ/reference/recover_recorded_responses.md)
@@ -205,15 +204,17 @@ If you use `rankingQ`, please cite:
 
 ### All vignettes
 
-- [1. Basic
-  Setup](http://sysilviakim.com/rankingQ/articles/v1-basic-setup.md):
-- [2. Correcting Bias in Ranking
-  Data](http://sysilviakim.com/rankingQ/articles/v2-bias-correction.md):
-- [3. Analysis of Bias-corrected Ranking
-  Data](http://sysilviakim.com/rankingQ/articles/v3-analysis.md):
-- [4. Visualizing
-  Rankings](http://sysilviakim.com/rankingQ/articles/v4-visualizing-rankings.md):
-- [5. Uniformity
-  Tests](http://sysilviakim.com/rankingQ/articles/v5-uniformity-test.md):
-- [6. Simulating Ranking
-  Data](http://sysilviakim.com/rankingQ/articles/v6-simulate-data.md):
+- [1. Getting
+  Started](http://sysilviakim.com/rankingQ/articles/v1-getting-started.md):
+- [2. Basic
+  Setup](http://sysilviakim.com/rankingQ/articles/v2-basic-setup.md):
+- [3. Correcting Bias in Ranking
+  Data](http://sysilviakim.com/rankingQ/articles/v3-bias-correction.md):
+- [4. Analysis of Bias-corrected Ranking
+  Data](http://sysilviakim.com/rankingQ/articles/v4-analysis.md):
+- [5. Visualizing
+  Rankings](http://sysilviakim.com/rankingQ/articles/v5-visualizing-rankings.md):
+- [6. Uniformity
+  Tests](http://sysilviakim.com/rankingQ/articles/v6-uniformity-test.md):
+- [7. Simulating Ranking
+  Data](http://sysilviakim.com/rankingQ/articles/v7-simulate-data.md):

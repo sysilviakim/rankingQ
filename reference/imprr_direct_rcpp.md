@@ -67,7 +67,7 @@ imprr_direct_rcpp(
 
 - weight:
 
-  The name of the weight column in `data`. Defaults to `NULL`, which
+  The name of the weight column in \`data\`. Defaults to \`NULL\`, which
   uses equal weights.
 
 - verbose:

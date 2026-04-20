@@ -26,8 +26,7 @@
 - [`plot_dist_ranking()`](http://sysilviakim.com/rankingQ/reference/plot_dist_ranking.md)
   : Plot the Distribution of Rankings Over the Permutation Space
 - [`rank_longer()`](http://sysilviakim.com/rankingQ/reference/rank_longer.md)
-  : Turn Column(s) Recording Rankings in Wide Format into a Long Data
-  Format
+  : Convert Ranking Columns from Wide to Long Format
 - [`rank_wider()`](http://sysilviakim.com/rankingQ/reference/rank_wider.md)
   : Turn Long Ranking Data into a Wide Format
 - [`recover_recorded_responses()`](http://sysilviakim.com/rankingQ/reference/recover_recorded_responses.md)
