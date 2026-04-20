@@ -11,7 +11,9 @@
   and
   [`imprr_weights()`](http://sysilviakim.com/rankingQ/reference/imprr_weights.md).
 - Rcpp backend for bootstrap-based estimation.
-- Visualization functions: `plot_average_rank()` and
+- Visualization functions:
+  [`plot_avg_ranking()`](http://sysilviakim.com/rankingQ/reference/plot_avg_ranking.md)
+  and
   [`plot_dist_ranking()`](http://sysilviakim.com/rankingQ/reference/plot_dist_ranking.md).
 - Utility functions for ranking data manipulation:
   [`rank_longer()`](http://sysilviakim.com/rankingQ/reference/rank_longer.md),
