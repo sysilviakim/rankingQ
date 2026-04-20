@@ -85,3 +85,16 @@ test_that("table_to_tibble handles single-element tables", {
   expect_equal(result$freq, 1)
   expect_equal(result$prop, 1)
 })
+
+test_that(".resolve_weight_vector rejects negative weights", {
+  df <- data.frame(w = c(1, -1, 2))
+
+  expect_error(
+    rankingQ:::.resolve_weight_vector(df, c(1, -1, 2), 3),
+    "Weights must be non-negative."
+  )
+  expect_error(
+    rankingQ:::.resolve_weight_vector(df, "w", 3),
+    "Weights must be non-negative."
+  )
+})

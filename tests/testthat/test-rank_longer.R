@@ -90,6 +90,30 @@ test_that("rank_longer validates cols and ranking length", {
   )
 })
 
+test_that("rank_longer validates id and missing ranking values early", {
+  df <- data.frame(
+    id = 1:2,
+    ranking = c("123", "321")
+  )
+
+  expect_error(
+    suppressMessages(rank_longer(df, cols = "ranking", id = c("id", "missing"))),
+    "The id argument must be a single column name."
+  )
+  expect_error(
+    suppressMessages(rank_longer(df, cols = "ranking", id = "missing")),
+    "The id argument is not contained in the given data frame."
+  )
+  expect_error(
+    suppressMessages(rank_longer(
+      data.frame(id = 1:2, ranking = c("123", NA)),
+      cols = "ranking",
+      id = "id"
+    )),
+    "The selected ranking columns cannot contain missing values."
+  )
+})
+
 test_that("rank_longer errors when reference is shorter than ranking length", {
   df <- data.frame(
     id = 1:2,
