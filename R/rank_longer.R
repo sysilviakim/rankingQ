@@ -29,7 +29,7 @@
 #' you can provide a character vector.
 #'
 #' @importFrom dplyr arrange left_join select mutate across `%>%`
-#' @importFrom tidyr pivot_longer separate_wider_position
+#' @importFrom tidyr pivot_longer pivot_wider separate_wider_position
 #' @importFrom tidyselect any_of all_of
 #'
 #' @return A data frame in long format with columns recording rankings.
@@ -161,5 +161,171 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
     arrange(!!as.name(id), reference_no)
 
   ## Return the output
+  return(out)
+}
+
+#' Turn Long Ranking Data into a Wide Format
+#'
+#' This function takes ranking data in long format and returns a wide-format
+#' data frame with one row per respondent. It can return either one column per
+#' ranked item or a single pasted ranking string.
+#'
+#' @param x A data frame in long format with respondent identifiers, item names,
+#' and ranks.
+#' @param id The column that uniquely identifies the respondent.
+#' @param item The column that contains item names. Defaults to
+#' \code{"item_name"}.
+#' @param rank The column that contains rank values. Defaults to
+#' \code{"ranking"}.
+#' @param output The desired output format: \code{"multiple"} for one column
+#' per item or \code{"single"} for one pasted ranking string. Defaults to
+#' \code{"multiple"}.
+#' @param reference Optional character vector giving the reference choice-set
+#' order. If omitted and \code{reference_no} is present in \code{x}, item order
+#' is inferred from that column.
+#' @param ranking_name The name of the output column when
+#' \code{output = "single"}. Defaults to \code{"ranking"}.
+#'
+#' @return A data frame in wide format with one row per respondent.
+#'
+#' @importFrom dplyr `%>%` arrange select
+#' @importFrom tidyr pivot_wider
+#' @importFrom tidyselect all_of any_of
+#'
+#' @examples
+#' x <- data.frame(
+#'   id = c(1, 1, 1, 2, 2, 2),
+#'   item_name = c("A", "B", "C", "A", "B", "C"),
+#'   ranking = c(1, 2, 3, 3, 2, 1)
+#' )
+#'
+#' rank_wider(x, id = "id")
+#' rank_wider(
+#'   x,
+#'   id = "id",
+#'   output = "single",
+#'   reference = c("A", "B", "C")
+#' )
+#'
+#' @export
+
+rank_wider <- function(x,
+                       id,
+                       item = "item_name",
+                       rank = "ranking",
+                       output = c("multiple", "single"),
+                       reference = NULL,
+                       ranking_name = "ranking") {
+  reference_no <- NULL
+
+  if (!("data.frame" %in% class(x))) {
+    stop("The x argument must be a data frame.")
+  }
+  if (!is.character(id) || length(id) != 1) {
+    stop("The id argument must be a character vector of length 1.")
+  }
+  if (!is.character(item) || length(item) != 1) {
+    stop("The item argument must be a character vector of length 1.")
+  }
+  if (!is.character(rank) || length(rank) != 1) {
+    stop("The rank argument must be a character vector of length 1.")
+  }
+  output <- match.arg(output)
+
+  required_cols <- c(id, item, rank)
+  missing_cols <- setdiff(required_cols, names(x))
+  if (length(missing_cols) > 0) {
+    stop(
+      paste0(
+        "The following required columns are missing from x: ",
+        paste(missing_cols, collapse = ", ")
+      )
+    )
+  }
+
+  dat <- x %>%
+    select(all_of(required_cols), any_of("reference_no"))
+
+  if (any(is.na(dat[[id]]))) {
+    stop("The id column cannot contain missing values.")
+  }
+  if (any(is.na(dat[[item]]))) {
+    stop("The item column cannot contain missing values.")
+  }
+  if (any(is.na(dat[[rank]]))) {
+    stop("The rank column cannot contain missing values.")
+  }
+
+  dat[[item]] <- as.character(dat[[item]])
+
+  if (any(duplicated(dat[c(id, item)]))) {
+    stop("Each respondent-item pair must appear at most once.")
+  }
+  if (any(duplicated(dat[c(id, rank)]))) {
+    stop("Each respondent must have unique rank values.")
+  }
+
+  if (!is.null(reference)) {
+    if (!is.character(reference)) {
+      stop("The reference argument must be a character vector.")
+    }
+    if (any(duplicated(reference))) {
+      stop("The reference argument cannot contain duplicates.")
+    }
+    if (!all(unique(dat[[item]]) %in% reference)) {
+      stop("All observed items must be contained in the reference argument.")
+    }
+    item_levels <- reference
+  } else if ("reference_no" %in% names(dat)) {
+    ref_map <- unique(dat[c(item, "reference_no")])
+    if (any(duplicated(ref_map[[item]]))) {
+      stop("Each item must map to a unique reference_no.")
+    }
+    ref_map <- ref_map[order(ref_map[["reference_no"]]), , drop = FALSE]
+    item_levels <- ref_map[[item]]
+  } else {
+    item_levels <- unique(dat[[item]])
+  }
+
+  item_counts <- table(dat[[id]])
+  if (!all(item_counts == length(item_levels))) {
+    stop("Each respondent must have a complete ranking over the same items.")
+  }
+
+  per_id_items <- split(dat[[item]], dat[[id]])
+  if (!all(vapply(per_id_items, function(z) setequal(z, item_levels), logical(1)))) {
+    stop("Each respondent must have the same set of ranked items.")
+  }
+
+  dat[[item]] <- factor(dat[[item]], levels = item_levels)
+
+  wide <- dat %>%
+    arrange(!!as.name(id), !!as.name(item)) %>%
+    pivot_wider(
+      id_cols = all_of(id),
+      names_from = all_of(item),
+      values_from = all_of(rank)
+    ) %>%
+    as.data.frame()
+
+  if (output == "multiple") {
+    return(wide)
+  }
+
+  rank_cols <- item_levels[item_levels %in% names(wide)]
+  rank_mat <- wide[rank_cols]
+  rank_strings <- apply(rank_mat, 1, function(z) paste0(z, collapse = ""))
+
+  if (any(nchar(rank_strings) != length(rank_cols))) {
+    stop(
+      paste0(
+        "Single-column output requires one-character rank values. ",
+        "Use output = \"multiple\" for rankings with two-digit values."
+      )
+    )
+  }
+
+  out <- wide[c(id)]
+  out[[ranking_name]] <- rank_strings
   return(out)
 }
