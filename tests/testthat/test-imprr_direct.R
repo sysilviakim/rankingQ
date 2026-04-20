@@ -83,6 +83,32 @@ test_that("imprr_direct validates main_q when inferring J", {
   )
 })
 
+test_that("imprr_direct infers J when the first main_q value is NA", {
+  identity <- rankingQ::identity
+  identity$app_identity[1] <- NA_character_
+
+  out_inferred <- imprr_direct(
+    identity,
+    J = NULL,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    n_bootstrap = 1,
+    seed = 1
+  )
+
+  out_explicit <- imprr_direct(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    n_bootstrap = 1,
+    seed = 1
+  )
+
+  expect_equal(out_inferred$est_p_random, out_explicit$est_p_random)
+  expect_equal(out_inferred$results, out_explicit$results)
+})
+
 test_that("imprr_direct validates anc_correct column presence", {
   identity <- rankingQ::identity
 
@@ -188,6 +214,35 @@ test_that("imprr_direct errors on missing weight column", {
       n_bootstrap = 1
     ),
     "weight column not found in data."
+  )
+})
+
+test_that("imprr_direct rejects invalid weight values", {
+  identity <- rankingQ::identity
+
+  expect_error(
+    imprr_direct(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      weight = c(-1, rep(1, nrow(identity) - 1)),
+      n_bootstrap = 1,
+      seed = 1
+    ),
+    "weight values cannot be negative."
+  )
+  expect_error(
+    imprr_direct(
+      transform(identity, bad_weight = c(Inf, rep(1, nrow(identity) - 1))),
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      weight = "bad_weight",
+      n_bootstrap = 1,
+      seed = 1
+    ),
+    "weight values must be finite and non-missing."
   )
 })
 

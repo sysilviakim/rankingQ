@@ -224,6 +224,32 @@ test_that("imprr_direct_rcpp validates main_q when inferring J", {
   )
 })
 
+test_that("imprr_direct_rcpp infers J when the first main_q value is NA", {
+  data(identity_w)
+  identity_w$app_identity[1] <- NA_character_
+
+  out_inferred <- imprr_direct_rcpp(
+    data = identity_w,
+    J = NULL,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    n_bootstrap = 1,
+    seed = 789
+  )
+
+  out_explicit <- imprr_direct_rcpp(
+    data = identity_w,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    n_bootstrap = 1,
+    seed = 789
+  )
+
+  expect_equal(out_inferred$est_p_random, out_explicit$est_p_random)
+  expect_equal(out_inferred$results, out_explicit$results)
+})
+
 test_that("imprr_direct_rcpp validates anc_correct column presence", {
   data(identity_w)
 
