@@ -77,7 +77,7 @@ test_that("stratified_avg errors on non-character main_q", {
       main_q      = 123,
       anc_correct = "anc_correct_identity"
     ),
-    "main_q must be a character."
+    "main_q must be a column name"
   )
 })
 
@@ -113,6 +113,30 @@ test_that("stratified_avg works without anc_correct when p_random is fixed", {
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 4L)
   expect_false(anyNA(result$mean))
+})
+
+test_that("stratified_avg accepts direct ranking-column input and bare names", {
+  identity <- rankingQ::identity
+  set.seed(9)
+  identity$test_stratum <- sample(c("group1", "group2"), nrow(identity), TRUE)
+
+  result <- suppressMessages(stratified_avg(
+    data = identity,
+    var_stratum = "test_stratum",
+    main_q = c(
+      app_identity_1,
+      app_identity_2,
+      app_identity_3,
+      app_identity_4
+    ),
+    anc_correct = anc_correct_identity,
+    weight = s_weight,
+    n_bootstrap = 1,
+    seed = 123
+  ))
+
+  expect_s3_class(result, "data.frame")
+  expect_equal(nrow(result), 4L)
 })
 
 test_that("stratified_avg uses provided weight vector", {

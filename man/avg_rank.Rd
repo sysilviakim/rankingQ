@@ -63,7 +63,7 @@ y <- data.frame(rank = c("123", "321", "213"))
 avg_rank(y, "rank")
 z <- rank_longer(
   y,
-  cols = "rank", id = "id",
+  cols = "rank",
   reference = c("Money", "Power", "Respect")
 )
 avg_rank(z, "ranking", items = "item_name", long = TRUE)

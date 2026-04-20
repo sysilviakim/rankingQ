@@ -77,6 +77,34 @@ test_that("avg_rank parses delimiter-separated rankings for J greater than 9", {
   expect_equal(result$mean, rep(5.5, 10))
 })
 
+test_that("avg_rank ignores unrelated duplicate output columns", {
+  identity_w <- rankingQ::identity_w
+  identity_w[["ranking_copy"]] <- identity_w[["ranking"]]
+  names(identity_w)[names(identity_w) == "ranking_copy"] <- "ranking"
+
+  raw_result <- avg_rank(
+    identity_w,
+    rankings = "app_identity",
+    items = c("Party", "Religion", "Gender", "Race")
+  )
+
+  items_df <- data.frame(
+    variable = paste0("app_identity_", 1:4),
+    item = c("Party", "Religion", "Gender", "Race")
+  )
+  ipw_result <- avg_rank(
+    identity_w,
+    items = items_df,
+    weight = "weights",
+    raw = FALSE
+  )
+
+  expect_equal(nrow(raw_result), 4)
+  expect_equal(as.character(raw_result$item), items_df$item)
+  expect_equal(nrow(ipw_result), 4)
+  expect_equal(as.character(ipw_result$item), items_df$item)
+})
+
 test_that("Error is thrown for incorrect arguments", {
   ## Writing tests for only a few cases
   expect_error(

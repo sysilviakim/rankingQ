@@ -128,3 +128,19 @@ test_that("rank_longer parses delimiter-separated rankings for J greater than 9"
   expect_equal(result$ranking[result$id == 1], 1:10)
   expect_equal(result$ranking[result$id == 2], 10:1)
 })
+
+test_that("rank_longer ignores unrelated duplicate column names", {
+  df <- data.frame(
+    id = c(1, 2),
+    app_identity = c("123", "321"),
+    ranking = c("123", "321")
+  )
+  df[["ranking_copy"]] <- df[["ranking"]]
+  names(df)[names(df) == "ranking_copy"] <- "ranking"
+
+  result <- rank_longer(df, cols = "app_identity", id = "id")
+
+  expect_equal(nrow(result), 6)
+  expect_equal(result$ranking[result$id == 1], 1:3)
+  expect_equal(result$ranking[result$id == 2], 3:1)
+})

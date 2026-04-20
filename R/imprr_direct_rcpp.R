@@ -12,13 +12,12 @@
 #'
 #' @param data The input dataset with ranking data.
 #' @param J The number of items in the ranking question. Defaults to NULL,
-#' in which case it will be inferred from the data, only if the column for
-#' `main_q` exists in the data.
-#' @param main_q Column name for the main ranking question to be analyzed.
-#' Using this argument, the function automatically looks for columns with
-#' marginal rankings. For example, if `main_q` is `app_identity`, the function
-#' looks for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on,
-#' with an underbar separator followed by numbers.
+#' in which case it will be inferred from the data. When `main_q` is a single
+#' column name or unquoted symbol such as `app_identity`, the function looks
+#' for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on. You may
+#' also supply `main_q` directly as a character vector or unquoted
+#' `c(...)` expression of ranking columns such as
+#' `c(party, gender, race, religion)`.
 #' @param anc_correct Optional indicator for passing the anchor question.
 #'   If `NULL`, `p_random` is used when supplied; otherwise the function
 #'   defaults to `p_random = 0` and applies no correction.
@@ -31,7 +30,8 @@
 #' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param seed Seed for \code{set.seed} for reproducibility.
 #' @param weight The name of the weight column in `data`. Defaults to `NULL`,
-#' which uses equal weights.
+#' which uses equal weights. This can also be supplied as a numeric vector or
+#' as an unquoted column name.
 #' @param verbose Indicator for verbose output. Defaults to FALSE.
 #' @param p_random Optional fixed proportion of random/inattentive respondents.
 #'   When supplied, this overrides `anc_correct` and a message is shown if both
@@ -66,9 +66,19 @@ imprr_direct_rcpp <- function(data,
     stop("There is no data to analyze. Please check the input data.")
   }
 
-  if (!is.character(main_q) || length(main_q) != 1) {
-    stop("main_q must be a single column name.")
-  }
+  env <- parent.frame()
+  main_q_info <- .resolve_main_q_columns(data, substitute(main_q), env, J)
+  main_q <- main_q_info$main_q
+  ranking_cols <- main_q_info$ranking_cols
+  J <- main_q_info$J
+  anc_correct <- .resolve_name_vector_input(
+    substitute(anc_correct),
+    env,
+    "anc_correct",
+    allow_multiple = FALSE
+  )
+  weight_input <- .resolve_weight_input(substitute(weight), env)
+
   normalized_args <- .normalize_population_args(population, assumption)
   population <- normalized_args$population
   assumption <- normalized_args$assumption
@@ -94,14 +104,14 @@ imprr_direct_rcpp <- function(data,
     return(
       imprr_direct(
         data = data,
-        J = J,
+        J = main_q_info$J,
         main_q = main_q,
         anc_correct = random_spec$anc_correct,
         population = population,
         assumption = assumption,
         n_bootstrap = n_bootstrap,
         seed = seed,
-        weight = weight,
+        weight = weight_input,
         verbose = verbose,
         p_random = random_spec$p_random
       )
@@ -122,35 +132,10 @@ imprr_direct_rcpp <- function(data,
     stop("n_bootstrap must be a single integer >= 1.")
   }
 
-  if (is.null(J)) {
-    if (!(main_q %in% names(data))) {
-      stop(
-        paste(
-          "When J is NULL, main_q must exist as a column in data",
-          "so J can be inferred."
-        )
-      )
-    }
-    J <- .infer_ranking_size(data[[main_q]])
-  }
-  if (!is.numeric(J) || length(J) != 1 || is.na(J) ||
-      J < 2 || J != as.integer(J)) {
-    stop("J must be a single integer >= 2.")
-  }
-  J <- as.integer(J)
-  ranking_cols <- paste0(main_q, "_", seq_len(J))
-  missing_ranking_cols <- setdiff(ranking_cols, names(data))
-  if (length(missing_ranking_cols) > 0) {
-    stop(
-      "Missing ranking columns for main_q: ",
-      paste(missing_ranking_cols, collapse = ", ")
-    )
-  }
-
-  if (is.null(weight)) {
+  if (is.null(weight_input)) {
     message("No weight column supplied; using equal weights for all observations.")
   }
-  weight <- .resolve_weight_vector(data, weight, N)
+  weight <- .resolve_weight_vector(data, weight_input, N)
 
   # Pre-compute constants ======================================================
   J_1 <- J - 1

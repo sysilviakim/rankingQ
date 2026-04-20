@@ -49,7 +49,7 @@
 #' avg_rank(y, "rank")
 #' z <- rank_longer(
 #'   y,
-#'   cols = "rank", id = "id",
+#'   cols = "rank",
 #'   reference = c("Money", "Power", "Respect")
 #' )
 #' avg_rank(z, "ranking", items = "item_name", long = TRUE)
@@ -79,6 +79,12 @@ avg_rank <- function(x,
       return(nrow(items))
     }
     length(items)
+  }
+  select_named_columns <- function(data, cols) {
+    keep_idx <- match(cols, names(data))
+    out <- data[, unique(keep_idx), drop = FALSE]
+    names(out) <- cols[!duplicated(keep_idx)]
+    out
   }
 
   if (!is.logical(long) || length(long) != 1 || is.na(long)) {
@@ -181,7 +187,7 @@ avg_rank <- function(x,
   ## treat differently
   if (raw) {
     if (long) {
-      out <- x %>%
+      out <- select_named_columns(x, c(items, rankings)) %>%
         group_by(!!as.name(items))
     } else {
       if (is.data.frame(items)) {
@@ -196,7 +202,7 @@ avg_rank <- function(x,
       reference_items <- if (is.null(items)) ordinal_seq(J) else items
       out <- suppressMessages(
         rank_longer(
-          x,
+          select_named_columns(x, rankings),
           cols = rankings,
           reference = reference_items
         )
@@ -255,7 +261,8 @@ avg_rank <- function(x,
       imap(
         ~ lm_robust(
           !!as.name(.x) ~ 1,
-          weights = !!as.name(weight), data = x
+          weights = !!as.name(weight),
+          data = select_named_columns(x, c(.x, weight))
         ) %>%
           tidy() %>%
           mutate(outcome = .y)

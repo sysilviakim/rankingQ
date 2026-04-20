@@ -13,15 +13,20 @@
 #' @param var_stratum The name of the stratifying variable.
 #' @param J The number of items in the ranking question. Defaults to NULL,
 #' in which case it will be inferred from the data.
-#' @param main_q Column name for the main ranking question to be analyzed.
+#' @param main_q Main ranking question specification. This can be a single
+#' column name or unquoted symbol such as `app_identity`, in which case the
+#' function looks for `app_identity_1`, `app_identity_2`, and so on. You may
+#' also supply `main_q` directly as a character vector or unquoted `c(...)`
+#' expression of ranking columns.
 #' @param anc_correct Optional indicator for passing the anchor question.
 #'   If `NULL`, `p_random` is used when supplied; otherwise the function
 #'   defaults to `p_random = 0` and applies no correction.
 #' @param labels A vector of labels for the items being ranked.
 #' Defaults to NULL.
 #' @param seed Seed for \code{set.seed} for reproducibility.
-#' @param weight Either a numeric vector of weights with length `nrow(data)`
-#' or the name of a weight column in `data`. Defaults to `NULL`.
+#' @param weight Either a numeric vector of weights with length `nrow(data)`,
+#' the name of a weight column in `data`, or an unquoted weight column name.
+#' Defaults to `NULL`.
 #' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param ipw Indicator for using inverse probability weighting. Defaults to
 #' FALSE, in which case direct bias estimation will be employed.
@@ -67,47 +72,33 @@ stratified_avg <- function(data, var_stratum, J = NULL,
   if (!is.character(var_stratum)) {
     stop("var_stratum must be a character.")
   }
-  if (!is.character(main_q)) {
-    stop("main_q must be a character.")
-  }
-  if (!is.null(anc_correct) && !is.character(anc_correct)) {
-    stop("anc_correct must be a character.")
-  }
+  env <- parent.frame()
+  main_q_info <- .resolve_main_q_columns(data, substitute(main_q), env, J)
+  main_q <- main_q_info$main_q
+  ranking_cols <- main_q_info$ranking_cols
+  J <- main_q_info$J
+  anc_correct <- .resolve_name_vector_input(
+    substitute(anc_correct),
+    env,
+    "anc_correct",
+    allow_multiple = FALSE
+  )
   random_spec <- .resolve_random_response_inputs(data, anc_correct, p_random)
   anc_correct <- random_spec$anc_correct
   p_random <- random_spec$p_random
+  weight_input <- .resolve_weight_input(substitute(weight), env)
 
-  if (is.null(weight)) {
+  if (is.null(weight_input)) {
     message("No weight column supplied; using equal weights for all observations.")
     weight_col <- make.unique(c(names(data), ".rankingQ_equal_weight"))
     weight_col <- weight_col[length(weight_col)]
     data[[weight_col]] <- rep(1, nrow(data))
   } else {
-    if (
-      is.character(weight) &&
-        length(weight) == 1 &&
-        weight %in% names(data)
-    ) {
-      weight_vec <- data[[weight]]
-    } else if (is.numeric(weight) && length(weight) == nrow(data)) {
-      weight_vec <- weight
-    } else {
-      stop(
-        paste(
-          "weight must be either a numeric vector of nrow(data)",
-          "or a column name."
-        )
-      )
-    }
+    weight_vec <- .resolve_weight_vector(data, weight_input, nrow(data))
     weight_col <- make.unique(c(names(data), ".rankingQ_weight"))
     weight_col <- weight_col[length(weight_col)]
     data[[weight_col]] <- weight_vec
   }
-
-  if (is.null(J)) {
-    J <- .infer_ranking_size(data[[main_q]])
-  }
-  ranking_cols <- paste0(main_q, "_", seq_len(J))
   item_spec <- data.frame(
     variable = ranking_cols,
     item = if (is.null(labels)) ranking_cols else labels,

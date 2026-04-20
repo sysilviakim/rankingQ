@@ -13,13 +13,12 @@
 #'
 #' @param data The input dataset with ranking data.
 #' @param J The number of items in the ranking question. Defaults to NULL,
-#' in which case it will be inferred from the data, only if the column for
-#' `main_q` exists in the data.
-#' @param main_q Column name for the main ranking question to be analyzed.
-#' Using this argument, the function automatically looks for columns with
-#' marginal rankings. For example, if `main_q` is `app_identity`, the function
-#' looks for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on,
-#' with an underbar separator followed by numbers.
+#' in which case it will be inferred from the data. When `main_q` is a single
+#' column name or unquoted symbol such as `app_identity`, the function looks
+#' for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on. You may
+#' also supply `main_q` directly as a character vector or unquoted
+#' `c(...)` expression of ranking columns such as
+#' `c(party, gender, race, religion)`.
 #' @param anc_correct Optional indicator for passing the anchor question.
 #'   If `NULL`, `p_random` is used when supplied; otherwise the function
 #'   defaults to `p_random = 0` and applies no correction.
@@ -30,7 +29,8 @@
 #'   uniform counterfactual preferences, while `contaminated` assumes their
 #'   counterfactual preferences match those of non-random respondents.
 #' @param weight The name of the weight column in `data`. Defaults to `NULL`,
-#' which uses equal weights.
+#' which uses equal weights. This can also be supplied as a numeric vector or
+#' as an unquoted column name.
 #' @param ranking The name of the column that will store the full ranking
 #' profile. Defaults to "ranking". If `main_q` exists in the data, the produced
 #' column should be identical to `main_q`. However, the function defaults to
@@ -66,22 +66,36 @@ imprr_weights <- function(data,
   count <- n <- n_adj <- n_renormalized <- prop <- w <-
     prop_obs <- weights <- prop_bc <- NULL
 
-  if (is.null(ranking) && main_q %in% names(data)) {
-    ranking <- main_q
-  }
-
-  if (ranking %in% names(data)) {
-    message("Existing '", ranking, "' column will be overwritten.")
-  }
-
   # Setup ======================================================================
   N <- nrow(data)
   if (is.null(N) || N == 0) {
     stop("There is no data to analyze. Please check the input data.")
   }
 
-  if (!is.character(main_q) || length(main_q) != 1) {
-    stop("main_q must be a single column name.")
+  env <- parent.frame()
+  main_q_info <- .resolve_main_q_columns(data, substitute(main_q), env, J)
+  main_q <- main_q_info$main_q
+  ranking_cols <- main_q_info$ranking_cols
+  J <- main_q_info$J
+  anc_correct <- .resolve_name_vector_input(
+    substitute(anc_correct),
+    env,
+    "anc_correct",
+    allow_multiple = FALSE
+  )
+  weight_input <- .resolve_weight_input(substitute(weight), env)
+  main_q_name <- if (length(main_q) == 1L) main_q[[1]] else NULL
+
+  if (is.null(ranking)) {
+    if (main_q_info$has_full_ranking_col) {
+      ranking <- main_q_name
+    } else {
+      ranking <- "ranking"
+    }
+  }
+  if (!is.character(ranking) || length(ranking) != 1 || is.na(ranking) ||
+      !nzchar(ranking)) {
+    stop("ranking must be a single column name.")
   }
 
   normalized_args <- .normalize_population_args(population, assumption)
@@ -99,32 +113,27 @@ imprr_weights <- function(data,
     random_spec <- .resolve_random_response_inputs(data, anc_correct, p_random)
   }
 
-  if (is.null(J)) {
-    if (!(main_q %in% names(data))) {
-      stop(
-        "When J is NULL, main_q must exist as a column in data so J can be inferred."
-      )
-    }
-    J <- .infer_ranking_size(data[[main_q]])
+  conflicting_outputs <- character()
+  if (!identical(ranking, main_q_name) && any(names(data) == ranking)) {
+    conflicting_outputs <- c(conflicting_outputs, ranking)
   }
-  if (!is.numeric(J) || length(J) != 1 || is.na(J) ||
-      J < 2 || J != as.integer(J)) {
-    stop("J must be a single integer >= 2.")
+  if (any(names(data) == "weights")) {
+    conflicting_outputs <- c(conflicting_outputs, "weights")
   }
-  J <- as.integer(J)
-  ranking_cols <- paste0(main_q, "_", seq_len(J))
-  missing_ranking_cols <- setdiff(ranking_cols, names(data))
-  if (length(missing_ranking_cols) > 0) {
+  conflicting_outputs <- unique(conflicting_outputs)
+  if (length(conflicting_outputs) > 0) {
     stop(
-      "Missing ranking columns for main_q: ",
-      paste(missing_ranking_cols, collapse = ", ")
+      "data already contains output column(s): ",
+      paste(conflicting_outputs, collapse = ", "),
+      ". imprr_weights() does not overwrite existing output columns. ",
+      "Please rename or drop them manually before calling imprr_weights()."
     )
   }
 
-  if (is.null(weight)) {
+  if (is.null(weight_input)) {
     message("No weight column supplied; using equal weights for all observations.")
   }
-  weight <- .resolve_weight_vector(data, weight, N)
+  weight <- .resolve_weight_vector(data, weight_input, N)
 
   # Pre-compute factorial for efficiency =======================================
   J_factorial <- factorial(J)
@@ -229,7 +238,7 @@ imprr_weights <- function(data,
 
   # Merge the weights back to the original data --------------------------------
   data_w <- data
-  data_w[[ranking]] <- .collapse_ranking_columns(data_w, ranking_cols, J)
+  data_w[[ranking]] <- .collapse_ranking_columns(data, ranking_cols, J)
 
   data_w <- data_w %>%
     left_join(tibble_w, by = ranking) %>%

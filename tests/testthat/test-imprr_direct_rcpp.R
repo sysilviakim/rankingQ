@@ -326,6 +326,27 @@ test_that("imprr_direct_rcpp uses exact ranking column names", {
   expect_equal(sort(unique(out$results$item)), c("q1_1", "q1_2"))
 })
 
+test_that("imprr_direct_rcpp accepts direct ranking-column input and bare names", {
+  df <- data.frame(
+    party = c(1, 2, 1, 2),
+    gender = c(2, 1, 2, 1),
+    anc = c(1, 1, 1, 1),
+    w = c(1, 2, 1, 2)
+  )
+
+  out <- imprr_direct_rcpp(
+    data = df,
+    main_q = c(party, gender),
+    anc_correct = anc,
+    weight = w,
+    n_bootstrap = 1,
+    seed = 1
+  )
+
+  expect_equal(sort(unique(out$results$item)), c("gender", "party"))
+  expect_equal(nrow(out$results), 10L)
+})
+
 test_that("imprr_direct_rcpp validates population and assumption inputs", {
   data(identity_w)
 

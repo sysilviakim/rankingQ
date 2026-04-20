@@ -74,6 +74,9 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
     x[["id"]] <- seq(nrow(x))
     id <- "id"
   }
+  if (!(id %in% names(x))) {
+    stop("The id argument is not contained in the given data frame.")
+  }
   if (any(duplicated(x[[id]]))) {
     stop("The id argument does not uniquely identify the respondent.")
   }
@@ -81,6 +84,9 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
   ## If NULL, select all columns except for the ID column
   if (is.null(cols)) {
     cols <- setdiff(names(x), id)
+  }
+  if (!all(cols %in% names(x))) {
+    stop("The cols argument contains columns not in the given data frame.")
   }
 
   ## Sanity check on `cols` argument
@@ -134,6 +140,9 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
       item_name = cols
     )
   }
+
+  keep_idx <- unique(c(match(id, names(x)), match(cols, names(x))))
+  x <- x[, keep_idx, drop = FALSE]
 
   ## Pasted ranking column case
   if (length(cols) == 1) {

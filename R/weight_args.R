@@ -3,8 +3,15 @@
     return(rep(1, N))
   }
 
+  if (is.numeric(weight)) {
+    if (length(weight) != N) {
+      stop("weight vector must have the same length as the number of rows in data.")
+    }
+    return(weight)
+  }
+
   if (!is.character(weight) || length(weight) != 1 || is.na(weight)) {
-    stop("weight must be NULL or a single column name in data.")
+    stop("weight must be NULL, a numeric vector, or a single column name in data.")
   }
 
   weight_vec <- data[[weight]]

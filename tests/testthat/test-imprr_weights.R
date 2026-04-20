@@ -257,6 +257,25 @@ test_that("imprr_weights uses exact ranking column names", {
   expect_equal(out$results$ranking, c("21", "12", "21", "12"))
 })
 
+test_that("imprr_weights accepts direct ranking-column input and bare names", {
+  df <- data.frame(
+    party = c(1, 2, 1, 2),
+    gender = c(2, 1, 2, 1),
+    anc = c(1, 1, 1, 1),
+    w = c(1, 2, 1, 2)
+  )
+
+  out <- imprr_weights(
+    df,
+    main_q = c(party, gender),
+    anc_correct = anc,
+    weight = w
+  )
+
+  expect_equal(out$results$ranking, c("12", "21", "12", "21"))
+  expect_equal(sort(out$rankings$ranking), c("12", "21"))
+})
+
 test_that("imprr_weights respects a custom ranking column name everywhere", {
   df <- data.frame(
     q_1 = c(1, 2, 1, 2),
@@ -366,4 +385,39 @@ test_that("imprr_weights accepts common input variants", {
   expect_equal(out_variant$est_p_random, out_default$est_p_random)
   expect_equal(out_variant$rankings, out_default$rankings)
   expect_equal(out_variant$results, out_default$results)
+})
+
+test_that("imprr_weights errors on conflicting output column names", {
+  identity_w <- rankingQ::identity_w
+
+  expect_error(
+    imprr_weights(
+      identity_w,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity"
+    ),
+    paste(
+      "data already contains output column\\(s\\): ranking, weights\\.",
+      "imprr_weights\\(\\) does not overwrite existing output columns\\."
+    )
+  )
+
+  df <- data.frame(
+    q_1 = c(1, 2, 1, 2),
+    q_2 = c(2, 1, 2, 1),
+    anc = c(1, 1, 1, 1),
+    myrank = c("12", "21", "12", "21")
+  )
+
+  expect_error(
+    imprr_weights(
+      df,
+      J = 2,
+      main_q = "q",
+      anc_correct = "anc",
+      ranking = "myrank"
+    ),
+    "data already contains output column\\(s\\): myrank\\."
+  )
 })
