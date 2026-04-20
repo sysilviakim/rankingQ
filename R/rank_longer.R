@@ -109,11 +109,11 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
     if (is.null(reference)) {
       message("No reference choice set specified. Using general column names.")
     } else {
-      if (max_ranking > length(reference)) {
+      if (length(reference) != max_ranking) {
         stop(
-          paste0(
-            "The max_ranking argument is greater than ",
-            "the length of the reference choice set."
+          paste(
+            "The reference choice set must have the same length as",
+            "the inferred ranking size."
           )
         )
       }

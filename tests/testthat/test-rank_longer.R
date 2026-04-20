@@ -114,7 +114,7 @@ test_that("rank_longer validates id and missing ranking values early", {
   )
 })
 
-test_that("rank_longer errors when reference is shorter than ranking length", {
+test_that("rank_longer errors when reference length does not match ranking length", {
   df <- data.frame(
     id = 1:2,
     ranking = c("123", "321")
@@ -130,8 +130,23 @@ test_that("rank_longer errors when reference is shorter than ranking length", {
       )
     ),
     paste(
-      "The max_ranking argument is greater than",
-      "the length of the reference choice set."
+      "The reference choice set must have the same length as",
+      "the inferred ranking size."
+    )
+  )
+
+  expect_error(
+    suppressMessages(
+      rank_longer(
+        df,
+        cols = "ranking",
+        id = "id",
+        reference = c("A", "B", "C", "D")
+      )
+    ),
+    paste(
+      "The reference choice set must have the same length as",
+      "the inferred ranking size."
     )
   )
 })
