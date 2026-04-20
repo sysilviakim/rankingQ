@@ -61,6 +61,34 @@ test_that("recover_recorded_responses works with df input", {
   expect_equal(nrow(result), 2)
 })
 
+test_that("recover_recorded_responses preserves source columns for generic names", {
+  df <- data.frame(
+    truth = "2413",
+    presented = "4321",
+    stringsAsFactors = FALSE
+  )
+
+  result <- recover_recorded_responses("truth", "presented", df = df)
+
+  expect_true("presented_recorded" %in% names(result))
+  expect_equal(result$presented, "4321")
+  expect_equal(result$presented_recorded, "3142")
+})
+
+test_that("recover_recorded_responses errors when output column already exists", {
+  df <- data.frame(
+    truth = "2413",
+    presented = "4321",
+    presented_recorded = "stale",
+    stringsAsFactors = FALSE
+  )
+
+  expect_error(
+    recover_recorded_responses("truth", "presented", df = df),
+    "Output column 'presented_recorded' already exists in the dataframe."
+  )
+})
+
 test_that("recover_recorded_responses handles NA in df input", {
   df <- data.frame(
     app_row_rnd      = c("1234", NA),

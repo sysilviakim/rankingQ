@@ -115,7 +115,17 @@ recover_recorded_responses <- function(
       stop("Response order variable is not in the dataframe.")
     }
 
-    variable_name <- gsub("_row_rnd", "_recorded", presented_order)
+    variable_name <- if (grepl("_row_rnd$", presented_order)) {
+      sub("_row_rnd$", "_recorded", presented_order)
+    } else {
+      paste0(presented_order, "_recorded")
+    }
+    if (variable_name %in% names(df)) {
+      stop(
+        "Output column '", variable_name, "' already exists in the dataframe. ",
+        "Please rename or drop it before calling recover_recorded_responses()."
+      )
+    }
     presented_values <- df[[presented_order]]
     true_values <- df[[true_order]]
 
