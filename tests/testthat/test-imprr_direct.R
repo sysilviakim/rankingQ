@@ -50,6 +50,21 @@ test_that("imprr_direct validates bootstrap count", {
   )
 })
 
+test_that("imprr_direct rejects infinite J cleanly", {
+  identity <- rankingQ::identity
+
+  expect_error(
+    imprr_direct(
+      identity,
+      J = Inf,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      n_bootstrap = 1
+    ),
+    "J must be a single integer >= 2."
+  )
+})
+
 test_that("imprr_direct validates main_q when inferring J", {
   identity <- rankingQ::identity
 

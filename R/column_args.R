@@ -66,7 +66,7 @@
 }
 
 .validate_J_input <- function(J) {
-  if (!is.numeric(J) || length(J) != 1 || is.na(J) ||
+  if (!is.numeric(J) || length(J) != 1 || is.na(J) || !is.finite(J) ||
       J < 2 || J != as.integer(J)) {
     stop("J must be a single integer >= 2.")
   }
