@@ -64,6 +64,43 @@ test_that("imprr_weights accepts a weight column name", {
   expect_true("weights" %in% names(out$results))
 })
 
+test_that("imprr_weights accepts a fixed p_random without anc_correct", {
+  toy <- data.frame(
+    q_1 = c(1, 2, 1, 2),
+    q_2 = c(2, 1, 2, 1)
+  )
+
+  out <- imprr_weights(
+    toy,
+    J = 2,
+    main_q = "q",
+    p_random = 0.25
+  )
+
+  expect_equal(out$est_p_random, 0.25)
+  expect_true("weights" %in% names(out$results))
+})
+
+test_that("imprr_weights defaults to no correction without anc_correct or p_random", {
+  toy <- data.frame(
+    q_1 = c(1, 2, 1, 2),
+    q_2 = c(2, 1, 2, 1)
+  )
+
+  expect_message(
+    out <- imprr_weights(
+      toy,
+      J = 2,
+      main_q = "q"
+    ),
+    "No anc_correct or p_random supplied"
+  )
+
+  expect_equal(out$est_p_random, 0)
+  expect_equal(out$rankings$prop_bc, out$rankings$prop_obs)
+  expect_equal(out$results$weights, rep(1, nrow(toy)))
+})
+
 test_that("imprr_weights uses supplied weights in est_p_random", {
   toy <- data.frame(
     q_1 = c(1, 1, 2, 2),

@@ -9,13 +9,14 @@ stratified_avg(
   var_stratum,
   J = NULL,
   main_q,
-  anc_correct,
+  anc_correct = NULL,
   labels = NULL,
   seed = 1234,
   weight = NULL,
   n_bootstrap = 200,
   ipw = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  p_random = NULL
 )
 }
 \arguments{
@@ -29,7 +30,9 @@ in which case it will be inferred from the data.}
 
 \item{main_q}{Column name for the main ranking question to be analyzed.}
 
-\item{anc_correct}{Indicator for passing the anchor question.}
+\item{anc_correct}{Optional indicator for passing the anchor question.
+If `NULL`, `p_random` is used when supplied; otherwise the function
+defaults to `p_random = 0` and applies no correction.}
 
 \item{labels}{A vector of labels for the items being ranked.
 Defaults to NULL.}
@@ -45,6 +48,9 @@ or the name of a weight column in `data`. Defaults to `NULL`.}
 FALSE, in which case direct bias estimation will be employed.}
 
 \item{verbose}{Indicator for verbose output. Defaults to FALSE.}
+
+\item{p_random}{Optional fixed proportion of random/inattentive respondents.
+When supplied, this overrides `anc_correct`.}
 }
 \value{
 A data frame with the bootstrap-estimated average ranks.

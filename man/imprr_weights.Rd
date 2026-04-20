@@ -8,11 +8,12 @@ imprr_weights(
   data,
   J = NULL,
   main_q,
-  anc_correct,
+  anc_correct = NULL,
   population = "non-random",
   assumption = "contaminated",
   weight = NULL,
-  ranking = "ranking"
+  ranking = "ranking",
+  p_random = NULL
 )
 }
 \arguments{
@@ -28,7 +29,9 @@ marginal rankings. For example, if `main_q` is `app_identity`, the function
 looks for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on,
 with an underbar separator followed by numbers.}
 
-\item{anc_correct}{Indicator for passing the anchor question.}
+\item{anc_correct}{Optional indicator for passing the anchor question.
+If `NULL`, `p_random` is used when supplied; otherwise the function
+defaults to `p_random = 0` and applies no correction.}
 
 \item{population}{Choice of the target population out of
 non-random respondents (default) or all respondents.}
@@ -45,6 +48,9 @@ which uses equal weights.}
 profile. Defaults to "ranking". If `main_q` exists in the data, the produced
 column should be identical to `main_q`. However, the function defaults to
 creating another column by combining marginal rankings, just in case.}
+
+\item{p_random}{Optional fixed proportion of random/inattentive respondents.
+When supplied, this overrides `anc_correct`.}
 }
 \value{
 A list with three elements:
