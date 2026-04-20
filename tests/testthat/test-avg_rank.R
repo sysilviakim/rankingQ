@@ -27,12 +27,59 @@ test_that("Basic one-column data with item names specified", {
   )
 })
 
+test_that("avg_rank accepts separate ranking columns in raw wide data", {
+  df_sep <- data.frame(
+    apple = c(2, 1, 3),
+    orange = c(1, 3, 2),
+    banana = c(3, 2, 1)
+  )
+
+  result <- avg_rank(df_sep, rankings = c("apple", "orange", "banana"))
+
+  expect_equal(nrow(result), 3)
+  expect_equal(result$item, c("apple", "orange", "banana"))
+  expect_equal(result$mean, c(2, 2, 2))
+})
+
+test_that("avg_rank supports weights in the raw estimator", {
+  df_weighted <- data.frame(
+    rank = c("12", "21"),
+    survey_weight = c(1, 3)
+  )
+
+  result <- avg_rank(df_weighted, "rank", weight = "survey_weight")
+
+  expect_equal(nrow(result), 2)
+  expect_equal(result$item, c("1st", "2nd"))
+  expect_equal(result$mean, c(1.75, 1.25))
+  expect_true(all(c("lower", "upper") %in% names(result)))
+})
+
 test_that("Long-format data.", {
   result <- avg_rank(df_long, "rank", items = "item", long = TRUE)
   expect_equal(nrow(result), 3)
   expect_equal(result$item, c("A", "B", "C"))
   expect_equal(result$mean, c(2.0, 1.5, 2.5))
   expect_equal(result$se, c(1.0, 0.5, 0.5))
+})
+
+test_that("avg_rank supports weights in long-format raw data", {
+  df_long_weighted <- data.frame(
+    item = c("A", "B", "A", "B"),
+    rank = c(1, 2, 2, 1),
+    survey_weight = c(1, 1, 3, 3)
+  )
+
+  result <- avg_rank(
+    df_long_weighted,
+    "rank",
+    items = "item",
+    long = TRUE,
+    weight = "survey_weight"
+  )
+
+  expect_equal(result$item, c("A", "B"))
+  expect_equal(result$mean, c(1.75, 1.25))
 })
 
 test_that("Wide-format item labels must match the number of ranked items", {
