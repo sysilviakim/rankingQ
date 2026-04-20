@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rankingQ</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,8 +42,24 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="rankingq-020">rankingQ 0.2.0<a class="anchor" aria-label="anchor" href="#rankingq-020"></a></h2>
+<ul><li>First CRAN submission. The package was previously available on GitHub under version 0.1.0.</li>
+<li>New exported function <code><a href="../reference/rank_wider.html">rank_wider()</a></code> for converting long-format ranking data to wide format (one column per item or a single pasted ranking string).</li>
+<li>
+<code><a href="../reference/imprr_direct.html">imprr_direct()</a></code>: <code>anc_correct</code> is now optional. Users can instead supply <code>p_random</code> directly, or rely on anchor-based estimation of the non-random response rate.</li>
+<li>
+<code><a href="../reference/imprr_direct_rcpp.html">imprr_direct_rcpp()</a></code>: correctly delegates to <code><a href="../reference/imprr_direct.html">imprr_direct()</a></code> when <code>method = "fixed"</code>, forwarding all population and assumption inputs.</li>
+<li>
+<code><a href="../reference/rpluce.html">rpluce()</a></code>: when all remaining Plackett-Luce weights become zero after earlier draws, the remaining items are now sampled uniformly at random rather than being ordered by input position.</li>
+<li>
+<code><a href="../reference/rank_longer.html">rank_longer()</a></code>: stricter validation on the <code>reference</code> argument and clearer handling of single- vs multi-column input.</li>
+<li>Stronger input validation across the package: weights must be finite, non-negative, and sum to a positive number; <code>J</code> must be finite; permutation labels are parsed consistently across compact, delimited, and fixed-width formats (including J &gt; 9).</li>
+<li>Permutation-label infrastructure rewritten to support rankings of arbitrary size.</li>
+<li>Documentation: switched to <code>\href{}{}</code> for external URLs; expanded examples and <code>\value{}</code> sections.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="rankingq-010">rankingQ 0.1.0<a class="anchor" aria-label="anchor" href="#rankingq-010"></a></h2>
-<ul><li>Initial CRAN release.</li>
+<ul><li>Initial GitHub release (not submitted to CRAN).</li>
 <li>Implements design-based bias correction methods for ranking survey questions, based on Atsusaka and Kim (2025) <a href="doi:10.1017/pan.2024.33" class="uri">doi:10.1017/pan.2024.33</a>.</li>
 <li>Core functions for bias correction: <code><a href="../reference/imprr_direct.html">imprr_direct()</a></code>, <code><a href="../reference/imprr_direct_rcpp.html">imprr_direct_rcpp()</a></code>, and <code><a href="../reference/imprr_weights.html">imprr_weights()</a></code>.</li>
 <li>Rcpp backend for bootstrap-based estimation.</li>
@@ -53,7 +69,8 @@
 <li>Simulation support with <code><a href="../reference/rpluce.html">rpluce()</a></code> for Plackett-Luce sampling.</li>
 <li>Includes example dataset from an identity ranking survey.</li>
 </ul></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
