@@ -53,7 +53,7 @@ test_that("stratified_avg returns IPW averages when ipw = TRUE", {
   )
 })
 
-test_that("stratified_avg errors on non-character var_stratum", {
+test_that("stratified_avg errors on invalid var_stratum input", {
   identity <- rankingQ::identity
   expect_error(
     stratified_avg(
@@ -63,7 +63,17 @@ test_that("stratified_avg errors on non-character var_stratum", {
       main_q      = "app_identity",
       anc_correct = "anc_correct_identity"
     ),
-    "var_stratum must be a character."
+    "var_stratum must be a single column name."
+  )
+  expect_error(
+    stratified_avg(
+      data        = identity,
+      var_stratum = "missing",
+      J           = 4,
+      main_q      = "app_identity",
+      anc_correct = "anc_correct_identity"
+    ),
+    "The stratifying variable is not contained in the given data frame."
   )
 })
 
@@ -257,6 +267,40 @@ test_that("stratified_avg infers J when the first main_q value is NA", {
   ))
 
   expect_identical(out_inferred, out_explicit)
+})
+
+test_that("stratified_avg validates labels length before computation", {
+  identity <- rankingQ::identity
+  set.seed(11)
+  identity$test_stratum <- sample(c("group1", "group2"), nrow(identity), TRUE)
+
+  expect_error(
+    stratified_avg(
+      data = identity,
+      var_stratum = "test_stratum",
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      labels = "only_one",
+      n_bootstrap = 1,
+      seed = 123
+    ),
+    "labels must be a character vector of length J with non-missing values."
+  )
+
+  expect_error(
+    stratified_avg(
+      data = identity,
+      var_stratum = "test_stratum",
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      labels = c("a", "b", "c"),
+      n_bootstrap = 1,
+      seed = 123
+    ),
+    "labels must be a character vector of length J with non-missing values."
+  )
 })
 
 test_that("stratified_avg emits the equal-weights message only once", {

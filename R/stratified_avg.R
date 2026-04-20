@@ -82,14 +82,24 @@ stratified_avg <- function(data, var_stratum, J = NULL,
   )
 
   ## class check
-  if (!is.character(var_stratum)) {
-    stop("var_stratum must be a character.")
+  if (!is.character(var_stratum) || length(var_stratum) != 1 ||
+      is.na(var_stratum) || !nzchar(var_stratum)) {
+    stop("var_stratum must be a single column name.")
+  }
+  if (!(var_stratum %in% names(data))) {
+    stop("The stratifying variable is not contained in the given data frame.")
   }
   env <- parent.frame()
   main_q_info <- .resolve_main_q_columns(data, substitute(main_q), env, J)
   main_q <- main_q_info$main_q
   ranking_cols <- main_q_info$ranking_cols
   J <- main_q_info$J
+  if (!is.null(labels)) {
+    labels <- as.character(labels)
+    if (length(labels) != J || anyNA(labels) || any(!nzchar(labels))) {
+      stop("labels must be a character vector of length J with non-missing values.")
+    }
+  }
   anc_correct <- .resolve_name_vector_input(
     substitute(anc_correct),
     env,
