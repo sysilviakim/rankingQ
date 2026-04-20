@@ -50,7 +50,8 @@ column should be identical to `main_q`. However, the function defaults to
 creating another column by combining marginal rankings, just in case.}
 
 \item{p_random}{Optional fixed proportion of random/inattentive respondents.
-When supplied, this overrides `anc_correct`.}
+When supplied, this overrides `anc_correct` and a message is shown if both
+are provided.}
 }
 \value{
 A list with three elements:

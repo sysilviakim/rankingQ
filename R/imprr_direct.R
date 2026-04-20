@@ -32,7 +32,8 @@
 #' which uses equal weights.
 #' @param verbose Indicator for verbose output. Defaults to FALSE.
 #' @param p_random Optional fixed proportion of random/inattentive respondents.
-#'   When supplied, this overrides `anc_correct`.
+#'   When supplied, this overrides `anc_correct` and a message is shown if both
+#'   are provided.
 #'
 #' @return A list with two elements:
 #' \describe{
@@ -73,7 +74,6 @@ imprr_direct <- function(data,
   normalized_args <- .normalize_population_args(population, assumption)
   population <- normalized_args$population
   assumption <- normalized_args$assumption
-  random_spec <- .resolve_random_response_inputs(data, anc_correct, p_random)
   if (population == "all" && assumption == "uniform") {
     if (!is.null(anc_correct) || !is.null(p_random)) {
       message(
@@ -82,6 +82,8 @@ imprr_direct <- function(data,
       )
     }
     random_spec <- list(method = "fixed", anc_correct = NULL, p_random = 0)
+  } else {
+    random_spec <- .resolve_random_response_inputs(data, anc_correct, p_random)
   }
   if (!is.numeric(n_bootstrap) || length(n_bootstrap) != 1 ||
       is.na(n_bootstrap) || n_bootstrap < 1 ||

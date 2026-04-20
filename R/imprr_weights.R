@@ -36,7 +36,8 @@
 #' column should be identical to `main_q`. However, the function defaults to
 #' creating another column by combining marginal rankings, just in case.
 #' @param p_random Optional fixed proportion of random/inattentive respondents.
-#'   When supplied, this overrides `anc_correct`.
+#'   When supplied, this overrides `anc_correct` and a message is shown if both
+#'   are provided.
 #'
 #' @return A list with three elements:
 #' \describe{
@@ -86,7 +87,6 @@ imprr_weights <- function(data,
   normalized_args <- .normalize_population_args(population, assumption)
   population <- normalized_args$population
   assumption <- normalized_args$assumption
-  random_spec <- .resolve_random_response_inputs(data, anc_correct, p_random)
   if (population == "all" && assumption == "uniform") {
     if (!is.null(anc_correct) || !is.null(p_random)) {
       message(
@@ -95,6 +95,8 @@ imprr_weights <- function(data,
       )
     }
     random_spec <- list(method = "fixed", anc_correct = NULL, p_random = 0)
+  } else {
+    random_spec <- .resolve_random_response_inputs(data, anc_correct, p_random)
   }
 
   if (is.null(J)) {

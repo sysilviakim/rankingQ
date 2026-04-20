@@ -27,7 +27,8 @@
 #' FALSE, in which case direct bias estimation will be employed.
 #' @param verbose Indicator for verbose output. Defaults to FALSE.
 #' @param p_random Optional fixed proportion of random/inattentive respondents.
-#'   When supplied, this overrides `anc_correct`.
+#'   When supplied, this overrides `anc_correct` and a message is shown if both
+#'   are provided.
 #'
 #' @return A data frame with the bootstrap-estimated average ranks.
 #'

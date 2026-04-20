@@ -34,7 +34,8 @@
 #' which uses equal weights.
 #' @param verbose Indicator for verbose output. Defaults to FALSE.
 #' @param p_random Optional fixed proportion of random/inattentive respondents.
-#'   When supplied, this overrides `anc_correct`.
+#'   When supplied, this overrides `anc_correct` and a message is shown if both
+#'   are provided.
 #'
 #' @return A list with two elements:
 #'   \item{est_p_random}{Summary statistics for the estimated proportion of
@@ -79,10 +80,11 @@ imprr_direct_rcpp <- function(data,
         "ignoring anc_correct and p_random."
       )
     }
-    p_random <- 0
-    anc_correct <- NULL
+    random_spec <- list(method = "fixed", anc_correct = NULL, p_random = 0)
+  } else {
+    random_spec <- .resolve_random_response_inputs(data, anc_correct, p_random)
   }
-  if (is.null(anc_correct) || !is.null(p_random)) {
+  if (random_spec$method == "fixed") {
     if (verbose) {
       message(
         "Using the R implementation because the random-response rate is fixed ",
@@ -94,18 +96,19 @@ imprr_direct_rcpp <- function(data,
         data = data,
         J = J,
         main_q = main_q,
-        anc_correct = anc_correct,
+        anc_correct = random_spec$anc_correct,
         population = population,
         assumption = assumption,
         n_bootstrap = n_bootstrap,
         seed = seed,
         weight = weight,
         verbose = verbose,
-        p_random = p_random
+        p_random = random_spec$p_random
       )
     )
   }
 
+  anc_correct <- random_spec$anc_correct
   if (!is.character(anc_correct) || length(anc_correct) != 1) {
     stop("anc_correct must be a single column name.")
   }

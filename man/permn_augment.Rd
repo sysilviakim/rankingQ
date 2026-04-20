@@ -9,9 +9,11 @@ permn_augment(tab, J = NULL)
 \arguments{
 \item{tab}{A table of observed permutation patterns.}
 
-\item{J}{The length of the reference choice set.
-Defaults to NULL, in which it will count the number of characters
-in the first input.}
+\item{J}{The length of the reference choice set. Defaults to `NULL`, in
+which case it is inferred from the permutation labels. For `J > 9`,
+delimiter-separated or zero-padded labels are unambiguous. Compact labels
+such as `"12345678910"` are parsed when possible, and the augmented output
+is returned in an unambiguous canonical format.}
 }
 \value{
 A table of observed permutation patterns augmented with all possible

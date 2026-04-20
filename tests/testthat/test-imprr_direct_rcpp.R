@@ -135,6 +135,27 @@ test_that("imprr_direct_rcpp accepts a fixed p_random without anc_correct", {
   expect_equal(nrow(result$results), 10L)
 })
 
+test_that("imprr_direct_rcpp messages when p_random overrides anc_correct", {
+  toy <- data.frame(
+    q_1 = c(1, 2, 1, 2),
+    q_2 = c(2, 1, 2, 1),
+    anc = c(1, 0, 1, 0)
+  )
+
+  expect_message(
+    imprr_direct_rcpp(
+      data = toy,
+      J = 2,
+      main_q = "q",
+      anc_correct = "anc",
+      p_random = 0.25,
+      n_bootstrap = 3,
+      seed = 1
+    ),
+    "p_random supplied; ignoring anc_correct"
+  )
+})
+
 test_that("imprr_direct_rcpp defaults to no correction without anc_correct or p_random", {
   toy <- data.frame(
     q_1 = c(1, 2, 1, 2),
