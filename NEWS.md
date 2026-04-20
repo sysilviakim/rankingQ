@@ -6,7 +6,7 @@
 * Core functions for bias correction: `imprr_direct()`, `imprr_direct_rcpp()`,
   and `imprr_weights()`.
 * Rcpp backend for bootstrap-based estimation.
-* Visualization functions: `plot_average_rank()` and `plot_dist_ranking()`.
+* Visualization functions: `plot_avg_ranking()` and `plot_dist_ranking()`.
 * Utility functions for ranking data manipulation: `rank_longer()`,
   `item_to_rank()`, `recover_recorded_responses()`, and `permn_augment()`.
 * Statistical testing with `uniformity_test()`.
