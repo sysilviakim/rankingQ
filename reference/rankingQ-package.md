@@ -15,7 +15,7 @@ Useful links:
 
 - <https://github.com/sysilviakim/rankingQ>
 
-- <http://sysilviakim.com/rankingQ/>
+- <https://sysilviakim.com/rankingQ/>
 
 - Report bugs at <https://github.com/sysilviakim/rankingQ/issues>
 

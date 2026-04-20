@@ -45,7 +45,7 @@ remotes::install_github("sysilviakim/rankingQ", dependencies = TRUE)
 ```
 
 For a full walkthrough, see the [Getting Started
-vignette](http://sysilviakim.com/rankingQ/articles/v1-getting-started.md).
+vignette](https://sysilviakim.com/rankingQ/articles/v1-getting-started.md).
 
 ## Key Features
 
