@@ -28,7 +28,8 @@
 #'   counterfactual preferences match those of non-random respondents.
 #' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param seed Seed for \code{set.seed} for reproducibility.
-#' @param weight A vector of weights. Defaults to NULL.
+#' @param weight The name of the weight column in `data`. Defaults to `NULL`,
+#' which uses equal weights.
 #' @param verbose Indicator for verbose output. Defaults to FALSE.
 #'
 #' @return A list with two elements:
@@ -99,12 +100,7 @@ imprr_direct_rcpp <- function(data,
     )
   }
 
-  if (is.null(weight)) {
-    weight <- rep(1.0, N)
-  }
-  if (length(weight) != N) {
-    stop("weight must have the same length as the number of rows in data.")
-  }
+  weight <- .resolve_weight_vector(data, weight, N)
 
   if (population == "all" && assumption == "uniform") {
     data[[anc_correct]] <- rep(1, N)

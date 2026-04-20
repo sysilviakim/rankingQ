@@ -64,6 +64,38 @@ test_that("imprr_direct validates anc_correct column presence", {
   )
 })
 
+test_that("imprr_direct accepts a weight column name", {
+  identity <- rankingQ::identity
+
+  out <- imprr_direct(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    weight = "s_weight",
+    n_bootstrap = 1,
+    seed = 1
+  )
+
+  expect_equal(nrow(out$results), 44L)
+})
+
+test_that("imprr_direct errors on missing weight column", {
+  identity <- rankingQ::identity
+
+  expect_error(
+    imprr_direct(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      weight = "missing_weight",
+      n_bootstrap = 1
+    ),
+    "weight column not found in data."
+  )
+})
+
 test_that("imprr_direct rejects empty data", {
   identity <- rankingQ::identity[0, ]
 

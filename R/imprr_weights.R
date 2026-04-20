@@ -28,7 +28,8 @@
 #'   uniform counterfactual preferences, while `contaminated` assumes their
 #'   counterfactual preferences match those of non-random respondents.
 #' @param seed Seed for \code{set.seed} for reproducibility.
-#' @param weight A vector of weights. Defaults to NULL.
+#' @param weight The name of the weight column in `data`. Defaults to `NULL`,
+#' which uses equal weights.
 #' @param ranking The name of the column that will store the full ranking
 #' profile. Defaults to "ranking". If `main_q` exists in the data, the produced
 #' column should be identical to `main_q`. However, the function defaults to
@@ -86,12 +87,7 @@ imprr_weights <- function(data,
     )
   }
 
-  if (is.null(weight)) {
-    weight <- rep(1, N)
-  }
-  if (length(weight) != N) {
-    stop("weight must have the same length as the number of rows in data.")
-  }
+  weight <- .resolve_weight_vector(data, weight, N)
   if (!missing(seed) && !is.null(seed)) {
     warning(
       "'seed' is currently ignored because imprr_weights is deterministic."

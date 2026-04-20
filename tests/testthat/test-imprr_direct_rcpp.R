@@ -83,11 +83,8 @@ test_that("imprr_direct_rcpp is faster than imprr_direct", {
   expect_true(time_tidy / time_rcpp > 10)
 })
 
-test_that("imprr_direct_rcpp handles custom weights", {
+test_that("imprr_direct_rcpp accepts a weight column name", {
   data(identity_w)
-
-  # Create some weights
-  weights <- identity_w$w
 
   result <- imprr_direct_rcpp(
     data = identity_w,
@@ -96,14 +93,14 @@ test_that("imprr_direct_rcpp handles custom weights", {
     anc_correct = "anc_correct_identity",
     n_bootstrap = 50,
     seed = 789,
-    weight = weights
+    weight = "w"
   )
 
   expect_type(result, "list")
   expect_true(result$est_p_random$mean >= 0)
 })
 
-test_that("imprr_direct_rcpp errors on malformed weight length", {
+test_that("imprr_direct_rcpp errors on missing weight column", {
   data(identity_w)
 
   expect_error(
@@ -114,9 +111,9 @@ test_that("imprr_direct_rcpp errors on malformed weight length", {
       anc_correct = "anc_correct_identity",
       n_bootstrap = 10,
       seed = 789,
-      weight = 1
+      weight = "missing_weight"
     ),
-    "weight must have the same length as the number of rows in data."
+    "weight column not found in data."
   )
 })
 

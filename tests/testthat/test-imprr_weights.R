@@ -36,6 +36,35 @@ test_that("IPW weights sum to approximately 1", {
   expect_equal(sum(example_ipw$rankings$prop_bc), 1, tolerance = 1e-10)
 })
 
+test_that("imprr_weights accepts a weight column name", {
+  identity <- rankingQ::identity
+
+  out <- imprr_weights(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    weight = "s_weight"
+  )
+
+  expect_true("weights" %in% names(out$results))
+})
+
+test_that("imprr_weights errors on missing weight column", {
+  identity <- rankingQ::identity
+
+  expect_error(
+    imprr_weights(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      weight = "missing_weight"
+    ),
+    "weight column not found in data."
+  )
+})
+
 test_that("imprr_weights errors when estimated non-random rate is too small", {
   bad <- data.frame(
     q_1 = c(1, 1, 1, 1),
