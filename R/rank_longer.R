@@ -32,7 +32,7 @@
 #' @importFrom tidyr pivot_longer pivot_wider separate_wider_position
 #' @importFrom tidyselect any_of all_of
 #'
-#' @return A data frame in long format with columns recording rankings.
+#' @returns A data frame in long format with columns recording rankings.
 #' The first column is the id variable that has been pre-specified.
 #' The second and third columns record what item is being ranked.
 #' The final column records the ranking of the item.
@@ -203,7 +203,7 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
 #' @param ranking_name The name of the output column when
 #' \code{output = "single"}. Defaults to \code{"ranking"}.
 #'
-#' @return A data frame in wide format with one row per respondent.
+#' @returns A data frame in wide format with one row per respondent.
 #'
 #' @importFrom dplyr `%>%` arrange select
 #' @importFrom tidyr pivot_wider

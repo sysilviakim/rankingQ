@@ -35,7 +35,7 @@
 #'
 #' @importFrom stats rmultinom
 #'
-#' @return A data frame of rankings of t items for n assessors.
+#' @returns A data frame of rankings of t items for n assessors.
 #'
 #' @examples
 #' rpluce(n = 10, t = 3, prob = c(0.5, 0.3, 0.2), seed = 123)

@@ -9,7 +9,14 @@
 #' @param var The variable within \code{data} to be used in the test.
 #' Defaults to NULL.
 #'
-#' @return A chi-square test result.
+#' @returns A chi-square test result.
+#'
+#' @examples
+#' tab <- table(c(
+#'   rep("123", 10), rep("132", 10), rep("213", 10),
+#'   rep("231", 10), rep("312", 10), rep("321", 10)
+#' ))
+#' uniformity_test(tab)
 #'
 #' @export
 

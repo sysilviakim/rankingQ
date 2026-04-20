@@ -18,7 +18,7 @@
 #' @param long Whether to return the output in a long data format.
 #' Default is `FALSE`.
 #'
-#' @return A data frame with items that are being ranked as columns,
+#' @returns A data frame with items that are being ranked as columns,
 #' with rankings in cell values.
 #'
 #' @importFrom tidyr pivot_longer

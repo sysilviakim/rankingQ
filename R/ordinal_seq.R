@@ -7,7 +7,7 @@
 #'
 #' @param length The length of the ordinal sequence to generate.
 #' It should be a numeric value of length 1.
-#' @return A vector of ordinal strings.
+#' @returns A vector of ordinal strings.
 #'
 #' @examples
 #' ordinal_seq(11)

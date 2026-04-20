@@ -40,7 +40,7 @@
 #'   When supplied, this overrides `anc_correct` and a message is shown if both
 #'   are provided.
 #'
-#' @return A list with three elements:
+#' @returns A list with three elements:
 #' \describe{
 #'   \item{est_p_random}{A numeric value representing the estimated proportion
 #'     of random responses.}
@@ -51,6 +51,15 @@
 #'     (\code{prop_obs}), bias-corrected proportions (\code{prop_bc}), and
 #'     inverse probability weights (\code{weights}) for each permutation.}
 #' }
+#'
+#' @examples
+#' out <- imprr_weights(
+#'   identity,
+#'   main_q = "app_identity",
+#'   anc_correct = "anc_correct_identity"
+#' )
+#' head(out$results)
+#' head(out$rankings)
 #'
 #' @export
 

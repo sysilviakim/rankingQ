@@ -9,7 +9,7 @@
 #' @param tibble A logical value indicating whether the output should be
 #' a tibble or data frame. Default is \code{TRUE}.
 #'
-#' @return A tibble or data frame, depending on the \code{tibble} argument.
+#' @returns A tibble or data frame, depending on the \code{tibble} argument.
 #'
 #' @importFrom tibble enframe
 #' @importFrom dplyr mutate

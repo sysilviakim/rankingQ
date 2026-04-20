@@ -18,9 +18,19 @@
 #' string.
 #' @param ylab The y-axis label. Defaults to an empty string.
 #'
-#' @return A ggplot object.
+#' @returns A ggplot object.
 #'
 #' @importFrom ggplot2 ggplot aes geom_point geom_linerange theme_bw xlab ylab
+#'
+#' @examples
+#' avg_rank_results <- data.frame(
+#'   item = c("Party", "Religion", "Gender", "Race"),
+#'   qoi = rep("average rank", 4),
+#'   mean = c(1.7, 2.1, 2.8, 3.4),
+#'   lower = c(1.5, 1.9, 2.6, 3.2),
+#'   upper = c(1.9, 2.3, 3.0, 3.6)
+#' )
+#' plot_avg_ranking(avg_rank_results)
 #'
 #' @export
 #'

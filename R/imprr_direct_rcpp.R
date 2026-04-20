@@ -38,12 +38,23 @@
 #'   When supplied, this overrides `anc_correct` and a message is shown if both
 #'   are provided.
 #'
-#' @return A list with two elements:
+#' @returns A list with two elements:
 #'   \item{est_p_random}{Summary statistics for the estimated proportion of
 #'     random respondents (mean, lower, upper)}
 #'   \item{results}{A tibble with bias-corrected estimates for all items,
 #'     including average ranks, pairwise probabilities, top-k probabilities,
 #'     and marginal probabilities}
+#'
+#' @examples
+#' out <- imprr_direct_rcpp(
+#'   identity,
+#'   main_q = "app_identity",
+#'   anc_correct = "anc_correct_identity",
+#'   n_bootstrap = 1,
+#'   seed = 123
+#' )
+#' out$est_p_random
+#' head(out$results)
 #'
 #' @export
 

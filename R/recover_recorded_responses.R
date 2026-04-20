@@ -28,7 +28,7 @@
 #' @importFrom dplyr `%>%`
 #' @importFrom purrr map
 #'
-#' @return A data frame with the true ranking of the items per respondent.
+#' @returns A data frame with the true ranking of the items per respondent.
 #'
 #' @examples
 #'

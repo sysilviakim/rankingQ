@@ -25,7 +25,7 @@
 #' @param round The number of decimal places to round the output to.
 #' Defaults to \code{NULL}.
 #'
-#' @return A data frame with the average rank of each item in the
+#' @returns A data frame with the average rank of each item in the
 #' reference choice set.
 #'
 #' @importFrom dplyr group_by summarise across everything `%>%` mutate

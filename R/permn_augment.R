@@ -302,7 +302,7 @@
 #' @importFrom purrr map
 #' @importFrom combinat permn
 #'
-#' @return A table of observed permutation patterns augmented with all possible
+#' @returns A table of observed permutation patterns augmented with all possible
 #' permutation patterns.
 #'
 #' @examples

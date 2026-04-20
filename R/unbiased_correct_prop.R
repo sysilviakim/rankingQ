@@ -8,7 +8,7 @@
 #' @param mean_c This is the raw proportion of the correct answers.
 #' @param J The number of items to rank order.
 #'
-#' @return A number between 0-1.
+#' @returns A number between 0-1.
 #'
 #' @examples
 #' unbiased_correct_prop(0.7, 3)

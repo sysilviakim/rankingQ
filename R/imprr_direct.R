@@ -36,7 +36,7 @@
 #'   When supplied, this overrides `anc_correct` and a message is shown if both
 #'   are provided.
 #'
-#' @return A list with two elements:
+#' @returns A list with two elements:
 #' \describe{
 #'   \item{est_p_random}{A data frame with summary statistics for the
 #'     estimated proportion of random respondents, including columns
@@ -45,6 +45,17 @@
 #'     \code{item}, \code{qoi} (quantity of interest), and \code{outcome},
 #'     including columns \code{mean}, \code{lower}, and \code{upper}.}
 #' }
+#'
+#' @examples
+#' out <- imprr_direct(
+#'   identity,
+#'   main_q = "app_identity",
+#'   anc_correct = "anc_correct_identity",
+#'   n_bootstrap = 1,
+#'   seed = 123
+#' )
+#' out$est_p_random
+#' head(out$results)
 #'
 #' @export
 

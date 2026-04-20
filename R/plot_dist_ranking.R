@@ -23,7 +23,7 @@
 #' @param h_color The color in `geom_hline`.
 #' @param h_alpha The transparency in `geom_hline`.
 #'
-#' @return A ggplot2 object.
+#' @returns A ggplot2 object.
 #'
 #' @examples
 #' tab <- lapply(combinat::permn(seq(3)), paste0, collapse = "") |>
