@@ -230,6 +230,35 @@ test_that("stratified_avg infers J and is reproducible with the same seed", {
   expect_setequal(as.character(unique(out1$item)), paste0("app_identity_", 1:4))
 })
 
+test_that("stratified_avg infers J when the first main_q value is NA", {
+  identity <- rankingQ::identity
+  set.seed(10)
+  identity$test_stratum <- sample(c("group1", "group2"), nrow(identity), TRUE)
+  identity$app_identity[1] <- NA_character_
+
+  out_inferred <- suppressMessages(stratified_avg(
+    data = identity,
+    var_stratum = "test_stratum",
+    J = NULL,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    n_bootstrap = 1,
+    seed = 321
+  ))
+
+  out_explicit <- suppressMessages(stratified_avg(
+    data = identity,
+    var_stratum = "test_stratum",
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    n_bootstrap = 1,
+    seed = 321
+  ))
+
+  expect_identical(out_inferred, out_explicit)
+})
+
 test_that("stratified_avg emits the equal-weights message only once", {
   identity <- rankingQ::identity
   set.seed(7)

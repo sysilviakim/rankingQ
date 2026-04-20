@@ -151,6 +151,47 @@ test_that("imprr_weights errors on missing weight column", {
   )
 })
 
+test_that("imprr_weights rejects invalid weight values", {
+  toy <- data.frame(
+    q_1 = c(1, 2, 1, 2),
+    q_2 = c(2, 1, 2, 1),
+    anc = c(1, 1, 1, 1),
+    bad_w = c(1, -1, 1, 1),
+    inf_w = c(Inf, 1, 1, 1)
+  )
+
+  expect_error(
+    imprr_weights(
+      toy,
+      J = 2,
+      main_q = "q",
+      anc_correct = "anc",
+      weight = "bad_w"
+    ),
+    "weight values cannot be negative."
+  )
+  expect_error(
+    imprr_weights(
+      toy,
+      J = 2,
+      main_q = "q",
+      anc_correct = "anc",
+      weight = "inf_w"
+    ),
+    "weight values must be finite and non-missing."
+  )
+  expect_error(
+    imprr_weights(
+      toy,
+      J = 2,
+      main_q = "q",
+      anc_correct = "anc",
+      weight = c(0, 0, 0, 0)
+    ),
+    "weight values must sum to a positive number."
+  )
+})
+
 test_that("imprr_weights validates missing anc_correct and empty data clearly", {
   identity <- rankingQ::identity
 
@@ -189,6 +230,29 @@ test_that("imprr_weights validates J inference requirements clearly", {
     ),
     "When J is NULL, main_q must exist as a column in data so J can be inferred."
   )
+})
+
+test_that("imprr_weights infers J when the first main_q value is NA", {
+  identity <- rankingQ::identity
+  identity$app_identity[1] <- NA_character_
+
+  out_inferred <- imprr_weights(
+    identity,
+    J = NULL,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity"
+  )
+
+  out_explicit <- imprr_weights(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity"
+  )
+
+  expect_equal(out_inferred$est_p_random, out_explicit$est_p_random)
+  expect_equal(out_inferred$rankings, out_explicit$rankings)
+  expect_equal(out_inferred$results, out_explicit$results)
 })
 
 test_that("imprr_weights no longer accepts seed", {
