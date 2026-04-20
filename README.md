@@ -1,14 +1,15 @@
-# `rankingQ`: Design-Based Methods for Improving Ranking Questions <img src="man/figures/logo.png" align="right" width="150"/>
+# `rankingQ`: Design-Based Methods for Improving Ranking Questions
+<img src="man/figures/logo.png" align="right" width="150"/>
 
 [![DOI](https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue)](https://doi.org/10.1017/pan.2024.33)
 
 ## Overview
 
-Survey ranking questions are prone to random responses — respondents who answer carelessly or arbitrarily. `rankingQ` corrects for this measurement error using anchor-ranking items, enabling unbiased estimates of ranking-based quantities like average ranks, marginal rank probabilities, and pairwise preferences.
+Survey ranking questions are prone to random responses, where respondents answer carelessly or arbitrarily. `rankingQ` corrects this measurement error using anchor-ranking items, enabling unbiased estimates of ranking-based quantities such as average ranks, marginal rank probabilities, and pairwise preferences.
 
-`rankingQ` implements design-based methods for correcting measurement error in survey ranking questions caused by random responses. It supports non-parametric and parametric estimation of ranking-based quantities of interest, and provides tools for bias detection and anchor-ranking question assessment.
+`rankingQ` implements design-based methods for correcting measurement error in survey ranking questions caused by random responding. It provides direct bias correction, inverse-probability weighting (IPW), visualization helpers, and diagnostics for assessing anchor-ranking questions.
 
-For the underlying methodology, see [Atsusaka and Kim (2025)](https://doi.org/10.1017/pan.2024.33). "Addressing Measurement Errors in Ranking Questions for the Social Sciences." *Political Analysis* Volume 33, Issue 4, October 2025, pp. 339–360. Please visit the [package site](https://sysilviakim.com/rankingQ/) for all vignettes and references.
+For the underlying methodology, see [Atsusaka and Kim (2025)](https://doi.org/10.1017/pan.2024.33), "Addressing Measurement Errors in Ranking Questions for the Social Sciences," *Political Analysis*, 33(4), 339-360. Visit the [package site](https://sysilviakim.com/rankingQ/) for vignettes and references.
 
 ## Installation
 
@@ -20,54 +21,30 @@ remotes::install_github("sysilviakim/rankingQ", dependencies = TRUE)
 
 ## Key Features
 
--   **Bias correction via plug-in estimator** (`imprr_direct`): estimates average ranks, marginal rank probabilities, pairwise preferences, and top-k rankings with confidence intervals
--   **Bias correction via IPW** (`imprr_weights`): reweights observed ranking distributions to correct for random responses
--   **Visualization** (`plot_avg_ranking`): plots corrected average rankings with uncertainty bounds
--   **Diagnostics**: tools for detecting bias and assessing the anchor-ranking question
+- **Bias correction via plug-in estimator** (`imprr_direct`): estimates average ranks, marginal rank probabilities, pairwise preferences, and top-k rankings with confidence intervals
+- **Bias correction via IPW** (`imprr_weights`): reweights observed ranking distributions to correct for random responses
+- **Visualization** (`plot_avg_ranking`): plots corrected average rankings with uncertainty bounds
+- **Diagnostics**: tools for detecting bias and assessing anchor-ranking questions
 
 ## Example
 
-The following is a simplified example of how this package can be used. For a full demonstration, visit <https://sysilviakim.com/rankingQ/>.
+The following is a simplified example of how the package can be used. For a fuller demonstration, visit [sysilviakim.com/rankingQ](https://sysilviakim.com/rankingQ/).
 
 ``` r
+library(rankingQ)
+
 data("identity")
 
 head(identity)
-# # A tibble: 6 × 16
-#   s_weight app_identity app_identity_1 app_identity_2 app_identity_3 app_identity_4
-#      <dbl> <chr>                 <dbl>          <dbl>          <dbl>          <dbl>
-# 1    0.844 1423                      1              4              2              3
-# 2    0.886 1423                      1              4              2              3
-# 3    2.96  3412                      3              4              1              2
-# 4    0.987 1423                      1              4              2              3
-# 5    1.76  4132                      4              1              3              2
-# 6    0.469 3124                      3              1              2              4
 
-
-# Perform bias correction via plug-in estimator
+# Perform bias correction via the plug-in estimator
 out_direct <- imprr_direct(
   data = identity,
   J = 4,
   main_q = "app_identity",
   anc_correct = "anc_correct_identity",
-  weight = identity$w_weight
+  weight = "s_weight"
 )
-
-out_direct$results
-# # A tibble: 44 × 6
-# # Groups:   item, qoi [16]
-#    item           qoi            outcome   mean  lower  upper
-#    <chr>          <chr>          <chr>    <dbl>  <dbl>  <dbl>
-#  1 app_identity_1 average rank   Avg: a… 3.27   3.24   3.33
-#  2 app_identity_1 marginal rank… Ranked… 0.0407 0.0232 0.0496
-#  3 app_identity_1 marginal rank… Ranked… 0.150  0.137  0.163
-#  4 app_identity_1 marginal rank… Ranked… 0.305  0.275  0.336
-#  5 app_identity_1 marginal rank… Ranked… 0.504  0.475  0.541
-#  6 app_identity_1 pairwise rank… v. app… 0.357  0.333  0.374
-#  7 app_identity_1 pairwise rank… v. app… 0.108  0.0739 0.136
-#  8 app_identity_1 pairwise rank… v. app… 0.262  0.238  0.284
-#  9 app_identity_1 top-k ranking  Top-1   0.0407 0.0232 0.0496
-# 10 app_identity_1 top-k ranking  Top-2   0.306  0.291  0.339
 
 # Perform bias correction via inverse-probability weighting (IPW)
 out_weights <- imprr_weights(
@@ -79,8 +56,53 @@ out_weights <- imprr_weights(
 ```
 
 <details>
+<summary>View <code>head(identity)</code> output</summary>
 
-<summary>View <code>out_weights\$rankings</code> output</summary>
+``` r
+head(identity)
+# A tibble: 6 x 16
+#   s_weight app_identity app_identity_1 app_identity_2 app_identity_3
+#      <dbl> <chr>                 <dbl>          <dbl>          <dbl>
+# 1    0.844 1423                      1              4              2
+# 2    0.886 1423                      1              4              2
+# 3    2.96  3412                      3              4              1
+# 4    0.987 1423                      1              4              2
+# 5    1.76  4132                      4              1              3
+# 6    0.469 3124                      3              1              2
+# ... with 11 more variables: app_identity_4 <dbl>, anc_identity <chr>,
+#   anc_identity_1 <dbl>, anc_identity_2 <dbl>, anc_identity_3 <dbl>,
+#   anc_identity_4 <dbl>, anc_correct_identity <dbl>,
+#   app_identity_recorded <chr>, anc_identity_recorded <chr>,
+#   app_identity_row_rnd <chr>, anc_identity_row_rnd <chr>
+```
+
+</details>
+
+<details>
+<summary>View <code>head(out_direct$results, 10)</code> output</summary>
+
+``` r
+head(out_direct$results, 10)
+# A tibble: 10 x 6
+# Groups:   item, qoi [4]
+#    item           qoi              outcome               mean   lower  upper
+#    <chr>          <chr>            <chr>                <dbl>   <dbl>  <dbl>
+#  1 app_identity_1 average rank     Avg: app_identity_1 3.27   3.13    3.40
+#  2 app_identity_1 marginal ranking Ranked 1            0.0512 0.00568 0.0958
+#  3 app_identity_1 marginal ranking Ranked 2            0.132  0.0863  0.178
+#  4 app_identity_1 marginal ranking Ranked 3            0.310  0.263   0.371
+#  5 app_identity_1 marginal ranking Ranked 4            0.507  0.452   0.573
+#  6 app_identity_1 pairwise ranking v. app_identity_2   0.361  0.302   0.420
+#  7 app_identity_1 pairwise ranking v. app_identity_3   0.107  0.0428  0.165
+#  8 app_identity_1 pairwise ranking v. app_identity_4   0.260  0.196   0.315
+#  9 app_identity_1 top-k ranking    Top-1               0.0512 0.00568 0.0958
+# 10 app_identity_1 top-k ranking    Top-2               0.183  0.115   0.243
+```
+
+</details>
+
+<details>
+<summary>View <code>head(out_weights$rankings)</code> output</summary>
 
 ``` r
 head(out_weights$rankings)
@@ -95,11 +117,13 @@ head(out_weights$rankings)
 
 </details>
 
+The `out_weights$results` data frame includes a `weights` column that can be reused in downstream analyses such as `avg_rank(..., raw = FALSE, weight = "weights")`.
+
 ## Citation
 
 If you use `rankingQ`, please cite:
 
-> Atsusaka, Yuki and Seo-young Silvia Kim (2025). "Addressing Measurement Errors in Ranking Questions for the Social Sciences." *Political Analysis* 33(4): 339–360. <https://doi.org/10.1017/pan.2024.33>
+> Atsusaka, Yuki, and Seo-young Silvia Kim. 2025. "Addressing Measurement Errors in Ranking Questions for the Social Sciences." *Political Analysis* 33(4): 339-360. <https://doi.org/10.1017/pan.2024.33>
 
 ``` bibtex
 @article{atsusaka2025,
