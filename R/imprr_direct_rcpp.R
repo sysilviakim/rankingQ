@@ -22,8 +22,10 @@
 #' @param anc_correct Indicator for passing the anchor question.
 #' @param population Choice of the target population out of
 #' non-random respondents (default) or all respondents.
-#' @param assumption Choice of the identifying assumption if `population` is
-#' set to all
+#' @param assumption Choice of identifying assumption when
+#'   `population = "all"`: `uniform` assumes random respondents would have
+#'   uniform counterfactual preferences, while `contaminated` assumes their
+#'   counterfactual preferences match those of non-random respondents.
 #' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param seed Seed for \code{set.seed} for reproducibility.
 #' @param weight A vector of weights. Defaults to NULL.
@@ -66,6 +68,9 @@ imprr_direct_rcpp <- function(data,
   if (!(anc_correct %in% names(data))) {
     stop("anc_correct column not found in data.")
   }
+  normalized_args <- .normalize_population_args(population, assumption)
+  population <- normalized_args$population
+  assumption <- normalized_args$assumption
   if (!is.numeric(n_bootstrap) || length(n_bootstrap) != 1 ||
       is.na(n_bootstrap) || n_bootstrap < 1 ||
       n_bootstrap != as.integer(n_bootstrap)) {
@@ -104,6 +109,7 @@ imprr_direct_rcpp <- function(data,
   if (population == "all" && assumption == "uniform") {
     data[[anc_correct]] <- rep(1, N)
   }
+  # Under contaminated sampling, theta for the full population equals theta_z.
 
   # Pre-compute constants
   J_1 <- J - 1

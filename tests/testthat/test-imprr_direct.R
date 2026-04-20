@@ -84,3 +84,99 @@ test_that("imprr_direct uses exact ranking column names", {
 
   expect_equal(sort(unique(out$results$item)), c("q1_1", "q1_2"))
 })
+
+test_that("imprr_direct validates population and assumption inputs", {
+  identity <- rankingQ::identity
+
+  expect_error(
+    imprr_direct(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      population = "oops",
+      n_bootstrap = 1
+    ),
+    "population must be one of:"
+  )
+
+  expect_error(
+    imprr_direct(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      population = "all",
+      assumption = "oops",
+      n_bootstrap = 1
+    ),
+    "assumption must be one of:"
+  )
+
+  expect_error(
+    imprr_direct(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      population = "non-random",
+      assumption = "uniform",
+      n_bootstrap = 1
+    ),
+    "assumption is only used when population = 'all'"
+  )
+})
+
+test_that("imprr_direct all-population contaminated matches default target", {
+  identity <- rankingQ::identity
+
+  out_default <- imprr_direct(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    n_bootstrap = 10,
+    seed = 123
+  )
+
+  out_contaminated <- imprr_direct(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    population = "all",
+    assumption = "contaminated",
+    n_bootstrap = 10,
+    seed = 123
+  )
+
+  expect_equal(out_contaminated$est_p_random, out_default$est_p_random)
+  expect_equal(out_contaminated$results, out_default$results)
+})
+
+test_that("imprr_direct accepts common input variants", {
+  identity <- rankingQ::identity
+
+  out_default <- imprr_direct(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    n_bootstrap = 10,
+    seed = 123
+  )
+
+  out_variant <- imprr_direct(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    population = "Non random",
+    assumption = "Contaminate",
+    n_bootstrap = 10,
+    seed = 123
+  )
+
+  expect_equal(out_variant$est_p_random, out_default$est_p_random)
+  expect_equal(out_variant$results, out_default$results)
+})

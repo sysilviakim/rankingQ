@@ -72,3 +72,90 @@ test_that("imprr_weights uses exact ranking column names", {
 
   expect_equal(out$results$ranking, c("21", "12", "21", "12"))
 })
+
+test_that("imprr_weights validates population and assumption inputs", {
+  identity <- rankingQ::identity
+
+  expect_error(
+    imprr_weights(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      population = "oops"
+    ),
+    "population must be one of:"
+  )
+
+  expect_error(
+    imprr_weights(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      population = "all",
+      assumption = "oops"
+    ),
+    "assumption must be one of:"
+  )
+
+  expect_error(
+    imprr_weights(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      population = "non-random",
+      assumption = "uniform"
+    ),
+    "assumption is only used when population = 'all'"
+  )
+})
+
+test_that("imprr_weights all-population contaminated matches default target", {
+  identity <- rankingQ::identity
+
+  out_default <- imprr_weights(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity"
+  )
+
+  out_contaminated <- imprr_weights(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    population = "all",
+    assumption = "contaminated"
+  )
+
+  expect_equal(out_contaminated$est_p_random, out_default$est_p_random)
+  expect_equal(out_contaminated$rankings, out_default$rankings)
+  expect_equal(out_contaminated$results, out_default$results)
+})
+
+test_that("imprr_weights accepts common input variants", {
+  identity <- rankingQ::identity
+
+  out_default <- imprr_weights(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity"
+  )
+
+  out_variant <- imprr_weights(
+    identity,
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    population = "Non random",
+    assumption = "Contaminate"
+  )
+
+  expect_equal(out_variant$est_p_random, out_default$est_p_random)
+  expect_equal(out_variant$rankings, out_default$rankings)
+  expect_equal(out_variant$results, out_default$results)
+})

@@ -23,8 +23,10 @@
 #' @param anc_correct Indicator for passing the anchor question.
 #' @param population Choice of the target population out of
 #' non-random respondents (default) or all respondents.
-#' @param assumption Choice of the identifying assumption if
-#'   `population` is set to all
+#' @param assumption Choice of identifying assumption when
+#'   `population = "all"`: `uniform` assumes random respondents would have
+#'   uniform counterfactual preferences, while `contaminated` assumes their
+#'   counterfactual preferences match those of non-random respondents.
 #' @param seed Seed for \code{set.seed} for reproducibility.
 #' @param weight A vector of weights. Defaults to NULL.
 #' @param ranking The name of the column that will store the full ranking
@@ -69,6 +71,9 @@ imprr_weights <- function(data,
 
   # Setup ======================================================================
   N <- nrow(data)
+  normalized_args <- .normalize_population_args(population, assumption)
+  population <- normalized_args$population
+  assumption <- normalized_args$assumption
   if (is.null(J)) {
     J <- nchar(data[[main_q]][[1]])
   }
@@ -93,9 +98,10 @@ imprr_weights <- function(data,
     )
   }
 
-  if (population == "all" & assumption == "uniform") {
+  if (population == "all" && assumption == "uniform") {
     data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
   }
+  # Under contaminated sampling, theta for the full population equals theta_z.
 
   # Pre-compute factorial for efficiency
   J_factorial <- factorial(J)
