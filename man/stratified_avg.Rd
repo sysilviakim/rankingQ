@@ -28,7 +28,11 @@ stratifying variable.}
 \item{J}{The number of items in the ranking question. Defaults to NULL,
 in which case it will be inferred from the data.}
 
-\item{main_q}{Column name for the main ranking question to be analyzed.}
+\item{main_q}{Main ranking question specification. This can be a single
+column name or unquoted symbol such as `app_identity`, in which case the
+function looks for `app_identity_1`, `app_identity_2`, and so on. You may
+also supply `main_q` directly as a character vector or unquoted `c(...)`
+expression of ranking columns.}
 
 \item{anc_correct}{Optional indicator for passing the anchor question.
 If `NULL`, `p_random` is used when supplied; otherwise the function
@@ -39,8 +43,9 @@ Defaults to NULL.}
 
 \item{seed}{Seed for \code{set.seed} for reproducibility.}
 
-\item{weight}{Either a numeric vector of weights with length `nrow(data)`
-or the name of a weight column in `data`. Defaults to `NULL`.}
+\item{weight}{Either a numeric vector of weights with length `nrow(data)`,
+the name of a weight column in `data`, or an unquoted weight column name.
+Defaults to `NULL`.}
 
 \item{n_bootstrap}{Number of bootstraps. Defaults to 200.}
 

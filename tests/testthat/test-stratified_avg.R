@@ -91,7 +91,7 @@ test_that("stratified_avg errors on non-character anc_correct", {
       main_q      = "app_identity",
       anc_correct = 123
     ),
-    "anc_correct must be a character."
+    "anc_correct must be a single column name."
   )
 })
 

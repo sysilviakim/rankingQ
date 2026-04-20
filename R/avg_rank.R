@@ -71,8 +71,9 @@ avg_rank <- function(x,
                      weight = NULL,
                      round = NULL) {
   ## Suppress "no visible binding for global variable" warnings
-  . <- item <- lower <- upper <- se <- variable <- method <- std.error <-
-    estimate <- conf.low <- conf.high <- outcome <- qoi <- NULL
+  . <- item <- item_name <- ranking <- lower <- upper <- se <- variable <-
+    method <- std.error <- estimate <- conf.low <- conf.high <- outcome <-
+    qoi <- NULL
 
   count_items <- function(items) {
     if (is.data.frame(items)) {
