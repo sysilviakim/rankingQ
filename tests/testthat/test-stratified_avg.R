@@ -95,6 +95,26 @@ test_that("stratified_avg errors on non-character anc_correct", {
   )
 })
 
+test_that("stratified_avg works without anc_correct when p_random is fixed", {
+  identity <- rankingQ::identity
+  set.seed(8)
+  identity$test_stratum <- sample(c("group1", "group2"), nrow(identity), TRUE)
+
+  result <- suppressMessages(stratified_avg(
+    data = identity,
+    var_stratum = "test_stratum",
+    J = 4,
+    main_q = "app_identity",
+    p_random = 0,
+    n_bootstrap = 1,
+    seed = 123
+  ))
+
+  expect_s3_class(result, "data.frame")
+  expect_equal(nrow(result), 4L)
+  expect_false(anyNA(result$mean))
+})
+
 test_that("stratified_avg uses provided weight vector", {
   identity <- rankingQ::identity
   set.seed(2)

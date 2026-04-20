@@ -1,14 +1,14 @@
 # Test uniformity_test function
 
-test_that("uniformity_test works with table input", {
-  # Create a uniform-ish table
+test_that("uniformity_test does not reject perfectly uniform input", {
   tab <- table(c(
     rep("123", 10), rep("132", 10), rep("213", 10),
     rep("231", 10), rep("312", 10), rep("321", 10)
   ))
   result <- uniformity_test(tab)
   expect_s3_class(result, "htest")
-  expect_equal(result$statistic[[1]], 0) # Should be 0 for uniform
+  expect_equal(result$statistic[[1]], 0)
+  expect_gte(result$p.value, 0.05)
 })
 
 test_that("uniformity_test warns when var is given with table input", {
