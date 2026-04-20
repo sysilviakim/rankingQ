@@ -1,0 +1,149 @@
+---
+title: "1. Getting Started"
+author: "Yuki Atsusaka and Seo-young Silvia Kim"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{1. Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette introduces the main `rankingQ` workflow using the
+`identity` dataset. The package is designed for ranking questions that
+may contain random responses and uses an anchor-ranking question to
+estimate and correct the resulting measurement error.
+
+```{r setup, message = FALSE, warning = FALSE}
+library(rankingQ)
+library(dplyr)
+
+data(identity)
+```
+
+## The Example Data
+
+The `identity` dataset contains a main ranking question about four
+sources of identity and an anchor-ranking question with a known correct
+ordering. It also includes the survey weight `s_weight`.
+
+```{r}
+identity |>
+  select(
+    s_weight,
+    app_identity,
+    starts_with("app_identity_"),
+    anc_correct_identity
+  ) |>
+  head()
+```
+
+The `app_identity` columns describe the ranking question of interest,
+while `anc_correct_identity` indicates whether each respondent answered
+the anchor question correctly.
+
+## Direct Bias Correction
+
+The `imprr_direct` function directly estimates bias-corrected quantities
+of interest such as average ranks, pairwise ranking probabilities,
+top-k probabilities, and marginal rank probabilities.
+
+```{r}
+out_direct <- imprr_direct(
+  data = identity,
+  J = 4,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity",
+  weight = "s_weight"
+)
+```
+
+The first output summarizes the estimated proportion of random
+responses.
+
+```{r}
+out_direct$est_p_random
+```
+
+The second output contains several corrected ranking-based quantities of
+interest. For a first pass, average ranks are often the easiest place to
+start.
+
+```{r}
+out_direct$results |>
+  filter(qoi == "average rank")
+```
+
+## Inverse-Probability Weighting
+
+The `imprr_weights` function instead produces respondent-level weights
+that can be used in downstream analyses.
+
+```{r}
+out_weights <- imprr_weights(
+  data = identity,
+  J = 4,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity",
+  weight = "s_weight"
+)
+```
+
+One output gives the bias-correction weight assigned to each possible
+ranking profile.
+
+```{r}
+out_weights$rankings |>
+  select(ranking, weights) |>
+  head()
+```
+
+The respondent-level output keeps the original data and appends a
+`weights` column along with a unified `ranking` column.
+
+```{r}
+out_weights$results |>
+  select(weights, s_weight, app_identity, ranking) |>
+  head()
+```
+
+## Using the IPW Weights
+
+The IPW-adjusted respondent-level data can be passed to downstream
+helpers such as `avg_rank`.
+
+```{r}
+items_df <- data.frame(
+  variable = paste0("app_identity_", 1:4),
+  item = c("Party", "Religion", "Gender", "Race")
+)
+
+avg_rank(
+  out_weights$results,
+  items = items_df,
+  weight = "weights",
+  raw = FALSE
+)
+```
+
+## Next Steps
+
+The remaining vignettes go into more detail on specific parts of the
+workflow:
+
+1. `2. Basic Setup` describes the expected input data structure.
+2. `3. Correcting Bias in Ranking Data` covers the correction methods in
+   more depth.
+3. `4. Analysis of Bias-corrected Ranking Data` shows downstream
+   analysis with corrected weights.
+4. `5. Visualizing Rankings` introduces the plotting helpers.
+5. `6. Uniformity Tests` covers diagnostics when anchor questions are
+   unavailable or need validation.
+6. `7. Simulating Ranking Data` describes the data-generation helper
+   `rpluce`.

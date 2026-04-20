@@ -1,9 +1,9 @@
 ---
-title: "4. Visualizing Rankings"
+title: "5. Visualizing Rankings"
 author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{4. Visualizing Rankings}
+  %\VignetteIndexEntry{5. Visualizing Rankings}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,7 +15,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-The following code chunk shows how to plot the distribution of ranking profiles. This can help eyeball whether the ranking data is uniformly distributed, which can of course be formally tested.
+The following code chunk shows how to plot the distribution of ranking
+profiles. This can help eyeball whether the ranking data is uniformly
+distributed, which can of course be formally tested.
 
 ```{r}
 library(combinat)
@@ -32,7 +34,8 @@ plot_dist_ranking(tab, ylim = 0.5)
 
 ## Visualizing Average Ranks
 
-The `plot_avg_ranking` function creates a visualization of average ranks with confidence intervals:
+The `plot_avg_ranking` function creates a visualization of average
+ranks with confidence intervals:
 
 ```{r}
 data(identity)

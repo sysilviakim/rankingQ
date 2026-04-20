@@ -1,9 +1,9 @@
 ---
-title: "3. Analysis of Bias-corrected Ranking Data"
+title: "4. Analysis of Bias-corrected Ranking Data"
 author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{3. Analysis of Bias-corrected Ranking Data}
+  %\VignetteIndexEntry{4. Analysis of Bias-corrected Ranking Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,7 +21,9 @@ library(estimatr)
 data(identity_w)
 ```
 
-The estimated weights from `imprr_weights` can be used to perform any analyses. For example, to estimate the average rank of party, one can leverage linear regression as follows:
+The estimated weights from `imprr_weights` can be used to perform any
+analyses. For example, to estimate the average rank of party, one can
+leverage linear regression as follows:
 
 ```{r}
 lm_robust(
@@ -32,11 +34,17 @@ lm_robust(
   tidy()
 ```
 
-While this illustrative example provides a valid point estimate, its confidence interval does not account for the estimation uncertainty around the estimated weights. Thus, in practice, `imprr_weights` must be used along with bootstrapping, such as the one available in `rsample` ([example](https://declaredesign.org/r/estimatr/articles/estimatr-in-the-tidyverse.html#bootstrap-using-rsample)).
+While this illustrative example provides a valid point estimate, its
+confidence interval does not account for the estimation uncertainty
+around the estimated weights. Thus, in practice, `imprr_weights` must
+be used along with bootstrapping, such as the one available in
+`rsample`; see the article below for an example:
+https://declaredesign.org/r/estimatr/articles/estimatr-in-the-tidyverse.html
 
 ## Computing Average Ranks
 
-The `avg_rank` function provides a convenient way to compute average ranks for all items:
+The `avg_rank` function provides a convenient way to compute average
+ranks for all items:
 
 ```{r}
 # Raw average ranks (without bias correction)
@@ -46,7 +54,8 @@ avg_rank(identity_w,
 )
 ```
 
-For bias-corrected estimates using IPW weights, use the marginal ranking columns:
+For bias-corrected estimates using IPW weights, use the marginal
+ranking columns:
 
 ```{r}
 # IPW-corrected average ranks

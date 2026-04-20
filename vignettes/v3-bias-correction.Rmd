@@ -1,9 +1,9 @@
 ---
-title: "2. Correcting Bias in Ranking Data"
+title: "3. Correcting Bias in Ranking Data"
 author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{2. Correcting Bias in Ranking Data}
+  %\VignetteIndexEntry{3. Correcting Bias in Ranking Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,12 +20,17 @@ library(tidyr)
 
 ## Estimating the Proportion of Random Responses
 
-In the `identity` dataset, given `anc_correct_identity`, the raw proportion of those who have correctly or incorrectly answered the anchor question is as follows:
+In the `identity` dataset, given `anc_correct_identity`, the raw
+proportion of those who have correctly or incorrectly answered the
+anchor question is as follows:
 
 ```{r}
 round(prop.table(table(identity$anc_correct_identity)) * 100, digits = 1)
 ```
-The 69.7% seen here, however, is likely an upwardly biased estimate of the percentage of non-random responses, because we must account for respondents accidentally answering the question correctly. For an unbiased estimation of random responses, we use `unbiased_correct_prop`. 
+The 69.7% seen here, however, is likely an upwardly biased estimate of
+the percentage of non-random responses, because we must account for
+respondents accidentally answering the question correctly. For an
+unbiased estimate of random responses, we use `unbiased_correct_prop`.
 
 ```{r}
 identity$random_identity <- case_when(
@@ -38,13 +43,20 @@ unbiased_correct_prop(
   J = 4
 )
 ```
-The revised estimate of non-random responses is 68.4%. That is to say, roughly 31.6% of the respondents are randomly responding.
+The revised estimate of non-random responses is 68.4%. That is to say,
+roughly 31.6% of the respondents are randomly responding.
 
 ## Direct Bias Correction via `imprr_direct`
 
-`rankingQ` has two primary functions to perform bias correction. First, `imprr_direct` **impr**oves **r**anking data by applying **direct** bias correction to several classes of quantities of interest.
+`rankingQ` has two primary functions to perform bias correction. First,
+`imprr_direct` **impr**oves **r**anking data by applying **direct** bias
+correction to several classes of quantities of interest.
 
-To apply the bias correction, we specify our dataset (`data`), the number of items (`J`), the prefix of column names that contain `J` items for the target ranking questions, and the prefix of column names for the anchor ranking questions. When survey weights are available, they can be included by specifying `weight` in the function.
+To apply the bias correction, we specify our dataset (`data`), the
+number of items (`J`), the prefix of column names that contain `J`
+items for the target ranking questions, and the prefix of column names
+for the anchor ranking questions. When survey weights are available,
+they can be included by specifying `weight` in the function.
 
 ```{r}
 ## app_identity_1 indicates marginal rank for party
@@ -68,7 +80,11 @@ out_direct <- imprr_direct(
 ```
 
 
-By default, `imprr_direct` assumes that the target population is a set of non-random respondents. When researchers wish to study the entire population as a target group, additional arguments must be specified, including `population` and `assumption`. For example, the uniform preference assumption can be specified as follows:
+By default, `imprr_direct` assumes that the target population is a set
+of non-random respondents. When researchers wish to study the entire
+population as a target group, additional arguments must be specified,
+including `population` and `assumption`. For example, the uniform
+preference assumption can be specified as follows:
 
 
 ```{r}
@@ -104,7 +120,10 @@ out_direct_contaminated <- imprr_direct(
 
 ### Results: Estimated Proportion of Random Responses
 
-The first output of `imprr_direct` is the estimated proportion of random responses. The vector `est_p_random` returns the estimated proportion along with the lower and upper ends of its corresponding 95% confidence interval.
+The first output of `imprr_direct` is the estimated proportion of random
+responses. The vector `est_p_random` returns the estimated proportion
+along with the lower and upper ends of its corresponding 95% confidence
+interval.
 
 ```{r}
 # Estimated proportion of random responses with a 95% CI
@@ -113,14 +132,16 @@ out_direct$est_p_random
 
 ### Results: Estimated Quantities of Interest
 
-The other output is the bias-corrected estimates of four classes of ranking-based quantities, including
+The other output is the bias-corrected estimates of four classes of
+ranking-based quantities, including
 
 1.  average ranks
 2.  pairwise ranking probabilities
 3.  top-k ranking probabilities
 4.  marginal ranking probabilities
 
-The output tibble `qoi` stores the estimated quantities and their corresponding 95% CIs.
+The output tibble `qoi` stores the estimated quantities and their
+corresponding 95% CIs.
 
 ```{r}
 # View the results based on the quantity of interest
@@ -147,9 +168,13 @@ out_direct$results %>%
   plot_avg_ranking()
 ```
 
-## Weighting-Based Bias Correction via `imprr_weight`
+## Weighting-Based Bias Correction via `imprr_weights`
 
-The alternative methods for bias correction is based on the idea of inverse-probability weighting. `imprr_weight` **impr**oves **r**anking data by computing bias correction **weights**, which can be used to correct for the bias in the inverse-probability weighting framework. The same arguments previously used can be used as follows:
+The alternative method for bias correction is based on the idea of
+inverse-probability weighting (IPW). `imprr_weights` **impr**oves
+**r**anking data by computing bias correction **weights**, which can be
+used to correct for the bias in the IPW framework. The same arguments
+previously used can be used as follows:
 
 ```{r}
 # Perform bias correction
@@ -162,7 +187,11 @@ out_weights <- imprr_weights(
 ```
 
 
-By default, `imprr_weights` assumes that the target population is a set of non-random respondents. When researchers wish to study the entire population as a target group, additional arguments must be specified, including `population` and `assumption`. For example, the uniform preference assumption can be specified as follows:
+By default, `imprr_weights` assumes that the target population is a set
+of non-random respondents. When researchers wish to study the entire
+population as a target group, additional arguments must be specified,
+including `population` and `assumption`. For example, the uniform
+preference assumption can be specified as follows:
 
 ```{r}
 # Perform bias correction with the uniform preference assumption
@@ -193,7 +222,10 @@ out_weights_contaminated <- imprr_weights(
 
 ### Results: Estimated Weights
 
-The output of `imprr_weights` contains the set of weights for all possible ranking profiles with `J` items. For example, when `J = 4`, the set has `{1234, 1243, ..., 4321}` and each profile now has an estimated weight.
+The output of `imprr_weights` contains the set of weights for all
+possible ranking profiles with `J` items. For example, when `J = 4`,
+the set has `{1234, 1243, ..., 4321}` and each profile now has an
+estimated weight.
 
 ```{r}
 # View the estimated weights
@@ -203,7 +235,8 @@ out_weights$rankings %>%
 
 ### Results: Estimated PMF with Bias Corrected Data
 
-`imprr_weight` also returns the estimated probability mass function of all ranking profile before and after bias correction.
+`imprr_weights` also returns the estimated probability mass function of
+all ranking profiles before and after bias correction.
 
 ```{r}
 # View the estimated corrected PMF
