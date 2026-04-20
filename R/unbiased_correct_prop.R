@@ -16,6 +16,16 @@
 #' @export
 
 unbiased_correct_prop <- function(mean_c, J) {
+  if (!is.numeric(mean_c) || length(mean_c) != 1 || is.na(mean_c) ||
+      !is.finite(mean_c) || mean_c < 0 || mean_c > 1) {
+    stop("mean_c must be a single finite number between 0 and 1.")
+  }
+  if (!is.numeric(J) || length(J) != 1 || is.na(J) || !is.finite(J) ||
+      J != as.integer(J) || J < 2) {
+    stop("J must be a single integer >= 2.")
+  }
+  J <- as.integer(J)
+
   ## Average of correct answers
   numerator <- mean_c - (1 / factorial(J))
   denominator <- 1 - (1 / factorial(J))

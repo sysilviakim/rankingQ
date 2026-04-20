@@ -22,3 +22,20 @@ test_that("unbiased_correct_prop handles identity data", {
   # Should be close to the value from the paper (~0.684)
   expect_equal(result, 0.684, tolerance = 0.01)
 })
+
+test_that("unbiased_correct_prop validates inputs", {
+  expect_error(
+    unbiased_correct_prop(0.7, J = 1),
+    "J must be a single integer >= 2."
+  )
+
+  expect_error(
+    unbiased_correct_prop(-0.1, J = 4),
+    "mean_c must be a single finite number between 0 and 1."
+  )
+
+  expect_error(
+    unbiased_correct_prop(1.1, J = 4),
+    "mean_c must be a single finite number between 0 and 1."
+  )
+})
