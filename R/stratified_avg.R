@@ -56,12 +56,21 @@ stratified_avg <- function(data, var_stratum, J = NULL,
   }
 
   if (!is.null(weight)) {
-    if (is.character(weight) && length(weight) == 1 && weight %in% names(data)) {
+    if (
+      is.character(weight) &&
+        length(weight) == 1 &&
+        weight %in% names(data)
+    ) {
       weight_vec <- data[[weight]]
     } else if (is.numeric(weight) && length(weight) == nrow(data)) {
       weight_vec <- weight
     } else {
-      stop("weight must be either a numeric vector of nrow(data) or a column name.")
+      stop(
+        paste(
+          "weight must be either a numeric vector of nrow(data)",
+          "or a column name."
+        )
+      )
     }
     data[[".weight__"]] <- weight_vec
     weight_col <- ".weight__"
@@ -90,7 +99,9 @@ stratified_avg <- function(data, var_stratum, J = NULL,
     list_strata <- boostrap_dat %>%
       group_by(!!as.name(var_stratum)) %>%
       group_split(.keep = TRUE) %>%
-      `names<-`({.} %>% map(~ .x[[var_stratum]][1]) %>% unlist())
+      `names<-`({
+        .
+      } %>% map(~ .x[[var_stratum]][1]) %>% unlist())
 
     ## Apply bias correction (direct) ------------------------------------------
     if (ipw == FALSE) {

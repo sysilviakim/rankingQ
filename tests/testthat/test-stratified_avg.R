@@ -6,7 +6,8 @@ test_that("stratified_avg returns correct structure", {
   identity <- rankingQ::identity
   set.seed(1)
   identity$test_stratum <- sample(
-    c("group1", "group2"), nrow(identity), replace = TRUE
+    c("group1", "group2"), nrow(identity),
+    replace = TRUE
   )
 
   result <- stratified_avg(
@@ -76,7 +77,10 @@ test_that("stratified_avg uses provided weight vector", {
   identity$test_stratum <- sample(c("group1", "group2"), nrow(identity), TRUE)
 
   w1 <- rep(1, nrow(identity))
-  w2 <- c(rep(10, nrow(identity) / 2), rep(1, nrow(identity) - nrow(identity) / 2))
+  w2 <- c(
+    rep(10, nrow(identity) / 2),
+    rep(1, nrow(identity) - nrow(identity) / 2)
+  )
 
   out1 <- stratified_avg(
     data = identity,

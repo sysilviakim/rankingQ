@@ -12,9 +12,9 @@ test_that("plug-in estimation works", {
   expect_equal(nrow(example_direct$est_p_random), 1L)
   expect_named(example_direct$est_p_random, c("mean", "lower", "upper"))
   expect_true(example_direct$est_p_random$mean > 0 &
-                example_direct$est_p_random$mean < 1)
+    example_direct$est_p_random$mean < 1)
   expect_true(example_direct$est_p_random$lower <=
-                example_direct$est_p_random$mean)
+    example_direct$est_p_random$mean)
   expect_true(example_direct$est_p_random$upper >=
-                example_direct$est_p_random$mean)
+    example_direct$est_p_random$mean)
 })

@@ -7,7 +7,8 @@
 #' @importFrom ggplot2 ggplot geom_col scale_fill_manual scale_y_continuous
 #' @importFrom ggplot2 geom_hline geom_text aes xlab ylab theme
 #'
-#' @param tab A table in which the frequencies of ranking patterns are recorded.
+#' @param tab A table in which the frequencies of ranking patterns are
+#'   recorded.
 #' @param x Name of the column that contains permutation patterns.
 #' @param y Name of the column that contains the plotted values
 #' (for example, proportions or frequencies).

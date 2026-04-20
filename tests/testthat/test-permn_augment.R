@@ -7,7 +7,9 @@ test_that("permn_augment adds missing permutations", {
 
   # Should have all 6 permutations
   expect_equal(length(result), 6)
-  expect_true(all(c("123", "132", "213", "231", "312", "321") %in% names(result)))
+  expect_true(
+    all(c("123", "132", "213", "231", "312", "321") %in% names(result))
+  )
 
   # Missing permutations should have 0 count
   expect_equal(result["132"], c("132" = 0))
@@ -24,9 +26,9 @@ test_that("permn_augment preserves existing counts", {
 
 test_that("permn_augment infers J from data", {
   tab <- table(c("123", "321"))
-  result <- permn_augment(tab)  # J not specified
+  result <- permn_augment(tab) # J not specified
 
-  expect_equal(length(result), 6)  # 3! = 6
+  expect_equal(length(result), 6) # 3! = 6
 })
 
 test_that("permn_augment handles complete data", {

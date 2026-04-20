@@ -6,7 +6,7 @@ test_that("unbiased_correct_prop computes correctly", {
   expect_equal(result, 1, tolerance = 1e-10)
 
   # With random guessing (1/J! correct), should give 0
-  result_random <- unbiased_correct_prop(1/24, J = 4)
+  result_random <- unbiased_correct_prop(1 / 24, J = 4)
   expect_equal(result_random, 0, tolerance = 1e-10)
 })
 

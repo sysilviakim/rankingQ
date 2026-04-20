@@ -34,6 +34,12 @@ test_that("ordinal_seq handles teen numbers with 'th' suffix", {
 })
 
 test_that("ordinal_seq errors on invalid input", {
-  expect_error(ordinal_seq(c(1, 2)), "`length` must be a numeric value of length 1.")
-  expect_error(ordinal_seq("a"), "`length` must be a numeric value of length 1.")
+  expect_error(
+    ordinal_seq(c(1, 2)),
+    "`length` must be a numeric value of length 1."
+  )
+  expect_error(
+    ordinal_seq("a"),
+    "`length` must be a numeric value of length 1."
+  )
 })

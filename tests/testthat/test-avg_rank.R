@@ -36,8 +36,20 @@ test_that("Long-format data.", {
 
 test_that("Error is thrown for incorrect arguments", {
   ## Writing tests for only a few cases
-  expect_error(avg_rank(data.frame()), "The rankings variable must be specified.")
-  expect_error(avg_rank(df_long, "invalid_col"), "The rankings variable is not contained in the given data frame.")
-  expect_error(avg_rank(df_long, long = 3), "The 'long' argument must be either TRUE or FALSE.")
-  expect_error(avg_rank(df_long, raw = "yes"), "The 'raw' argument must be either TRUE or FALSE.")
+  expect_error(
+    avg_rank(data.frame()),
+    "The rankings variable must be specified."
+  )
+  expect_error(
+    avg_rank(df_long, "invalid_col"),
+    "The rankings variable is not contained in the given data frame."
+  )
+  expect_error(
+    avg_rank(df_long, long = 3),
+    "The 'long' argument must be either TRUE or FALSE."
+  )
+  expect_error(
+    avg_rank(df_long, raw = "yes"),
+    "The 'raw' argument must be either TRUE or FALSE."
+  )
 })

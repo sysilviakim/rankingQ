@@ -1,7 +1,8 @@
 #' Augmenting Permutation Patterns
 #'
 #' In some distribution of ranking data, not all possible permutation patterns
-#' may be realized due to the sample size or skewed distribution of preferences.
+#' may be realized due to the sample size or skewed distribution of
+#' preferences.
 #'
 #' This function augments the given table with all possible observed
 #' permutation patterns with a frequency of zero for unrealized patterns.

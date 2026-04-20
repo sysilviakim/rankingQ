@@ -1,8 +1,10 @@
 # source("renv/activate.R")
 
 options(
-  repos = c(RSPM = "https://packagemanager.rstudio.com/all/latest",
-            CRAN = "https://cran.rstudio.com/"),
+  repos = c(
+    RSPM = "https://packagemanager.rstudio.com/all/latest",
+    CRAN = "https://cran.rstudio.com/"
+  ),
   renv.config.auto.snapshot = TRUE
 )
 
@@ -11,9 +13,11 @@ options(
 if (Sys.info()[["sysname"]] %in% c("Darwin", "Windows")) {
   options(renv.config.repos.override = c(
     CRAN = "https://cran.rstudio.com/",
-    INLA = "https://inla.r-inla-download.org/R/testing"))
+    INLA = "https://inla.r-inla-download.org/R/testing"
+  ))
 } else if (Sys.info()[["sysname"]] == "Linux") {
   options(renv.config.repos.override = c(
     RSPM = "https://packagemanager.rstudio.com/all/latest",
-    INLA = "https://inla.r-inla-download.org/R/testing"))
+    INLA = "https://inla.r-inla-download.org/R/testing"
+  ))
 }

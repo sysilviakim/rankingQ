@@ -2,11 +2,13 @@
 
 test_that("uniformity_test works with table input", {
   # Create a uniform-ish table
-  tab <- table(c(rep("123", 10), rep("132", 10), rep("213", 10),
-                 rep("231", 10), rep("312", 10), rep("321", 10)))
+  tab <- table(c(
+    rep("123", 10), rep("132", 10), rep("213", 10),
+    rep("231", 10), rep("312", 10), rep("321", 10)
+  ))
   result <- uniformity_test(tab)
   expect_s3_class(result, "htest")
-  expect_equal(result$statistic[[1]], 0)  # Should be 0 for uniform
+  expect_equal(result$statistic[[1]], 0) # Should be 0 for uniform
 })
 
 test_that("uniformity_test works with data frame input", {
@@ -19,10 +21,16 @@ test_that("uniformity_test works with data frame input", {
 
 test_that("uniformity_test throws error for invalid input", {
   df <- data.frame(other_col = c("a", "b", "c"))
-  expect_error(uniformity_test(df, var = "ranking"),
-               "The variable specified is not in the data.")
-  expect_error(uniformity_test(df),
-               "please specify the variable")
-  expect_error(uniformity_test(df, var = 123),
-               "must be a character string")
+  expect_error(
+    uniformity_test(df, var = "ranking"),
+    "The variable specified is not in the data."
+  )
+  expect_error(
+    uniformity_test(df),
+    "please specify the variable"
+  )
+  expect_error(
+    uniformity_test(df, var = 123),
+    "must be a character string"
+  )
 })

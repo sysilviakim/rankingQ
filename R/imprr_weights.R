@@ -3,7 +3,8 @@
 #' @description This function implements the bias correction of the ranking
 #' distribution using a paired anchor question, using the IPW estimator.
 #'
-#' @importFrom dplyr `%>%` mutate select group_by left_join arrange summarise count rename
+#' @importFrom dplyr `%>%` mutate select group_by left_join arrange summarise
+#'   count rename
 #' @importFrom tidyselect matches
 #' @importFrom tidyr unite
 #' @importFrom tibble tibble
@@ -22,7 +23,8 @@
 #' @param anc_correct Indicator for passing the anchor question.
 #' @param population Choice of the target population out of
 #' non-random respondents (default) or all respondents.
-#' @param assumption Choice of the identifying assumption if `population` is set to all
+#' @param assumption Choice of the identifying assumption if
+#'   `population` is set to all
 #' @param seed Seed for \code{set.seed} for reproducibility.
 #' @param weight A vector of weights. Defaults to NULL.
 #' @param ranking The name of the column that will store the full ranking
@@ -78,10 +80,12 @@ imprr_weights <- function(data,
     stop("weight must have the same length as the number of rows in data.")
   }
   if (!missing(seed) && !is.null(seed)) {
-    warning("'seed' is currently ignored because imprr_weights is deterministic.")
+    warning(
+      "'seed' is currently ignored because imprr_weights is deterministic."
+    )
   }
 
-  if (population == "all" & assumption == "uniform"){
+  if (population == "all" & assumption == "uniform") {
     data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
   }
 
@@ -171,7 +175,8 @@ imprr_weights <- function(data,
   # Step 6: Get the bias-correction weight vector ------------------------------
   df_w <- perm_j %>%
     mutate(
-      weights = imp_PMF$prop_bc / PMF_raw$prop_obs, # Inverse probability weight
+      # Inverse probability weight.
+      weights = imp_PMF$prop_bc / PMF_raw$prop_obs,
       weights = ifelse(weights == Inf, 0, weights),
       weights = ifelse(is.na(weights), 0, weights)
     ) %>% # NA arise from 0/0
@@ -201,8 +206,10 @@ imprr_weights <- function(data,
   out_rankings <- PMF_raw %>%
     left_join(imp_PMF, by = "ranking") %>%
     left_join(df_w, by = "ranking") %>%
-    dplyr::select(ranking, n, prop_obs, prop_bc, weights,
-                  everything())
+    dplyr::select(
+      ranking, n, prop_obs, prop_bc, weights,
+      everything()
+    )
 
   # Summarize results ----------------------------------------------------------
   return(
@@ -219,28 +226,35 @@ imprr_weights <- function(data,
 #' Internal function adapted from questionr::wtd.table.
 #'
 #' @param x a vector
-#' @param y another optional vector for a two-way frequency table. Must be the same length as x
+#' @param y another optional vector for a two-way frequency table.
+#'   Must be the same length as x
 #' @param weights vector of weights, must be the same length as x
 #' @param digits Number of significant digits.
-#' @param normwt if TRUE, normalize weights so that the total weighted count is the same as the unweighted one
+#' @param normwt if TRUE, normalize weights so that the total weighted count
+#'   is the same as the unweighted one
 #' @param useNA whether to include NA values in the table
 #' @param na.rm (deprecated) if TRUE, remove NA values before computation
 #' @param na.show (deprecated) if TRUE, show NA count in table output
-#' @param exclude values to remove from x and y. To exclude NA, use na.rm argument.
+#' @param exclude values to remove from x and y.
+#'   To exclude NA, use na.rm argument.
 #'
 #' @keywords internal
 
 wtd.table <- function(
-    x, y = NULL, weights = NULL, digits = 3, normwt = FALSE,
-    useNA = c("no", "ifany", "always"), na.rm = TRUE,
-    na.show = FALSE, exclude = NULL) {
-
+  x, y = NULL, weights = NULL, digits = 3, normwt = FALSE,
+  useNA = c("no", "ifany", "always"), na.rm = TRUE,
+  na.show = FALSE, exclude = NULL
+) {
   if (is.null(weights)) {
     warning("no weights argument given, using uniform weights of 1")
     weights <- rep(1, length(x))
   }
-  if (length(x) != length(weights)) stop("x and weights lengths must be the same")
-  if (!is.null(y) & (length(x) != length(y))) stop("x and y lengths must be the same")
+  if (length(x) != length(weights)) {
+    stop("x and weights lengths must be the same")
+  }
+  if (!is.null(y) & (length(x) != length(y))) {
+    stop("x and y lengths must be the same")
+  }
   miss.usena <- missing(useNA)
   useNA <- match.arg(useNA)
   weights[is.na(weights)] <- 0
@@ -253,7 +267,12 @@ wtd.table <- function(
   }
   if (useNA != "no" || (na.show && miss.usena)) {
     if (match(NA, exclude, nomatch = 0L)) {
-      warning("'exclude' containing NA and 'useNA' != \"no\"' are a bit contradicting")
+      warning(
+        paste(
+          "'exclude' containing NA and 'useNA' != \"no\"' are a bit",
+          "contradicting"
+        )
+      )
     }
     x <- addNA(x)
     if (!is.null(y)) y <- addNA(y)
@@ -281,8 +300,12 @@ wtd.table <- function(
   tab <- as.table(result)
   if (useNA == "ifany") {
     if (!is.null(y)) {
-      if (sum(tab[, is.na(colnames(tab))]) == 0) tab <- tab[, !is.na(colnames(tab))]
-      if (sum(tab[is.na(rownames(tab)), ]) == 0) tab <- tab[!is.na(rownames(tab)), ]
+      if (sum(tab[, is.na(colnames(tab))]) == 0) {
+        tab <- tab[, !is.na(colnames(tab))]
+      }
+      if (sum(tab[is.na(rownames(tab)), ]) == 0) {
+        tab <- tab[!is.na(rownames(tab)), ]
+      }
     } else {
       if (tab[is.na(names(tab))] == 0) tab <- tab[!is.na(names(tab))]
     }

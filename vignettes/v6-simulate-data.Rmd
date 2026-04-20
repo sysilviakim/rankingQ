@@ -23,8 +23,10 @@ library(rankingQ)
 
 
 ```{r}
-draw <- rpluce(n = 50,
-               t = 4,
-               prob = c(0.4, 0.2, 0.2, 0.2))
+draw <- rpluce(
+  n = 50,
+  t = 4,
+  prob = c(0.4, 0.2, 0.2, 0.2)
+)
 head(draw)
 ```

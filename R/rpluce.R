@@ -1,13 +1,15 @@
 #' Draw Samples from the Plackett-Luce Model
 #'
 #' This function draws samples from the Plackett-Luce model, using
-#' Algorithm 2.1, "Efficient Sampling from Plackett-Luce," in [Xia (2019)](https://link.springer.com/book/10.1007/978-3-031-01582-3),
+#' Algorithm 2.1, "Efficient Sampling from Plackett-Luce," in
+#' [Xia (2019)](https://link.springer.com/book/10.1007/978-3-031-01582-3),
 #' page 20, Section 2.2.3 Sampling from Random Utility Models.
 #' The name \code{rpluce} is a convention that follows random generations of
 #' numbers from statistical distributions such as \code{rnorm} or
 #' \code{rmultinom}.
 #'
-#' Input: A parameter \eqn{\overrightarrow{\gamma} = (\gamma_1, \cdots, \gamma_m)}
+#' Input: A parameter
+#' \eqn{\overrightarrow{\gamma} = (\gamma_1, \cdots, \gamma_m)}
 #' of Plackett-Luce. \cr
 #'
 #' Output: A ranking \eqn{R \in \mathcal{L}(\mathcal{A})} from
@@ -38,10 +40,16 @@
 
 rpluce <- function(n, t, prob, choices = NULL, seed = NULL) {
   ## Sanity check on the sample-size arguments.
-  if (!is.numeric(n) || length(n) != 1 || is.na(n) || n < 1 || n != as.integer(n)) {
+  if (
+    !is.numeric(n) || length(n) != 1 || is.na(n) ||
+      n < 1 || n != as.integer(n)
+  ) {
     stop("The specified n must be a positive whole number.")
   }
-  if (!is.numeric(t) || length(t) != 1 || is.na(t) || t < 2 || t != as.integer(t)) {
+  if (
+    !is.numeric(t) || length(t) != 1 || is.na(t) ||
+      t < 2 || t != as.integer(t)
+  ) {
     stop("The specified t must be a whole number greater than or equal to 2.")
   }
 
@@ -68,7 +76,9 @@ rpluce <- function(n, t, prob, choices = NULL, seed = NULL) {
   if (any(prob < 0) | any(prob > 1)) {
     stop("The specified probability must be between 0 and 1.")
   }
-  if (!isTRUE(all.equal(sum(prob), 1, tolerance = sqrt(.Machine$double.eps)))) {
+  if (
+    !isTRUE(all.equal(sum(prob), 1, tolerance = sqrt(.Machine$double.eps)))
+  ) {
     stop("The specified probability must sum to 1.")
   }
   if (length(prob) != t) {

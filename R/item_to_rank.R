@@ -7,11 +7,13 @@
 #'
 #' @param item_rank A data frame with rankings as columns,
 #' with items being ranked as cell values.
-#' @param format_input Character string indicating the format of the data input,
+#' @param format_input Character string indicating the format of the
+#'   data input,
 #' namely "ordering" or "ranking".
 #' Used for \code{PLMIX::rank_ord_switch}.
 #' @param reference A character vector of item names to be used for renaming
-#' the columns. If not specified, will use the first 26 letters of the alphabet.
+#' the columns. If not specified, will use the first 26 letters of the
+#' alphabet.
 #' Default is `NULL`.
 #' @param long Whether to return the output in a long data format.
 #' Default is `FALSE`.
@@ -46,15 +48,19 @@ item_to_rank <- function(item_rank,
       stop("reference must be a character vector.")
     }
     if (length(reference) < ncol(item_rank)) {
-      stop("reference must have at least as many labels as there are ranked items.")
+      stop(
+        "reference must have at least as many labels as there are ranked items."
+      )
     }
     item_crosswalk <- data.frame(
-      name = reference, item_no = paste0("Item_", seq(length(reference)))
+      name = reference,
+      item_no = paste0("Item_", seq(length(reference)))
     )
   } else {
     default_names <- unique_alphabets(ncol(item_rank))
     item_crosswalk <- data.frame(
-      name = default_names, item_no = paste0("Item_", seq(length(default_names)))
+      name = default_names,
+      item_no = paste0("Item_", seq(length(default_names)))
     )
   }
 

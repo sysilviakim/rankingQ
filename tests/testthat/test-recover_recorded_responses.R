@@ -1,6 +1,8 @@
 # Test recover_recorded_responses function
 
-test_that("recover_recorded_responses works with string inputs (examples from docs)", {
+test_that(
+  "recover_recorded_responses works with string inputs (examples from docs)",
+  {
   # A-B-C-D true ranking, items presented as B-A-D-C -> recorded "2143"
   expect_equal(recover_recorded_responses("1234", "2143"), "2143")
 
@@ -9,13 +11,17 @@ test_that("recover_recorded_responses works with string inputs (examples from do
 
   # C-A-D-B true ranking, items presented as D-C-B-A -> recorded "3142"
   expect_equal(recover_recorded_responses("2413", "4321"), "3142")
-})
+  }
+)
 
-test_that("recover_recorded_responses: identity presentation yields same as true", {
+test_that(
+  "recover_recorded_responses: identity presentation yields same as true",
+  {
   # When presented in natural order, recorded response equals true ranking
   expect_equal(recover_recorded_responses("1234", "1234"), "1234")
   expect_equal(recover_recorded_responses("3214", "1234"), "3214")
-})
+  }
+)
 
 test_that("recover_recorded_responses errors when df columns are missing", {
   df <- data.frame(a = "1234", b = "2143", stringsAsFactors = FALSE)
@@ -37,7 +43,8 @@ test_that("recover_recorded_responses works with df input", {
     stringsAsFactors     = FALSE
   )
   result <- recover_recorded_responses(
-    "app_identity", "app_identity_row_rnd", df = df
+    "app_identity", "app_identity_row_rnd",
+    df = df
   )
 
   expect_true("app_identity_recorded" %in% names(result))

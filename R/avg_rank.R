@@ -135,7 +135,9 @@ avg_rank <- function(x,
   } else if (!is.null(items)) {
     J <- length(items)
   } else {
-    stop("There is no information about the number of items in the data frame.")
+    stop(
+      "There is no information about the number of items in the data frame."
+    )
   }
 
   ## Sanity checks for "rankings" and "items" arguments.
@@ -218,7 +220,10 @@ avg_rank <- function(x,
       } else {
         stop(
           paste0(
-            "If items argument is a data frame, make sure that the columns are",
+            paste(
+              "If items argument is a data frame, make sure that the",
+              "columns are"
+            ),
             " named 'item' and 'variable'."
           )
         )

@@ -10,7 +10,7 @@ test_that("rank_longer converts single column correctly", {
 
   expect_true("item_name" %in% names(result))
   expect_true("ranking" %in% names(result))
-  expect_equal(nrow(result), 6)  # 2 rows * 3 items
+  expect_equal(nrow(result), 6) # 2 rows * 3 items
 })
 
 test_that("rank_longer uses reference labels", {
@@ -19,8 +19,10 @@ test_that("rank_longer uses reference labels", {
     ranking = c("123", "321")
   )
 
-  result <- rank_longer(df, cols = "ranking", id = "id",
-                        reference = c("A", "B", "C"))
+  result <- rank_longer(df,
+    cols = "ranking", id = "id",
+    reference = c("A", "B", "C")
+  )
 
   expect_true(all(c("A", "B", "C") %in% result$item_name))
 })

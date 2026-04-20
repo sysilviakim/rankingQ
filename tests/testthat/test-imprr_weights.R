@@ -14,7 +14,7 @@ test_that("IPW estimation works", {
   expect_named(example_ipw, c("est_p_random", "results", "rankings"))
 
   # Check est_p_random is between 0 and 1
-expect_true(example_ipw$est_p_random >= 0 && example_ipw$est_p_random <= 1)
+  expect_true(example_ipw$est_p_random >= 0 && example_ipw$est_p_random <= 1)
 
   # Check results has weights column
   expect_true("weights" %in% names(example_ipw$results))

@@ -49,7 +49,10 @@
 #'
 #' @export
 
-recover_recorded_responses <- function(true_order, presented_order, df = NULL) {
+recover_recorded_responses <- function(
+    true_order,
+    presented_order,
+    df = NULL) {
   recover_one <- function(true_chars, presented_chars) {
     if (any(is.na(true_chars)) || any(is.na(presented_chars))) {
       return(NA_character_)
@@ -97,7 +100,10 @@ recover_recorded_responses <- function(true_order, presented_order, df = NULL) {
           tryCatch(
             recover_one(true_order[[.x]], presented_order[[.x]]),
             error = function(e) {
-              stop(sprintf("Row %d: %s", .x, conditionMessage(e)), call. = FALSE)
+              stop(
+                sprintf("Row %d: %s", .x, conditionMessage(e)),
+                call. = FALSE
+              )
             }
           )
         }

@@ -20,7 +20,8 @@
 #' @param anc_correct Indicator for passing the anchor question.
 #' @param population Choice of the target population out of
 #' non-random respondents (default) or all respondents.
-#' @param assumption Choice of the identifying assumption if `population` is set to all
+#' @param assumption Choice of the identifying assumption if
+#'   `population` is set to all
 #' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param seed Seed for \code{set.seed} for reproducibility.
 #' @param weight A vector of weights. Defaults to NULL.
@@ -69,7 +70,7 @@ imprr_direct <- function(data,
     stop("weight must have the same length as the number of rows in data.")
   }
 
-  if (population == "all" & assumption == "uniform"){
+  if (population == "all" & assumption == "uniform") {
     data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
   }
 
@@ -153,18 +154,25 @@ imprr_direct <- function(data,
         other_items,
         FUN.VALUE = numeric(1),
         FUN = function(comp_item) {
-          weighted_mean_safe(Y_rank_target < as.numeric(boostrap_dat[[comp_item]]), bootstrap_weight)
+          weighted_mean_safe(
+            Y_rank_target < as.numeric(boostrap_dat[[comp_item]]),
+            bootstrap_weight
+          )
         }
       )
       m_top <- vapply(
         seq_len(J_1),
         FUN.VALUE = numeric(1),
-        FUN = function(k) weighted_mean_safe(Y_rank_target <= k, bootstrap_weight)
+        FUN = function(k) {
+          weighted_mean_safe(Y_rank_target <= k, bootstrap_weight)
+        }
       )
       m_marginal <- vapply(
         seq_len(J),
         FUN.VALUE = numeric(1),
-        FUN = function(k) weighted_mean_safe(Y_rank_target == k, bootstrap_weight)
+        FUN = function(k) {
+          weighted_mean_safe(Y_rank_target == k, bootstrap_weight)
+        }
       )
 
       # Step 3: Get the QOI based on random responses

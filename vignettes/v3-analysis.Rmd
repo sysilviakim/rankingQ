@@ -35,8 +35,10 @@ The `avg_rank` function provides a convenient way to compute average ranks for a
 
 ```{r}
 # Raw average ranks (without bias correction)
-avg_rank(identity_w, rankings = "app_identity",
-         items = c("Party", "Religion", "Gender", "Race"))
+avg_rank(identity_w,
+  rankings = "app_identity",
+  items = c("Party", "Religion", "Gender", "Race")
+)
 ```
 
 For bias-corrected estimates using IPW weights, use the marginal ranking columns:

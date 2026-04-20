@@ -68,11 +68,14 @@ test_that("rpluce errors on invalid choices argument", {
   )
 })
 
-test_that("rpluce accepts floating-point probabilities that sum to 1 within tolerance", {
+test_that(
+  "rpluce accepts floating-point probabilities that sum to 1 within tolerance",
+  {
   expect_no_error(
     rpluce(n = 5, t = 3, prob = c(0.1, 0.2, 0.7), seed = 99)
   )
-})
+  }
+)
 
 test_that("rpluce errors cleanly on invalid n and t boundary values", {
   expect_error(
