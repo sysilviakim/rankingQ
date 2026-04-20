@@ -35,6 +35,33 @@ test_that("Long-format data.", {
   expect_equal(result$se, c(1.0, 0.5, 0.5))
 })
 
+test_that("Wide-format item labels must match the number of ranked items", {
+  df_four <- data.frame(rank = c("1234", "2143"))
+
+  expect_error(
+    avg_rank(df_four, "rank", items = c("A", "B", "C")),
+    "The number of reference choice set's elements in the items variable does not match the number of items ranked."
+  )
+})
+
+test_that("IPW avg_rank accepts item mappings as a data frame", {
+  identity_w <- rankingQ::identity_w
+  items_df <- data.frame(
+    variable = paste0("app_identity_", 1:4),
+    item = c("Party", "Religion", "Gender", "Race")
+  )
+
+  result <- avg_rank(
+    identity_w,
+    items = items_df,
+    weight = "weights",
+    raw = FALSE
+  )
+
+  expect_equal(nrow(result), 4)
+  expect_equal(as.character(result$item), items_df$item)
+})
+
 test_that("Error is thrown for incorrect arguments", {
   ## Writing tests for only a few cases
   expect_error(

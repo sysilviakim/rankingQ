@@ -74,6 +74,13 @@ avg_rank <- function(x,
   . <- item <- lower <- upper <- se <- variable <- method <- std.error <-
     estimate <- conf.low <- conf.high <- outcome <- qoi <- NULL
 
+  count_items <- function(items) {
+    if (is.data.frame(items)) {
+      return(nrow(items))
+    }
+    length(items)
+  }
+
   if (!is.logical(long) || length(long) != 1 || is.na(long)) {
     stop("The 'long' argument must be either TRUE or FALSE.")
   }
@@ -133,7 +140,7 @@ avg_rank <- function(x,
   if (!is.null(rankings)) {
     J <- max(nchar(x[[rankings]]))
   } else if (!is.null(items)) {
-    J <- length(items)
+    J <- count_items(items)
   } else {
     stop(
       "There is no information about the number of items in the data frame."
@@ -143,7 +150,7 @@ avg_rank <- function(x,
   ## Sanity checks for "rankings" and "items" arguments.
   if (!is.null(items)) {
     if (!long) {
-      if (J < length(items)) {
+      if (J != count_items(items)) {
         stop(
           paste0(
             "The number of reference choice set's elements in the items ",
