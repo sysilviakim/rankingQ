@@ -71,3 +71,13 @@ A list with three elements:
 This function implements the bias correction of the ranking
 distribution using a paired anchor question, using the IPW estimator.
 }
+\examples{
+out <- imprr_weights(
+  identity,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity"
+)
+head(out$results)
+head(out$rankings)
+
+}

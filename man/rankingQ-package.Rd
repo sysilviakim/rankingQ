@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Implements design-based bias correction methods that address measurement errors due to random responses in ranking survey questions. Based on Atsusaka and Kim (2025) \doi{10.1017/pan.2024.33}.
+Provides design-based methods to reduce measurement error from random responding in survey ranking questions. Uses anchor-ranking items or user-supplied random-response rates to estimate corrected average ranks, marginal rank probabilities, pairwise comparisons, and ranking distributions. Includes tools for visualization, format conversion, simulation, and diagnostic checks for ranking data. Based on Atsusaka and Kim (2025) \doi{10.1017/pan.2024.33}.
 }
 \seealso{
 Useful links:
@@ -20,11 +20,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Seo-young Silvia Kim \email{sskim.research@gmail.com} (\href{https://orcid.org/0000-0002-8801-9210}{ORCID})
+\strong{Maintainer}: Seo-young Silvia Kim \email{sy.silvia.kim@gmail.com} (\href{https://orcid.org/0000-0002-8801-9210}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
-  \item Yuki Atsusaka \email{yuki.atsusaka@gmail.com} (\href{https://orcid.org/0000-0001-5365-1876}{ORCID})
+  \item Yuki Atsusaka \email{yuki.atsusaka@gmail.com} (\href{https://orcid.org/0000-0001-5365-1876}{ORCID}) [copyright holder]
 }
 
 }

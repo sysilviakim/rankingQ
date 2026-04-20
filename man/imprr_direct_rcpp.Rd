@@ -71,3 +71,15 @@ distribution using a paired anchor question. This is a fast Rcpp-based
 implementation that is approximately 200-300x faster than the tidyverse
 version.
 }
+\examples{
+out <- imprr_direct_rcpp(
+  identity,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity",
+  n_bootstrap = 1,
+  seed = 123
+)
+out$est_p_random
+head(out$results)
+
+}

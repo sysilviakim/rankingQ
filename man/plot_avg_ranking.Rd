@@ -32,3 +32,14 @@ As long as the mean and the confidence intervals are provided,
 this function will plot other quantities of interest such as
 marginal, pairwise, top-k rankings.
 }
+\examples{
+avg_rank_results <- data.frame(
+  item = c("Party", "Religion", "Gender", "Race"),
+  qoi = rep("average rank", 4),
+  mean = c(1.7, 2.1, 2.8, 3.4),
+  lower = c(1.5, 1.9, 2.6, 3.2),
+  upper = c(1.9, 2.3, 3.0, 3.6)
+)
+plot_avg_ranking(avg_rank_results)
+
+}

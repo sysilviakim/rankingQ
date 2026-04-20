@@ -65,3 +65,17 @@ A data frame with the bootstrap-estimated average ranks.
 This function estimates the average ranks based on
 stratification.
 }
+\examples{
+identity2 <- identity
+identity2$stratum <- rep(c("group1", "group2"), length.out = nrow(identity2))
+out <- suppressMessages(stratified_avg(
+  identity2,
+  var_stratum = "stratum",
+  main_q = "app_identity",
+  p_random = 0,
+  n_bootstrap = 1,
+  seed = 123
+))
+head(out)
+
+}

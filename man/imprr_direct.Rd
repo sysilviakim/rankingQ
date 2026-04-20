@@ -72,3 +72,15 @@ A list with two elements:
 This function implements the bias correction of the ranking
 distribution using a paired anchor question.
 }
+\examples{
+out <- imprr_direct(
+  identity,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity",
+  n_bootstrap = 1,
+  seed = 123
+)
+out$est_p_random
+head(out$results)
+
+}

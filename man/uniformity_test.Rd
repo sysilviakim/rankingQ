@@ -19,3 +19,11 @@ A chi-square test result.
 This function implements the uniformity test for
 ranking permutation patterns documented in Atsusaka and Kim (2025).
 }
+\examples{
+tab <- table(c(
+  rep("123", 10), rep("132", 10), rep("213", 10),
+  rep("231", 10), rep("312", 10), rep("321", 10)
+))
+uniformity_test(tab)
+
+}
