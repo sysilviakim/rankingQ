@@ -142,7 +142,7 @@ avg_rank <- function(x,
 
   ## Sanity checks for "rankings" and "items" arguments.
   if (!is.null(items)) {
-    if (long == FALSE) {
+    if (!long) {
       if (J < length(items)) {
         stop(
           paste0(
@@ -157,15 +157,15 @@ avg_rank <- function(x,
       }
     }
   } else {
-    if (long == TRUE) {
+      if (long) {
       stop("If long data frame, the items variable must be specified.")
     }
   }
 
   ## Depending on whether it's a long- or wide-type data frame,
   ## treat differently
-  if (raw == TRUE) {
-    if (long == TRUE) {
+  if (raw) {
+    if (long) {
       out <- x %>%
         group_by(!!as.name(items))
     } else {
@@ -261,7 +261,7 @@ avg_rank <- function(x,
     if (is.data.frame(items)) {
       out <- out %>%
         rename(variable = item) %>%
-        left_join(., items) %>%
+        left_join(items, by = "variable") %>%
         select(-variable)
       items <- items$item
     }
@@ -283,7 +283,7 @@ avg_rank <- function(x,
       mutate(across(c(mean, lower, upper), ~ round(., digits = round)))
   }
 
-  if (long == TRUE) {
+  if (long) {
     return(
       as.data.frame(out) %>%
         select(!!items, qoi, mean, se, lower, upper, method)

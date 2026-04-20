@@ -153,7 +153,7 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
       names_to = "item_name",
       values_to = "ranking"
     ) %>%
-    left_join(., crosswalk_df)
+    left_join(crosswalk_df, by = "item_name")
 
   ## Arrange the output
   out <- out |>

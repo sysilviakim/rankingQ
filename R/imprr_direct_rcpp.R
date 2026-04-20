@@ -103,6 +103,9 @@ imprr_direct_rcpp <- function(data,
     )
   }
 
+  if (is.null(weight)) {
+    message("No weight column supplied; using equal weights for all observations.")
+  }
   weight <- .resolve_weight_vector(data, weight, N)
 
   if (population == "all" && assumption == "uniform") {

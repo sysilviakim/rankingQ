@@ -34,7 +34,7 @@ table_to_tibble <- function(tab, tibble = TRUE) {
       prop = freq / sum(freq)
     )
 
-  if (tibble == FALSE) {
+  if (!tibble) {
     out <- as.data.frame(out)
   }
   return(out)

@@ -68,7 +68,12 @@ stratified_avg <- function(data, var_stratum, J = NULL,
     stop("anc_correct must be a character.")
   }
 
-  if (!is.null(weight)) {
+  if (is.null(weight)) {
+    message("No weight column supplied; using equal weights for all observations.")
+    weight_col <- make.unique(c(names(data), ".rankingQ_equal_weight"))
+    weight_col <- weight_col[length(weight_col)]
+    data[[weight_col]] <- rep(1, nrow(data))
+  } else {
     if (
       is.character(weight) &&
         length(weight) == 1 &&
@@ -85,10 +90,9 @@ stratified_avg <- function(data, var_stratum, J = NULL,
         )
       )
     }
-    data[[".tmp_weight"]] <- weight_vec
-    weight_col <- ".tmp_weight"
-  } else {
-    weight_col <- NULL
+    weight_col <- make.unique(c(names(data), ".rankingQ_weight"))
+    weight_col <- weight_col[length(weight_col)]
+    data[[weight_col]] <- weight_vec
   }
 
   if (is.null(J)) {
@@ -123,7 +127,7 @@ stratified_avg <- function(data, var_stratum, J = NULL,
       } %>% map(~ .x[[var_stratum]][1]) %>% unlist())
 
     ## Apply bias correction (direct) ------------------------------------------
-    if (ipw == FALSE) {
+    if (!ipw) {
       imprr_list <- list_strata %>%
         map(
           ~ {

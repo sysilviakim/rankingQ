@@ -109,6 +109,9 @@ imprr_weights <- function(data,
     )
   }
 
+  if (is.null(weight)) {
+    message("No weight column supplied; using equal weights for all observations.")
+  }
   weight <- .resolve_weight_vector(data, weight, N)
 
   if (population == "all" && assumption == "uniform") {
@@ -174,7 +177,7 @@ imprr_weights <- function(data,
   PMF_raw <- perm_j %>%
     left_join(D_PMF_0, by = ranking) %>%
     mutate(
-      n = ifelse(is.na(n) == T, 0, n),
+      n = ifelse(is.na(n), 0, n),
       prop_obs = n / sum(weight),
       prop_obs = ifelse(is.na(prop_obs), 0, prop_obs)
     ) %>%
