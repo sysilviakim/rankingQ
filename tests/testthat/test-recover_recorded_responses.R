@@ -61,6 +61,20 @@ test_that("recover_recorded_responses handles NA in df input", {
   expect_true(is.na(result$app_recorded[2]))
 })
 
+test_that("recover_recorded_responses handles empty df input", {
+  df <- data.frame(
+    app_row_rnd      = character(0),
+    app_true         = character(0),
+    stringsAsFactors = FALSE
+  )
+
+  result <- recover_recorded_responses("app_true", "app_row_rnd", df = df)
+
+  expect_true("app_recorded" %in% names(result))
+  expect_equal(nrow(result), 0)
+  expect_identical(result$app_recorded, character(0))
+})
+
 test_that("recover_recorded_responses validates malformed string indices", {
   expect_error(
     recover_recorded_responses("1234", "21a4"),

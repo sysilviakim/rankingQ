@@ -94,21 +94,21 @@ recover_recorded_responses <- function(
     true_order <- df[[true_order]] %>%
       map(~ strsplit(.x, "")[[1]])
 
-    recovered_order <- seq(length(true_order)) %>%
-      map(
-        ~ {
-          tryCatch(
-            recover_one(true_order[[.x]], presented_order[[.x]]),
-            error = function(e) {
-              stop(
-                sprintf("Row %d: %s", .x, conditionMessage(e)),
-                call. = FALSE
-              )
-            }
-          )
-        }
-      ) %>%
-      unlist()
+    recovered_order <- vapply(
+      seq_along(true_order),
+      function(i) {
+        tryCatch(
+          recover_one(true_order[[i]], presented_order[[i]]),
+          error = function(e) {
+            stop(
+              sprintf("Row %d: %s", i, conditionMessage(e)),
+              call. = FALSE
+            )
+          }
+        )
+      },
+      FUN.VALUE = character(1)
+    )
 
     df[[variable_name]] <- recovered_order
     return(df)
