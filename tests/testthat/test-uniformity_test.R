@@ -11,6 +11,19 @@ test_that("uniformity_test works with table input", {
   expect_equal(result$statistic[[1]], 0) # Should be 0 for uniform
 })
 
+test_that("uniformity_test warns when var is given with table input", {
+  tab <- table(c(
+    rep("123", 10), rep("132", 10), rep("213", 10),
+    rep("231", 10), rep("312", 10), rep("321", 10)
+  ))
+
+  expect_warning(
+    result <- uniformity_test(tab, var = "ranking"),
+    "ignored when 'data' is already a table"
+  )
+  expect_s3_class(result, "htest")
+})
+
 test_that("uniformity_test works with data frame input", {
   df <- data.frame(ranking = c(rep("123", 50), rep("321", 50)))
   result <- uniformity_test(df, var = "ranking")
