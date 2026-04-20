@@ -41,8 +41,8 @@ counterfactual preferences match those of non-random respondents.}
 
 \item{seed}{Seed for \code{set.seed} for reproducibility.}
 
-\item{weight}{The name of the weight column in \code{data}. Defaults to
-\code{NULL}, which uses equal weights.}
+\item{weight}{The name of the weight column in `data`. Defaults to `NULL`,
+which uses equal weights.}
 
 \item{ranking}{The name of the column that will store the full ranking
 profile. Defaults to "ranking". If `main_q` exists in the data, the produced

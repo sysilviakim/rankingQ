@@ -6,13 +6,12 @@
 \alias{rankingQ-package}
 \title{rankingQ: Design-Based Methods for Improving Ranking Questions}
 \description{
-\if{html}{
-\figure{logo.png}{options: style='float: right' alt='logo' width='120'}
-}
+\if{html}{\figure{logo.png}{
+options: style='float: right' alt='logo' width='120'}}
 
-Implements design-based bias correction methods that address measurement
-errors due to random responses in ranking survey questions. Based on
-Atsusaka and Kim (2025) \doi{10.1017/pan.2024.33}.
+Implements design-based bias correction methods that address
+measurement errors due to random responses in ranking survey questions.
+Based on Atsusaka and Kim (2025) \doi{10.1017/pan.2024.33}.
 }
 \seealso{
 Useful links:
@@ -30,7 +29,8 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Yuki Atsusaka \email{yuki.atsusaka@gmail.com}
+  \item Yuki Atsusaka
+  \email{yuki.atsusaka@gmail.com}
   (\href{https://orcid.org/0000-0001-5365-1876}{ORCID})
 }
 
