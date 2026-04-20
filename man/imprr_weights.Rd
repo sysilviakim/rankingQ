@@ -34,11 +34,15 @@ with an underbar separator followed by numbers.}
 \item{population}{Choice of the target population out of
 non-random respondents (default) or all respondents.}
 
-\item{assumption}{Choice of the identifying assumption if `population` is set to all}
+\item{assumption}{Choice of identifying assumption when
+`population = "all"`: `uniform` assumes random respondents would have
+uniform counterfactual preferences, while `contaminated` assumes their
+counterfactual preferences match those of non-random respondents.}
 
 \item{seed}{Seed for \code{set.seed} for reproducibility.}
 
-\item{weight}{A vector of weights. Defaults to NULL.}
+\item{weight}{The name of the weight column in \code{data}. Defaults to
+\code{NULL}, which uses equal weights.}
 
 \item{ranking}{The name of the column that will store the full ranking
 profile. Defaults to "ranking". If `main_q` exists in the data, the produced

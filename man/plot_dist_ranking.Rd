@@ -20,12 +20,13 @@ plot_dist_ranking(
 )
 }
 \arguments{
-\item{tab}{A table in which the frequencies of ranking patterns are recorded.}
+\item{tab}{A table in which the frequencies of ranking patterns are
+recorded.}
 
 \item{x}{Name of the column that contains permutation patterns.}
 
-\item{y}{Name of the column that contains the proportion of ranking
-permutations.}
+\item{y}{Name of the column that contains the plotted values
+(for example, proportions or frequencies).}
 
 \item{ylim}{The upper limit of the y-axis.}
 

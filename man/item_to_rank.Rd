@@ -15,12 +15,14 @@ item_to_rank(
 \item{item_rank}{A data frame with rankings as columns,
 with items being ranked as cell values.}
 
-\item{format_input}{Character string indicating the format of the data input,
+\item{format_input}{Character string indicating the format of the
+  data input,
 namely "ordering" or "ranking".
 Used for \code{PLMIX::rank_ord_switch}.}
 
 \item{reference}{A character vector of item names to be used for renaming
-the columns. If not specified, will use the first 26 letters of the alphabet.
+the columns. If not specified, will use the first 26 letters of the
+alphabet.
 Default is `NULL`.}
 
 \item{long}{Whether to return the output in a long data format.

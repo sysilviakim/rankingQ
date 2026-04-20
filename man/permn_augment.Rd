@@ -19,7 +19,8 @@ permutation patterns.
 }
 \description{
 In some distribution of ranking data, not all possible permutation patterns
-may be realized due to the sample size or skewed distribution of preferences.
+may be realized due to the sample size or skewed distribution of
+preferences.
 }
 \details{
 This function augments the given table with all possible observed
