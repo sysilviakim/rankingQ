@@ -145,6 +145,32 @@ are provided.</p></dd>
 
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">imprr_direct</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">identity</span>,</span></span>
+<span class="r-in"><span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span></span>
+<span class="r-in"><span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span></span>
+<span class="r-in"><span>  n_bootstrap <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  seed <span class="op">=</span> <span class="fl">123</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No weight column supplied; using equal weights for all observations.</span>
+<span class="r-in"><span><span class="va">out</span><span class="op">$</span><span class="va">est_p_random</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       mean    lower    upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.310536 0.310536 0.310536</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">results</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   item           qoi              outcome               mean  lower  upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> app_identity_1 average rank     Avg: app_identity_1 3.33   3.33   3.33  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> app_identity_1 marginal ranking Ranked 1            0.036<span style="text-decoration: underline;">2</span> 0.036<span style="text-decoration: underline;">2</span> 0.036<span style="text-decoration: underline;">2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> app_identity_1 marginal ranking Ranked 2            0.137  0.137  0.137 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> app_identity_1 marginal ranking Ranked 3            0.284  0.284  0.284 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> app_identity_1 marginal ranking Ranked 4            0.543  0.543  0.543 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> app_identity_1 pairwise ranking v. app_identity_2   0.338  0.338  0.338 </span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

@@ -98,3 +98,31 @@ A list with two elements:
   A tibble with bias-corrected estimates for all items, including
   average ranks, pairwise probabilities, top-k probabilities, and
   marginal probabilities
+
+## Examples
+
+``` r
+out <- imprr_direct_rcpp(
+  identity,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity",
+  n_bootstrap = 1,
+  seed = 123
+)
+#> No weight column supplied; using equal weights for all observations.
+out$est_p_random
+#> # A tibble: 1 × 3
+#>    mean lower upper
+#>   <dbl> <dbl> <dbl>
+#> 1 0.322 0.322 0.322
+head(out$results)
+#> # A tibble: 6 × 6
+#>   item           qoi              outcome               mean  lower  upper
+#>   <chr>          <chr>            <chr>                <dbl>  <dbl>  <dbl>
+#> 1 app_identity_1 average rank     Avg: app_identity_1 3.30   3.30   3.30  
+#> 2 app_identity_1 pairwise ranking v. app_identity_2   0.349  0.349  0.349 
+#> 3 app_identity_1 pairwise ranking v. app_identity_3   0.0924 0.0924 0.0924
+#> 4 app_identity_1 pairwise ranking v. app_identity_4   0.256  0.256  0.256 
+#> 5 app_identity_1 top-k ranking    Top-1               0.0298 0.0298 0.0298
+#> 6 app_identity_1 top-k ranking    Top-2               0.171  0.171  0.171 
+```

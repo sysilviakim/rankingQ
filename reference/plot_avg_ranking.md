@@ -38,3 +38,17 @@ plot_avg_ranking(data, qoi_filter = "average rank", xlab = NULL, ylab = "")
 ## Value
 
 A ggplot object.
+
+## Examples
+
+``` r
+avg_rank_results <- data.frame(
+  item = c("Party", "Religion", "Gender", "Race"),
+  qoi = rep("average rank", 4),
+  mean = c(1.7, 2.1, 2.8, 3.4),
+  lower = c(1.5, 1.9, 2.6, 3.2),
+  upper = c(1.9, 2.3, 3.0, 3.6)
+)
+plot_avg_ranking(avg_rank_results)
+
+```

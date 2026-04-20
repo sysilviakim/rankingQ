@@ -87,3 +87,24 @@ stratified_avg(
 ## Value
 
 A data frame with the bootstrap-estimated average ranks.
+
+## Examples
+
+``` r
+identity2 <- identity
+identity2$stratum <- rep(c("group1", "group2"), length.out = nrow(identity2))
+out <- suppressMessages(stratified_avg(
+  identity2,
+  var_stratum = "stratum",
+  main_q = "app_identity",
+  p_random = 0,
+  n_bootstrap = 1,
+  seed = 123
+))
+head(out)
+#>       mean           item
+#> 1 3.052680 app_identity_1
+#> 2 2.536044 app_identity_2
+#> 3 1.949168 app_identity_3
+#> 4 2.462107 app_identity_4
+```

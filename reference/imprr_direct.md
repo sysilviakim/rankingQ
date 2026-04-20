@@ -98,3 +98,29 @@ A list with two elements:
   A tibble with bias-corrected estimates grouped by `item`, `qoi`
   (quantity of interest), and `outcome`, including columns `mean`,
   `lower`, and `upper`.
+
+## Examples
+
+``` r
+out <- imprr_direct(
+  identity,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity",
+  n_bootstrap = 1,
+  seed = 123
+)
+#> No weight column supplied; using equal weights for all observations.
+out$est_p_random
+#>       mean    lower    upper
+#> 1 0.310536 0.310536 0.310536
+head(out$results)
+#> # A tibble: 6 × 6
+#>   item           qoi              outcome               mean  lower  upper
+#>   <chr>          <chr>            <chr>                <dbl>  <dbl>  <dbl>
+#> 1 app_identity_1 average rank     Avg: app_identity_1 3.33   3.33   3.33  
+#> 2 app_identity_1 marginal ranking Ranked 1            0.0362 0.0362 0.0362
+#> 3 app_identity_1 marginal ranking Ranked 2            0.137  0.137  0.137 
+#> 4 app_identity_1 marginal ranking Ranked 3            0.284  0.284  0.284 
+#> 5 app_identity_1 marginal ranking Ranked 4            0.543  0.543  0.543 
+#> 6 app_identity_1 pairwise ranking v. app_identity_2   0.338  0.338  0.338 
+```

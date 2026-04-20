@@ -22,3 +22,19 @@ uniformity_test(data, var = NULL)
 ## Value
 
 A chi-square test result.
+
+## Examples
+
+``` r
+tab <- table(c(
+  rep("123", 10), rep("132", 10), rep("213", 10),
+  rep("231", 10), rep("312", 10), rep("321", 10)
+))
+uniformity_test(tab)
+#> 
+#>  Chi-squared test for given probabilities
+#> 
+#> data:  tab
+#> X-squared = 0, df = 5, p-value = 1
+#> 
+```

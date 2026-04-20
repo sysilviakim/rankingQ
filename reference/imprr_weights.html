@@ -142,6 +142,40 @@ are provided.</p></dd>
 
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">imprr_weights</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">identity</span>,</span></span>
+<span class="r-in"><span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span></span>
+<span class="r-in"><span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No weight column supplied; using equal weights for all observations.</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">results</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 18</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   weights s_weight app_identity app_identity_1 app_identity_2 app_identity_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>    1.02    0.844 1423                      1              4              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>    1.02    0.886 1423                      1              4              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>    1.27    2.96  3412                      3              4              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>    1.02    0.987 1423                      1              4              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>    1.10    1.76  4132                      4              1              3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>    1.02    0.469 3124                      3              1              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 12 more variables: app_identity_4 &lt;dbl&gt;, anc_identity &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   anc_identity_1 &lt;dbl&gt;, anc_identity_2 &lt;dbl&gt;, anc_identity_3 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   anc_identity_4 &lt;dbl&gt;, anc_correct_identity &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   app_identity_recorded &lt;chr&gt;, anc_identity_recorded &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   app_identity_row_rnd &lt;chr&gt;, anc_identity_row_rnd &lt;chr&gt;, ranking &lt;chr&gt;</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">rankings</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ranking  n    prop_obs     prop_bc   weights   prop_bc_raw prop_bc_adj</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    1234 14 0.012939002 0.000000000 0.0000000 -0.0003526508 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    1243 11 0.010166359 0.000000000 0.0000000 -0.0044081345 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    1324 14 0.012939002 0.000000000 0.0000000 -0.0003526508 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    1342  7 0.006469501 0.000000000 0.0000000 -0.0098154461 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    1423 50 0.046210721 0.046944603 1.0158812  0.0483131539 0.048313154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    1432 20 0.018484288 0.007538549 0.4078355  0.0077583167 0.007758317</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

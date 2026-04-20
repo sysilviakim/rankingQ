@@ -97,3 +97,37 @@ A list with three elements:
   A data frame with ranking patterns, observed proportions (`prop_obs`),
   bias-corrected proportions (`prop_bc`), and inverse probability
   weights (`weights`) for each permutation.
+
+## Examples
+
+``` r
+out <- imprr_weights(
+  identity,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity"
+)
+#> No weight column supplied; using equal weights for all observations.
+head(out$results)
+#> # A tibble: 6 × 18
+#>   weights s_weight app_identity app_identity_1 app_identity_2 app_identity_3
+#>     <dbl>    <dbl> <chr>                 <dbl>          <dbl>          <dbl>
+#> 1    1.02    0.844 1423                      1              4              2
+#> 2    1.02    0.886 1423                      1              4              2
+#> 3    1.27    2.96  3412                      3              4              1
+#> 4    1.02    0.987 1423                      1              4              2
+#> 5    1.10    1.76  4132                      4              1              3
+#> 6    1.02    0.469 3124                      3              1              2
+#> # ℹ 12 more variables: app_identity_4 <dbl>, anc_identity <chr>,
+#> #   anc_identity_1 <dbl>, anc_identity_2 <dbl>, anc_identity_3 <dbl>,
+#> #   anc_identity_4 <dbl>, anc_correct_identity <dbl>,
+#> #   app_identity_recorded <chr>, anc_identity_recorded <chr>,
+#> #   app_identity_row_rnd <chr>, anc_identity_row_rnd <chr>, ranking <chr>
+head(out$rankings)
+#>   ranking  n    prop_obs     prop_bc   weights   prop_bc_raw prop_bc_adj
+#> 1    1234 14 0.012939002 0.000000000 0.0000000 -0.0003526508 0.000000000
+#> 2    1243 11 0.010166359 0.000000000 0.0000000 -0.0044081345 0.000000000
+#> 3    1324 14 0.012939002 0.000000000 0.0000000 -0.0003526508 0.000000000
+#> 4    1342  7 0.006469501 0.000000000 0.0000000 -0.0098154461 0.000000000
+#> 5    1423 50 0.046210721 0.046944603 1.0158812  0.0483131539 0.048313154
+#> 6    1432 20 0.018484288 0.007538549 0.4078355  0.0077583167 0.007758317
+```
