@@ -13,7 +13,6 @@ imprr_weights(
   anc_correct,
   population = "non-random",
   assumption = "contaminated",
-  seed = 123456,
   weight = NULL,
   ranking = "ranking"
 )
@@ -54,10 +53,6 @@ imprr_weights(
   \`uniform\` assumes random respondents would have uniform
   counterfactual preferences, while \`contaminated\` assumes their
   counterfactual preferences match those of non-random respondents.
-
-- seed:
-
-  Seed for `set.seed` for reproducibility.
 
 - weight:
 

@@ -58,7 +58,6 @@ distribution using a paired anchor question, using the IPW estimator.</p>
 <span>  <span class="va">anc_correct</span>,</span>
 <span>  population <span class="op">=</span> <span class="st">"non-random"</span>,</span>
 <span>  assumption <span class="op">=</span> <span class="st">"contaminated"</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">123456</span>,</span>
 <span>  weight <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ranking <span class="op">=</span> <span class="st">"ranking"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -100,10 +99,6 @@ non-random respondents (default) or all respondents.</p></dd>
 `population = "all"`: `uniform` assumes random respondents would have
 uniform counterfactual preferences, while `contaminated` assumes their
 counterfactual preferences match those of non-random respondents.</p></dd>
-
-
-<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>Seed for <code>set.seed</code> for reproducibility.</p></dd>
 
 
 <dt id="arg-weight">weight<a class="anchor" aria-label="anchor" href="#arg-weight"></a></dt>

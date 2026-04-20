@@ -168,12 +168,12 @@ ranking profile.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ranking</span>, <span class="va">weights</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   ranking   weights</span></span>
-<span><span class="co">#&gt; 1    1234 0.5275266</span></span>
+<span><span class="co">#&gt; 1    1234 0.4413785</span></span>
 <span><span class="co">#&gt; 2    1243 0.0000000</span></span>
-<span><span class="co">#&gt; 3    1324 0.4410833</span></span>
+<span><span class="co">#&gt; 3    1324 0.3402731</span></span>
 <span><span class="co">#&gt; 4    1342 0.0000000</span></span>
-<span><span class="co">#&gt; 5    1423 0.9897016</span></span>
-<span><span class="co">#&gt; 6    1432 0.3828315</span></span></code></pre></div>
+<span><span class="co">#&gt; 5    1423 0.9819455</span></span>
+<span><span class="co">#&gt; 6    1432 0.2721408</span></span></code></pre></div>
 <p>The respondent-level output keeps the original data and appends a
 <code>weights</code> column along with a unified <code>ranking</code>
 column.</p>
@@ -184,12 +184,12 @@ column.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span></span>
 <span><span class="co">#&gt;   weights s_weight app_identity ranking</span></span>
 <span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>   0.990    0.844 1423         1423   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>   0.990    0.886 1423         1423   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>   1.28     2.96  3412         3412   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>   0.990    0.987 1423         1423   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>   1.13     1.76  4132         4132   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>   0.976    0.469 3124         3124</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>   0.982    0.844 1423         1423   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>   0.982    0.886 1423         1423   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>   1.32     2.96  3412         3412   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>   0.982    0.987 1423         1423   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>   1.14     1.76  4132         4132   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>   0.966    0.469 3124         3124</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="using-the-ipw-weights">Using the IPW Weights<a class="anchor" aria-label="anchor" href="#using-the-ipw-weights"></a>
@@ -210,10 +210,10 @@ helpers such as <code>avg_rank</code>.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Joining with `by = join_by(variable)`</span></span>
 <span><span class="co">#&gt;       item          qoi     mean         se    lower    upper method</span></span>
-<span><span class="co">#&gt; 1    Party Average Rank 3.203496 0.02782939 3.148891 3.258102    IPW</span></span>
-<span><span class="co">#&gt; 2 Religion Average Rank 2.597869 0.04029251 2.518809 2.676930    IPW</span></span>
-<span><span class="co">#&gt; 3   Gender Average Rank 1.726510 0.02499470 1.677466 1.775554    IPW</span></span>
-<span><span class="co">#&gt; 4     Race Average Rank 2.472124 0.02569631 2.421704 2.522544    IPW</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    Party Average Rank 3.226655 0.02751980 3.172656 3.280653    IPW</span></span>
+<span><span class="co">#&gt; 2 Religion Average Rank 2.600988 0.04074443 2.521041 2.680935    IPW</span></span>
+<span><span class="co">#&gt; 3   Gender Average Rank 1.707342 0.02466106 1.658953 1.755731    IPW</span></span>
+<span><span class="co">#&gt; 4     Race Average Rank 2.465016 0.02531970 2.415334 2.514697    IPW</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="next-steps">Next Steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>

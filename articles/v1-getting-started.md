@@ -108,12 +108,12 @@ out_weights$rankings |>
   select(ranking, weights) |>
   head()
 #>   ranking   weights
-#> 1    1234 0.5275266
+#> 1    1234 0.4413785
 #> 2    1243 0.0000000
-#> 3    1324 0.4410833
+#> 3    1324 0.3402731
 #> 4    1342 0.0000000
-#> 5    1423 0.9897016
-#> 6    1432 0.3828315
+#> 5    1423 0.9819455
+#> 6    1432 0.2721408
 ```
 
 The respondent-level output keeps the original data and appends a
@@ -126,12 +126,12 @@ out_weights$results |>
 #> # A tibble: 6 × 4
 #>   weights s_weight app_identity ranking
 #>     <dbl>    <dbl> <chr>        <chr>  
-#> 1   0.990    0.844 1423         1423   
-#> 2   0.990    0.886 1423         1423   
-#> 3   1.28     2.96  3412         3412   
-#> 4   0.990    0.987 1423         1423   
-#> 5   1.13     1.76  4132         4132   
-#> 6   0.976    0.469 3124         3124
+#> 1   0.982    0.844 1423         1423   
+#> 2   0.982    0.886 1423         1423   
+#> 3   1.32     2.96  3412         3412   
+#> 4   0.982    0.987 1423         1423   
+#> 5   1.14     1.76  4132         4132   
+#> 6   0.966    0.469 3124         3124
 ```
 
 ## Using the IPW Weights
@@ -153,10 +153,10 @@ avg_rank(
 )
 #> Joining with `by = join_by(variable)`
 #>       item          qoi     mean         se    lower    upper method
-#> 1    Party Average Rank 3.203496 0.02782939 3.148891 3.258102    IPW
-#> 2 Religion Average Rank 2.597869 0.04029251 2.518809 2.676930    IPW
-#> 3   Gender Average Rank 1.726510 0.02499470 1.677466 1.775554    IPW
-#> 4     Race Average Rank 2.472124 0.02569631 2.421704 2.522544    IPW
+#> 1    Party Average Rank 3.226655 0.02751980 3.172656 3.280653    IPW
+#> 2 Religion Average Rank 2.600988 0.04074443 2.521041 2.680935    IPW
+#> 3   Gender Average Rank 1.707342 0.02466106 1.658953 1.755731    IPW
+#> 4     Race Average Rank 2.465016 0.02531970 2.415334 2.514697    IPW
 ```
 
 ## Next Steps
