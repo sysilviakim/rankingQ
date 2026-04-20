@@ -111,3 +111,20 @@ test_that("rank_longer errors when reference is shorter than ranking length", {
     )
   )
 })
+
+test_that("rank_longer parses delimiter-separated rankings for J greater than 9", {
+  df <- data.frame(
+    id = c(1, 2),
+    ranking = c(
+      paste(1:10, collapse = "|"),
+      paste(10:1, collapse = "|")
+    )
+  )
+
+  result <- rank_longer(df, cols = "ranking", id = "id")
+
+  expect_equal(nrow(result), 20)
+  expect_equal(result$reference_no, rep(1:10, 2))
+  expect_equal(result$ranking[result$id == 1], 1:10)
+  expect_equal(result$ranking[result$id == 2], 10:1)
+})

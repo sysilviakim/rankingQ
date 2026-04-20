@@ -85,3 +85,37 @@ test_that("rank_wider errors on duplicated ranks within respondent", {
     "Each respondent must have unique rank values."
   )
 })
+
+test_that("rank_wider emits delimiter-separated single-column output for J greater than 9", {
+  items <- paste0("Item_", 1:10)
+  df <- data.frame(
+    id = rep(c(1, 2), each = 10),
+    item_name = rep(items, 2),
+    ranking = c(1:10, 10:1)
+  )
+
+  result <- rank_wider(
+    df,
+    id = "id",
+    output = "single",
+    reference = items
+  )
+
+  expect_equal(
+    result$ranking,
+    c(
+      paste(1:10, collapse = "|"),
+      paste(10:1, collapse = "|")
+    )
+  )
+
+  round_trip <- rank_longer(
+    result,
+    cols = "ranking",
+    id = "id",
+    reference = items
+  )
+
+  expect_equal(round_trip$ranking[round_trip$id == 1], 1:10)
+  expect_equal(round_trip$ranking[round_trip$id == 2], 10:1)
+})

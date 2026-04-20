@@ -116,6 +116,46 @@ test_that("imprr_direct_rcpp accepts a weight column name", {
   expect_true(result$est_p_random$mean >= 0)
 })
 
+test_that("imprr_direct_rcpp accepts a fixed p_random without anc_correct", {
+  toy <- data.frame(
+    q_1 = c(1, 2, 1, 2),
+    q_2 = c(2, 1, 2, 1)
+  )
+
+  result <- imprr_direct_rcpp(
+    data = toy,
+    J = 2,
+    main_q = "q",
+    p_random = 0.25,
+    n_bootstrap = 3,
+    seed = 1
+  )
+
+  expect_equal(as.numeric(result$est_p_random[1, ]), c(0.25, 0.25, 0.25))
+  expect_equal(nrow(result$results), 10L)
+})
+
+test_that("imprr_direct_rcpp defaults to no correction without anc_correct or p_random", {
+  toy <- data.frame(
+    q_1 = c(1, 2, 1, 2),
+    q_2 = c(2, 1, 2, 1)
+  )
+
+  expect_message(
+    result <- imprr_direct_rcpp(
+      data = toy,
+      J = 2,
+      main_q = "q",
+      n_bootstrap = 3,
+      seed = 1
+    ),
+    "No anc_correct or p_random supplied"
+  )
+
+  expect_equal(as.numeric(result$est_p_random[1, ]), c(0, 0, 0))
+  expect_false(anyNA(result$results$mean))
+})
+
 test_that("imprr_direct_rcpp errors on missing weight column", {
   data(identity_w)
 
@@ -219,6 +259,29 @@ test_that("imprr_direct_rcpp errors when bootstrap draws imply invalid non-rando
     ),
     "Estimated non-random response rate is too small/non-finite."
   )
+})
+
+test_that("imprr_direct_rcpp infers J from delimiter-separated main_q values", {
+  ranking_mat <- rbind(1:10, 10:1)
+  toy <- as.data.frame(ranking_mat)
+  names(toy) <- paste0("q_", 1:10)
+  toy$q <- c(
+    paste(1:10, collapse = "|"),
+    paste(10:1, collapse = "|")
+  )
+  toy$anc <- c(1, 1)
+
+  out <- imprr_direct_rcpp(
+    data = toy,
+    J = NULL,
+    main_q = "q",
+    anc_correct = "anc",
+    n_bootstrap = 1,
+    seed = 1
+  )
+
+  expect_equal(nrow(out$est_p_random), 1)
+  expect_equal(nrow(out$results), 290)
 })
 
 test_that("imprr_direct_rcpp uses exact ranking column names", {

@@ -53,32 +53,59 @@ recover_recorded_responses <- function(
     true_order,
     presented_order,
     df = NULL) {
-  recover_one <- function(true_chars, presented_chars) {
-    if (any(is.na(true_chars)) || any(is.na(presented_chars))) {
+  recover_one <- function(true_label, presented_label) {
+    if (is.na(true_label) || is.na(presented_label)) {
       return(NA_character_)
     }
 
-    indices <- suppressWarnings(as.integer(presented_chars))
+    true_parsed <- .parse_permutation_label(true_label, J = NULL)
+    .validate_permutation_values(
+      true_parsed$values,
+      true_parsed$J,
+      true_label
+    )
 
-    if (length(indices) != length(true_chars)) {
+    if (grepl("[A-Za-z]", presented_label)) {
+      stop("presented_order must contain only numeric position codes.")
+    }
+
+    presented_parsed <- tryCatch(
+      .parse_permutation_label(
+        presented_label,
+        J = true_parsed$J
+      ),
+      error = function(e) {
+        stop("presented_order must contain only numeric position codes.")
+      }
+    )
+
+    indices <- suppressWarnings(as.integer(presented_parsed$values))
+
+    if (length(indices) != true_parsed$J) {
       stop("presented_order and true_order must have the same length.")
     }
     if (any(is.na(indices))) {
       stop("presented_order must contain only numeric position codes.")
     }
-    if (any(indices < 1L | indices > length(true_chars))) {
+    if (any(indices < 1L | indices > true_parsed$J)) {
       stop("presented_order contains indices outside the range of true_order.")
     }
-    if (!identical(sort(indices), seq_along(true_chars))) {
+    if (!identical(sort(indices), seq_len(true_parsed$J))) {
       stop("presented_order must be a permutation of positions in true_order.")
     }
 
-    paste(true_chars[indices], collapse = "")
+    output_format <- true_parsed
+    if (output_format$style %in% c("compact_multi", "compact_multi_inferred")) {
+      output_format <- .default_ranking_format(true_parsed$J)
+    }
+
+    .format_permutation_values(
+      true_parsed$values[indices],
+      format = output_format
+    )
   }
 
   if (is.null(df)) {
-    presented_order <- strsplit(presented_order, "")[[1]]
-    true_order <- strsplit(true_order, "")[[1]]
     return(recover_one(true_order, presented_order))
   } else {
     if (!(presented_order %in% names(df))) {
@@ -89,16 +116,14 @@ recover_recorded_responses <- function(
     }
 
     variable_name <- gsub("_row_rnd", "_recorded", presented_order)
-    presented_order <- df[[presented_order]] %>%
-      map(~ strsplit(.x, "")[[1]])
-    true_order <- df[[true_order]] %>%
-      map(~ strsplit(.x, "")[[1]])
+    presented_values <- df[[presented_order]]
+    true_values <- df[[true_order]]
 
     recovered_order <- vapply(
-      seq_along(true_order),
+      seq_along(true_values),
       function(i) {
         tryCatch(
-          recover_one(true_order[[i]], presented_order[[i]]),
+          recover_one(true_values[[i]], presented_values[[i]]),
           error = function(e) {
             stop(
               sprintf("Row %d: %s", i, conditionMessage(e)),

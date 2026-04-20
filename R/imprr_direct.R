@@ -17,7 +17,9 @@
 #' marginal rankings. For example, if `main_q` is `app_identity`, the function
 #' looks for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on,
 #' with an underbar separator followed by numbers.
-#' @param anc_correct Indicator for passing the anchor question.
+#' @param anc_correct Optional indicator for passing the anchor question.
+#'   If `NULL`, `p_random` is used when supplied; otherwise the function
+#'   defaults to `p_random = 0` and applies no correction.
 #' @param population Choice of the target population out of
 #' non-random respondents (default) or all respondents.
 #' @param assumption Choice of identifying assumption when
@@ -29,6 +31,8 @@
 #' @param weight The name of the weight column in `data`. Defaults to `NULL`,
 #' which uses equal weights.
 #' @param verbose Indicator for verbose output. Defaults to FALSE.
+#' @param p_random Optional fixed proportion of random/inattentive respondents.
+#'   When supplied, this overrides `anc_correct`.
 #'
 #' @return A list with two elements:
 #' \describe{
@@ -45,13 +49,14 @@
 imprr_direct <- function(data,
                          J = NULL,
                          main_q,
-                         anc_correct,
+                         anc_correct = NULL,
                          population = "non-random",
                          assumption = "contaminated",
                          n_bootstrap = 200,
                          seed = 123456,
                          weight = NULL,
-                         verbose = FALSE) {
+                         verbose = FALSE,
+                         p_random = NULL) {
   ## Suppress global variable warning
   estimate <- g_U <- est.p.random <- item <- qoi <-
     outcome <- bc_estimate <- NULL
@@ -65,15 +70,19 @@ imprr_direct <- function(data,
   if (!is.character(main_q) || length(main_q) != 1) {
     stop("main_q must be a single column name.")
   }
-  if (!is.character(anc_correct) || length(anc_correct) != 1) {
-    stop("anc_correct must be a single column name.")
-  }
-  if (!(anc_correct %in% names(data))) {
-    stop("anc_correct column not found in data.")
-  }
   normalized_args <- .normalize_population_args(population, assumption)
   population <- normalized_args$population
   assumption <- normalized_args$assumption
+  random_spec <- .resolve_random_response_inputs(data, anc_correct, p_random)
+  if (population == "all" && assumption == "uniform") {
+    if (!is.null(anc_correct) || !is.null(p_random)) {
+      message(
+        "population = 'all' with assumption = 'uniform' implies no correction; ",
+        "ignoring anc_correct and p_random."
+      )
+    }
+    random_spec <- list(method = "fixed", anc_correct = NULL, p_random = 0)
+  }
   if (!is.numeric(n_bootstrap) || length(n_bootstrap) != 1 ||
       is.na(n_bootstrap) || n_bootstrap < 1 ||
       n_bootstrap != as.integer(n_bootstrap)) {
@@ -89,7 +98,7 @@ imprr_direct <- function(data,
         )
       )
     }
-    J <- nchar(data[[main_q]][[1]])
+    J <- .infer_ranking_size(data[[main_q]])
   }
   if (!is.numeric(J) || length(J) != 1 || is.na(J) ||
       J < 2 || J != as.integer(J)) {
@@ -110,11 +119,6 @@ imprr_direct <- function(data,
   }
   weight <- .resolve_weight_vector(data, weight, N)
 
-  if (population == "all" && assumption == "uniform") {
-    data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
-  }
-  # Under contaminated sampling, theta for the full population equals theta_z.
-
   # Pre-compute constants for efficiency =======================================
   J_factorial <- factorial(J)
   J_1 <- J - 1
@@ -122,6 +126,17 @@ imprr_direct <- function(data,
   uniform_pairwise <- 0.5
   uniform_prob <- 1 / J
   min_p_non_random <- sqrt(.Machine$double.eps)
+  fixed_p_non_random <- NULL
+  if (random_spec$method == "fixed") {
+    fixed_p_non_random <- 1 - random_spec$p_random
+    if (!is.finite(fixed_p_non_random) ||
+        fixed_p_non_random <= min_p_non_random) {
+      stop(
+        "Estimated non-random response rate is too small/non-finite. ",
+        "Check anc_correct, weights, and J."
+      )
+    }
+  }
 
   # Check the validity of the input arguments ==================================
 
@@ -162,15 +177,20 @@ imprr_direct <- function(data,
 
     # Step 1: Get the proportion of random answers -----------------------------
     ## This requires anchor questions and item order randomization
-    prop_correct <- sum(boostrap_dat[[anc_correct]] * bootstrap_weight) /
-      sum(bootstrap_weight)
-    p_non_random <- (prop_correct - 1 / J_factorial) /
-      (1 - 1 / J_factorial)
-    if (!is.finite(p_non_random) || p_non_random <= min_p_non_random) {
-      stop(
-        "Estimated non-random response rate is too small/non-finite. ",
-        "Check anc_correct, weights, and J."
+    if (random_spec$method == "anchor") {
+      p_non_random <- .estimate_p_non_random_from_anchor(
+        boostrap_dat[[random_spec$anc_correct]],
+        bootstrap_weight,
+        J
       )
+      if (!is.finite(p_non_random) || p_non_random <= min_p_non_random) {
+        stop(
+          "Estimated non-random response rate is too small/non-finite. ",
+          "Check anc_correct, weights, and J."
+        )
+      }
+    } else {
+      p_non_random <- fixed_p_non_random
     }
 
     # Step 2: Get the naive estimates of simple quantities ---------------------

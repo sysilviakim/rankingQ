@@ -14,7 +14,9 @@
 #' @param J The number of items in the ranking question. Defaults to NULL,
 #' in which case it will be inferred from the data.
 #' @param main_q Column name for the main ranking question to be analyzed.
-#' @param anc_correct Indicator for passing the anchor question.
+#' @param anc_correct Optional indicator for passing the anchor question.
+#'   If `NULL`, `p_random` is used when supplied; otherwise the function
+#'   defaults to `p_random = 0` and applies no correction.
 #' @param labels A vector of labels for the items being ranked.
 #' Defaults to NULL.
 #' @param seed Seed for \code{set.seed} for reproducibility.
@@ -24,15 +26,18 @@
 #' @param ipw Indicator for using inverse probability weighting. Defaults to
 #' FALSE, in which case direct bias estimation will be employed.
 #' @param verbose Indicator for verbose output. Defaults to FALSE.
+#' @param p_random Optional fixed proportion of random/inattentive respondents.
+#'   When supplied, this overrides `anc_correct`.
 #'
 #' @return A data frame with the bootstrap-estimated average ranks.
 #'
 #' @export
 
 stratified_avg <- function(data, var_stratum, J = NULL,
-                           main_q, anc_correct, labels = NULL, seed = 1234,
+                           main_q, anc_correct = NULL, labels = NULL,
+                           seed = 1234,
                            weight = NULL, n_bootstrap = 200, ipw = FALSE,
-                           verbose = FALSE) {
+                           verbose = FALSE, p_random = NULL) {
   . <- NULL
 
   if (!is.numeric(n_bootstrap) || length(n_bootstrap) != 1 ||
@@ -64,9 +69,12 @@ stratified_avg <- function(data, var_stratum, J = NULL,
   if (!is.character(main_q)) {
     stop("main_q must be a character.")
   }
-  if (!is.character(anc_correct)) {
+  if (!is.null(anc_correct) && !is.character(anc_correct)) {
     stop("anc_correct must be a character.")
   }
+  random_spec <- .resolve_random_response_inputs(data, anc_correct, p_random)
+  anc_correct <- random_spec$anc_correct
+  p_random <- random_spec$p_random
 
   if (is.null(weight)) {
     message("No weight column supplied; using equal weights for all observations.")
@@ -96,7 +104,7 @@ stratified_avg <- function(data, var_stratum, J = NULL,
   }
 
   if (is.null(J)) {
-    J <- nchar(data[[main_q]][[1]])
+    J <- .infer_ranking_size(data[[main_q]])
   }
   ranking_cols <- paste0(main_q, "_", seq_len(J))
   item_spec <- data.frame(
@@ -137,6 +145,7 @@ stratified_avg <- function(data, var_stratum, J = NULL,
               J = J,
               main_q = main_q,
               anc_correct = anc_correct,
+              p_random = p_random,
               weight = weight_col,
               n_bootstrap = 1,
               seed = seed_list[b],
@@ -154,6 +163,7 @@ stratified_avg <- function(data, var_stratum, J = NULL,
               J = J,
               main_q = main_q,
               anc_correct = anc_correct,
+              p_random = p_random,
               weight = weight_col
             )
           }

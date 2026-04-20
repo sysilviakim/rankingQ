@@ -62,6 +62,21 @@ test_that("IPW avg_rank accepts item mappings as a data frame", {
   expect_equal(as.character(result$item), items_df$item)
 })
 
+test_that("avg_rank parses delimiter-separated rankings for J greater than 9", {
+  df_ten <- data.frame(
+    rank = c(
+      paste(1:10, collapse = "|"),
+      paste(10:1, collapse = "|")
+    )
+  )
+
+  result <- avg_rank(df_ten, "rank")
+
+  expect_equal(nrow(result), 10)
+  expect_equal(as.character(result$item), ordinal_seq(10))
+  expect_equal(result$mean, rep(5.5, 10))
+})
+
 test_that("Error is thrown for incorrect arguments", {
   ## Writing tests for only a few cases
   expect_error(

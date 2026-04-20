@@ -51,7 +51,7 @@ plot_dist_ranking <- function(tab,
   .tmp_label <- NULL
 
   ## The size of the reference choice set.
-  J <- nchar(as.character(tab[[x]][[1]]))
+  J <- .infer_ranking_size(tab[[x]])
   tab[[".tmp_label"]] <- if (identical(y, "prop")) {
     paste0(round(tab[[y]] * 100, digits = 1), "%")
   } else {

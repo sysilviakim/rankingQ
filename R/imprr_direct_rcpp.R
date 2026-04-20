@@ -19,7 +19,9 @@
 #' marginal rankings. For example, if `main_q` is `app_identity`, the function
 #' looks for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on,
 #' with an underbar separator followed by numbers.
-#' @param anc_correct Indicator for passing the anchor question.
+#' @param anc_correct Optional indicator for passing the anchor question.
+#'   If `NULL`, `p_random` is used when supplied; otherwise the function
+#'   defaults to `p_random = 0` and applies no correction.
 #' @param population Choice of the target population out of
 #' non-random respondents (default) or all respondents.
 #' @param assumption Choice of identifying assumption when
@@ -31,6 +33,8 @@
 #' @param weight The name of the weight column in `data`. Defaults to `NULL`,
 #' which uses equal weights.
 #' @param verbose Indicator for verbose output. Defaults to FALSE.
+#' @param p_random Optional fixed proportion of random/inattentive respondents.
+#'   When supplied, this overrides `anc_correct`.
 #'
 #' @return A list with two elements:
 #'   \item{est_p_random}{Summary statistics for the estimated proportion of
@@ -44,13 +48,14 @@
 imprr_direct_rcpp <- function(data,
                               J = NULL,
                               main_q,
-                              anc_correct,
+                              anc_correct = NULL,
                               population = "non-random",
                               assumption = "contaminated",
                               n_bootstrap = 200,
                               seed = 123456,
                               weight = NULL,
-                              verbose = FALSE) {
+                              verbose = FALSE,
+                              p_random = NULL) {
   ## Suppress global variable warning
   qoi <- outcome <- bc_estimate <- item <- NULL
 
@@ -63,15 +68,51 @@ imprr_direct_rcpp <- function(data,
   if (!is.character(main_q) || length(main_q) != 1) {
     stop("main_q must be a single column name.")
   }
+  normalized_args <- .normalize_population_args(population, assumption)
+  population <- normalized_args$population
+  assumption <- normalized_args$assumption
+
+  if (population == "all" && assumption == "uniform") {
+    if (!is.null(anc_correct) || !is.null(p_random)) {
+      message(
+        "population = 'all' with assumption = 'uniform' implies no correction; ",
+        "ignoring anc_correct and p_random."
+      )
+    }
+    p_random <- 0
+    anc_correct <- NULL
+  }
+  if (is.null(anc_correct) || !is.null(p_random)) {
+    if (verbose) {
+      message(
+        "Using the R implementation because the random-response rate is fixed ",
+        "rather than estimated from anc_correct."
+      )
+    }
+    return(
+      imprr_direct(
+        data = data,
+        J = J,
+        main_q = main_q,
+        anc_correct = anc_correct,
+        population = population,
+        assumption = assumption,
+        n_bootstrap = n_bootstrap,
+        seed = seed,
+        weight = weight,
+        verbose = verbose,
+        p_random = p_random
+      )
+    )
+  }
+
   if (!is.character(anc_correct) || length(anc_correct) != 1) {
     stop("anc_correct must be a single column name.")
   }
   if (!(anc_correct %in% names(data))) {
     stop("anc_correct column not found in data.")
   }
-  normalized_args <- .normalize_population_args(population, assumption)
-  population <- normalized_args$population
-  assumption <- normalized_args$assumption
+
   if (!is.numeric(n_bootstrap) || length(n_bootstrap) != 1 ||
       is.na(n_bootstrap) || n_bootstrap < 1 ||
       n_bootstrap != as.integer(n_bootstrap)) {
@@ -87,7 +128,7 @@ imprr_direct_rcpp <- function(data,
         )
       )
     }
-    J <- nchar(data[[main_q]][[1]])
+    J <- .infer_ranking_size(data[[main_q]])
   }
   if (!is.numeric(J) || length(J) != 1 || is.na(J) ||
       J < 2 || J != as.integer(J)) {
@@ -107,11 +148,6 @@ imprr_direct_rcpp <- function(data,
     message("No weight column supplied; using equal weights for all observations.")
   }
   weight <- .resolve_weight_vector(data, weight, N)
-
-  if (population == "all" && assumption == "uniform") {
-    data[[anc_correct]] <- rep(1, N)
-  }
-  # Under contaminated sampling, theta for the full population equals theta_z.
 
   # Pre-compute constants ======================================================
   J_1 <- J - 1

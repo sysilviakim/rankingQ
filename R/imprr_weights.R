@@ -20,7 +20,9 @@
 #' marginal rankings. For example, if `main_q` is `app_identity`, the function
 #' looks for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on,
 #' with an underbar separator followed by numbers.
-#' @param anc_correct Indicator for passing the anchor question.
+#' @param anc_correct Optional indicator for passing the anchor question.
+#'   If `NULL`, `p_random` is used when supplied; otherwise the function
+#'   defaults to `p_random = 0` and applies no correction.
 #' @param population Choice of the target population out of
 #' non-random respondents (default) or all respondents.
 #' @param assumption Choice of identifying assumption when
@@ -33,6 +35,8 @@
 #' profile. Defaults to "ranking". If `main_q` exists in the data, the produced
 #' column should be identical to `main_q`. However, the function defaults to
 #' creating another column by combining marginal rankings, just in case.
+#' @param p_random Optional fixed proportion of random/inattentive respondents.
+#'   When supplied, this overrides `anc_correct`.
 #'
 #' @return A list with three elements:
 #' \describe{
@@ -51,11 +55,12 @@
 imprr_weights <- function(data,
                           J = NULL,
                           main_q,
-                          anc_correct,
+                          anc_correct = NULL,
                           population = "non-random",
                           assumption = "contaminated",
                           weight = NULL,
-                          ranking = "ranking") {
+                          ranking = "ranking",
+                          p_random = NULL) {
   ## Suppress global variable warning
   count <- n <- n_adj <- n_renormalized <- prop <- w <-
     prop_obs <- weights <- prop_bc <- NULL
@@ -77,23 +82,28 @@ imprr_weights <- function(data,
   if (!is.character(main_q) || length(main_q) != 1) {
     stop("main_q must be a single column name.")
   }
-  if (!is.character(anc_correct) || length(anc_correct) != 1) {
-    stop("anc_correct must be a single column name.")
-  }
-  if (!(anc_correct %in% names(data))) {
-    stop("anc_correct column not found in data.")
-  }
 
   normalized_args <- .normalize_population_args(population, assumption)
   population <- normalized_args$population
   assumption <- normalized_args$assumption
+  random_spec <- .resolve_random_response_inputs(data, anc_correct, p_random)
+  if (population == "all" && assumption == "uniform") {
+    if (!is.null(anc_correct) || !is.null(p_random)) {
+      message(
+        "population = 'all' with assumption = 'uniform' implies no correction; ",
+        "ignoring anc_correct and p_random."
+      )
+    }
+    random_spec <- list(method = "fixed", anc_correct = NULL, p_random = 0)
+  }
+
   if (is.null(J)) {
     if (!(main_q %in% names(data))) {
       stop(
         "When J is NULL, main_q must exist as a column in data so J can be inferred."
       )
     }
-    J <- nchar(data[[main_q]][[1]])
+    J <- .infer_ranking_size(data[[main_q]])
   }
   if (!is.numeric(J) || length(J) != 1 || is.na(J) ||
       J < 2 || J != as.integer(J)) {
@@ -114,11 +124,6 @@ imprr_weights <- function(data,
   }
   weight <- .resolve_weight_vector(data, weight, N)
 
-  if (population == "all" && assumption == "uniform") {
-    data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
-  }
-  # Under contaminated sampling, theta for the full population equals theta_z.
-
   # Pre-compute factorial for efficiency =======================================
   J_factorial <- factorial(J)
 
@@ -127,18 +132,16 @@ imprr_weights <- function(data,
 
   glo_app <- data[, ranking_cols, drop = FALSE]
 
-  weighted_mean_safe <- function(x, w) {
-    keep <- !is.na(x) & !is.na(w)
-    if (!any(keep)) {
-      return(NA_real_)
-    }
-    sum(x[keep] * w[keep]) / sum(w[keep])
-  }
-
   # Step 1: Get the proportion of random answers -------------------------------
-  prop_correct <- weighted_mean_safe(data[[anc_correct]], weight)
-  p_non_random <- (prop_correct - 1 / J_factorial) /
-    (1 - 1 / J_factorial)
+  if (random_spec$method == "anchor") {
+    p_non_random <- .estimate_p_non_random_from_anchor(
+      data[[random_spec$anc_correct]],
+      weight,
+      J
+    )
+  } else {
+    p_non_random <- 1 - random_spec$p_random
+  }
   if (!is.finite(p_non_random) || p_non_random <= sqrt(.Machine$double.eps)) {
     stop(
       "Estimated non-random response rate is too small/non-finite. ",
@@ -152,7 +155,7 @@ imprr_weights <- function(data,
   # Step 3: Get the observed PMF based on raw data -----------------------------
   ## Get raw counts of ranking profiles
   D_0 <- glo_app
-  D_0[[ranking]] <- do.call(paste0, lapply(D_0[ranking_cols], as.character))
+  D_0[[ranking]] <- .collapse_ranking_columns(D_0, ranking_cols, J)
   D_0$survey_weight <- weight
 
   ## Get weighted counts by ranking profile (fast path via Rcpp)
@@ -170,7 +173,7 @@ imprr_weights <- function(data,
   colnames(perm_j) <- c(paste0("position_", seq_len(J)))
 
   perm_j <- perm_j %>%
-    unite(!!as.name(ranking), sep = "") %>%
+    unite(!!as.name(ranking), sep = if (J <= 9L) "" else "|") %>%
     arrange(!!as.name(ranking))
 
   ## We need this because some rankings may not appear in the data
@@ -223,15 +226,8 @@ imprr_weights <- function(data,
   tibble_w <- df_w %>% tibble()
 
   # Merge the weights back to the original data --------------------------------
-  if (!(ranking %in% names(data))) {
-    data_w <- data
-    data_w[[ranking]] <- do.call(
-      paste0,
-      lapply(data_w[ranking_cols], as.character)
-    )
-  } else {
-    data_w <- data
-  }
+  data_w <- data
+  data_w[[ranking]] <- .collapse_ranking_columns(data_w, ranking_cols, J)
 
   data_w <- data_w %>%
     left_join(tibble_w, by = ranking) %>%

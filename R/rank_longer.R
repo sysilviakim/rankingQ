@@ -89,8 +89,9 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
       "The cols argument must be a character vector of length 1 or greater."
     )
   } else if (length(cols) == 1) {
-    message("One column selected. Parsing column by character length.")
-    max_ranking <- max(nchar(x[[cols]]))
+    message("One column selected. Parsing encoded ranking values.")
+    parsed_rankings <- .parse_ranking_vector(x[[cols]])
+    max_ranking <- parsed_rankings$J
 
     if (is.null(reference)) {
       message("No reference choice set specified. Using general column names.")
@@ -136,13 +137,13 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
 
   ## Pasted ranking column case
   if (length(cols) == 1) {
-    ## Split the column into N = max_ranking columns
-    x <- x %>%
-      separate_wider_position(
-        all_of(cols),
-        widths = stats::setNames(rep(1L, max_ranking), reference)
-      ) %>%
-      mutate(across(all_of(reference), as.numeric))
+    source_col <- cols
+    rank_df <- as.data.frame(parsed_rankings$values, stringsAsFactors = FALSE)
+    names(rank_df) <- reference
+    x <- cbind(
+      x[, setdiff(names(x), source_col), drop = FALSE],
+      rank_df
+    )
     cols <- reference
   }
 
@@ -318,16 +319,12 @@ rank_wider <- function(x,
 
   rank_cols <- item_levels[item_levels %in% names(wide)]
   rank_mat <- wide[rank_cols]
-  rank_strings <- apply(rank_mat, 1, function(z) paste0(z, collapse = ""))
-
-  if (any(nchar(rank_strings) != length(rank_cols))) {
-    stop(
-      paste0(
-        "Single-column output requires one-character rank values. ",
-        "Use output = \"multiple\" for rankings with two-digit values."
-      )
-    )
-  }
+  rank_format <- .default_ranking_format(length(rank_cols))
+  rank_strings <- apply(
+    rank_mat,
+    1,
+    function(z) .format_permutation_values(z, format = rank_format)
+  )
 
   out <- wide[c(id)]
   out[[ranking_name]] <- rank_strings

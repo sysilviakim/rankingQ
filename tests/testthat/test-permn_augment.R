@@ -42,5 +42,29 @@ test_that("permn_augment handles complete data", {
 
 test_that("permn_augment errors on inconsistent lengths", {
   tab <- table(c("123", "12"))
-  expect_error(permn_augment(tab), "same number of characters")
+  expect_error(permn_augment(tab), "must imply the same J")
+})
+
+test_that("permn_augment handles delimiter-separated labels", {
+  tab <- table(c(rep("1,2,3", 2), "3,2,1"))
+  result <- permn_augment(tab, J = 3)
+
+  expect_equal(length(result), 6)
+  expect_true(
+    all(c("1,2,3", "1,3,2", "2,1,3", "2,3,1", "3,1,2", "3,2,1") %in% names(result))
+  )
+  expect_equal(result["1,2,3"], c("1,2,3" = 2))
+  expect_equal(result["1,3,2"], c("1,3,2" = 0))
+})
+
+test_that("compact multi-digit permutation labels can be parsed unambiguously", {
+  parsed <- rankingQ:::.parse_permutation_label("12345678910")
+
+  expect_equal(parsed$J, 10L)
+  expect_identical(parsed$style, "compact_multi")
+  expect_equal(parsed$values, 1:10)
+  expect_equal(
+    rankingQ:::.format_permutation_values(parsed$values),
+    paste(1:10, collapse = "|")
+  )
 })

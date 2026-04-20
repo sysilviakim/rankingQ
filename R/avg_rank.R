@@ -137,8 +137,16 @@ avg_rank <- function(x,
   }
 
   ## What is the J?
-  if (!is.null(rankings)) {
-    J <- max(nchar(x[[rankings]]))
+  if (long) {
+    if (is.null(items)) {
+      stop("If long data frame, the items variable must be specified.")
+    }
+    if (!(items %in% colnames(x))) {
+      stop("The items variable is not contained in the given data frame.")
+    }
+    J <- length(unique(x[[items]]))
+  } else if (!is.null(rankings)) {
+    J <- .infer_ranking_size(x[[rankings]])
   } else if (!is.null(items)) {
     J <- count_items(items)
   } else {
@@ -176,33 +184,28 @@ avg_rank <- function(x,
       out <- x %>%
         group_by(!!as.name(items))
     } else {
-      if (is.null(items)) {
-        ## Just use the ranking positions to identify the items
-        out <- x %>%
-          separate_wider_position(
-            !!as.name(rankings),
-            widths = stats::setNames(rep(1L, J), ordinal_seq(J))
-          ) %>%
-          mutate(across(all_of(ordinal_seq(J)), as.numeric)) %>%
-          pivot_longer(
-            all_of(ordinal_seq(J)),
-            names_to = "item",
-            values_to = "rankings"
+      if (is.data.frame(items)) {
+        stop(
+          paste(
+            "For raw wide data, items must be either NULL or a character",
+            "vector of item labels."
           )
-      } else {
-        ## Use the items variable as item names
-        out <- x %>%
-          separate_wider_position(
-            !!as.name(rankings),
-            widths = stats::setNames(rep(1L, J), items)
-          ) %>%
-          mutate(across(all_of(items), as.numeric)) %>%
-          pivot_longer(
-            all_of(items),
-            names_to = "item",
-            values_to = "rankings"
-          )
+        )
       }
+
+      reference_items <- if (is.null(items)) ordinal_seq(J) else items
+      out <- suppressMessages(
+        rank_longer(
+          x,
+          cols = rankings,
+          reference = reference_items
+        )
+      ) %>%
+        rename(
+          item = item_name,
+          rankings = ranking
+        ) %>%
+        mutate(item = factor(item, levels = reference_items))
       rankings <- "rankings"
       out <- out %>%
         group_by(item) %>%
@@ -226,6 +229,9 @@ avg_rank <- function(x,
         upper = mean + 1.96 * se,
         method = "Raw Data"
       )
+    if (is.null(items)) {
+      out$item <- as.character(out$item)
+    }
   } else {
     vars <- items
     if (is.data.frame(items)) {

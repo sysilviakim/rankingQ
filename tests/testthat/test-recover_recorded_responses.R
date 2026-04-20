@@ -23,6 +23,16 @@ test_that(
   }
 )
 
+test_that("recover_recorded_responses handles delimiter-separated rankings for J greater than 9", {
+  true_order <- paste(10:1, collapse = "|")
+  presented_order <- paste(c(2, 1, 4:10, 3), collapse = "|")
+
+  expect_equal(
+    recover_recorded_responses(true_order, presented_order),
+    paste(c(9, 10, 7:1, 8), collapse = "|")
+  )
+})
+
 test_that("recover_recorded_responses errors when df columns are missing", {
   df <- data.frame(a = "1234", b = "2143", stringsAsFactors = FALSE)
 
