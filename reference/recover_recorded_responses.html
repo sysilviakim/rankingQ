@@ -60,7 +60,12 @@ presented.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">recover_recorded_responses</span><span class="op">(</span><span class="va">true_order</span>, <span class="va">presented_order</span>, df <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">recover_recorded_responses</span><span class="op">(</span></span>
+<span>  <span class="va">true_order</span>,</span>
+<span>  <span class="va">presented_order</span>,</span>
+<span>  df <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  reference <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -82,10 +87,20 @@ were presented to the respondent.</p></dd>
 If NULL, the function expects inputs as simple strings such as "321" or
 "312".</p></dd>
 
+
+<dt id="arg-reference">reference<a class="anchor" aria-label="anchor" href="#arg-reference"></a></dt>
+<dd><p>Optional reference choice-set order. This is only needed
+when mixing numeric position codes with item-label inputs. It can be
+supplied as a character vector such as <code>c("A", "B", "C", "D")</code> or as
+a single compact/delimited string such as <code>"ABCD"</code> or
+<code>"A|B|C|D"</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with the true ranking of the items per respondent.</p>
+    <p>If <code>df = NULL</code>, a character string giving the recovered
+recorded response. Otherwise, the original data frame augmented with a
+column containing the recovered recorded response.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -119,6 +134,15 @@ The true order of the items is A, B, C, so the observed/true ranking is
 <span class="r-in"><span><span class="co">## However, the items were presented in the order D-C-B-A.</span></span></span>
 <span class="r-in"><span><span class="co">## Therefore, the respondent's recorded response is 3-1-4-2.</span></span></span>
 <span class="r-in"><span><span class="fu">recover_recorded_responses</span><span class="op">(</span>true_order <span class="op">=</span> <span class="st">"2413"</span>, <span class="st">"4321"</span><span class="op">)</span> <span class="co">## Output: "3142"</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "3142"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## The same example using item labels directly.</span></span></span>
+<span class="r-in"><span><span class="fu">recover_recorded_responses</span><span class="op">(</span><span class="st">"CADB"</span>, <span class="st">"DCBA"</span><span class="op">)</span> <span class="co">## Output: "3142"</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "3142"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## You can also mix numeric rankings with labeled presentation order</span></span></span>
+<span class="r-in"><span><span class="co">## if the reference choice set is supplied explicitly.</span></span></span>
+<span class="r-in"><span><span class="fu">recover_recorded_responses</span><span class="op">(</span><span class="st">"2413"</span>, <span class="st">"D|C|B|A"</span>, reference <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "3142"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

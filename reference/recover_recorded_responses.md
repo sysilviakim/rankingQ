@@ -8,7 +8,12 @@ actually provided, ignoring the order in which the items were presented.
 ## Usage
 
 ``` r
-recover_recorded_responses(true_order, presented_order, df = NULL)
+recover_recorded_responses(
+  true_order,
+  presented_order,
+  df = NULL,
+  reference = NULL
+)
 ```
 
 ## Arguments
@@ -28,9 +33,18 @@ recover_recorded_responses(true_order, presented_order, df = NULL)
   The input data frame. Defaults to NULL. If NULL, the function expects
   inputs as simple strings such as "321" or "312".
 
+- reference:
+
+  Optional reference choice-set order. This is only needed when mixing
+  numeric position codes with item-label inputs. It can be supplied as a
+  character vector such as `c("A", "B", "C", "D")` or as a single
+  compact/delimited string such as `"ABCD"` or `"A|B|C|D"`.
+
 ## Value
 
-A data frame with the true ranking of the items per respondent.
+If `df = NULL`, a character string giving the recovered recorded
+response. Otherwise, the original data frame augmented with a column
+containing the recovered recorded response.
 
 ## Details
 
@@ -64,5 +78,14 @@ recover_recorded_responses(true_order = "4321", "1234") ## Output: "4321"
 ## However, the items were presented in the order D-C-B-A.
 ## Therefore, the respondent's recorded response is 3-1-4-2.
 recover_recorded_responses(true_order = "2413", "4321") ## Output: "3142"
+#> [1] "3142"
+
+## The same example using item labels directly.
+recover_recorded_responses("CADB", "DCBA") ## Output: "3142"
+#> [1] "3142"
+
+## You can also mix numeric rankings with labeled presentation order
+## if the reference choice set is supplied explicitly.
+recover_recorded_responses("2413", "D|C|B|A", reference = c("A", "B", "C", "D"))
 #> [1] "3142"
 ```
