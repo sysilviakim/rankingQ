@@ -59,9 +59,34 @@ imprr_direct <- function(data,
     stop("There is no data to analyze. Please check the input data.")
   }
 
+  if (!is.character(main_q) || length(main_q) != 1) {
+    stop("main_q must be a single column name.")
+  }
+  if (!is.character(anc_correct) || length(anc_correct) != 1) {
+    stop("anc_correct must be a single column name.")
+  }
+  if (!(anc_correct %in% names(data))) {
+    stop("anc_correct column not found in data.")
+  }
+  if (!is.numeric(n_bootstrap) || length(n_bootstrap) != 1 ||
+      is.na(n_bootstrap) || n_bootstrap < 1 ||
+      n_bootstrap != as.integer(n_bootstrap)) {
+    stop("n_bootstrap must be a single integer >= 1.")
+  }
+
   if (is.null(J)) {
+    if (!(main_q %in% names(data))) {
+      stop(
+        "When J is NULL, main_q must exist as a column in data so J can be inferred."
+      )
+    }
     J <- nchar(data[[main_q]][[1]])
   }
+  if (!is.numeric(J) || length(J) != 1 || is.na(J) ||
+      J < 2 || J != as.integer(J)) {
+    stop("J must be a single integer >= 2.")
+  }
+  J <- as.integer(J)
 
   if (is.null(weight)) {
     weight <- rep(1, N)

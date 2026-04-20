@@ -120,6 +120,54 @@ test_that("imprr_direct_rcpp errors on malformed weight length", {
   )
 })
 
+test_that("imprr_direct_rcpp validates bootstrap count", {
+  data(identity_w)
+
+  expect_error(
+    imprr_direct_rcpp(
+      data = identity_w,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      n_bootstrap = 0,
+      seed = 789
+    ),
+    "n_bootstrap must be a single integer >= 1."
+  )
+})
+
+test_that("imprr_direct_rcpp validates main_q when inferring J", {
+  data(identity_w)
+
+  expect_error(
+    imprr_direct_rcpp(
+      data = identity_w[, setdiff(names(identity_w), "app_identity")],
+      J = NULL,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      n_bootstrap = 1,
+      seed = 789
+    ),
+    "When J is NULL, main_q must exist as a column in data so J can be inferred."
+  )
+})
+
+test_that("imprr_direct_rcpp validates anc_correct column presence", {
+  data(identity_w)
+
+  expect_error(
+    imprr_direct_rcpp(
+      data = identity_w,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "missing_anchor",
+      n_bootstrap = 1,
+      seed = 789
+    ),
+    "anc_correct column not found in data."
+  )
+})
+
 test_that("imprr_direct_rcpp with verbose output", {
   data(identity_w)
 
