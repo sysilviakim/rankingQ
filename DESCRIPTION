@@ -8,9 +8,13 @@ Authors@R: c(
   person("Yuki", "Atsusaka", email = "yuki.atsusaka@gmail.com",
   role = c("aut", "cph"), comment = c(ORCID="0000-0001-5365-1876"))
   )
-Description: Implements design-based bias correction methods that address
-    measurement errors due to random responses in ranking survey questions.
-    Based on Atsusaka and Kim (2025) <doi:10.1017/pan.2024.33>.
+Description: Provides design-based methods to reduce measurement error from
+    random responding in survey ranking questions. Uses anchor-ranking items
+    or user-supplied random-response rates to estimate corrected average
+    ranks, marginal rank probabilities, pairwise comparisons, and ranking
+    distributions. Includes tools for visualization, format conversion,
+    simulation, and diagnostic checks for ranking data. Based on Atsusaka and
+    Kim (2025) <doi:10.1017/pan.2024.33>.
 URL: https://github.com/sysilviakim/rankingQ, http://sysilviakim.com/rankingQ/
 BugReports: https://github.com/sysilviakim/rankingQ/issues
 License: GPL (>= 3)
