@@ -100,10 +100,10 @@ z <- rank_longer(
 #> One column selected. Parsing column by character length.
 #> Joining with `by = join_by(item_name)`
 avg_rank(z, "ranking", items = "item_name", long = TRUE)
-#>   item_name          qoi     mean        se    lower    upper   method
-#> 1     Money Average Rank 2.000000 0.3333333 1.346667 2.653333 Raw Data
-#> 2     Power Average Rank 1.666667 0.1924501 1.289464 2.043869 Raw Data
-#> 3   Respect Average Rank 2.333333 0.3849002 1.578929 3.087738 Raw Data
+#>   item_name          qoi     mean        se     lower    upper   method
+#> 1     Money Average Rank 2.000000 0.5773503 0.8683935 3.131607 Raw Data
+#> 2     Power Average Rank 1.666667 0.3333333 1.0133333 2.320000 Raw Data
+#> 3   Respect Average Rank 2.333333 0.6666667 1.0266667 3.640000 Raw Data
 
 ## Example output from item_to_rank
 x <- data.frame(
@@ -111,8 +111,8 @@ x <- data.frame(
   rank = c(3L, 1L, 2L, 1L, 2L, 3L, 3L, 2L, 1L)
 )
 avg_rank(x, long = TRUE)
-#>   item          qoi     mean        se    lower    upper   method
-#> 1    a Average Rank 2.333333 0.3849002 1.578929 3.087738 Raw Data
-#> 2    b Average Rank 1.666667 0.1924501 1.289464 2.043869 Raw Data
-#> 3    c Average Rank 2.000000 0.3333333 1.346667 2.653333 Raw Data
+#>   item          qoi     mean        se     lower    upper   method
+#> 1    a Average Rank 2.333333 0.6666667 1.0266667 3.640000 Raw Data
+#> 2    b Average Rank 1.666667 0.3333333 1.0133333 2.320000 Raw Data
+#> 3    c Average Rank 2.000000 0.5773503 0.8683935 3.131607 Raw Data
 ```
