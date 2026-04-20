@@ -160,6 +160,35 @@ test_that("imprr_direct_rcpp errors on missing weight column", {
   )
 })
 
+test_that("imprr_direct_rcpp rejects invalid weight values", {
+  data(identity_w)
+
+  expect_error(
+    imprr_direct_rcpp(
+      data = identity_w,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      n_bootstrap = 1,
+      seed = 789,
+      weight = c(-1, rep(1, nrow(identity_w) - 1))
+    ),
+    "weight values cannot be negative."
+  )
+  expect_error(
+    imprr_direct_rcpp(
+      data = transform(identity_w, zero_weight = 0),
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      n_bootstrap = 1,
+      seed = 789,
+      weight = "zero_weight"
+    ),
+    "weight values must sum to a positive number."
+  )
+})
+
 test_that("imprr_direct_rcpp validates bootstrap count", {
   data(identity_w)
 
@@ -245,6 +274,27 @@ test_that("imprr_direct_rcpp errors when bootstrap draws imply invalid non-rando
       seed = 1
     ),
     "Estimated non-random response rate is too small/non-finite."
+  )
+})
+
+test_that("imprr_direct_rcpp errors when bootstrap draws produce non-finite QOIs", {
+  bad <- data.frame(
+    q = "123",
+    q_1 = NA_real_,
+    q_2 = 2,
+    q_3 = 3,
+    anc = 1
+  )
+
+  expect_error(
+    imprr_direct_rcpp(
+      data = bad,
+      main_q = "q",
+      anc_correct = "anc",
+      n_bootstrap = 2,
+      seed = 1
+    ),
+    "Bootstrap produced non-finite estimates."
   )
 })
 

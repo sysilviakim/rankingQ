@@ -161,15 +161,24 @@ imprr_direct_rcpp <- function(data,
       "Check anc_correct, weights, and J."
     )
   }
+  if (any(!is.finite(result_cpp$avg_ranks)) ||
+      any(!is.finite(result_cpp$pairwise)) ||
+      any(!is.finite(result_cpp$topk)) ||
+      any(!is.finite(result_cpp$marginal))) {
+    stop(
+      "Bootstrap produced non-finite estimates. ",
+      "Check ranking columns, anc_correct, weights, and J."
+    )
+  }
   if (verbose) message("Bootstrapping finished.")
 
   # Format results to match original output format =============================
 
   # Proportion of random responses ---------------------------------------------
   df_random_summary <- tibble::tibble(
-    mean = mean(result_cpp$p_random, na.rm = TRUE),
-    lower = stats::quantile(result_cpp$p_random, 0.025, na.rm = TRUE),
-    upper = stats::quantile(result_cpp$p_random, 0.975, na.rm = TRUE)
+    mean = mean(result_cpp$p_random),
+    lower = stats::quantile(result_cpp$p_random, 0.025),
+    upper = stats::quantile(result_cpp$p_random, 0.975)
   )
 
   # Build results tibble -------------------------------------------------------
@@ -186,9 +195,9 @@ imprr_direct_rcpp <- function(data,
       item = target_item,
       qoi = "average rank",
       outcome = paste0("Avg: ", target_item),
-      mean = mean(avg_rank_values, na.rm = TRUE),
-      lower = stats::quantile(avg_rank_values, 0.025, na.rm = TRUE),
-      upper = stats::quantile(avg_rank_values, 0.975, na.rm = TRUE)
+      mean = mean(avg_rank_values),
+      lower = stats::quantile(avg_rank_values, 0.025),
+      upper = stats::quantile(avg_rank_values, 0.975)
     )
 
     # Pairwise probabilities ---------------------------------------------------
@@ -199,9 +208,9 @@ imprr_direct_rcpp <- function(data,
         item = target_item,
         qoi = "pairwise ranking",
         outcome = paste0("v. ", other_items[k]),
-        mean = mean(pairwise_values, na.rm = TRUE),
-        lower = stats::quantile(pairwise_values, 0.025, na.rm = TRUE),
-        upper = stats::quantile(pairwise_values, 0.975, na.rm = TRUE)
+        mean = mean(pairwise_values),
+        lower = stats::quantile(pairwise_values, 0.025),
+        upper = stats::quantile(pairwise_values, 0.975)
       )
     }
 
@@ -213,9 +222,9 @@ imprr_direct_rcpp <- function(data,
         item = target_item,
         qoi = "top-k ranking",
         outcome = paste0("Top-", k),
-        mean = mean(topk_values, na.rm = TRUE),
-        lower = stats::quantile(topk_values, 0.025, na.rm = TRUE),
-        upper = stats::quantile(topk_values, 0.975, na.rm = TRUE)
+        mean = mean(topk_values),
+        lower = stats::quantile(topk_values, 0.025),
+        upper = stats::quantile(topk_values, 0.975)
       )
     }
 
@@ -227,9 +236,9 @@ imprr_direct_rcpp <- function(data,
         item = target_item,
         qoi = "marginal ranking",
         outcome = paste0("Ranked ", k),
-        mean = mean(marginal_values, na.rm = TRUE),
-        lower = stats::quantile(marginal_values, 0.025, na.rm = TRUE),
-        upper = stats::quantile(marginal_values, 0.975, na.rm = TRUE)
+        mean = mean(marginal_values),
+        lower = stats::quantile(marginal_values, 0.025),
+        upper = stats::quantile(marginal_values, 0.975)
       )
     }
   }
