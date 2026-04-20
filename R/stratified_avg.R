@@ -126,20 +126,13 @@ stratified_avg <- function(data, var_stratum, J = NULL,
       imprr_list <- list_strata %>%
         map(
           ~ {
-            ## First, the weights in vector format
-            if (is.null(weight_col)) {
-              weights <- NULL
-            } else {
-              weights <- .x[[weight_col]]
-            }
-
             ## Direct bias correction
             imprr_direct(
               data = .x,
               J = J,
               main_q = main_q,
               anc_correct = anc_correct,
-              weight = weights,
+              weight = weight_col,
               n_bootstrap = 1,
               seed = seed_list[b],
               verbose = verbose
@@ -150,20 +143,13 @@ stratified_avg <- function(data, var_stratum, J = NULL,
       imprr_list <- list_strata %>%
         map(
           ~ {
-            ## First, the weights in vector format
-            if (is.null(weight_col)) {
-              weights <- NULL
-            } else {
-              weights <- .x[[weight_col]]
-            }
-
             ## IPW bias correction
             imprr_weights(
               data = .x,
               J = J,
               main_q = main_q,
               anc_correct = anc_correct,
-              weight = weights
+              weight = weight_col
             )
           }
         )
