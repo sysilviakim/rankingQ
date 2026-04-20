@@ -14,9 +14,11 @@
 
 # Output files from R CMD build
 /*.tar.gz
+/rankingQ_*.tar.gz
 
 # Output files from R CMD check
 /*.Rcheck/
+/rankingQ.Rcheck/
 
 # RStudio files
 .Rproj.user/
