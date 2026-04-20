@@ -34,6 +34,10 @@ Input: A parameter
 \eqn{\overrightarrow{\gamma} = (\gamma_1, \cdots, \gamma_m)}
 of Plackett-Luce. \cr
 
+If all remaining Plackett-Luce weights become zero after earlier draws,
+the remaining items are sampled uniformly at random rather than being
+ordered by their input position.
+
 Output: A ranking \eqn{R \in \mathcal{L}(\mathcal{A})} from
 \eqn{pi_{\overrightarrow{\gamma}} ( \cdot )} under Plackett–Luce.  \cr
   1: Let \eqn{R = \emptyset} and \eqn{A = \mathcal{A}}.  \cr
