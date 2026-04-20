@@ -36,7 +36,9 @@ Defaults to NULL.}
 
 \item{seed}{Seed for \code{set.seed} for reproducibility.}
 
-\item{weight}{A vector of weights. Defaults to NULL.}
+\item{weight}{Either a numeric vector of weights with length
+\code{nrow(data)} or the name of a weight column in \code{data}.
+Defaults to \code{NULL}.}
 
 \item{n_bootstrap}{Number of bootstraps. Defaults to 200.}
 

@@ -136,6 +136,28 @@ test_that("stratified_avg uses provided weight vector", {
   expect_false(isTRUE(all.equal(out1$mean, out2$mean)))
 })
 
+test_that("stratified_avg accepts a weight column name", {
+  skip_on_cran()
+
+  identity <- rankingQ::identity
+  set.seed(5)
+  identity$test_stratum <- sample(c("group1", "group2"), nrow(identity), TRUE)
+
+  result <- stratified_avg(
+    data = identity,
+    var_stratum = "test_stratum",
+    J = 4,
+    main_q = "app_identity",
+    anc_correct = "anc_correct_identity",
+    weight = "s_weight",
+    n_bootstrap = 2,
+    seed = 123
+  )
+
+  expect_s3_class(result, "data.frame")
+  expect_equal(nrow(result), 2 * 4)
+})
+
 test_that("stratified_avg infers J and is reproducible with the same seed", {
   skip_on_cran()
 

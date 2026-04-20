@@ -64,6 +64,36 @@ test_that("imprr_weights accepts a weight column name", {
   expect_true("weights" %in% names(out$results))
 })
 
+test_that("imprr_weights uses supplied weights in est_p_random", {
+  toy <- data.frame(
+    q_1 = c(1, 1, 2, 2),
+    q_2 = c(2, 2, 1, 1),
+    anc = c(1, 1, 0, 0),
+    w_high = c(10, 10, 1, 1),
+    w_low = c(6, 6, 5, 5)
+  )
+
+  out_high <- imprr_weights(
+    toy,
+    J = 2,
+    main_q = "q",
+    anc_correct = "anc",
+    weight = "w_high"
+  )
+
+  out_low <- imprr_weights(
+    toy,
+    J = 2,
+    main_q = "q",
+    anc_correct = "anc",
+    weight = "w_low"
+  )
+
+  expect_false(isTRUE(all.equal(out_high$est_p_random, out_low$est_p_random)))
+  expect_equal(out_high$est_p_random, 1 - (((20 / 22) - 0.5) / 0.5))
+  expect_equal(out_low$est_p_random, 1 - (((12 / 22) - 0.5) / 0.5))
+})
+
 test_that("imprr_weights errors on missing weight column", {
   identity <- rankingQ::identity
 
@@ -76,6 +106,61 @@ test_that("imprr_weights errors on missing weight column", {
       weight = "missing_weight"
     ),
     "weight column not found in data."
+  )
+})
+
+test_that("imprr_weights validates missing anc_correct and empty data clearly", {
+  identity <- rankingQ::identity
+
+  expect_error(
+    imprr_weights(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "missing_anc"
+    ),
+    "anc_correct column not found in data."
+  )
+
+  expect_error(
+    imprr_weights(
+      identity[0, ],
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity"
+    ),
+    "There is no data to analyze"
+  )
+})
+
+test_that("imprr_weights validates J inference requirements clearly", {
+  bad <- data.frame(
+    anc_correct = c(1, 1, 1)
+  )
+
+  expect_error(
+    imprr_weights(
+      bad,
+      J = NULL,
+      main_q = "q",
+      anc_correct = "anc_correct"
+    ),
+    "When J is NULL, main_q must exist as a column in data so J can be inferred."
+  )
+})
+
+test_that("imprr_weights no longer accepts seed", {
+  identity <- rankingQ::identity
+
+  expect_error(
+    imprr_weights(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      seed = 1
+    ),
+    "unused argument"
   )
 })
 
@@ -114,6 +199,30 @@ test_that("imprr_weights uses exact ranking column names", {
   )
 
   expect_equal(out$results$ranking, c("21", "12", "21", "12"))
+})
+
+test_that("imprr_weights respects a custom ranking column name everywhere", {
+  df <- data.frame(
+    q_1 = c(1, 2, 1, 2),
+    q_2 = c(2, 1, 2, 1),
+    anc = c(1, 1, 1, 1)
+  )
+
+  out <- imprr_weights(
+    df,
+    J = 2,
+    main_q = "q",
+    anc_correct = "anc",
+    ranking = "myrank"
+  )
+
+  expect_true("myrank" %in% names(out$results))
+  expect_false("ranking" %in% names(out$results))
+  expect_equal(out$results$myrank, c("12", "21", "12", "21"))
+
+  expect_true("myrank" %in% names(out$rankings))
+  expect_false("ranking" %in% names(out$rankings))
+  expect_equal(out$rankings$myrank, c("12", "21"))
 })
 
 test_that("imprr_weights validates population and assumption inputs", {

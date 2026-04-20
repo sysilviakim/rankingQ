@@ -18,7 +18,8 @@
 #' @param labels A vector of labels for the items being ranked.
 #' Defaults to NULL.
 #' @param seed Seed for \code{set.seed} for reproducibility.
-#' @param weight A vector of weights. Defaults to NULL.
+#' @param weight Either a numeric vector of weights with length `nrow(data)`
+#' or the name of a weight column in `data`. Defaults to `NULL`.
 #' @param n_bootstrap Number of bootstraps. Defaults to 200.
 #' @param ipw Indicator for using inverse probability weighting. Defaults to
 #' FALSE, in which case direct bias estimation will be employed.
@@ -84,8 +85,8 @@ stratified_avg <- function(data, var_stratum, J = NULL,
         )
       )
     }
-    data[[".weight__"]] <- weight_vec
-    weight_col <- ".weight__"
+    data[[".tmp_weight"]] <- weight_vec
+    weight_col <- ".tmp_weight"
   } else {
     weight_col <- NULL
   }
