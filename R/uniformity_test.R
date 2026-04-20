@@ -1,7 +1,7 @@
 #' Uniformity Test for Ranking Patterns
 #'
 #' @description This function implements the uniformity test for
-#' ranking permutation patterns documented in Atsusaka and Kim (2024).
+#' ranking permutation patterns documented in Atsusaka and Kim (2025).
 #'
 #' @importFrom stats chisq.test
 #'

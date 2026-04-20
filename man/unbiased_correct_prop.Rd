@@ -18,7 +18,7 @@ A number between 0-1.
 This function computes the unbiased proportion of *correct* answers after
 adjusting for the possibility that the respondent may have randomly guessed
 the correct answer. The function is based on the formula provided by
-Proposition 1 of Atsusaka and Kim (2024).
+Proposition 1 of Atsusaka and Kim (2025).
 }
 \examples{
 unbiased_correct_prop(0.7, 3)
