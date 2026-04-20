@@ -47,6 +47,7 @@
 <li>New exported function <code><a href="../reference/rank_wider.html">rank_wider()</a></code> for converting long-format ranking data to wide format (one column per item or a single pasted ranking string).</li>
 <li>
 <code><a href="../reference/imprr_direct.html">imprr_direct()</a></code>: <code>anc_correct</code> is now optional. Users can instead supply <code>p_random</code> directly, or rely on anchor-based estimation of the non-random response rate.</li>
+<li>New exported convenience wrapper <code><a href="../reference/add_ipw_weights.html">add_ipw_weights()</a></code> for returning the original data augmented with respondent-level IPW weights, with an option to also keep ranking summaries.</li>
 <li>
 <code><a href="../reference/imprr_direct_rcpp.html">imprr_direct_rcpp()</a></code>: correctly delegates to <code><a href="../reference/imprr_direct.html">imprr_direct()</a></code> when <code>method = "fixed"</code>, forwarding all population and assumption inputs.</li>
 <li>

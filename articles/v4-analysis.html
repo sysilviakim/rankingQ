@@ -75,57 +75,103 @@ and Seo-young Silvia Kim</h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sysilviakim/rankingQ" class="external-link">rankingQ</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://declaredesign.org/r/estimatr/" class="external-link">estimatr</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">identity_w</span><span class="op">)</span></span></code></pre></div>
-<p>The estimated weights from <code>imprr_weights</code> can be used to
-perform any analyses. For example, to estimate the average rank of
-party, one can leverage linear regression as follows:</p>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">identity</span><span class="op">)</span></span></code></pre></div>
+<p>The IPW workflow is easiest to think of in two steps. First,
+<code><a href="../reference/imprr_weights.html">imprr_weights()</a></code> estimates respondent-level correction
+weights. Those weights can then be used for point estimation in
+downstream analyses.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_weights.html">imprr_weights</a></span><span class="op">(</span></span>
+<span>  <span class="va">identity</span>,</span>
+<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
+<span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; No weight column supplied; using equal weights for all observations.</span></span>
+<span></span>
+<span><span class="va">out_weights</span><span class="op">$</span><span class="va">est_p_random</span></span>
+<span><span class="co">#&gt; [1] 0.3163224</span></span></code></pre></div>
+<p>For example, to estimate the average rank of party as a point
+estimate, one can leverage weighted linear regression as follows:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://declaredesign.org/r/estimatr/reference/lm_robust.html" class="external-link">lm_robust</a></span><span class="op">(</span></span>
 <span>  <span class="va">app_identity_1</span> <span class="op">~</span> <span class="fl">1</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">identity_w</span>,</span>
-<span>  weights <span class="op">=</span> <span class="va">identity_w</span><span class="op">$</span><span class="va">weights</span></span>
+<span>  data <span class="op">=</span> <span class="va">out_weights</span><span class="op">$</span><span class="va">results</span>,</span>
+<span>  weights <span class="op">=</span> <span class="va">out_weights</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">weights</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          term estimate  std.error statistic p.value conf.low conf.high   df</span></span>
 <span><span class="co">#&gt; 1 (Intercept) 3.220388 0.02790142  115.4202       0 3.165641  3.275135 1081</span></span>
 <span><span class="co">#&gt;          outcome</span></span>
 <span><span class="co">#&gt; 1 app_identity_1</span></span></code></pre></div>
-<p>While this illustrative example provides a valid point estimate, its
-confidence interval does not account for the estimation uncertainty
-around the estimated weights. Thus, in practice,
-<code>imprr_weights</code> must be used along with bootstrapping, such
-as the one available in <code>rsample</code>; see the article below for
-an example: <a href="https://declaredesign.org/r/estimatr/articles/estimatr-in-the-tidyverse.html" class="external-link uri">https://declaredesign.org/r/estimatr/articles/estimatr-in-the-tidyverse.html</a></p>
+<p>That gives a valid point estimate, but its standard error treats the
+estimated IPW weights as fixed. For built-in ranking summaries, use
+<code><a href="../reference/imprr_weights_boot.html">imprr_weights_boot()</a></code>, which resamples respondents, reruns
+<code><a href="../reference/imprr_weights.html">imprr_weights()</a></code> inside each resample, and summarizes the
+resulting quantities of interest.</p>
 <div class="section level2">
 <h2 id="computing-average-ranks">Computing Average Ranks<a class="anchor" aria-label="anchor" href="#computing-average-ranks"></a>
 </h2>
-<p>The <code>avg_rank</code> function provides a convenient way to
-compute average ranks for all items:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Raw average ranks (without bias correction)</span></span>
-<span><span class="fu"><a href="../reference/avg_rank.html">avg_rank</a></span><span class="op">(</span><span class="va">identity_w</span>,</span>
-<span>  rankings <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
-<span>  items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party"</span>, <span class="st">"Religion"</span>, <span class="st">"Gender"</span>, <span class="st">"Race"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt;       item          qoi     mean         se    lower    upper   method</span></span>
-<span><span class="co">#&gt; 1    Party Average Rank 3.024954 0.03094894 2.964294 3.085614 Raw Data</span></span>
-<span><span class="co">#&gt; 2 Religion Average Rank 2.572089 0.03745515 2.498677 2.645501 Raw Data</span></span>
-<span><span class="co">#&gt; 3   Gender Average Rank 1.912200 0.02922013 1.854928 1.969471 Raw Data</span></span>
-<span><span class="co">#&gt; 4     Race Average Rank 2.490758 0.02883352 2.434244 2.547272 Raw Data</span></span></code></pre></div>
-<p>For bias-corrected estimates using IPW weights, use the marginal
-ranking columns:</p>
+<p>The <code>avg_rank</code> function remains a convenient way to
+compute point estimates from the IPW-adjusted respondent-level data:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># IPW-corrected average ranks</span></span>
-<span><span class="va">items_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">items_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"app_identity_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>,</span>
 <span>  item <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party"</span>, <span class="st">"Religion"</span>, <span class="st">"Gender"</span>, <span class="st">"Race"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/avg_rank.html">avg_rank</a></span><span class="op">(</span><span class="va">identity_w</span>, items <span class="op">=</span> <span class="va">items_df</span>, weight <span class="op">=</span> <span class="st">"weights"</span>, raw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/avg_rank.html">avg_rank</a></span><span class="op">(</span><span class="va">out_weights</span><span class="op">$</span><span class="va">results</span>, items <span class="op">=</span> <span class="va">items_df</span>, weight <span class="op">=</span> <span class="st">"weights"</span>, raw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       item          qoi     mean         se    lower    upper method</span></span>
 <span><span class="co">#&gt; 1    Party Average Rank 3.220388 0.02790142 3.165641 3.275135    IPW</span></span>
 <span><span class="co">#&gt; 2 Religion Average Rank 2.609023 0.04051924 2.529518 2.688529    IPW</span></span>
 <span><span class="co">#&gt; 3   Gender Average Rank 1.706054 0.02448379 1.658013 1.754095    IPW</span></span>
 <span><span class="co">#&gt; 4     Race Average Rank 2.464535 0.02616016 2.413204 2.515865    IPW</span></span></code></pre></div>
+<p>For bootstrap uncertainty on the same quantities,
+<code><a href="../reference/imprr_weights_boot.html">imprr_weights_boot()</a></code> returns summaries in the same general
+format as <code><a href="../reference/imprr_direct.html">imprr_direct()</a></code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out_boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_weights_boot.html">imprr_weights_boot</a></span><span class="op">(</span></span>
+<span>  <span class="va">identity</span>,</span>
+<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
+<span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
+<span>  n_bootstrap <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">123</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; No weight column supplied; using equal weights for all observations.</span></span>
+<span></span>
+<span><span class="va">out_boot</span><span class="op">$</span><span class="va">est_p_random</span></span>
+<span><span class="co">#&gt;        mean     lower     upper</span></span>
+<span><span class="co">#&gt; 1 0.3157438 0.2982159 0.3334646</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">out_boot</span><span class="op">$</span><span class="va">results</span>, <span class="va">qoi</span> <span class="op">==</span> <span class="st">"average rank"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span></span>
+<span><span class="co">#&gt;   item           qoi          outcome              mean lower upper</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> app_identity_1 average rank Avg: app_identity_1  3.21  3.15  3.30</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> app_identity_2 average rank Avg: app_identity_2  2.61  2.52  2.71</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> app_identity_3 average rank Avg: app_identity_3  1.70  1.66  1.73</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> app_identity_4 average rank Avg: app_identity_4  2.47  2.41  2.55</span></span></code></pre></div>
+<p>The same object also contains bootstrap summaries for pairwise,
+top-k, and marginal ranking quantities:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">out_boot</span><span class="op">$</span><span class="va">results</span>, <span class="va">qoi</span> <span class="op">==</span> <span class="st">"pairwise ranking"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 6</span></span></span>
+<span><span class="co">#&gt;    item           qoi              outcome            mean lower upper</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> app_identity_1 pairwise ranking v. app_identity_2 0.381 0.348 0.426</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> app_identity_1 pairwise ranking v. app_identity_3 0.133 0.107 0.158</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> app_identity_1 pairwise ranking v. app_identity_4 0.275 0.242 0.307</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> app_identity_2 pairwise ranking v. app_identity_1 0.619 0.574 0.652</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> app_identity_2 pairwise ranking v. app_identity_3 0.342 0.320 0.369</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> app_identity_2 pairwise ranking v. app_identity_4 0.429 0.388 0.468</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> app_identity_3 pairwise ranking v. app_identity_1 0.867 0.842 0.893</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> app_identity_3 pairwise ranking v. app_identity_2 0.658 0.631 0.680</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> app_identity_3 pairwise ranking v. app_identity_4 0.770 0.740 0.792</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> app_identity_4 pairwise ranking v. app_identity_1 0.725 0.693 0.758</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> app_identity_4 pairwise ranking v. app_identity_2 0.571 0.532 0.612</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> app_identity_4 pairwise ranking v. app_identity_3 0.230 0.208 0.260</span></span></code></pre></div>
+<p>If you want uncertainty for an arbitrary downstream weighted
+analysis, the same principle applies: resample respondents and rerun
+<code><a href="../reference/imprr_weights.html">imprr_weights()</a></code> within each resample before recomputing the
+target estimand.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

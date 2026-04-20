@@ -12,6 +12,10 @@
   `anc_correct` is now optional. Users can instead supply `p_random`
   directly, or rely on anchor-based estimation of the non-random
   response rate.
+- New exported convenience wrapper
+  [`add_ipw_weights()`](https://sysilviakim.com/rankingQ/reference/add_ipw_weights.md)
+  for returning the original data augmented with respondent-level IPW
+  weights, with an option to also keep ranking summaries.
 - [`imprr_direct_rcpp()`](https://sysilviakim.com/rankingQ/reference/imprr_direct_rcpp.md):
   correctly delegates to
   [`imprr_direct()`](https://sysilviakim.com/rankingQ/reference/imprr_direct.md)
