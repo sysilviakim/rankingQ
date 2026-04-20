@@ -11,6 +11,14 @@ Survey ranking questions are prone to random responses, where respondents answer
 
 For the underlying methodology, see [Atsusaka and Kim (2025)](https://doi.org/10.1017/pan.2024.33), "Addressing Measurement Errors in Ranking Questions for the Social Sciences," *Political Analysis*, 33(4), 339-360. Visit the [package site](https://sysilviakim.com/rankingQ/) for vignettes and references.
 
+## Correction Inputs
+
+`rankingQ` supports three ways to handle random or inattentive responding in its correction functions.
+
+- Use `anc_correct` when you have an anchor-ranking question.
+- Use `p_random` when you want to externally supply a plausible proportion of random or inattentive respondents.
+- Supply neither if you do not want to apply a correction; this is the default behavior, and the functions will let you know that no correction was applied. Both `imprr_direct` and `imprr_weights` will return the uncorrected estimates in this case, but still print useful outputs such as average rankings, top-k rankings, and so on.
+
 ## Installation
 
 Currently, you can install the development version from GitHub:
