@@ -62,3 +62,6 @@ src/*.dll
 
 # Claude settings
 .claude/
+
+# Reverse dependency check outputs
+/revdep/

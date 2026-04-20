@@ -14,3 +14,4 @@
 ^rankingQ\.Rcheck$
 ^rankingQ_.*\.tar\.gz$
 ^cran-comments\.md$
+^revdep$
