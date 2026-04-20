@@ -39,7 +39,11 @@ stratified_avg(
 
 - main_q:
 
-  Column name for the main ranking question to be analyzed.
+  Main ranking question specification. This can be a single column name
+  or unquoted symbol such as \`app_identity\`, in which case the
+  function looks for \`app_identity_1\`, \`app_identity_2\`, and so on.
+  You may also supply \`main_q\` directly as a character vector or
+  unquoted \`c(...)\` expression of ranking columns.
 
 - anc_correct:
 
@@ -57,8 +61,9 @@ stratified_avg(
 
 - weight:
 
-  Either a numeric vector of weights with length \`nrow(data)\` or the
-  name of a weight column in \`data\`. Defaults to \`NULL\`.
+  Either a numeric vector of weights with length \`nrow(data)\`, the
+  name of a weight column in \`data\`, or an unquoted weight column
+  name. Defaults to \`NULL\`.
 
 - n_bootstrap:
 

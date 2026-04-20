@@ -1,10 +1,10 @@
 # Draw Samples from the Plackett-Luce Model
 
 This function draws samples from the Plackett-Luce model, using
-Algorithm 2.1, "Efficient Sampling from Plackett-Luce," in \[Xia
-(2019)\](https://link.springer.com/book/10.1007/978-3-031-01582-3), page
-20, Section 2.2.3 Sampling from Random Utility Models. The name `rpluce`
-is a convention that follows random generations of numbers from
+Algorithm 2.1, "Efficient Sampling from Plackett-Luce," in [Xia
+(2019)](https://link.springer.com/book/10.1007/978-3-031-01582-3), page
+20, Section 2.2.3, "Sampling from Random Utility Models." The name
+`rpluce` is a convention that follows random generations of numbers from
 statistical distributions such as `rnorm` or `rmultinom`.
 
 ## Usage
@@ -42,16 +42,20 @@ A data frame of rankings of t items for n assessors.
 ## Details
 
 Input: A parameter \\\overrightarrow{\gamma} = (\gamma_1, \cdots,
-\gamma_m)\\ of Plackett-Luce.  
+\gamma_m)\\ of the Plackett-Luce model.  
+
+If all remaining Plackett-Luce weights become zero after earlier draws,
+the remaining items are sampled uniformly at random rather than being
+ordered by their input position.
 
 Output: A ranking \\R \in \mathcal{L}(\mathcal{A})\\ from
-\\pi\_{\overrightarrow{\gamma}} ( \cdot )\\ under Plackett–Luce.  
+\\\pi\_{\overrightarrow{\gamma}}(\cdot)\\ under Plackett-Luce.  
 1: Let \\R = \emptyset\\ and \\A = \mathcal{A}\\.  
 2: for \\t = 1\\ to \\m\\ do  
 3: Choose an alternative \\a\_{i_t}\\ from \\A\\ with probability
 proportional to \\\gamma\_{i_t}\\.  
-4: \\R \leftarrow R \succ a\_{i_t}\\ and \\A \leftarrow A \\ \\ a\_{i_t}
-\\\\.  
+4: \\R \leftarrow R \succ a\_{i_t}\\ and \\A \leftarrow A \setminus \\
+a\_{i_t} \\\\.  
 5: end for  
 6: return \\R\\.
 

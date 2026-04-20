@@ -30,16 +30,16 @@ imprr_direct(
 - J:
 
   The number of items in the ranking question. Defaults to NULL, in
-  which case it will be inferred from the data, only if the column for
-  \`main_q\` exists in the data.
+  which case it will be inferred from the data.
 
 - main_q:
 
-  Column name for the main ranking question to be analyzed. Using this
-  argument, the function automatically looks for columns with marginal
-  rankings. For example, if \`main_q\` is \`app_identity\`, the function
-  looks for \`app_identity_1\`, \`app_identity_2\`, \`app_identity_3\`,
-  and so on, with an underbar separator followed by numbers.
+  Ranking question to be analyzed. When \`main_q\` is a single column
+  name or unquoted symbol such as \`app_identity\`, the function looks
+  for \`app_identity_1\`, \`app_identity_2\`, \`app_identity_3\`, and so
+  on. You may also supply \`main_q\` directly as a character vector or
+  unquoted \`c(...)\` expression of ranking columns such as \`c(party,
+  gender, race, religion)\`.
 
 - anc_correct:
 
@@ -70,7 +70,8 @@ imprr_direct(
 - weight:
 
   The name of the weight column in \`data\`. Defaults to \`NULL\`, which
-  uses equal weights.
+  uses equal weights. This can also be supplied as a numeric vector or
+  as an unquoted column name.
 
 - verbose:
 
