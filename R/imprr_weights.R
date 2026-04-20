@@ -99,7 +99,7 @@ imprr_weights <- function(data,
   }
   # Under contaminated sampling, theta for the full population equals theta_z.
 
-  # Pre-compute factorial for efficiency
+  # Pre-compute factorial for efficiency =======================================
   J_factorial <- factorial(J)
 
   # Check the validity of the input arguments ==================================
@@ -190,10 +190,10 @@ imprr_weights <- function(data,
     ) %>% # NA arise from 0/0
     arrange(!!as.name(ranking))
 
-  # Turn the results into a tibble
+  # Turn the results into a tibble ---------------------------------------------
   tibble_w <- df_w %>% tibble()
 
-  # Merge the weights back to the original data
+  # Merge the weights back to the original data --------------------------------
   if (!(ranking %in% names(data))) {
     data_w <- data
     data_w[[ranking]] <- do.call(
@@ -216,7 +216,7 @@ imprr_weights <- function(data,
       everything()
     )
 
-  # Summarize results ----------------------------------------------------------
+  # Summarize results ==========================================================
   return(
     list(
       est_p_random = 1 - p_non_random,

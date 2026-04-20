@@ -3,8 +3,10 @@
 \docType{data}
 \name{identity_w}
 \alias{identity_w}
-\title{Identity-ranking data with estimated weights based on inverse probability
-weighting}
+\title{
+Identity-ranking data with estimated weights based on inverse probability
+weighting
+}
 \format{
 ## `identity_w`
 A data frame with 1,082 rows and 18 columns:

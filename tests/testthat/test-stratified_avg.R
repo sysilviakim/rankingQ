@@ -51,7 +51,10 @@ test_that("stratified_avg returns IPW averages when ipw = TRUE", {
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 3 * 4)
   expect_false(anyNA(result$mean))
-  expect_setequal(as.character(unique(result$item)), paste0("app_identity_", 1:4))
+  expect_setequal(
+    as.character(unique(result$item)),
+    paste0("app_identity_", 1:4)
+  )
 })
 
 test_that("stratified_avg errors on non-character var_stratum", {

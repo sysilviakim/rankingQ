@@ -5,8 +5,7 @@ using namespace Rcpp;
 double weighted_mean_cpp(NumericVector x, NumericVector weights) {
   int n = x.size();
   double sum_wx = 0.0;
-
-double sum_w = 0.0;
+  double sum_w = 0.0;
 
   for (int i = 0; i < n; i++) {
     if (!NumericVector::is_na(x[i]) && !NumericVector::is_na(weights[i])) {
@@ -38,7 +37,9 @@ double weighted_var_cpp(NumericVector x, NumericVector weights) {
 }
 
 // [[Rcpp::export]]
-NumericVector pairwise_indicator_cpp(NumericVector target, NumericVector comparison) {
+NumericVector pairwise_indicator_cpp(
+    NumericVector target,
+    NumericVector comparison) {
   int n = target.size();
   NumericVector result(n);
 
@@ -79,12 +80,16 @@ double bias_correct_cpp(double estimate, double g_U, double p_non_random) {
 }
 
 // [[Rcpp::export]]
-NumericVector bias_correct_vec_cpp(NumericVector estimates, NumericVector g_U, double p_non_random) {
+NumericVector bias_correct_vec_cpp(
+    NumericVector estimates,
+    NumericVector g_U,
+    double p_non_random) {
   int n = estimates.size();
   NumericVector result(n);
 
   for (int i = 0; i < n; i++) {
-    result[i] = (estimates[i] - (g_U[i] * (1.0 - p_non_random))) / p_non_random;
+    result[i] =
+      (estimates[i] - (g_U[i] * (1.0 - p_non_random))) / p_non_random;
   }
 
   return result;
@@ -183,8 +188,13 @@ List compute_qoi_stats_cpp(NumericMatrix data, NumericVector weights, int J) {
 }
 
 // [[Rcpp::export]]
-List bootstrap_qoi_cpp(NumericMatrix data, NumericVector anc_correct,
-                       NumericVector weights, int J, int n_bootstrap, int seed) {
+List bootstrap_qoi_cpp(
+    NumericMatrix data,
+    NumericVector anc_correct,
+    NumericVector weights,
+    int J,
+    int n_bootstrap,
+    int seed) {
   int N = data.nrow();
   int J_1 = J - 1;
 
@@ -232,7 +242,8 @@ List bootstrap_qoi_cpp(NumericMatrix data, NumericVector anc_correct,
       sum_w += weights[idx];
     }
     double prop_correct = sum_correct / sum_w;
-    double p_non_random = (prop_correct - 1.0/J_factorial) / (1.0 - 1.0/J_factorial);
+    double p_non_random =
+      (prop_correct - 1.0 / J_factorial) / (1.0 - 1.0 / J_factorial);
     if (!R_finite(p_non_random) || p_non_random <= 1e-12) {
       p_random_boot[b] = NA_REAL;
       for (int j = 0; j < J; j++) {
@@ -262,7 +273,8 @@ List bootstrap_qoi_cpp(NumericMatrix data, NumericVector anc_correct,
         sum_w_item += weights[idx];
       }
       double raw_avg = sum_wx / sum_w_item;
-      avg_ranks_boot(b, j) = (raw_avg - uniform_avg_rank * (1.0 - p_non_random)) / p_non_random;
+      avg_ranks_boot(b, j) =
+        (raw_avg - uniform_avg_rank * (1.0 - p_non_random)) / p_non_random;
 
       // Pairwise
       int pair_idx = 0;
@@ -277,7 +289,8 @@ List bootstrap_qoi_cpp(NumericMatrix data, NumericVector anc_correct,
           }
           double raw_pair = sum_pair / sum_w_item;
           pairwise_boot(b, j * J_1 + pair_idx) =
-            (raw_pair - uniform_pairwise * (1.0 - p_non_random)) / p_non_random;
+            (raw_pair - uniform_pairwise * (1.0 - p_non_random)) /
+            p_non_random;
           pair_idx++;
         }
       }

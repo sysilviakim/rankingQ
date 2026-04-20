@@ -1,4 +1,4 @@
-#' Turn Column(s) Recording Rankings in Wide Format into a Long Data Format
+#' Convert Ranking Columns from Wide to Long Format
 #'
 #' This function takes a data frame in wide format with columns recording
 #' rankings into a long data format.
@@ -293,7 +293,11 @@ rank_wider <- function(x,
   }
 
   per_id_items <- split(dat[[item]], dat[[id]])
-  if (!all(vapply(per_id_items, function(z) setequal(z, item_levels), logical(1)))) {
+  if (!all(vapply(
+    per_id_items,
+    function(z) setequal(z, item_levels),
+    logical(1)
+  ))) {
     stop("Each respondent must have the same set of ranked items.")
   }
 

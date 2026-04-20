@@ -81,7 +81,10 @@ imprr_direct_rcpp <- function(data,
   if (is.null(J)) {
     if (!(main_q %in% names(data))) {
       stop(
-        "When J is NULL, main_q must exist as a column in data so J can be inferred."
+        paste(
+          "When J is NULL, main_q must exist as a column in data",
+          "so J can be inferred."
+        )
       )
     }
     J <- nchar(data[[main_q]][[1]])
@@ -107,18 +110,18 @@ imprr_direct_rcpp <- function(data,
   }
   # Under contaminated sampling, theta for the full population equals theta_z.
 
-  # Pre-compute constants
+  # Pre-compute constants ======================================================
   J_1 <- J - 1
 
-  # Extract ranking columns
+  # Extract ranking columns ====================================================
   data_matrix <- as.matrix(data[, ranking_cols])
   storage.mode(data_matrix) <- "double"
 
-  # Extract anchor correct vector
+  # Extract anchor correct vector ==============================================
   anc_vec <- as.numeric(data[[anc_correct]])
   weights_vec <- as.numeric(weight)
 
-  # Run C++ bootstrap
+  # Run C++ bootstrap ==========================================================
   if (verbose) message("Running Rcpp bootstrap...")
   result_cpp <- bootstrap_qoi_cpp(
     data_matrix, anc_vec, weights_vec,
@@ -128,14 +131,14 @@ imprr_direct_rcpp <- function(data,
 
   # Format results to match original output format =============================
 
-  # Proportion of random responses
+  # Proportion of random responses ---------------------------------------------
   df_random_summary <- tibble::tibble(
     mean = mean(result_cpp$p_random, na.rm = TRUE),
     lower = stats::quantile(result_cpp$p_random, 0.025, na.rm = TRUE),
     upper = stats::quantile(result_cpp$p_random, 0.975, na.rm = TRUE)
   )
 
-  # Build results tibble
+  # Build results tibble -------------------------------------------------------
   item_names <- ranking_cols
   all_results <- list()
 
@@ -143,7 +146,7 @@ imprr_direct_rcpp <- function(data,
     target_item <- item_names[j]
     other_items <- item_names[-j]
 
-    # Average rank
+    # Average rank -------------------------------------------------------------
     avg_rank_values <- result_cpp$avg_ranks[, j]
     all_results[[length(all_results) + 1]] <- tibble::tibble(
       item = target_item,
@@ -154,7 +157,7 @@ imprr_direct_rcpp <- function(data,
       upper = stats::quantile(avg_rank_values, 0.975, na.rm = TRUE)
     )
 
-    # Pairwise probabilities
+    # Pairwise probabilities ---------------------------------------------------
     for (k in seq_len(J_1)) {
       col_idx <- (j - 1) * J_1 + k
       pairwise_values <- result_cpp$pairwise[, col_idx]
@@ -168,7 +171,7 @@ imprr_direct_rcpp <- function(data,
       )
     }
 
-    # Top-k probabilities
+    # Top-k probabilities ------------------------------------------------------
     for (k in seq_len(J_1)) {
       col_idx <- (j - 1) * J_1 + k
       topk_values <- result_cpp$topk[, col_idx]
@@ -182,7 +185,7 @@ imprr_direct_rcpp <- function(data,
       )
     }
 
-    # Marginal probabilities
+    # Marginal probabilities ---------------------------------------------------
     for (k in seq_len(J)) {
       col_idx <- (j - 1) * J + k
       marginal_values <- result_cpp$marginal[, col_idx]

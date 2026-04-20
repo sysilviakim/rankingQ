@@ -1,6 +1,8 @@
 .resolve_weight_vector <- function(data, weight, N) {
   if (is.null(weight)) {
-    message("No weight column supplied; using equal weights for all observations.")
+    message(
+      "No weight column supplied; using equal weights for all observations."
+    )
     return(rep(1, N))
   }
 
@@ -16,7 +18,9 @@
     stop("weight column must be numeric.")
   }
   if (length(weight_vec) != N) {
-    stop("weight column must have the same length as the number of rows in data.")
+    stop(
+      "weight column must have the same length as the number of rows in data."
+    )
   }
 
   weight_vec

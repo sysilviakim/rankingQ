@@ -105,6 +105,9 @@ test_that("rank_longer errors when reference is shorter than ranking length", {
         reference = c("A", "B")
       )
     ),
-    "The max_ranking argument is greater than the length of the reference choice set."
+    paste(
+      "The max_ranking argument is greater than",
+      "the length of the reference choice set."
+    )
   )
 })

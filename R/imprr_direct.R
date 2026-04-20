@@ -83,7 +83,10 @@ imprr_direct <- function(data,
   if (is.null(J)) {
     if (!(main_q %in% names(data))) {
       stop(
-        "When J is NULL, main_q must exist as a column in data so J can be inferred."
+        paste(
+          "When J is NULL, main_q must exist as a column in data",
+          "so J can be inferred."
+        )
       )
     }
     J <- nchar(data[[main_q]][[1]])
@@ -150,7 +153,7 @@ imprr_direct <- function(data,
     ## Sample indices
     index <- sample.int(N, size = N, replace = TRUE)
 
-    ## This is the bootstrapped data
+    ## This is the bootstrapped data -------------------------------------------
     boostrap_dat <- data[index, ]
     bootstrap_weight <- weight[index]
 
@@ -205,7 +208,7 @@ imprr_direct <- function(data,
         }
       )
 
-      # Step 3: Get the QOI based on random responses
+      # Step 3: Get the QOI based on random responses --------------------------
       ## g(random)---QOI based on uniform distribution
       gg_averagerank <- data.frame(estimate = m_rank_target) %>%
         mutate(
@@ -235,7 +238,7 @@ imprr_direct <- function(data,
           g_U = uniform_prob
         )
 
-      # Step 4: Directly apply bias-correction (Equation 6)
+      # Step 4: Directly apply bias-correction (Equation 6) --------------------
       ## bc_estimate: bias-corrected estimate
       all_qoi <- rbind(
         gg_averagerank,
@@ -261,7 +264,7 @@ imprr_direct <- function(data,
     message("Bootstrapping finished.")
   }
 
-  # Summarize results
+  # Summarize results ==========================================================
   ## Compute the mean and 95% CI based on bootstrapping
   ## Return all weights for IPW
 

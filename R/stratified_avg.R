@@ -50,7 +50,11 @@ stratified_avg <- function(data, var_stratum, J = NULL,
   old_seed <- get(".Random.seed", envir = globalenv())
   on.exit(assign(".Random.seed", old_seed, envir = globalenv()), add = TRUE)
   set.seed(seed)
-  seed_list <- sample.int(max(n_bootstrap * 10, 1e4), n_bootstrap, replace = FALSE)
+  seed_list <- sample.int(
+    max(n_bootstrap * 10, 1e4),
+    n_bootstrap,
+    replace = FALSE
+  )
 
   ## class check
   if (!is.character(var_stratum)) {

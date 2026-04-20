@@ -161,7 +161,10 @@ test_that("imprr_direct_rcpp validates main_q when inferring J", {
       n_bootstrap = 1,
       seed = 789
     ),
-    "When J is NULL, main_q must exist as a column in data so J can be inferred."
+    paste(
+      "When J is NULL, main_q must exist as a column in data",
+      "so J can be inferred."
+    )
   )
 })
 
@@ -263,7 +266,9 @@ test_that("imprr_direct_rcpp validates population and assumption inputs", {
   )
 })
 
-test_that("imprr_direct_rcpp all-population contaminated matches default target", {
+test_that(
+  "imprr_direct_rcpp all-population contaminated matches default target",
+  {
   data(identity_w)
 
   out_default <- imprr_direct_rcpp(
@@ -288,7 +293,8 @@ test_that("imprr_direct_rcpp all-population contaminated matches default target"
 
   expect_equal(out_contaminated$est_p_random, out_default$est_p_random)
   expect_equal(out_contaminated$results, out_default$results)
-})
+  }
+)
 
 test_that("imprr_direct_rcpp accepts common input variants", {
   data(identity_w)

@@ -61,7 +61,10 @@ test_that("imprr_direct validates main_q when inferring J", {
       anc_correct = "anc_correct_identity",
       n_bootstrap = 1
     ),
-    "When J is NULL, main_q must exist as a column in data so J can be inferred."
+    paste(
+      "When J is NULL, main_q must exist as a column in data",
+      "so J can be inferred."
+    )
   )
 })
 

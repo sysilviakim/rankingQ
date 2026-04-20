@@ -2,7 +2,7 @@
 % Please edit documentation in R/rank_longer.R
 \name{rank_longer}
 \alias{rank_longer}
-\title{Turn Column(s) Recording Rankings in Wide Format into a Long Data Format}
+\title{Convert Ranking Columns from Wide to Long Format}
 \usage{
 rank_longer(x, cols = NULL, id = NULL, reference = NULL)
 }
