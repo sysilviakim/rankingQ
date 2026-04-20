@@ -56,13 +56,14 @@ stratification.</p>
 <span>  <span class="va">var_stratum</span>,</span>
 <span>  J <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">main_q</span>,</span>
-<span>  <span class="va">anc_correct</span>,</span>
+<span>  anc_correct <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1234</span>,</span>
 <span>  weight <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_bootstrap <span class="op">=</span> <span class="fl">200</span>,</span>
 <span>  ipw <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  p_random <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -89,7 +90,9 @@ in which case it will be inferred from the data.</p></dd>
 
 
 <dt id="arg-anc-correct">anc_correct<a class="anchor" aria-label="anchor" href="#arg-anc-correct"></a></dt>
-<dd><p>Indicator for passing the anchor question.</p></dd>
+<dd><p>Optional indicator for passing the anchor question.
+If `NULL`, `p_random` is used when supplied; otherwise the function
+defaults to `p_random = 0` and applies no correction.</p></dd>
 
 
 <dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
@@ -117,6 +120,12 @@ FALSE, in which case direct bias estimation will be employed.</p></dd>
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Indicator for verbose output. Defaults to FALSE.</p></dd>
+
+
+<dt id="arg-p-random">p_random<a class="anchor" aria-label="anchor" href="#arg-p-random"></a></dt>
+<dd><p>Optional fixed proportion of random/inattentive respondents.
+When supplied, this overrides `anc_correct` and a message is shown if both
+are provided.</p></dd>
 
 </dl></div>
     <div class="section level2">

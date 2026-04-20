@@ -10,11 +10,12 @@ imprr_weights(
   data,
   J = NULL,
   main_q,
-  anc_correct,
+  anc_correct = NULL,
   population = "non-random",
   assumption = "contaminated",
   weight = NULL,
-  ranking = "ranking"
+  ranking = "ranking",
+  p_random = NULL
 )
 ```
 
@@ -40,7 +41,9 @@ imprr_weights(
 
 - anc_correct:
 
-  Indicator for passing the anchor question.
+  Optional indicator for passing the anchor question. If \`NULL\`,
+  \`p_random\` is used when supplied; otherwise the function defaults to
+  \`p_random = 0\` and applies no correction.
 
 - population:
 
@@ -66,6 +69,12 @@ imprr_weights(
   column should be identical to \`main_q\`. However, the function
   defaults to creating another column by combining marginal rankings,
   just in case.
+
+- p_random:
+
+  Optional fixed proportion of random/inattentive respondents. When
+  supplied, this overrides \`anc_correct\` and a message is shown if
+  both are provided.
 
 ## Value
 

@@ -100,6 +100,8 @@ out_direct_uniform <- imprr_direct(
 )
 ```
 
+    ## population = 'all' with assumption = 'uniform' implies no correction; ignoring anc_correct and p_random.
+
     ## No weight column supplied; using equal weights for all observations.
 
 Similarly, the contaminated sampling assumption can be specified as
@@ -238,6 +240,8 @@ out_weights_uniform <- imprr_weights(
   assumption = "uniform"
 )
 ```
+
+    ## population = 'all' with assumption = 'uniform' implies no correction; ignoring anc_correct and p_random.
 
     ## No weight column supplied; using equal weights for all observations.
 

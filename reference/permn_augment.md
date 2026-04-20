@@ -18,8 +18,11 @@ permn_augment(tab, J = NULL)
 
 - J:
 
-  The length of the reference choice set. Defaults to NULL, in which it
-  will count the number of characters in the first input.
+  The length of the reference choice set. Defaults to \`NULL\`, in which
+  case it is inferred from the permutation labels. For \`J \> 9\`,
+  delimiter-separated or zero-padded labels are unambiguous. Compact
+  labels such as \`"12345678910"\` are parsed when possible, and the
+  augmented output is returned in an unambiguous canonical format.
 
 ## Value
 
@@ -43,7 +46,6 @@ permn_augment(tab, J = 3)
 
 tab <- table(c("123", "321", "213", "312", "132", "231"))
 permn_augment(tab, J = 3)
-#> 
 #> 123 132 213 231 312 321 
 #>   1   1   1   1   1   1 
 ```

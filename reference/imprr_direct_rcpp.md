@@ -11,13 +11,14 @@ imprr_direct_rcpp(
   data,
   J = NULL,
   main_q,
-  anc_correct,
+  anc_correct = NULL,
   population = "non-random",
   assumption = "contaminated",
   n_bootstrap = 200,
   seed = 123456,
   weight = NULL,
-  verbose = FALSE
+  verbose = FALSE,
+  p_random = NULL
 )
 ```
 
@@ -43,7 +44,9 @@ imprr_direct_rcpp(
 
 - anc_correct:
 
-  Indicator for passing the anchor question.
+  Optional indicator for passing the anchor question. If \`NULL\`,
+  \`p_random\` is used when supplied; otherwise the function defaults to
+  \`p_random = 0\` and applies no correction.
 
 - population:
 
@@ -73,6 +76,12 @@ imprr_direct_rcpp(
 - verbose:
 
   Indicator for verbose output. Defaults to FALSE.
+
+- p_random:
+
+  Optional fixed proportion of random/inattentive respondents. When
+  supplied, this overrides \`anc_correct\` and a message is shown if
+  both are provided.
 
 ## Value
 

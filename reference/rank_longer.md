@@ -87,11 +87,11 @@ y <- data.frame(
   rank = c("123", "321", "213")
 )
 rank_longer(y, cols = "rank", id = "id")
-#> One column selected. Parsing column by character length.
+#> One column selected. Parsing encoded ranking values.
 #> No reference choice set specified. Using general column names.
 #> # A tibble: 9 × 4
 #>   id     reference_no item_name ranking
-#>   <chr>         <int> <chr>       <dbl>
+#>   <chr>         <int> <chr>       <int>
 #> 1 Bernie            1 V1              1
 #> 2 Bernie            2 V2              2
 #> 3 Bernie            3 V3              3
@@ -106,10 +106,10 @@ rank_longer(
   cols = "rank", id = "id",
   reference = c("Money", "Power", "Respect")
 )
-#> One column selected. Parsing column by character length.
+#> One column selected. Parsing encoded ranking values.
 #> # A tibble: 9 × 4
 #>   id     reference_no item_name ranking
-#>   <chr>         <int> <chr>       <dbl>
+#>   <chr>         <int> <chr>       <int>
 #> 1 Bernie            1 Money           1
 #> 2 Bernie            2 Power           2
 #> 3 Bernie            3 Respect         3

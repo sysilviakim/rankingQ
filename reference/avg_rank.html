@@ -139,10 +139,11 @@ reference choice set.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  3rd Average Rank 2.333333 0.6666667 1.0266667 3.640000 Raw Data</span>
 <span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="rank_longer.html">rank_longer</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">y</span>,</span></span>
-<span class="r-in"><span>  cols <span class="op">=</span> <span class="st">"rank"</span>, id <span class="op">=</span> <span class="st">"id"</span>,</span></span>
+<span class="r-in"><span>  cols <span class="op">=</span> <span class="st">"rank"</span>,</span></span>
 <span class="r-in"><span>  reference <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Money"</span>, <span class="st">"Power"</span>, <span class="st">"Respect"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> One column selected. Parsing column by character length.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No ID column specified. Using row number.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> One column selected. Parsing encoded ranking values.</span>
 <span class="r-in"><span><span class="fu">avg_rank</span><span class="op">(</span><span class="va">z</span>, <span class="st">"ranking"</span>, items <span class="op">=</span> <span class="st">"item_name"</span>, long <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   item_name          qoi     mean        se     lower    upper   method</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     Money Average Rank 2.000000 0.5773503 0.8683935 3.131607 Raw Data</span>

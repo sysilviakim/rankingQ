@@ -94,10 +94,11 @@ avg_rank(y, "rank")
 #> 3  3rd Average Rank 2.333333 0.6666667 1.0266667 3.640000 Raw Data
 z <- rank_longer(
   y,
-  cols = "rank", id = "id",
+  cols = "rank",
   reference = c("Money", "Power", "Respect")
 )
-#> One column selected. Parsing column by character length.
+#> No ID column specified. Using row number.
+#> One column selected. Parsing encoded ranking values.
 avg_rank(z, "ranking", items = "item_name", long = TRUE)
 #>   item_name          qoi     mean        se     lower    upper   method
 #> 1     Money Average Rank 2.000000 0.5773503 0.8683935 3.131607 Raw Data
