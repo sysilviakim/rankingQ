@@ -69,6 +69,10 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
   }
 
   ## Sanity check on `id` argument
+  if (!is.null(id) &&
+      (!is.character(id) || length(id) != 1 || is.na(id) || !nzchar(id))) {
+    stop("The id argument must be a single column name.")
+  }
   if (is.null(id)) {
     message("No ID column specified. Using row number.")
     x[["id"]] <- seq(nrow(x))
@@ -87,6 +91,9 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
   }
   if (!all(cols %in% names(x))) {
     stop("The cols argument contains columns not in the given data frame.")
+  }
+  if (anyNA(x[, cols, drop = FALSE])) {
+    stop("The selected ranking columns cannot contain missing values.")
   }
 
   ## Sanity check on `cols` argument
