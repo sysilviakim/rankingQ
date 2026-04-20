@@ -29,6 +29,22 @@ test_that("imprr_direct_rcpp returns expected structure", {
   expect_true("mean" %in% names(result$results))
 })
 
+test_that("imprr_direct_rcpp messages when using equal weights by default", {
+  data(identity_w)
+
+  expect_message(
+    imprr_direct_rcpp(
+      data = identity_w,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      n_bootstrap = 1,
+      seed = 123
+    ),
+    "No weight column supplied; using equal weights for all observations."
+  )
+})
+
 test_that("imprr_direct_rcpp produces reasonable estimates", {
   data(identity_w)
 

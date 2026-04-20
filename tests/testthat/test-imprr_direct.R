@@ -19,6 +19,22 @@ test_that("plug-in estimation works", {
                 example_direct$est_p_random$mean)
 })
 
+test_that("imprr_direct messages when using equal weights by default", {
+  identity <- rankingQ::identity
+
+  expect_message(
+    imprr_direct(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      n_bootstrap = 1,
+      seed = 1
+    ),
+    "No weight column supplied; using equal weights for all observations."
+  )
+})
+
 test_that("imprr_direct validates bootstrap count", {
   identity <- rankingQ::identity
 

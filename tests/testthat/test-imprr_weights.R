@@ -23,6 +23,20 @@ test_that("IPW estimation works", {
   expect_equal(nrow(example_ipw$rankings), 24)
 })
 
+test_that("imprr_weights messages when using equal weights by default", {
+  identity <- rankingQ::identity
+
+  expect_message(
+    imprr_weights(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity"
+    ),
+    "No weight column supplied; using equal weights for all observations."
+  )
+})
+
 test_that("IPW weights sum to approximately 1", {
   identity <- rankingQ::identity
   example_ipw <- imprr_weights(
