@@ -18,50 +18,79 @@ knitr::opts_chunk$set(
 ```{r, message=FALSE, warning=FALSE}
 library(rankingQ)
 library(estimatr)
-data(identity_w)
+data(identity)
 ```
 
-The estimated weights from `imprr_weights` can be used to perform any
-analyses. For example, to estimate the average rank of party, one can
-leverage linear regression as follows:
+The IPW workflow is easiest to think of in two steps. First,
+`imprr_weights()` estimates respondent-level correction weights. Those
+weights can then be used for point estimation in downstream analyses.
+
+```{r}
+out_weights <- imprr_weights(
+  identity,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity"
+)
+
+out_weights$est_p_random
+```
+
+For example, to estimate the average rank of party as a point estimate,
+one can leverage weighted linear regression as follows:
 
 ```{r}
 lm_robust(
   app_identity_1 ~ 1,
-  data = identity_w,
-  weights = identity_w$weights
+  data = out_weights$results,
+  weights = out_weights$results$weights
 ) |>
   tidy()
 ```
 
-While this illustrative example provides a valid point estimate, its
-confidence interval does not account for the estimation uncertainty
-around the estimated weights. Thus, in practice, `imprr_weights` must
-be used along with bootstrapping, such as the one available in
-`rsample`; see the article below for an example:
-https://declaredesign.org/r/estimatr/articles/estimatr-in-the-tidyverse.html
+That gives a valid point estimate, but its standard error treats the
+estimated IPW weights as fixed. For built-in ranking summaries, use
+`imprr_weights_boot()`, which resamples respondents, reruns
+`imprr_weights()` inside each resample, and summarizes the resulting
+quantities of interest.
 
 ## Computing Average Ranks
 
-The `avg_rank` function provides a convenient way to compute average
-ranks for all items:
+The `avg_rank` function remains a convenient way to compute point
+estimates from the IPW-adjusted respondent-level data:
 
 ```{r}
-# Raw average ranks (without bias correction)
-avg_rank(identity_w,
-  rankings = "app_identity",
-  items = c("Party", "Religion", "Gender", "Race")
-)
-```
-
-For bias-corrected estimates using IPW weights, use the marginal
-ranking columns:
-
-```{r}
-# IPW-corrected average ranks
 items_df <- data.frame(
   variable = paste0("app_identity_", 1:4),
   item = c("Party", "Religion", "Gender", "Race")
 )
-avg_rank(identity_w, items = items_df, weight = "weights", raw = FALSE)
+
+avg_rank(out_weights$results, items = items_df, weight = "weights", raw = FALSE)
 ```
+
+For bootstrap uncertainty on the same quantities, `imprr_weights_boot()`
+returns summaries in the same general format as `imprr_direct()`:
+
+```{r}
+out_boot <- imprr_weights_boot(
+  identity,
+  main_q = "app_identity",
+  anc_correct = "anc_correct_identity",
+  n_bootstrap = 10,
+  seed = 123
+)
+
+out_boot$est_p_random
+subset(out_boot$results, qoi == "average rank")
+```
+
+The same object also contains bootstrap summaries for pairwise, top-k,
+and marginal ranking quantities:
+
+```{r}
+subset(out_boot$results, qoi == "pairwise ranking")
+```
+
+If you want uncertainty for an arbitrary downstream weighted analysis,
+the same principle applies: resample respondents and rerun
+`imprr_weights()` within each resample before recomputing the target
+estimand.

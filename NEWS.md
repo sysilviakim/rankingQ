@@ -8,6 +8,9 @@
 * `imprr_direct()`: `anc_correct` is now optional. Users can instead
   supply `p_random` directly, or rely on anchor-based estimation of the
   non-random response rate.
+* New exported convenience wrapper `add_ipw_weights()` for returning the
+  original data augmented with respondent-level IPW weights, with an
+  option to also keep ranking summaries.
 * `imprr_direct_rcpp()`: correctly delegates to `imprr_direct()` when
   `method = "fixed"`, forwarding all population and assumption inputs.
 * `rpluce()`: when all remaining Plackett-Luce weights become zero after

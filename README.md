@@ -36,6 +36,7 @@ For a full walkthrough of an example and downstream analysis, see the [Getting S
 
 - **Bias correction via plug-in estimator** (`imprr_direct`): estimates average ranks, marginal rank probabilities, pairwise preferences, and top-k rankings with confidence intervals
 - **Bias correction via IPW** (`imprr_weights`): reweights observed ranking distributions to correct for random responses
+- **Convenience augmentation** (`add_ipw_weights`): returns the original data with respondent-level IPW weights attached
 - **Visualization** (`plot_avg_ranking`): plots corrected average rankings with uncertainty bounds
 - **Diagnostics**: tools for detecting bias and assessing anchor-ranking questions
 

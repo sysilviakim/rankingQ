@@ -471,3 +471,98 @@ test_that("imprr_weights errors on conflicting output column names", {
     "data already contains output column\\(s\\): myrank\\."
   )
 })
+
+test_that("add_ipw_weights returns augmented data by default", {
+  identity <- rankingQ::identity
+
+  out_full <- suppressMessages(
+    imprr_weights(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity"
+    )
+  )
+  out_aug <- suppressMessages(
+    add_ipw_weights(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity"
+    )
+  )
+
+  expect_s3_class(out_aug, "data.frame")
+  expect_equal(names(out_aug), c(names(identity), "ipw_weights"))
+  expect_false("ranking" %in% names(out_aug))
+  expect_equal(out_aug$ipw_weights, out_full$results$weights)
+})
+
+test_that("add_ipw_weights optionally keeps ranking outputs", {
+  identity <- rankingQ::identity
+
+  out <- suppressMessages(
+    add_ipw_weights(
+      identity,
+      J = 4,
+      main_q = app_identity,
+      anc_correct = anc_correct_identity,
+      keep_ranking = TRUE,
+      ranking_col = "myrank",
+      keep_rankings = TRUE
+    )
+  )
+
+  expect_type(out, "list")
+  expect_named(out, c("data", "rankings", "est_p_random"))
+  expect_true(all(c("ipw_weights", "myrank") %in% names(out$data)))
+  expect_true("myrank" %in% names(out$rankings))
+  expect_false("ranking" %in% names(out$data))
+})
+
+test_that("add_ipw_weights preserves an existing weights column", {
+  toy <- data.frame(
+    q_1 = c(1, 2, 1, 2),
+    q_2 = c(2, 1, 2, 1),
+    anc = c(1, 1, 1, 1),
+    weights = c(2, 3, 4, 5)
+  )
+
+  out <- add_ipw_weights(
+    toy,
+    J = 2,
+    main_q = "q",
+    anc_correct = "anc",
+    weight = "weights"
+  )
+
+  expect_equal(out$weights, toy$weights)
+  expect_true("ipw_weights" %in% names(out))
+})
+
+test_that("add_ipw_weights validates output column collisions", {
+  identity <- rankingQ::identity
+  identity$ipw_weights <- 1
+
+  expect_error(
+    add_ipw_weights(
+      identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity"
+    ),
+    "weight_col already exists in data."
+  )
+
+  expect_error(
+    add_ipw_weights(
+      rankingQ::identity,
+      J = 4,
+      main_q = "app_identity",
+      anc_correct = "anc_correct_identity",
+      keep_ranking = TRUE,
+      ranking_col = "app_identity"
+    ),
+    "ranking_col already exists in data."
+  )
+})
