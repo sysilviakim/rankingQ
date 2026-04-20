@@ -109,7 +109,7 @@ test_that("imprr_direct_rcpp accepts a weight column name", {
     anc_correct = "anc_correct_identity",
     n_bootstrap = 50,
     seed = 789,
-    weight = "w"
+    weight = "weights"
   )
 
   expect_type(result, "list")

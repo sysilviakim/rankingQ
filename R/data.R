@@ -71,15 +71,15 @@
 #'
 #' @description
 #'
-#' This data has two extra columns from the original `identity` data:
-#' `w` and `ranking`, which are respectively the estimated weights based on
-#' inverse probability weighting and the ranking pattern that the respondent
-#' provided, united into a single column.
+#' This data is the `results` element returned by applying
+#' `imprr_weights()` to `identity`. It adds two columns to the original
+#' `identity` data: `weights`, the estimated inverse probability weights, and
+#' `ranking`, the pasted full ranking profile.
 #'
 #' @format ## `identity_w`
-#' A data frame with 1,082 rows and 17 columns:
+#' A data frame with 1,082 rows and 18 columns:
 #' \describe{
-#'   \item{w}{Estimated weight based on inverse probability weighting.}
+#'   \item{weights}{Estimated weights based on inverse probability weighting.}
 #'   \item{s_weight}{Survey weight.}
 #'   \item{app_identity}{
 #'     Full ranking profile for the main identity ranking question.
@@ -121,6 +121,10 @@
 #'   \item{anc_identity_row_rnd}{
 #'     The order in which the items were randomly presented for the
 #'     respondent in the anchor ranking question.
+#'   }
+#'   \item{ranking}{
+#'     Pasted full ranking profile reconstructed from the marginal ranking
+#'     columns. In this dataset, it matches \code{app_identity}.
 #'   }
 #' }
 #' @source <https://github.com/sysilviakim/ranking_error>
