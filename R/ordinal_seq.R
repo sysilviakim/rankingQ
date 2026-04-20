@@ -16,9 +16,14 @@
 
 ordinal_seq <- function(length) {
   # Sanity check on `length` argument
-  if (length(length) != 1 | !is.numeric(length)) {
+  if (!is.numeric(length) || length(length) != 1 || is.na(length)) {
     stop("`length` must be a numeric value of length 1.")
   }
+  if (!is.finite(length) || length <= 0 || length != as.integer(length)) {
+    stop("`length` must be a positive integer.")
+  }
+
+  length <- as.integer(length)
 
   ordinal_suffix <- function(n) {
     if (n %% 100 %in% c(11, 12, 13)) {

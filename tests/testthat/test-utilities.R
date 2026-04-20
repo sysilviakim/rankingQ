@@ -55,6 +55,18 @@ test_that("ordinal_seq errors on invalid input", {
     ordinal_seq(NULL),
     "`length` must be a numeric value of length 1."
   )
+  expect_error(
+    ordinal_seq(0),
+    "`length` must be a positive integer."
+  )
+  expect_error(
+    ordinal_seq(-1),
+    "`length` must be a positive integer."
+  )
+  expect_error(
+    ordinal_seq(1.5),
+    "`length` must be a positive integer."
+  )
 })
 
 test_that("table_to_tibble keeps factor rankings and exact proportions", {
