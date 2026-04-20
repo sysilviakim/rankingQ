@@ -37,27 +37,11 @@ compute_qoi_stats_cpp <- function(data, weights, J) {
     .Call(`_rankingQ_compute_qoi_stats_cpp`, data, weights, J)
 }
 
-bootstrap_qoi_cpp <- function(
-    data,
-    anc_correct,
-    weights,
-    J,
-    n_bootstrap,
-    seed
-) {
-    .Call(
-        `_rankingQ_bootstrap_qoi_cpp`,
-        data,
-        anc_correct,
-        weights,
-        J,
-        n_bootstrap,
-        seed
-    )
+bootstrap_qoi_cpp <- function(data, anc_correct, weights, J, n_bootstrap, seed) {
+    .Call(`_rankingQ_bootstrap_qoi_cpp`, data, anc_correct, weights, J, n_bootstrap, seed)
 }
 
 weighted_table_cpp <- function(x, weights) {
     .Call(`_rankingQ_weighted_table_cpp`, x, weights)
 }
-
 
