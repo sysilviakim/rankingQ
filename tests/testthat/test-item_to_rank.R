@@ -25,6 +25,38 @@ test_that("item_to_rank with custom reference names", {
   expect_equal(names(result), c("Alpha", "Beta"))
 })
 
+test_that("item_to_rank converts ranking to ordering format", {
+  df <- data.frame(
+    a = c(3L, 1L),
+    b = c(1L, 2L),
+    c = c(2L, 3L)
+  )
+
+  result <- item_to_rank(df, format_input = "ranking")
+
+  expect_equal(as.data.frame(result), data.frame(
+    a = c(2L, 1L),
+    b = c(3L, 2L),
+    c = c(1L, 3L)
+  ))
+})
+
+test_that("item_to_rank accepts character orderings without PLMIX", {
+  df <- data.frame(
+    first = c("b", "a"),
+    second = c("c", "b"),
+    third = c("a", "c")
+  )
+
+  result <- item_to_rank(df)
+
+  expect_equal(as.data.frame(result), data.frame(
+    a = c(3L, 1L),
+    b = c(1L, 2L),
+    c = c(2L, 3L)
+  ))
+})
+
 test_that("item_to_rank long format returns item and rank columns", {
   df <- data.frame(
     first  = c(1L, 2L),
@@ -49,8 +81,20 @@ test_that("item_to_rank errors on invalid long argument", {
   )
 })
 
+test_that("item_to_rank validates format_input and complete permutations", {
+  expect_error(
+    item_to_rank(data.frame(first = 1L, second = 2L), format_input = "oops"),
+    "format_input must be either 'ordering' or 'ranking'."
+  )
+
+  expect_error(
+    item_to_rank(data.frame(first = 1L, second = 1L)),
+    "Each row of item_rank must be a complete permutation"
+  )
+})
+
 test_that("item_to_rank handles more than 26 items without NA names", {
-  df <- as.data.frame(matrix(sample(1:30, 90, replace = TRUE), ncol = 30))
+  df <- as.data.frame(t(replicate(3, sample(1:30))))
   out <- item_to_rank(df)
 
   expect_equal(ncol(out), 30)

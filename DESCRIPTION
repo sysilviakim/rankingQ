@@ -25,7 +25,6 @@ Imports:
   ggplot2,
   rlang,
   combinat,
-  PLMIX,
   estimatr,
   stats,
   Rcpp
