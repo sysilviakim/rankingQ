@@ -332,20 +332,20 @@ head(identity_w)
 ```
 
     ## # A tibble: 6 × 19
-    ##   weights s_weight app_identity ranking app_identity_1 app_identity_2
-    ##     <dbl>    <dbl> <chr>        <chr>            <dbl>          <dbl>
-    ## 1    1.02    0.844 1423         1423                 1              4
-    ## 2    1.02    0.886 1423         1423                 1              4
-    ## 3    1.27    2.96  3412         3412                 3              4
-    ## 4    1.02    0.987 1423         1423                 1              4
-    ## 5    1.10    1.76  4132         4132                 4              1
-    ## 6    1.02    0.469 3124         3124                 3              1
-    ## # ℹ 13 more variables: app_identity_3 <dbl>, app_identity_4 <dbl>,
-    ## #   anc_identity <chr>, anc_identity_1 <dbl>, anc_identity_2 <dbl>,
-    ## #   anc_identity_3 <dbl>, anc_identity_4 <dbl>, anc_correct_identity <dbl>,
+    ##   weights s_weight app_identity app_identity_1 app_identity_2 app_identity_3
+    ##     <dbl>    <dbl> <chr>                 <dbl>          <dbl>          <dbl>
+    ## 1    1.02    0.844 1423                      1              4              2
+    ## 2    1.02    0.886 1423                      1              4              2
+    ## 3    1.27    2.96  3412                      3              4              1
+    ## 4    1.02    0.987 1423                      1              4              2
+    ## 5    1.10    1.76  4132                      4              1              3
+    ## 6    1.02    0.469 3124                      3              1              2
+    ## # ℹ 13 more variables: app_identity_4 <dbl>, anc_identity <chr>,
+    ## #   anc_identity_1 <dbl>, anc_identity_2 <dbl>, anc_identity_3 <dbl>,
+    ## #   anc_identity_4 <dbl>, anc_correct_identity <dbl>,
     ## #   app_identity_recorded <chr>, anc_identity_recorded <chr>,
     ## #   app_identity_row_rnd <chr>, anc_identity_row_rnd <chr>,
-    ## #   random_identity <dbl>
+    ## #   random_identity <dbl>, ranking <chr>
 
 ``` r
 # save(identity_w, file = "data/identity_w.rda")

@@ -371,20 +371,20 @@ function of all ranking profile before and after bias correction.</p>
 <code class="sourceCode R"><span><span class="va">identity_w</span> <span class="op">&lt;-</span> <span class="va">out_weights</span><span class="op">$</span><span class="va">results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">identity_w</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 19</span></span></span>
-<span><span class="co">##   weights s_weight app_identity ranking app_identity_1 app_identity_2</span></span>
-<span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>    1.02    0.844 1423         1423                 1              4</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>    1.02    0.886 1423         1423                 1              4</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>    1.27    2.96  3412         3412                 3              4</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>    1.02    0.987 1423         1423                 1              4</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span>    1.10    1.76  4132         4132                 4              1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span>    1.02    0.469 3124         3124                 3              1</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 13 more variables: app_identity_3 &lt;dbl&gt;, app_identity_4 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   anc_identity &lt;chr&gt;, anc_identity_1 &lt;dbl&gt;, anc_identity_2 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   anc_identity_3 &lt;dbl&gt;, anc_identity_4 &lt;dbl&gt;, anc_correct_identity &lt;dbl&gt;,</span></span></span>
+<span><span class="co">##   weights s_weight app_identity app_identity_1 app_identity_2 app_identity_3</span></span>
+<span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span>    1.02    0.844 1423                      1              4              2</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span>    1.02    0.886 1423                      1              4              2</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span>    1.27    2.96  3412                      3              4              1</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span>    1.02    0.987 1423                      1              4              2</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span>    1.10    1.76  4132                      4              1              3</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span>    1.02    0.469 3124                      3              1              2</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 13 more variables: app_identity_4 &lt;dbl&gt;, anc_identity &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   anc_identity_1 &lt;dbl&gt;, anc_identity_2 &lt;dbl&gt;, anc_identity_3 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   anc_identity_4 &lt;dbl&gt;, anc_correct_identity &lt;dbl&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   app_identity_recorded &lt;chr&gt;, anc_identity_recorded &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   app_identity_row_rnd &lt;chr&gt;, anc_identity_row_rnd &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   random_identity &lt;dbl&gt;</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   random_identity &lt;dbl&gt;, ranking &lt;chr&gt;</span></span></span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save(identity_w, file = "data/identity_w.rda")</span></span></code></pre></div>
 </div>
