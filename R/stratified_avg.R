@@ -81,6 +81,12 @@ stratified_avg <- function(data, var_stratum, J = NULL,
   if (is.null(J)) {
     J <- nchar(data[[main_q]][[1]])
   }
+  ranking_cols <- paste0(main_q, "_", seq_len(J))
+  item_spec <- data.frame(
+    variable = ranking_cols,
+    item = if (is.null(labels)) ranking_cols else labels,
+    stringsAsFactors = FALSE
+  )
 
   ## Initialize output ---------------------------------------------------------
   out_stratification <- vector("list", length = n_bootstrap)
@@ -145,22 +151,35 @@ stratified_avg <- function(data, var_stratum, J = NULL,
               J = J,
               main_q = main_q,
               anc_correct = anc_correct,
-              weight = weights,
-              seed = seed_list[b]
+              weight = weights
             )
           }
         )
     }
 
     ## Stratification estimates ------------------------------------------------
-    est_list <- imprr_list %>%
-      map("results") %>%
-      map(
-        ~ .x %>%
-          filter(qoi == "average rank") %>%
-          ungroup() %>%
-          select(item, mean)
-      )
+    if (ipw == FALSE) {
+      est_list <- imprr_list %>%
+        map("results") %>%
+        map(
+          ~ .x %>%
+            filter(qoi == "average rank") %>%
+            ungroup() %>%
+            select(item, mean)
+        )
+    } else {
+      est_list <- imprr_list %>%
+        map("results") %>%
+        map(
+          ~ suppressMessages(avg_rank(
+            .x,
+            items = item_spec,
+            weight = "weights",
+            raw = FALSE
+          )) %>%
+            select(item, mean)
+        )
+    }
 
     strat <- names(p_X) %>%
       map(
