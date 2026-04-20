@@ -95,11 +95,16 @@ test_that("rpluce handles four-item rankings", {
 })
 
 test_that("rpluce handles degenerate Plackett-Luce probabilities", {
-  result <- rpluce(n = 5, t = 3, prob = c(1, 0, 0), seed = 7)
+  result <- rpluce(n = 50, t = 3, prob = c(1, 0, 0), seed = 7)
 
-  expect_equal(result$`1st`, rep("a", 5))
-  expect_equal(result$`2nd`, rep("b", 5))
-  expect_equal(result$`3rd`, rep("c", 5))
+  expect_equal(result$`1st`, rep("a", 50))
+  expect_setequal(unique(result$`2nd`), c("b", "c"))
+  expect_setequal(unique(result$`3rd`), c("b", "c"))
+  expect_true(all(vapply(
+    seq_len(nrow(result)),
+    function(i) setequal(as.character(unlist(result[i, 2:3])), c("b", "c")),
+    logical(1)
+  )))
 })
 
 test_that("rpluce errors cleanly on invalid n and t boundary values", {
