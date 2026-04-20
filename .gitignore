@@ -65,3 +65,7 @@ src/*.dll
 
 # Reverse dependency check outputs
 /revdep/
+
+# Local stress-test outputs and scratch benchmarks
+/reports/quality/stress_test_log.txt
+/inst/benchmarks/stress_test_simulations.R

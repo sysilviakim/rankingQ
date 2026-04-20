@@ -210,13 +210,17 @@ List bootstrap_qoi_cpp(
   // Storage for bootstrap results
   NumericVector p_random_boot(n_bootstrap);
   NumericMatrix avg_ranks_boot(n_bootstrap, J);
+  NumericMatrix avg_ranks_raw_boot(n_bootstrap, J);
   // For simplicity, store flattened pairwise, topk, marginal
   int n_pairwise = J * J_1;
   int n_topk = J * J_1;
   int n_marginal = J * J;
   NumericMatrix pairwise_boot(n_bootstrap, n_pairwise);
+  NumericMatrix pairwise_raw_boot(n_bootstrap, n_pairwise);
   NumericMatrix topk_boot(n_bootstrap, n_topk);
+  NumericMatrix topk_raw_boot(n_bootstrap, n_topk);
   NumericMatrix marginal_boot(n_bootstrap, n_marginal);
+  NumericMatrix marginal_raw_boot(n_bootstrap, n_marginal);
 
   // Set seed for reproducibility
   Environment base_env("package:base");
@@ -248,15 +252,19 @@ List bootstrap_qoi_cpp(
       p_random_boot[b] = NA_REAL;
       for (int j = 0; j < J; j++) {
         avg_ranks_boot(b, j) = NA_REAL;
+        avg_ranks_raw_boot(b, j) = NA_REAL;
       }
       for (int c = 0; c < n_pairwise; c++) {
         pairwise_boot(b, c) = NA_REAL;
+        pairwise_raw_boot(b, c) = NA_REAL;
       }
       for (int c = 0; c < n_topk; c++) {
         topk_boot(b, c) = NA_REAL;
+        topk_raw_boot(b, c) = NA_REAL;
       }
       for (int c = 0; c < n_marginal; c++) {
         marginal_boot(b, c) = NA_REAL;
+        marginal_raw_boot(b, c) = NA_REAL;
       }
       continue;
     }
@@ -273,6 +281,7 @@ List bootstrap_qoi_cpp(
         sum_w_item += weights[idx];
       }
       double raw_avg = sum_wx / sum_w_item;
+      avg_ranks_raw_boot(b, j) = raw_avg;
       avg_ranks_boot(b, j) =
         (raw_avg - uniform_avg_rank * (1.0 - p_non_random)) / p_non_random;
 
@@ -288,6 +297,7 @@ List bootstrap_qoi_cpp(
             }
           }
           double raw_pair = sum_pair / sum_w_item;
+          pairwise_raw_boot(b, j * J_1 + pair_idx) = raw_pair;
           pairwise_boot(b, j * J_1 + pair_idx) =
             (raw_pair - uniform_pairwise * (1.0 - p_non_random)) /
             p_non_random;
@@ -305,6 +315,7 @@ List bootstrap_qoi_cpp(
           }
         }
         double raw_topk = sum_topk / sum_w_item;
+        topk_raw_boot(b, j * J_1 + k) = raw_topk;
         // For top-k, g_U = (k+1)/J
         double g_U_topk = (double)(k + 1) / J;
         topk_boot(b, j * J_1 + k) =
@@ -321,6 +332,7 @@ List bootstrap_qoi_cpp(
           }
         }
         double raw_marg = sum_marg / sum_w_item;
+        marginal_raw_boot(b, j * J + k) = raw_marg;
         marginal_boot(b, j * J + k) =
           (raw_marg - uniform_prob * (1.0 - p_non_random)) / p_non_random;
       }
@@ -330,9 +342,13 @@ List bootstrap_qoi_cpp(
   return List::create(
     Named("p_random") = p_random_boot,
     Named("avg_ranks") = avg_ranks_boot,
+    Named("avg_ranks_raw") = avg_ranks_raw_boot,
     Named("pairwise") = pairwise_boot,
+    Named("pairwise_raw") = pairwise_raw_boot,
     Named("topk") = topk_boot,
-    Named("marginal") = marginal_boot
+    Named("topk_raw") = topk_raw_boot,
+    Named("marginal") = marginal_boot,
+    Named("marginal_raw") = marginal_raw_boot
   );
 }
 

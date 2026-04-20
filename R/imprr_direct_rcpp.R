@@ -184,6 +184,68 @@ imprr_direct_rcpp <- function(data,
   if (verbose) message("Bootstrapping finished.")
 
   # Format results to match original output format =============================
+  summarize_qoi_mats <- function(avg_ranks,
+                                 pairwise,
+                                 topk,
+                                 marginal) {
+    all_results <- list()
+
+    for (j in seq_len(J)) {
+      target_item <- item_names[j]
+      other_items <- item_names[-j]
+
+      avg_rank_values <- avg_ranks[, j]
+      all_results[[length(all_results) + 1]] <- tibble::tibble(
+        item = target_item,
+        qoi = "average rank",
+        outcome = paste0("Avg: ", target_item),
+        mean = mean(avg_rank_values),
+        lower = stats::quantile(avg_rank_values, 0.025),
+        upper = stats::quantile(avg_rank_values, 0.975)
+      )
+
+      for (k in seq_len(J_1)) {
+        col_idx <- (j - 1) * J_1 + k
+        pairwise_values <- pairwise[, col_idx]
+        all_results[[length(all_results) + 1]] <- tibble::tibble(
+          item = target_item,
+          qoi = "pairwise ranking",
+          outcome = paste0("v. ", other_items[k]),
+          mean = mean(pairwise_values),
+          lower = stats::quantile(pairwise_values, 0.025),
+          upper = stats::quantile(pairwise_values, 0.975)
+        )
+      }
+
+      for (k in seq_len(J_1)) {
+        col_idx <- (j - 1) * J_1 + k
+        topk_values <- topk[, col_idx]
+        all_results[[length(all_results) + 1]] <- tibble::tibble(
+          item = target_item,
+          qoi = "top-k ranking",
+          outcome = paste0("Top-", k),
+          mean = mean(topk_values),
+          lower = stats::quantile(topk_values, 0.025),
+          upper = stats::quantile(topk_values, 0.975)
+        )
+      }
+
+      for (k in seq_len(J)) {
+        col_idx <- (j - 1) * J + k
+        marginal_values <- marginal[, col_idx]
+        all_results[[length(all_results) + 1]] <- tibble::tibble(
+          item = target_item,
+          qoi = "marginal ranking",
+          outcome = paste0("Ranked ", k),
+          mean = mean(marginal_values),
+          lower = stats::quantile(marginal_values, 0.025),
+          upper = stats::quantile(marginal_values, 0.975)
+        )
+      }
+    }
+
+    do.call(rbind, all_results)
+  }
 
   # Proportion of random responses ---------------------------------------------
   df_random_summary <- tibble::tibble(
@@ -194,72 +256,40 @@ imprr_direct_rcpp <- function(data,
 
   # Build results tibble -------------------------------------------------------
   item_names <- ranking_cols
-  all_results <- list()
-
-  for (j in seq_len(J)) {
-    target_item <- item_names[j]
-    other_items <- item_names[-j]
-
-    # Average rank -------------------------------------------------------------
-    avg_rank_values <- result_cpp$avg_ranks[, j]
-    all_results[[length(all_results) + 1]] <- tibble::tibble(
-      item = target_item,
-      qoi = "average rank",
-      outcome = paste0("Avg: ", target_item),
-      mean = mean(avg_rank_values),
-      lower = stats::quantile(avg_rank_values, 0.025),
-      upper = stats::quantile(avg_rank_values, 0.975)
-    )
-
-    # Pairwise probabilities ---------------------------------------------------
-    for (k in seq_len(J_1)) {
-      col_idx <- (j - 1) * J_1 + k
-      pairwise_values <- result_cpp$pairwise[, col_idx]
-      all_results[[length(all_results) + 1]] <- tibble::tibble(
-        item = target_item,
-        qoi = "pairwise ranking",
-        outcome = paste0("v. ", other_items[k]),
-        mean = mean(pairwise_values),
-        lower = stats::quantile(pairwise_values, 0.025),
-        upper = stats::quantile(pairwise_values, 0.975)
-      )
-    }
-
-    # Top-k probabilities ------------------------------------------------------
-    for (k in seq_len(J_1)) {
-      col_idx <- (j - 1) * J_1 + k
-      topk_values <- result_cpp$topk[, col_idx]
-      all_results[[length(all_results) + 1]] <- tibble::tibble(
-        item = target_item,
-        qoi = "top-k ranking",
-        outcome = paste0("Top-", k),
-        mean = mean(topk_values),
-        lower = stats::quantile(topk_values, 0.025),
-        upper = stats::quantile(topk_values, 0.975)
-      )
-    }
-
-    # Marginal probabilities ---------------------------------------------------
-    for (k in seq_len(J)) {
-      col_idx <- (j - 1) * J + k
-      marginal_values <- result_cpp$marginal[, col_idx]
-      all_results[[length(all_results) + 1]] <- tibble::tibble(
-        item = target_item,
-        qoi = "marginal ranking",
-        outcome = paste0("Ranked ", k),
-        mean = mean(marginal_values),
-        lower = stats::quantile(marginal_values, 0.025),
-        upper = stats::quantile(marginal_values, 0.975)
-      )
-    }
-  }
-
-  df_qoi_summary <- do.call(rbind, all_results)
+  df_qoi_summary <- summarize_qoi_mats(
+    result_cpp$avg_ranks,
+    result_cpp$pairwise,
+    result_cpp$topk,
+    result_cpp$marginal
+  )
+  df_raw_summary <- summarize_qoi_mats(
+    result_cpp$avg_ranks_raw,
+    result_cpp$pairwise_raw,
+    result_cpp$topk_raw,
+    result_cpp$marginal_raw
+  )
 
   return(
-    list(
+    .rankingq_structure_output(
+      list(
       est_p_random = df_random_summary,
       results = df_qoi_summary
+      ),
+      class = c("imprr_direct_rcpp", "imprr_direct", "rankingQ_interval_estimate"),
+      method_tables = list(
+        raw = df_raw_summary,
+        direct = df_qoi_summary
+      ),
+      metadata = list(
+        call = match.call(expand.dots = FALSE),
+        primary_method = "direct",
+        J = J,
+        n_bootstrap = n_bootstrap,
+        n_obs = N,
+        population = population,
+        assumption = assumption,
+        ranking_cols = ranking_cols
+      )
     )
   )
 }

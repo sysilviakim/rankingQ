@@ -5,7 +5,6 @@
 #'
 #' @importFrom dplyr `%>%` mutate select group_by summarise pull
 #' @importFrom tidyselect matches
-#' @importFrom estimatr lm_robust tidy
 #' @importFrom stats runif
 #'
 #' @param data The input dataset with ranking data.
@@ -299,7 +298,8 @@ imprr_direct <- function(data,
       upper = quantile(est.p.random, 0.975)
     )
 
-  df_qoi_summary <- do.call(rbind.data.frame, list_qoi) %>%
+  df_qoi_all <- do.call(rbind.data.frame, list_qoi)
+  df_qoi_summary <- df_qoi_all %>%
     group_by(item, qoi, outcome) %>%
     summarise(
       mean = mean(bc_estimate),
@@ -307,11 +307,36 @@ imprr_direct <- function(data,
       upper = quantile(bc_estimate, 0.975),
       .groups = "drop"
     )
+  df_raw_summary <- df_qoi_all %>%
+    group_by(item, qoi, outcome) %>%
+    summarise(
+      mean = mean(estimate),
+      lower = quantile(estimate, 0.025),
+      upper = quantile(estimate, 0.975),
+      .groups = "drop"
+    )
 
   return(
-    list(
+    .rankingq_structure_output(
+      list(
       est_p_random = df_random_summary,
       results = df_qoi_summary
+      ),
+      class = c("imprr_direct", "rankingQ_interval_estimate"),
+      method_tables = list(
+        raw = df_raw_summary,
+        direct = df_qoi_summary
+      ),
+      metadata = list(
+        call = match.call(expand.dots = FALSE),
+        primary_method = "direct",
+        J = J,
+        n_bootstrap = n_bootstrap,
+        n_obs = N,
+        population = population,
+        assumption = assumption,
+        ranking_cols = ranking_cols
+      )
     )
   )
 }

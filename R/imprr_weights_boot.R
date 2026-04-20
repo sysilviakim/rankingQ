@@ -1,23 +1,27 @@
-.ipw_qoi_from_rankings <- function(rankings_df, ranking_col, item_names, J) {
+.rankingq_qoi_from_rankings <- function(rankings_df,
+                                        ranking_col,
+                                        item_names,
+                                        J,
+                                        prob_col = "prop_bc") {
   if (!(ranking_col %in% names(rankings_df))) {
     stop("ranking_col must be contained in rankings_df.")
   }
-  if (!("prop_bc" %in% names(rankings_df))) {
-    stop("rankings_df must contain a prop_bc column.")
+  if (!(prob_col %in% names(rankings_df))) {
+    stop("rankings_df must contain the requested probability column.")
   }
 
   ranking_mat <- .parse_ranking_vector(rankings_df[[ranking_col]], J = J)$values
-  prop_bc <- as.numeric(rankings_df$prop_bc)
+  prob <- as.numeric(rankings_df[[prob_col]])
 
-  if (length(prop_bc) != nrow(ranking_mat) ||
-      anyNA(prop_bc) || any(!is.finite(prop_bc))) {
-    stop("rankings_df$prop_bc must be finite and aligned with the ranking labels.")
+  if (length(prob) != nrow(ranking_mat) ||
+      anyNA(prob) || any(!is.finite(prob))) {
+    stop("The requested probability column must be finite and aligned.")
   }
-  if (sum(prop_bc) <= 0) {
-    stop("rankings_df$prop_bc must sum to a positive value.")
+  if (sum(prob) <= 0) {
+    stop("The requested probability column must sum to a positive value.")
   }
 
-  prop_bc <- prop_bc / sum(prop_bc)
+  prob <- prob / sum(prob)
   J_1 <- J - 1L
   all_qoi_list <- vector("list", length = J)
 
@@ -26,26 +30,26 @@
     other_items <- item_names[-j]
     target_rank <- ranking_mat[, j]
 
-    avg_rank <- sum(target_rank * prop_bc)
+    avg_rank <- sum(target_rank * prob)
     pairwise <- vapply(
       seq_along(other_items),
       FUN.VALUE = numeric(1),
       FUN = function(k) {
-        sum((target_rank < ranking_mat[, -j, drop = FALSE][, k]) * prop_bc)
+        sum((target_rank < ranking_mat[, -j, drop = FALSE][, k]) * prob)
       }
     )
     topk <- vapply(
       seq_len(J_1),
       FUN.VALUE = numeric(1),
       FUN = function(k) {
-        sum((target_rank <= k) * prop_bc)
+        sum((target_rank <= k) * prob)
       }
     )
     marginal <- vapply(
       seq_len(J),
       FUN.VALUE = numeric(1),
       FUN = function(k) {
-        sum((target_rank == k) * prop_bc)
+        sum((target_rank == k) * prob)
       }
     )
 
@@ -230,6 +234,7 @@ imprr_weights_boot <- function(data,
 
   list_prop <- vector("list", length = n_bootstrap)
   list_qoi <- vector("list", length = n_bootstrap)
+  list_qoi_raw <- vector("list", length = n_bootstrap)
 
   for (i in seq_len(n_bootstrap)) {
     index <- sample.int(N, size = N, replace = TRUE)
@@ -249,11 +254,19 @@ imprr_weights_boot <- function(data,
     )
 
     list_prop[[i]] <- out_ipw$est_p_random
-    list_qoi[[i]] <- .ipw_qoi_from_rankings(
+    list_qoi[[i]] <- .rankingq_qoi_from_rankings(
       out_ipw$rankings,
       ranking_col = ranking_name,
       item_names = loop_ranking_cols,
-      J = J
+      J = J,
+      prob_col = "prop_bc"
+    )
+    list_qoi_raw[[i]] <- .rankingq_qoi_from_rankings(
+      out_ipw$rankings,
+      ranking_col = ranking_name,
+      item_names = loop_ranking_cols,
+      J = J,
+      prob_col = "prop_obs"
     )
   }
 
@@ -277,9 +290,34 @@ imprr_weights_boot <- function(data,
       upper = as.numeric(quantile(estimate, 0.975)),
       .groups = "drop"
     )
+  df_raw_summary <- do.call(rbind.data.frame, list_qoi_raw) %>%
+    group_by(item, qoi, outcome) %>%
+    summarise(
+      mean = mean(estimate),
+      lower = as.numeric(quantile(estimate, 0.025)),
+      upper = as.numeric(quantile(estimate, 0.975)),
+      .groups = "drop"
+    )
 
-  list(
-    est_p_random = df_random_summary,
-    results = df_qoi_summary
+  .rankingq_structure_output(
+    list(
+      est_p_random = df_random_summary,
+      results = df_qoi_summary
+    ),
+    class = c("imprr_weights_boot", "rankingQ_interval_estimate"),
+    method_tables = list(
+      raw = df_raw_summary,
+      ipw = df_qoi_summary
+    ),
+    metadata = list(
+      call = match.call(expand.dots = FALSE),
+      primary_method = "ipw",
+      J = J,
+      n_bootstrap = n_bootstrap,
+      n_obs = N,
+      population = population,
+      assumption = assumption,
+      ranking_cols = ranking_cols
+    )
   )
 }

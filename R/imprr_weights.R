@@ -262,12 +262,49 @@ imprr_weights <- function(data,
       everything()
     )
 
+  raw_qoi <- .rankingq_estimate_to_summary_table(
+    .rankingq_qoi_from_rankings(
+      out_rankings,
+      ranking_col = ranking,
+      item_names = ranking_cols,
+      J = J,
+      prob_col = "prop_obs"
+    )
+  )
+  ipw_qoi <- .rankingq_estimate_to_summary_table(
+    .rankingq_qoi_from_rankings(
+      out_rankings,
+      ranking_col = ranking,
+      item_names = ranking_cols,
+      J = J,
+      prob_col = "prop_bc"
+    )
+  )
+
   # Summarize results ==========================================================
   return(
-    list(
+    .rankingq_structure_output(
+      list(
       est_p_random = 1 - p_non_random,
       results = data_w,
       rankings = out_rankings
+      ),
+      class = c("imprr_weights", "rankingQ_point_estimate"),
+      method_tables = list(
+        raw = raw_qoi,
+        ipw = ipw_qoi
+      ),
+      metadata = list(
+        call = match.call(expand.dots = FALSE),
+        primary_method = "ipw",
+        J = J,
+        n_bootstrap = NULL,
+        n_obs = N,
+        population = population,
+        assumption = assumption,
+        ranking_cols = ranking_cols,
+        ranking_col = ranking
+      )
     )
   )
 }

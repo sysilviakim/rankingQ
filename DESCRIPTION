@@ -26,6 +26,7 @@ Imports:
   tidyselect,
   purrr,
   tibble,
+  generics,
   ggplot2,
   rlang,
   combinat,

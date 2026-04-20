@@ -37,7 +37,8 @@
 #' @importFrom rlang !! set_names
 #' @importFrom tidyselect all_of
 #' @importFrom stats sd
-#' @importFrom estimatr lm_robust tidy
+#' @importFrom estimatr lm_robust
+#' @importFrom generics tidy
 #'
 #' @examples
 #' x <- data.frame(
