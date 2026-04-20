@@ -4,7 +4,12 @@
 \alias{recover_recorded_responses}
 \title{Recover the Recorded Responses Given that Ranking Items were Randomized}
 \usage{
-recover_recorded_responses(true_order, presented_order, df = NULL)
+recover_recorded_responses(
+  true_order,
+  presented_order,
+  df = NULL,
+  reference = NULL
+)
 }
 \arguments{
 \item{true_order}{A string representing the true ranking of the respondent
@@ -16,9 +21,17 @@ were presented to the respondent.}
 \item{df}{The input data frame. Defaults to NULL.
 If NULL, the function expects inputs as simple strings such as "321" or
 "312".}
+
+\item{reference}{Optional reference choice-set order. This is only needed
+when mixing numeric position codes with item-label inputs. It can be
+supplied as a character vector such as \code{c("A", "B", "C", "D")} or as
+a single compact/delimited string such as \code{"ABCD"} or
+\code{"A|B|C|D"}.}
 }
 \value{
-A data frame with the true ranking of the items per respondent.
+If \code{df = NULL}, a character string giving the recovered
+recorded response. Otherwise, the original data frame augmented with a
+column containing the recovered recorded response.
 }
 \description{
 This function, using the order of the items that was presented to the
@@ -55,5 +68,12 @@ recover_recorded_responses(true_order = "4321", "1234") ## Output: "4321"
 ## However, the items were presented in the order D-C-B-A.
 ## Therefore, the respondent's recorded response is 3-1-4-2.
 recover_recorded_responses(true_order = "2413", "4321") ## Output: "3142"
+
+## The same example using item labels directly.
+recover_recorded_responses("CADB", "DCBA") ## Output: "3142"
+
+## You can also mix numeric rankings with labeled presentation order
+## if the reference choice set is supplied explicitly.
+recover_recorded_responses("2413", "D|C|B|A", reference = c("A", "B", "C", "D"))
 
 }

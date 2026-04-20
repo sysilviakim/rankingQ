@@ -33,6 +33,47 @@ test_that("recover_recorded_responses handles delimiter-separated rankings for J
   )
 })
 
+test_that("recover_recorded_responses handles item-label inputs directly", {
+  expect_equal(
+    recover_recorded_responses("CADB", "DCBA"),
+    "3142"
+  )
+
+  expect_equal(
+    recover_recorded_responses(
+      "cherry|apple|date|banana",
+      "date|cherry|banana|apple"
+    ),
+    "3142"
+  )
+})
+
+test_that("recover_recorded_responses supports explicit reference order for mixed inputs", {
+  reference <- c("A", "B", "C", "D")
+
+  expect_equal(
+    recover_recorded_responses("2413", "D|C|B|A", reference = reference),
+    "3142"
+  )
+
+  expect_equal(
+    recover_recorded_responses("CADB", "4321", reference = reference),
+    "3142"
+  )
+})
+
+test_that("recover_recorded_responses requires reference for mixed numeric and label inputs", {
+  expect_error(
+    recover_recorded_responses("2413", "DCBA"),
+    "reference must be supplied when mixing numeric position codes with item-label inputs."
+  )
+
+  expect_error(
+    recover_recorded_responses("CADB", "4321"),
+    "reference must be supplied when mixing numeric position codes with item-label inputs."
+  )
+})
+
 test_that("recover_recorded_responses errors when df columns are missing", {
   df <- data.frame(a = "1234", b = "2143", stringsAsFactors = FALSE)
 
@@ -59,6 +100,24 @@ test_that("recover_recorded_responses works with df input", {
 
   expect_true("app_identity_recorded" %in% names(result))
   expect_equal(nrow(result), 2)
+})
+
+test_that("recover_recorded_responses works with df input and explicit reference labels", {
+  df <- data.frame(
+    truth = c("CADB", "DBCA"),
+    presented = c("DCBA", "ABCD"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- recover_recorded_responses(
+    "truth",
+    "presented",
+    df = df,
+    reference = c("A", "B", "C", "D")
+  )
+
+  expect_true("presented_recorded" %in% names(result))
+  expect_equal(result$presented_recorded, c("3142", "4231"))
 })
 
 test_that("recover_recorded_responses preserves source columns for generic names", {
