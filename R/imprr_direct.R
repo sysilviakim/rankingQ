@@ -146,9 +146,9 @@ imprr_direct <- function(data,
   on.exit(assign(".Random.seed", old_seed, envir = globalenv()), add = TRUE)
   set.seed(seed)
 
-  for (i in 1:n_bootstrap) {
+  for (i in seq_len(n_bootstrap)) {
     ## Sample indices
-    index <- sample(1:nrow(data), size = nrow(data), replace = TRUE)
+    index <- sample.int(N, size = N, replace = TRUE)
 
     ## This is the bootstrapped data
     boostrap_dat <- data[index, ]
@@ -171,7 +171,7 @@ imprr_direct <- function(data,
     item_names <- ranking_cols
     all_qoi_list <- list()
 
-    for (j in 1:J) {
+    for (j in seq_len(J)) {
       # Specify each item as the target item in return
       target_item <- item_names[j]
       other_items <- item_names[-j]
@@ -223,14 +223,14 @@ imprr_direct <- function(data,
 
       gg_topk <- data.frame(estimate = as.numeric(m_top)) %>%
         mutate(
-          outcome = paste0("Top-", "", 1:J_1),
+          outcome = paste0("Top-", "", seq_len(J_1)),
           qoi = "top-k ranking",
-          g_U = (1:J_1) / J
+          g_U = seq_len(J_1) / J
         )
 
       gg_marginal <- data.frame(estimate = as.numeric(m_marginal)) %>%
         mutate(
-          outcome = paste0("Ranked", " ", 1:J),
+          outcome = paste0("Ranked", " ", seq_len(J)),
           qoi = "marginal ranking",
           g_U = uniform_prob
         )
@@ -279,7 +279,8 @@ imprr_direct <- function(data,
     summarise(
       mean = mean(bc_estimate),
       lower = quantile(bc_estimate, 0.025),
-      upper = quantile(bc_estimate, 0.975)
+      upper = quantile(bc_estimate, 0.975),
+      .groups = "drop"
     )
 
   return(

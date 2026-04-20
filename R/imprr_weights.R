@@ -62,7 +62,7 @@ imprr_weights <- function(data,
   count <- n <- n_adj <- n_renormalized <- prop <- w <-
     prop_obs <- weights <- prop_bc <- NULL
 
-  if (is.null(ranking) & main_q %in% names(data)) {
+  if (is.null(ranking) && main_q %in% names(data)) {
     ranking <- main_q
   }
 
@@ -136,9 +136,9 @@ imprr_weights <- function(data,
   names(D_PMF_0)[1] <- ranking
 
   ## Create sample space to merge
-  perm_j <- permn(1:J)
+  perm_j <- permn(seq_len(J))
   perm_j <- do.call(rbind.data.frame, perm_j)
-  colnames(perm_j) <- c(paste0("position_", 1:J))
+  colnames(perm_j) <- c(paste0("position_", seq_len(J)))
 
   perm_j <- perm_j %>%
     unite(!!as.name(ranking), sep = "") %>%

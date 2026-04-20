@@ -139,7 +139,7 @@ imprr_direct_rcpp <- function(data,
   item_names <- ranking_cols
   all_results <- list()
 
-  for (j in 1:J) {
+  for (j in seq_len(J)) {
     target_item <- item_names[j]
     other_items <- item_names[-j]
 
@@ -155,7 +155,7 @@ imprr_direct_rcpp <- function(data,
     )
 
     # Pairwise probabilities
-    for (k in 1:J_1) {
+    for (k in seq_len(J_1)) {
       col_idx <- (j - 1) * J_1 + k
       pairwise_values <- result_cpp$pairwise[, col_idx]
       all_results[[length(all_results) + 1]] <- tibble::tibble(
@@ -169,7 +169,7 @@ imprr_direct_rcpp <- function(data,
     }
 
     # Top-k probabilities
-    for (k in 1:J_1) {
+    for (k in seq_len(J_1)) {
       col_idx <- (j - 1) * J_1 + k
       topk_values <- result_cpp$topk[, col_idx]
       all_results[[length(all_results) + 1]] <- tibble::tibble(
@@ -183,7 +183,7 @@ imprr_direct_rcpp <- function(data,
     }
 
     # Marginal probabilities
-    for (k in 1:J) {
+    for (k in seq_len(J)) {
       col_idx <- (j - 1) * J + k
       marginal_values <- result_cpp$marginal[, col_idx]
       all_results[[length(all_results) + 1]] <- tibble::tibble(
