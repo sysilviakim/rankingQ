@@ -39,3 +39,72 @@ test_that("rank_longer handles multiple columns", {
 
   expect_equal(nrow(result), 6)
 })
+
+test_that("rank_longer creates row-number ids when id is omitted", {
+  df <- data.frame(ranking = c("123", "321"))
+
+  result <- suppressMessages(rank_longer(df, cols = "ranking"))
+
+  expect_true("id" %in% names(result))
+  expect_equal(unique(result$id), 1:2)
+})
+
+test_that("rank_longer arranges output by id and reference order", {
+  df <- data.frame(
+    id = c(2, 1),
+    ranking = c("321", "123")
+  )
+
+  result <- suppressMessages(rank_longer(df, cols = "ranking", id = "id"))
+
+  expect_equal(result$id, c(1, 1, 1, 2, 2, 2))
+  expect_equal(result$reference_no, rep(1:3, 2))
+})
+
+test_that("rank_longer errors on duplicate ids", {
+  df <- data.frame(
+    id = c(1, 1),
+    ranking = c("123", "321")
+  )
+
+  expect_error(
+    suppressMessages(rank_longer(df, cols = "ranking", id = "id")),
+    "The id argument does not uniquely identify the respondent."
+  )
+})
+
+test_that("rank_longer validates cols and ranking length", {
+  expect_error(
+    rank_longer(data.frame(id = 1:2), cols = character(), id = "id"),
+    "The cols argument must be a character vector of length 1 or greater."
+  )
+  expect_error(
+    suppressMessages(
+      rank_longer(
+        data.frame(id = 1:2, ranking = c("1", "1")),
+        cols = "ranking",
+        id = "id"
+      )
+    ),
+    "The max_ranking argument must be greater than 1."
+  )
+})
+
+test_that("rank_longer errors when reference is shorter than ranking length", {
+  df <- data.frame(
+    id = 1:2,
+    ranking = c("123", "321")
+  )
+
+  expect_error(
+    suppressMessages(
+      rank_longer(
+        df,
+        cols = "ranking",
+        id = "id",
+        reference = c("A", "B")
+      )
+    ),
+    "The max_ranking argument is greater than the length of the reference choice set."
+  )
+})

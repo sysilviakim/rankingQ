@@ -26,6 +26,13 @@ test_that("rpluce is reproducible with a fixed seed", {
   expect_identical(r1, r2)
 })
 
+test_that("rpluce produces different samples for different seeds", {
+  r1 <- rpluce(n = 20, t = 4, prob = c(0.4, 0.3, 0.2, 0.1), seed = 1)
+  r2 <- rpluce(n = 20, t = 4, prob = c(0.4, 0.3, 0.2, 0.1), seed = 2)
+
+  expect_false(identical(r1, r2))
+})
+
 test_that("rpluce with custom choices renames columns", {
   result <- rpluce(
     n = 5, t = 3, prob = c(0.5, 0.3, 0.2),
@@ -76,6 +83,16 @@ test_that(
   )
   }
 )
+
+test_that("rpluce handles four-item rankings", {
+  result <- rpluce(n = 8, t = 4, prob = c(0.4, 0.3, 0.2, 0.1), seed = 11)
+
+  expect_equal(names(result), ordinal_seq(4))
+
+  for (i in seq_len(nrow(result))) {
+    expect_setequal(as.character(unlist(result[i, ])), letters[1:4])
+  }
+})
 
 test_that("rpluce errors cleanly on invalid n and t boundary values", {
   expect_error(

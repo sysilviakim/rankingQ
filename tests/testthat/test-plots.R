@@ -38,6 +38,20 @@ test_that("plot_avg_ranking preserves a user-provided xlab", {
   expect_equal(p$labels$x, "Custom X Label")
 })
 
+test_that("plot_avg_ranking derives xlab from qoi_filter when xlab is NULL", {
+  df <- data.frame(
+    qoi = rep("top-k ranking", 2),
+    item = c("A", "B"),
+    mean = c(0.25, 0.35),
+    lower = c(0.20, 0.30),
+    upper = c(0.30, 0.40)
+  )
+
+  p <- plot_avg_ranking(df, qoi_filter = "top-k ranking", xlab = NULL)
+
+  expect_equal(p$labels$x, "Top-k Ranking")
+})
+
 test_that("plot_dist_ranking returns a ggplot object", {
   tab <- table(
     c(
@@ -68,4 +82,17 @@ test_that("plot_dist_ranking uses the selected y column for labels", {
 
   p <- plot_dist_ranking(tab, y = "freq", ylim = 12)
   expect_equal(p$data$.tmp_label, c("10", "5"))
+})
+
+test_that("plot_dist_ranking accepts custom x and y column names", {
+  tab <- data.frame(
+    pattern = factor(c("123", "321")),
+    proportion = c(2 / 3, 1 / 3),
+    count = c(10, 5)
+  )
+
+  p <- plot_dist_ranking(tab, x = "pattern", y = "proportion", ylim = 1)
+
+  expect_s3_class(p, "ggplot")
+  expect_equal(p$labels$x, "Recorded Responses")
 })

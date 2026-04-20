@@ -34,3 +34,14 @@ test_that("uniformity_test throws error for invalid input", {
     "must be a character string"
   )
 })
+
+test_that("uniformity_test works with tibble input for 4-item rankings", {
+  df <- tibble::tibble(
+    ranking = c(rep("1234", 10), rep("4321", 10), rep("2143", 10), rep("3412", 10))
+  )
+
+  result <- suppressWarnings(uniformity_test(df, var = "ranking"))
+
+  expect_s3_class(result, "htest")
+  expect_match(result$method, "Chi-squared")
+})
