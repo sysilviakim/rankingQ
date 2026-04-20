@@ -1,12 +1,12 @@
-#' Identity-ranking data analyzed in Atsusaka and Kim (2024)
+#' Identity-ranking data analyzed in Atsusaka and Kim (2025)
 #'
 #' @description
 #'
 #' Full dataset from survey on relative partisanship used in
-#' Atsusaka, Yuki, & Kim, Seo-young Silvia (2024).
+#' Atsusaka, Yuki, & Kim, Seo-young Silvia (2025).
 #' Addressing Measurement Errors in Ranking Questions for the Social Sciences.
-#' Political Analysis (conditionally accepted).
-#' https://osf.io/preprints/osf/3ys8x
+#' Political Analysis, 33(4), 339-360.
+#' https://doi.org/10.1017/pan.2024.33
 #'
 #' This data contains Americans' rankings of four sources of their identity,
 #' including political party, religion, gender, and race, for
