@@ -28,6 +28,8 @@
 - [`rank_longer()`](http://sysilviakim.com/rankingQ/reference/rank_longer.md)
   : Turn Column(s) Recording Rankings in Wide Format into a Long Data
   Format
+- [`rank_wider()`](http://sysilviakim.com/rankingQ/reference/rank_wider.md)
+  : Turn Long Ranking Data into a Wide Format
 - [`recover_recorded_responses()`](http://sysilviakim.com/rankingQ/reference/recover_recorded_responses.md)
   : Recover the Recorded Responses Given that Ranking Items were
   Randomized
