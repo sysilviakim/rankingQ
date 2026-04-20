@@ -68,10 +68,10 @@ out_direct <- imprr_direct(
   data = identity,
   ## Not strictly necessary if app_identity, the input for `main_q`,
   ## is specified. In that case, will look for J if unspecified
-  J = 4, 
-  ## automatically looks for 
+  J = 4,
+  ## automatically looks for
   ## app_identity_1, app_identity_2, app_identity_3, app_identity_4
-  main_q = "app_identity", 
+  main_q = "app_identity",
   anc_correct = "anc_correct_identity",
   # setting to 10 only for our vignette
   n_bootstrap = 10
@@ -85,15 +85,15 @@ including `population` and `assumption`. For example, the uniform
 preference assumption can be specified as follows:
 
 ``` r
-# Perform bias correction for the entire population with the uniform preference assumption
+# Bias correction for the entire population with the uniform assumption
 
 out_direct_uniform <- imprr_direct(
   data = identity,
-  J = 4, 
-  main_q = "app_identity", 
+  J = 4,
+  main_q = "app_identity",
   anc_correct = "anc_correct_identity",
   population = "all",
-  assumption= "uniform",
+  assumption = "uniform",
   n_bootstrap = 10
 )
 ```
@@ -102,15 +102,15 @@ Similarly, the contaminated sampling assumption can be specified as
 follows:
 
 ``` r
-# Perform bias correction for the entire population with the contaminated sampling assumption
+# Bias correction for the entire population with contaminated sampling
 
 out_direct_contaminated <- imprr_direct(
   data = identity,
-  J = 4, 
-  main_q = "app_identity", 
+  J = 4,
+  main_q = "app_identity",
   anc_correct = "anc_correct_identity",
   population = "all",
-  assumption= "contaminated",
+  assumption = "contaminated",
   n_bootstrap = 10
 )
 ```
@@ -123,7 +123,7 @@ along with the lower and upper ends of its corresponding 95% confidence
 interval.
 
 ``` r
-# Estimated proportion of random responses with a 95% CI 
+# Estimated proportion of random responses with a 95% CI
 out_direct$est_p_random
 ```
 
@@ -146,7 +146,7 @@ corresponding 95% CIs.
 ``` r
 # View the results based on the quantity of interest
 out_direct$results %>%
-   filter(qoi == "average rank")
+  filter(qoi == "average rank")
 ```
 
     ## # A tibble: 4 × 6
@@ -187,7 +187,8 @@ For example, one can visualize the result for average ranks as follows:
 out_direct$results %>%
   mutate(
     item = factor(
-      item, levels = paste0("app_identity_", seq(4)),
+      item,
+      levels = paste0("app_identity_", seq(4)),
       labels = c("party", "religion", "gender", "race")
     )
   ) %>%

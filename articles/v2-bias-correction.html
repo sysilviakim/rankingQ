@@ -132,10 +132,10 @@ specifying <code>weight</code> in the function.</p>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
 <span>  <span class="co">## Not strictly necessary if app_identity, the input for `main_q`,</span></span>
 <span>  <span class="co">## is specified. In that case, will look for J if unspecified</span></span>
-<span>  J <span class="op">=</span> <span class="fl">4</span>, </span>
-<span>  <span class="co">## automatically looks for </span></span>
+<span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  <span class="co">## automatically looks for</span></span>
 <span>  <span class="co">## app_identity_1, app_identity_2, app_identity_3, app_identity_4</span></span>
-<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>, </span>
+<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
 <span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
 <span>  <span class="co"># setting to 10 only for our vignette</span></span>
 <span>  n_bootstrap <span class="op">=</span> <span class="fl">10</span></span>
@@ -147,29 +147,29 @@ be specified, including <code>population</code> and
 <code>assumption</code>. For example, the uniform preference assumption
 can be specified as follows:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Perform bias correction for the entire population with the uniform preference assumption</span></span>
+<code class="sourceCode R"><span><span class="co"># Bias correction for the entire population with the uniform assumption</span></span>
 <span></span>
 <span><span class="va">out_direct_uniform</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
-<span>  J <span class="op">=</span> <span class="fl">4</span>, </span>
-<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>, </span>
+<span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
 <span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
 <span>  population <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span>  assumption<span class="op">=</span> <span class="st">"uniform"</span>,</span>
+<span>  assumption <span class="op">=</span> <span class="st">"uniform"</span>,</span>
 <span>  n_bootstrap <span class="op">=</span> <span class="fl">10</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Similarly, the contaminated sampling assumption can be specified as
 follows:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Perform bias correction for the entire population with the contaminated sampling assumption</span></span>
+<code class="sourceCode R"><span><span class="co"># Bias correction for the entire population with contaminated sampling</span></span>
 <span></span>
 <span><span class="va">out_direct_contaminated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
-<span>  J <span class="op">=</span> <span class="fl">4</span>, </span>
-<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>, </span>
+<span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
 <span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
 <span>  population <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span>  assumption<span class="op">=</span> <span class="st">"contaminated"</span>,</span>
+<span>  assumption <span class="op">=</span> <span class="st">"contaminated"</span>,</span>
 <span>  n_bootstrap <span class="op">=</span> <span class="fl">10</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
@@ -180,7 +180,7 @@ proportion of random responses. The vector <code>est_p_random</code>
 returns the estimated proportion along with the lower and upper ends of
 its corresponding 95% confidence interval.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Estimated proportion of random responses with a 95% CI </span></span>
+<code class="sourceCode R"><span><span class="co"># Estimated proportion of random responses with a 95% CI</span></span>
 <span><span class="va">out_direct</span><span class="op">$</span><span class="va">est_p_random</span></span></code></pre></div>
 <pre><code><span><span class="co">##        mean     lower     upper</span></span>
 <span><span class="co">## 1 0.3158402 0.2875352 0.3451338</span></span></code></pre>
@@ -201,7 +201,7 @@ and their corresponding 95% CIs.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View the results based on the quantity of interest</span></span>
 <span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qoi</span> <span class="op">==</span> <span class="st">"average rank"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qoi</span> <span class="op">==</span> <span class="st">"average rank"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 6</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># Groups:   item, qoi [4]</span></span></span>
 <span><span class="co">##   item           qoi          outcome              mean lower upper</span></span>
@@ -236,7 +236,8 @@ follows:</p>
 <span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    item <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
-<span>      <span class="va">item</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"app_identity_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="va">item</span>,</span>
+<span>      levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"app_identity_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="st">"religion"</span>, <span class="st">"gender"</span>, <span class="st">"race"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>

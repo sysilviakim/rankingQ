@@ -12,9 +12,11 @@ library(rankingQ)
 ```
 
 ``` r
-draw <- rpluce(n = 50,
-               t = 4,
-               prob = c(0.4, 0.2, 0.2, 0.2))
+draw <- rpluce(
+  n = 50,
+  t = 4,
+  prob = c(0.4, 0.2, 0.2, 0.2)
+)
 head(draw)
 #>   1st 2nd 3rd 4th
 #> 1   b   a   d   c

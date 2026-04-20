@@ -96,8 +96,10 @@ as the one available in <code>rsample</code> (<a href="https://declaredesign.org
 compute average ranks for all items:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Raw average ranks (without bias correction)</span></span>
-<span><span class="fu"><a href="../reference/avg_rank.html">avg_rank</a></span><span class="op">(</span><span class="va">identity_w</span>, rankings <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
-<span>         items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party"</span>, <span class="st">"Religion"</span>, <span class="st">"Gender"</span>, <span class="st">"Race"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/avg_rank.html">avg_rank</a></span><span class="op">(</span><span class="va">identity_w</span>,</span>
+<span>  rankings <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
+<span>  items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party"</span>, <span class="st">"Religion"</span>, <span class="st">"Gender"</span>, <span class="st">"Race"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt;       item          qoi     mean         se    lower    upper   method</span></span>
 <span><span class="co">#&gt; 1    Party Average Rank 3.024954 0.03094894 2.964294 3.085614 Raw Data</span></span>
 <span><span class="co">#&gt; 2 Religion Average Rank 2.572089 0.03745515 2.498677 2.645501 Raw Data</span></span>

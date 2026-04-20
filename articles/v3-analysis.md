@@ -31,8 +31,10 @@ ranks for all items:
 
 ``` r
 # Raw average ranks (without bias correction)
-avg_rank(identity_w, rankings = "app_identity",
-         items = c("Party", "Religion", "Gender", "Race"))
+avg_rank(identity_w,
+  rankings = "app_identity",
+  items = c("Party", "Religion", "Gender", "Race")
+)
 #>       item          qoi     mean         se    lower    upper   method
 #> 1    Party Average Rank 3.024954 0.03094894 2.964294 3.085614 Raw Data
 #> 2 Religion Average Rank 2.572089 0.03745515 2.498677 2.645501 Raw Data
