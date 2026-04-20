@@ -73,7 +73,7 @@ rpluce <- function(n, t, prob, choices = NULL, seed = NULL) {
   if (any(is.na(prob))) {
     stop("NA values are not allowed in the prob argument.")
   }
-  if (any(prob < 0) | any(prob > 1)) {
+  if (any(prob < 0) || any(prob > 1)) {
     stop("The specified probability must be between 0 and 1.")
   }
   if (
@@ -169,7 +169,7 @@ unique_alphabets <- function(length) {
     )
   }
   if (length <= 26) {
-    return(letters[1:length])
+    return(letters[seq_len(length)])
   } else {
     if (length > 1000) {
       message("Ranking more than 1,000 items.")
@@ -189,7 +189,7 @@ unique_alphabets <- function(length) {
         paste0
       )
     }
-    out <- sort(unique(c(letters, as.vector(out)))[1:length])
+    out <- sort(unique(c(letters, as.vector(out)))[seq_len(length)])
     return(out)
   }
 }

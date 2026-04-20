@@ -121,15 +121,15 @@ rank_longer <- function(x, cols = NULL, id = NULL, reference = NULL) {
   if (length(cols) == 1) {
     if (is.null(reference)) {
       ## Overwrite the reference argument with a general column name
-      reference <- paste0("V", 1:max_ranking)
+      reference <- paste0("V", seq_len(max_ranking))
     }
     crosswalk_df <- data.frame(
-      reference_no = 1:max_ranking,
+      reference_no = seq_len(max_ranking),
       item_name = reference
     )
   } else {
     crosswalk_df <- data.frame(
-      reference_no = 1:max_ranking,
+      reference_no = seq_len(max_ranking),
       item_name = cols
     )
   }

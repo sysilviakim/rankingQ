@@ -14,19 +14,21 @@
 #' @export
 
 uniformity_test <- function(data, var = NULL) {
+  is_table <- "table" %in% class(data)
+
   ## Argument type check
-  if (!is.null(var) & !is.character(var)) {
+  if (!is.null(var) && !is.character(var)) {
     stop("The 'var' argument must be a character string.")
   }
 
-  if (!("table" %in% class(data)) & is.null(var)) {
+  if (!is_table && is.null(var)) {
     stop(
       paste0(
         "If the data is not already in a table format, ",
         "please specify the variable to be used in the test."
       )
     )
-  } else if (!("table" %in% class(data)) & !is.null(var)) {
+  } else if (!is_table && !is.null(var)) {
     if (!(var %in% names(data))) {
       stop("The variable specified is not in the data.")
     } else {
@@ -34,7 +36,7 @@ uniformity_test <- function(data, var = NULL) {
       tab <- permn_augment(tab)
       return(chisq.test(tab, p = rep(1 / length(tab), length(tab))))
     }
-  } else if ("table" %in% class(data)) {
+  } else if (is_table) {
     if (!is.null(var)) {
       warning(
         paste0(

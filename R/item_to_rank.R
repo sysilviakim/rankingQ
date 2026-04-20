@@ -39,7 +39,7 @@ item_to_rank <- function(item_rank,
                          format_input = "ordering",
                          reference = NULL,
                          long = FALSE) {
-  if (long != FALSE & long != TRUE) {
+  if (!is.logical(long) || length(long) != 1 || is.na(long)) {
     stop("The 'long' argument must be either TRUE or FALSE.")
   }
 
@@ -54,13 +54,13 @@ item_to_rank <- function(item_rank,
     }
     item_crosswalk <- data.frame(
       name = reference,
-      item_no = paste0("Item_", seq(length(reference)))
+      item_no = paste0("Item_", seq_len(length(reference)))
     )
   } else {
     default_names <- unique_alphabets(ncol(item_rank))
     item_crosswalk <- data.frame(
       name = default_names,
-      item_no = paste0("Item_", seq(length(default_names)))
+      item_no = paste0("Item_", seq_len(length(default_names)))
     )
   }
 
@@ -70,11 +70,11 @@ item_to_rank <- function(item_rank,
   out <- as.data.frame(out)
 
   ## Using item_crosswalk, perform renaming
-  colnames(out) <- item_crosswalk$name[1:ncol(out)]
+  colnames(out) <- item_crosswalk$name[seq_len(ncol(out))]
 
   ## If output_long is specified, return the long format
   ## Use pivot_longer
-  if (!is.null(long) & isTRUE(long)) {
+  if (isTRUE(long)) {
     out <- pivot_longer(
       out, cols = everything(), names_to = "item", values_to = "rank"
     )

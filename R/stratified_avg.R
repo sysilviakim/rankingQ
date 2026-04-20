@@ -34,6 +34,15 @@ stratified_avg <- function(data, var_stratum, J = NULL,
                            verbose = FALSE) {
   . <- NULL
 
+  if (!is.numeric(n_bootstrap) || length(n_bootstrap) != 1 ||
+      is.na(n_bootstrap) || n_bootstrap < 1 ||
+      n_bootstrap != as.integer(n_bootstrap)) {
+    stop("n_bootstrap must be a single integer >= 1.")
+  }
+  if (!is.logical(ipw) || length(ipw) != 1 || is.na(ipw)) {
+    stop("ipw must be either TRUE or FALSE.")
+  }
+
   ## Save and restore RNG state
   if (!exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
     runif(1)
@@ -41,8 +50,7 @@ stratified_avg <- function(data, var_stratum, J = NULL,
   old_seed <- get(".Random.seed", envir = globalenv())
   on.exit(assign(".Random.seed", old_seed, envir = globalenv()), add = TRUE)
   set.seed(seed)
-  seed_list <-
-    sample(1:max(n_bootstrap * 10, 1e4), n_bootstrap, replace = FALSE)
+  seed_list <- sample.int(max(n_bootstrap * 10, 1e4), n_bootstrap, replace = FALSE)
 
   ## class check
   if (!is.character(var_stratum)) {
@@ -91,9 +99,9 @@ stratified_avg <- function(data, var_stratum, J = NULL,
   ## Initialize output ---------------------------------------------------------
   out_stratification <- vector("list", length = n_bootstrap)
 
-  for (b in 1:n_bootstrap) {
+  for (b in seq_len(n_bootstrap)) {
     ## Sample indices ----------------------------------------------------------
-    index <- sample(1:nrow(data), size = nrow(data), replace = TRUE)
+    index <- sample.int(nrow(data), size = nrow(data), replace = TRUE)
 
     ## This is the bootstrapped data -------------------------------------------
     boostrap_dat <- data[index, ]
@@ -158,7 +166,7 @@ stratified_avg <- function(data, var_stratum, J = NULL,
     }
 
     ## Stratification estimates ------------------------------------------------
-    if (ipw == FALSE) {
+    if (!ipw) {
       est_list <- imprr_list %>%
         map("results") %>%
         map(

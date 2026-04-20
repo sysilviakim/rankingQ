@@ -1,5 +1,6 @@
 .resolve_weight_vector <- function(data, weight, N) {
   if (is.null(weight)) {
+    message("No weight column supplied; using equal weights for all observations.")
     return(rep(1, N))
   }
 
