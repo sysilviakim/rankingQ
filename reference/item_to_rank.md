@@ -26,8 +26,8 @@ item_to_rank(
 - format_input:
 
   Character string indicating the format of the data input, namely
-  "ordering" or "ranking". Used for
-  [`PLMIX::rank_ord_switch`](https://rdrr.io/pkg/PLMIX/man/rank_ord_switch.html).
+  "ordering" or "ranking". The function returns the corresponding
+  inverse representation.
 
 - reference:
 
