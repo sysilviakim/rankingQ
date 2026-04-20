@@ -74,23 +74,23 @@ avg_rank <- function(x,
   . <- item <- lower <- upper <- se <- variable <- method <- std.error <-
     estimate <- conf.low <- conf.high <- outcome <- qoi <- NULL
 
-  if (long != FALSE & long != TRUE) {
+  if (!is.logical(long) || length(long) != 1 || is.na(long)) {
     stop("The 'long' argument must be either TRUE or FALSE.")
   }
-  if (raw != FALSE & raw != TRUE) {
+  if (!is.logical(raw) || length(raw) != 1 || is.na(raw)) {
     stop("The 'raw' argument must be either TRUE or FALSE.")
   }
 
-  if (raw == FALSE & is.null(items)) {
+  if (!raw && is.null(items)) {
     stop("If using the IPW estimator, the items variable must be specified.")
   }
-  if (raw == FALSE & is.null(weight)) {
+  if (!raw && is.null(weight)) {
     stop("If using the IPW estimator, the weight variable must be specified.")
   }
-  if (raw == FALSE & long == TRUE) {
+  if (!raw && long) {
     stop("If using the IPW estimator, the data frame must be in wide format.")
   }
-  if (raw == TRUE & !is.null(weight)) {
+  if (raw && !is.null(weight)) {
     stop("If not using the IPW estimator, the weight variable must be NULL.")
   }
   if (!is.null(weight)) {
@@ -101,18 +101,18 @@ avg_rank <- function(x,
 
   ## Use the output from `item_to_rank` without having to specify input.
   if (
-    is.null(rankings) & is.null(items) &
-      ncol(x) == 2 & ("rank" %in% names(x)) & ("item" %in% names(x))
+    is.null(rankings) && is.null(items) &&
+      ncol(x) == 2 && ("rank" %in% names(x)) && ("item" %in% names(x))
   ) {
     rankings <- "rank"
     items <- "item"
   }
 
-  if (is.null(rankings) & long == FALSE & ("rank" %in% names(x))) {
+  if (is.null(rankings) && !long && ("rank" %in% names(x))) {
     rankings <- "rank"
   }
 
-  if (is.null(rankings) & !("rank" %in% names(x)) & raw == TRUE) {
+  if (is.null(rankings) && !("rank" %in% names(x)) && raw) {
     stop("The rankings variable must be specified.")
   }
 
@@ -270,7 +270,7 @@ avg_rank <- function(x,
       mutate(item = factor(item, levels = items))
   }
 
-  if (!is.null(items) & long == FALSE) {
+  if (!is.null(items) && !long) {
     ## Must align the summary output by the item order given;
     ## otherwise, the summary tibble appears in alphabetical order
     out$item <- factor(out$item, levels = items)
