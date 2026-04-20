@@ -63,3 +63,24 @@ test_that("imprr_direct validates anc_correct column presence", {
     "anc_correct column not found in data."
   )
 })
+
+test_that("imprr_direct uses exact ranking column names", {
+  df <- data.frame(
+    q10_1 = c(1, 2, 1, 2),
+    q10_2 = c(2, 1, 2, 1),
+    q1_1 = c(2, 1, 2, 1),
+    q1_2 = c(1, 2, 1, 2),
+    anc = c(1, 1, 1, 1)
+  )
+
+  out <- imprr_direct(
+    df,
+    J = 2,
+    main_q = "q1",
+    anc_correct = "anc",
+    n_bootstrap = 1,
+    seed = 1
+  )
+
+  expect_equal(sort(unique(out$results$item)), c("q1_1", "q1_2"))
+})

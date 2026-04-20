@@ -85,6 +85,14 @@ imprr_direct_rcpp <- function(data,
     stop("J must be a single integer >= 2.")
   }
   J <- as.integer(J)
+  ranking_cols <- paste0(main_q, "_", seq_len(J))
+  missing_ranking_cols <- setdiff(ranking_cols, names(data))
+  if (length(missing_ranking_cols) > 0) {
+    stop(
+      "Missing ranking columns for main_q: ",
+      paste(missing_ranking_cols, collapse = ", ")
+    )
+  }
 
   if (is.null(weight)) {
     weight <- rep(1.0, N)
@@ -101,7 +109,6 @@ imprr_direct_rcpp <- function(data,
   J_1 <- J - 1
 
   # Extract ranking columns
-  ranking_cols <- paste0(main_q, "_", 1:J)
   data_matrix <- as.matrix(data[, ranking_cols])
   storage.mode(data_matrix) <- "double"
 

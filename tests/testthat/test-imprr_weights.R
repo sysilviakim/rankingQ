@@ -53,3 +53,22 @@ test_that("imprr_weights errors when estimated non-random rate is too small", {
     "non-random response rate"
   )
 })
+
+test_that("imprr_weights uses exact ranking column names", {
+  df <- data.frame(
+    q10_1 = c(1, 2, 1, 2),
+    q10_2 = c(2, 1, 2, 1),
+    q1_1 = c(2, 1, 2, 1),
+    q1_2 = c(1, 2, 1, 2),
+    anc = c(1, 1, 1, 1)
+  )
+
+  out <- imprr_weights(
+    df,
+    J = 2,
+    main_q = "q1",
+    anc_correct = "anc"
+  )
+
+  expect_equal(out$results$ranking, c("21", "12", "21", "12"))
+})

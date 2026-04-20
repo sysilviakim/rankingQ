@@ -87,6 +87,14 @@ imprr_direct <- function(data,
     stop("J must be a single integer >= 2.")
   }
   J <- as.integer(J)
+  ranking_cols <- paste0(main_q, "_", seq_len(J))
+  missing_ranking_cols <- setdiff(ranking_cols, names(data))
+  if (length(missing_ranking_cols) > 0) {
+    stop(
+      "Missing ranking columns for main_q: ",
+      paste(missing_ranking_cols, collapse = ", ")
+    )
+  }
 
   if (is.null(weight)) {
     weight <- rep(1, N)
@@ -144,11 +152,6 @@ imprr_direct <- function(data,
     boostrap_dat <- data[index, ]
     bootstrap_weight <- weight[index]
 
-    ## Main ranking only
-    loc_app <- boostrap_dat %>%
-      select(matches(main_q)) %>%
-      select(matches("_[[:digit:]]$"))
-
     # Step 1: Get the proportion of random answers -----------------------------
     ## This requires anchor questions and item order randomization
     prop_correct <- sum(boostrap_dat[[anc_correct]] * bootstrap_weight) /
@@ -163,7 +166,7 @@ imprr_direct <- function(data,
     }
 
     # Step 2: Get the naive estimates of simple quantities ---------------------
-    item_names <- colnames(loc_app)
+    item_names <- ranking_cols
     all_qoi_list <- list()
 
     for (j in 1:J) {

@@ -72,6 +72,14 @@ imprr_weights <- function(data,
   if (is.null(J)) {
     J <- nchar(data[[main_q]][[1]])
   }
+  ranking_cols <- paste0(main_q, "_", seq_len(J))
+  missing_ranking_cols <- setdiff(ranking_cols, names(data))
+  if (length(missing_ranking_cols) > 0) {
+    stop(
+      "Missing ranking columns for main_q: ",
+      paste(missing_ranking_cols, collapse = ", ")
+    )
+  }
 
   if (is.null(weight)) {
     weight <- rep(1, N)
@@ -95,9 +103,7 @@ imprr_weights <- function(data,
   # Check the validity of the input arguments ==================================
   ## Main ranking only
 
-  glo_app <- data %>%
-    select(matches(main_q)) %>%
-    select(matches("_[[:digit:]]$"))
+  glo_app <- data[, ranking_cols, drop = FALSE]
 
   # Step 1: Get the proportion of random answers -------------------------------
   p_non_random <- (mean(data[[anc_correct]]) - 1 / J_factorial) /
@@ -114,9 +120,9 @@ imprr_weights <- function(data,
 
   # Step 3: Get the observed PMF based on raw data -----------------------------
   ## Get raw counts of ranking profiles
-  D_0 <- glo_app %>%
-    unite(!!as.name(ranking), sep = "") %>%
-    mutate(survey_weight = weight)
+  D_0 <- glo_app
+  D_0[[ranking]] <- do.call(paste0, lapply(D_0[ranking_cols], as.character))
+  D_0$survey_weight <- weight
 
   ## Get weighted counts by ranking profile (fast path via Rcpp)
   tab_vec <- weighted_table_cpp(D_0[[ranking]], D_0$survey_weight)
@@ -185,16 +191,13 @@ imprr_weights <- function(data,
   # Turn the results into a tibble
   tibble_w <- df_w %>% tibble()
 
-  var_vec <- paste0(main_q, "_", 1:J)
-
   # Merge the weights back to the original data
   if (!(ranking %in% names(data))) {
-    data_w <- data %>%
-      unite(
-        !!as.name(ranking),
-        matches(var_vec),
-        sep = "", remove = FALSE
-      )
+    data_w <- data
+    data_w[[ranking]] <- do.call(
+      paste0,
+      lapply(data_w[ranking_cols], as.character)
+    )
   } else {
     data_w <- data
   }
