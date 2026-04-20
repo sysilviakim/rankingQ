@@ -27,7 +27,6 @@
 #'   `population = "all"`: `uniform` assumes random respondents would have
 #'   uniform counterfactual preferences, while `contaminated` assumes their
 #'   counterfactual preferences match those of non-random respondents.
-#' @param seed Seed for \code{set.seed} for reproducibility.
 #' @param weight The name of the weight column in `data`. Defaults to `NULL`,
 #' which uses equal weights.
 #' @param ranking The name of the column that will store the full ranking
@@ -55,7 +54,6 @@ imprr_weights <- function(data,
                           anc_correct,
                           population = "non-random",
                           assumption = "contaminated",
-                          seed = 123456,
                           weight = NULL,
                           ranking = "ranking") {
   ## Suppress global variable warning
@@ -66,18 +64,42 @@ imprr_weights <- function(data,
     ranking <- main_q
   }
 
-  if ("ranking" %in% names(data)) {
-    message("Existing 'ranking' column will be overwritten.")
+  if (ranking %in% names(data)) {
+    message("Existing '", ranking, "' column will be overwritten.")
   }
 
   # Setup ======================================================================
   N <- nrow(data)
+  if (is.null(N) || N == 0) {
+    stop("There is no data to analyze. Please check the input data.")
+  }
+
+  if (!is.character(main_q) || length(main_q) != 1) {
+    stop("main_q must be a single column name.")
+  }
+  if (!is.character(anc_correct) || length(anc_correct) != 1) {
+    stop("anc_correct must be a single column name.")
+  }
+  if (!(anc_correct %in% names(data))) {
+    stop("anc_correct column not found in data.")
+  }
+
   normalized_args <- .normalize_population_args(population, assumption)
   population <- normalized_args$population
   assumption <- normalized_args$assumption
   if (is.null(J)) {
+    if (!(main_q %in% names(data))) {
+      stop(
+        "When J is NULL, main_q must exist as a column in data so J can be inferred."
+      )
+    }
     J <- nchar(data[[main_q]][[1]])
   }
+  if (!is.numeric(J) || length(J) != 1 || is.na(J) ||
+      J < 2 || J != as.integer(J)) {
+    stop("J must be a single integer >= 2.")
+  }
+  J <- as.integer(J)
   ranking_cols <- paste0(main_q, "_", seq_len(J))
   missing_ranking_cols <- setdiff(ranking_cols, names(data))
   if (length(missing_ranking_cols) > 0) {
@@ -88,11 +110,6 @@ imprr_weights <- function(data,
   }
 
   weight <- .resolve_weight_vector(data, weight, N)
-  if (!missing(seed) && !is.null(seed)) {
-    warning(
-      "'seed' is currently ignored because imprr_weights is deterministic."
-    )
-  }
 
   if (population == "all" && assumption == "uniform") {
     data[[anc_correct]] <- rep(1, N) # get naive estimate for theta
@@ -107,8 +124,17 @@ imprr_weights <- function(data,
 
   glo_app <- data[, ranking_cols, drop = FALSE]
 
+  weighted_mean_safe <- function(x, w) {
+    keep <- !is.na(x) & !is.na(w)
+    if (!any(keep)) {
+      return(NA_real_)
+    }
+    sum(x[keep] * w[keep]) / sum(w[keep])
+  }
+
   # Step 1: Get the proportion of random answers -------------------------------
-  p_non_random <- (mean(data[[anc_correct]]) - 1 / J_factorial) /
+  prop_correct <- weighted_mean_safe(data[[anc_correct]], weight)
+  p_non_random <- (prop_correct - 1 / J_factorial) /
     (1 - 1 / J_factorial)
   if (!is.finite(p_non_random) || p_non_random <= sqrt(.Machine$double.eps)) {
     stop(
@@ -209,10 +235,10 @@ imprr_weights <- function(data,
     select(weights, everything())
 
   out_rankings <- PMF_raw %>%
-    left_join(imp_PMF, by = "ranking") %>%
-    left_join(df_w, by = "ranking") %>%
+    left_join(imp_PMF, by = ranking) %>%
+    left_join(df_w, by = ranking) %>%
     dplyr::select(
-      ranking, n, prop_obs, prop_bc, weights,
+      all_of(ranking), n, prop_obs, prop_bc, weights,
       everything()
     )
 

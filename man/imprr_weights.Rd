@@ -11,7 +11,6 @@ imprr_weights(
   anc_correct,
   population = "non-random",
   assumption = "contaminated",
-  seed = 123456,
   weight = NULL,
   ranking = "ranking"
 )
@@ -38,8 +37,6 @@ non-random respondents (default) or all respondents.}
 `population = "all"`: `uniform` assumes random respondents would have
 uniform counterfactual preferences, while `contaminated` assumes their
 counterfactual preferences match those of non-random respondents.}
-
-\item{seed}{Seed for \code{set.seed} for reproducibility.}
 
 \item{weight}{The name of the weight column in `data`. Defaults to `NULL`,
 which uses equal weights.}
