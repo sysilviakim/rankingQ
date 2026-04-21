@@ -3,6 +3,11 @@
 #' @description This function implements the bias correction of the ranking
 #' distribution using a paired anchor question, using the IPW estimator.
 #'
+#' @details `imprr_weights()` enumerates the full permutation space of rankings,
+#' so its computational cost grows factorially in `J`. In practice, it is best
+#' suited to small or moderate ranking questions. For larger `J`, prefer
+#' `imprr_direct()` or `imprr_direct_rcpp()`.
+#'
 #' @importFrom dplyr `%>%` mutate select group_by left_join arrange summarise
 #'   count rename
 #' @importFrom tidyselect matches

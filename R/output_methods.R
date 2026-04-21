@@ -27,7 +27,7 @@
   meta <- .rankingq_get_meta(x)
   primary_method <- meta$primary_method %||% "direct"
   if (!is.null(x$results)) {
-    return(setNames(list(x$results), primary_method))
+    return(stats::setNames(list(x$results), primary_method))
   }
 
   NULL
@@ -464,6 +464,7 @@ autoplot.rankingQ_output <- function(object,
                                      xlab = NULL,
                                      ylab = "",
                                      ...) {
+  estimate <- display_term <- conf.low <- conf.high <- NULL
   type <- .rankingq_match_type(type, allow_null = FALSE)[[1]]
   plot_data <- tidy(
     object,

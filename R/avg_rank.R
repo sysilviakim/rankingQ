@@ -156,8 +156,10 @@ avg_rank <- function(x,
         upper = conf.high,
         qoi = "Average Rank",
         method = "Raw Data"
-      ) %>%
-      rename(!!group_var := outcome) %>%
+      ) -> out
+
+    names(out)[names(out) == "outcome"] <- group_var
+    out %>%
       select(
         !!as.name(group_var),
         qoi,
