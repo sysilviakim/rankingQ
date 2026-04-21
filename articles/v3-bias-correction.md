@@ -211,6 +211,12 @@ inverse-probability weighting (IPW). `imprr_weights` **impr**oves
 used to correct for the bias in the IPW framework. The same arguments
 previously used can be used as follows:
 
+Because `imprr_weights` enumerates the full permutation space, its
+computational cost grows quickly with `J!`. In practice, this method is
+best suited to small or moderate ranking questions; for larger `J`,
+`imprr_direct` or `imprr_direct_rcpp` will usually be much more
+practical.
+
 ``` r
 # Perform bias correction
 out_weights <- imprr_weights(

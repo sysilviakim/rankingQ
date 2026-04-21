@@ -257,6 +257,11 @@ inverse-probability weighting (IPW). <code>imprr_weights</code>
 bias correction <strong>weights</strong>, which can be used to correct
 for the bias in the IPW framework. The same arguments previously used
 can be used as follows:</p>
+<p>Because <code>imprr_weights</code> enumerates the full permutation
+space, its computational cost grows quickly with <code>J!</code>. In
+practice, this method is best suited to small or moderate ranking
+questions; for larger <code>J</code>, <code>imprr_direct</code> or
+<code>imprr_direct_rcpp</code> will usually be much more practical.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Perform bias correction</span></span>
 <span><span class="va">out_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_weights.html">imprr_weights</a></span><span class="op">(</span></span>

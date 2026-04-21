@@ -98,6 +98,13 @@ A list with three elements:
   bias-corrected proportions (`prop_bc`), and inverse probability
   weights (`weights`) for each permutation.
 
+## Details
+
+\`imprr_weights()\` enumerates the full permutation space of rankings,
+so its computational cost grows factorially in \`J\`. In practice, it is
+best suited to small or moderate ranking questions. For larger \`J\`,
+prefer \`imprr_direct()\` or \`imprr_direct_rcpp()\`.
+
 ## Examples
 
 ``` r
