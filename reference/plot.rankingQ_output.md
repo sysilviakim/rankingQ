@@ -64,6 +64,10 @@ autoplot(
 
   Passed through to `autoplot()`.
 
+- object:
+
+  A rankingQ estimator output object.
+
 - conf.int:
 
   If `TRUE`, confidence intervals are drawn when available.

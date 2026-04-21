@@ -38,6 +38,10 @@ print(x, digits = 3L, ...)
 
   Unused.
 
+- x:
+
+  A `summary.rankingQ_output` object.
+
 - digits:
 
   Number of digits to print.
