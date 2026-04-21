@@ -23,6 +23,8 @@ method.}
 
 \item{...}{Unused.}
 
+\item{x}{A \code{summary.rankingQ_output} object.}
+
 \item{digits}{Number of digits to print.}
 }
 \value{

@@ -45,6 +45,8 @@ method.}
 
 \item{...}{Passed through to \code{autoplot()}.}
 
+\item{object}{A rankingQ estimator output object.}
+
 \item{conf.int}{If \code{TRUE}, confidence intervals are drawn when
 available.}
 }

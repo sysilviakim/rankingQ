@@ -366,6 +366,7 @@ summary.rankingQ_output <- function(object,
 }
 
 #' @rdname summary.rankingQ_output
+#' @param x A \code{summary.rankingQ_output} object.
 #' @param digits Number of digits to print.
 #'
 #' @export
@@ -452,6 +453,7 @@ plot.rankingQ_output <- function(x,
 }
 
 #' @rdname plot.rankingQ_output
+#' @param object A rankingQ estimator output object.
 #' @param conf.int If \code{TRUE}, confidence intervals are drawn when
 #'   available.
 #'
