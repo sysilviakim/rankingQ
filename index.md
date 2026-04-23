@@ -4,14 +4,15 @@
 
 ## Overview
 
-Survey ranking questions are prone to random responses, where
-respondents answer carelessly or arbitrarily. `rankingQ` corrects this
-measurement error using anchor-ranking items, enabling unbiased
-estimates of ranking-based quantities such as average ranks, marginal
-rank probabilities, and pairwise preferences.
+Ranking data offer valuable insights into social science by allowing
+researchers to study how people make comparative judgments about
+multiple social and political options. However, a common practical
+concern is that data collected from ranking survey questions are often
+prone to measurement error due to insensible, random responses.
 
-`rankingQ` implements design-based methods for correcting measurement
-error in survey ranking questions caused by random responding. It
+`rankingQ` implements design-based methods to **estimate various
+ranking-based quantities** while correcting for such measurement error.
+With an additional ranking question for detecting random responses, it
 provides direct bias correction, inverse-probability weighting (IPW),
 visualization helpers, and diagnostics for assessing anchor-ranking
 questions.
