@@ -16,9 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 This vignette introduces the main `rankingQ` workflow using the
-`identity` dataset. The package is designed for ranking questions that
-may contain random responses and uses an anchor-ranking question to
-estimate and correct the resulting measurement error.
+`identity` dataset. The package is designed for estimating various ranking-based quantities from ranking data. It also allows researchers to correct for measurement error caused by inattentive survey respondents.
 
 ```{r setup, message = FALSE, warning = FALSE}
 library(rankingQ)
@@ -27,11 +25,30 @@ library(dplyr)
 data(identity)
 ```
 
+
+
 ## The Example Data
 
 The `identity` dataset contains a main ranking question about four
 sources of identity and an anchor-ranking question with a known correct
-ordering. It also includes the survey weight `s_weight`.
+ordering. 
+
+
+```{r}
+identity |> 
+  rename(party = app_identity_1,
+         religion = app_identity_2,
+         gender = app_identity_3,
+         race = app_identity_4) |>
+  select(
+    app_identity, 
+    party, religion, gender, race
+  ) |>
+  head()
+```
+
+
+It also includes the survey weight `s_weight`.
 
 ```{r}
 identity |>

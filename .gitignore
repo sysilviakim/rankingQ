@@ -70,3 +70,4 @@ src/*.dll
 /reports/
 /reports/quality/stress_test_log.txt
 /inst/benchmarks/stress_test_simulations.R
+.positai
