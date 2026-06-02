@@ -1,11 +1,13 @@
 # 1. Getting Started
 
 This vignette introduces the main `rankingQ` workflow using the
-`identity` dataset. The package is designed for ranking questions that
-may contain random responses and uses an anchor-ranking question to
-estimate and correct the resulting measurement error.
+`identity` dataset. The package is designed for estimating various
+ranking-based quantities from ranking data. It also allows researchers
+to correct for measurement error caused by inattentive survey
+respondents.
 
 ``` r
+
 library(rankingQ)
 library(dplyr)
 
@@ -16,9 +18,35 @@ data(identity)
 
 The `identity` dataset contains a main ranking question about four
 sources of identity and an anchor-ranking question with a known correct
-ordering. It also includes the survey weight `s_weight`.
+ordering.
 
 ``` r
+
+identity |> 
+  rename(party = app_identity_1,
+         religion = app_identity_2,
+         gender = app_identity_3,
+         race = app_identity_4) |>
+  select(
+    app_identity, 
+    party, religion, gender, race
+  ) |>
+  head()
+#> # A tibble: 6 × 5
+#>   app_identity party religion gender  race
+#>   <chr>        <dbl>    <dbl>  <dbl> <dbl>
+#> 1 1423             1        4      2     3
+#> 2 1423             1        4      2     3
+#> 3 3412             3        4      1     2
+#> 4 1423             1        4      2     3
+#> 5 4132             4        1      3     2
+#> 6 3124             3        1      2     4
+```
+
+It also includes the survey weight `s_weight`.
+
+``` r
+
 identity |>
   select(
     s_weight,
@@ -51,6 +79,7 @@ of interest such as average ranks, pairwise ranking probabilities, top-k
 probabilities, and marginal rank probabilities.
 
 ``` r
+
 out_direct <- imprr_direct(
   data = identity,
   J = 4,
@@ -64,6 +93,7 @@ The first output summarizes the estimated proportion of random
 responses.
 
 ``` r
+
 out_direct$est_p_random
 #>        mean     lower     upper
 #> 1 0.3512825 0.3077923 0.3977214
@@ -74,6 +104,7 @@ interest. For a first pass, average ranks are often the easiest place to
 start.
 
 ``` r
+
 out_direct$results |>
   filter(qoi == "average rank")
 #> # A tibble: 4 × 6
@@ -91,6 +122,7 @@ The `imprr_weights` function instead produces respondent-level weights
 that can be used in downstream analyses.
 
 ``` r
+
 out_weights <- imprr_weights(
   data = identity,
   J = 4,
@@ -104,6 +136,7 @@ One output gives the bias-correction weight assigned to each possible
 ranking profile.
 
 ``` r
+
 out_weights$rankings |>
   select(ranking, weights) |>
   head()
@@ -120,6 +153,7 @@ The respondent-level output keeps the original data and appends a
 `weights` column along with a unified `ranking` column.
 
 ``` r
+
 out_weights$results |>
   select(weights, s_weight, app_identity, ranking) |>
   head()
@@ -140,6 +174,7 @@ The IPW-adjusted respondent-level data can be passed to downstream
 helpers such as `avg_rank`.
 
 ``` r
+
 items_df <- data.frame(
   variable = paste0("app_identity_", 1:4),
   item = c("Party", "Religion", "Gender", "Race")

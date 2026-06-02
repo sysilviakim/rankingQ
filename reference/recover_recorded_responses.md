@@ -62,6 +62,7 @@ This function takes C, B, A and 1-2-3 as inputs and returns 3-2-1.
 ## Examples
 
 ``` r
+
 ## This respondent's true ranking reported is A-B-C-D.
 ## However, the items were presented in the order B-A-D-C.
 ## Therefore, the respondent's recorded response is 2-1-4-3.

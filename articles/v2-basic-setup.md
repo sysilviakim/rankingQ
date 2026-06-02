@@ -13,6 +13,7 @@ respondents to rank four sources of identity (partisanship, race,
 gender, and religion) based on their relative importance to them.
 
 ``` r
+
 library(rankingQ)
 data("identity")
 ```
@@ -31,6 +32,7 @@ religion fourth, so the full ranking profile `app_identity` is `"1423"`
 given the reference choice set of party-religion-gender-race.
 
 ``` r
+
 head(identity)
 #> # A tibble: 6 × 16
 #>   s_weight app_identity app_identity_1 app_identity_2 app_identity_3
@@ -67,6 +69,7 @@ an incorrect answer for the anchor question, whereas the rest have
 provided the correct answer.
 
 ``` r
+
 identity[, c(paste0("anc_identity_", seq(4)), "anc_correct_identity")] |>
   tail()
 #> # A tibble: 6 × 5

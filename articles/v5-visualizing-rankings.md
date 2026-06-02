@@ -5,6 +5,7 @@ profiles. This can help eyeball whether the ranking data is uniformly
 distributed, which can of course be formally tested.
 
 ``` r
+
 library(combinat)
 #> 
 #> Attaching package: 'combinat'
@@ -30,6 +31,7 @@ The `plot_avg_ranking` function creates a visualization of average ranks
 with confidence intervals:
 
 ``` r
+
 data(identity)
 
 # First compute bias-corrected estimates

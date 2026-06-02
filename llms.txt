@@ -42,6 +42,7 @@ responding in its correction functions.
 Currently, you can install the development version from GitHub:
 
 ``` r
+
 remotes::install_github("sysilviakim/rankingQ", dependencies = TRUE)
 ```
 

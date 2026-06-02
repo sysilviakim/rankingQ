@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>1. Getting Started • rankingQ</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="1. Getting Started">
 </head>
@@ -74,9 +74,9 @@ and Seo-young Silvia Kim</h4>
     
 <p>This vignette introduces the main <code>rankingQ</code> workflow
 using the <code>identity</code> dataset. The package is designed for
-ranking questions that may contain random responses and uses an
-anchor-ranking question to estimate and correct the resulting
-measurement error.</p>
+estimating various ranking-based quantities from ranking data. It also
+allows researchers to correct for measurement error caused by
+inattentive survey respondents.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sysilviakim/rankingQ" class="external-link">rankingQ</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -87,9 +87,29 @@ measurement error.</p>
 </h2>
 <p>The <code>identity</code> dataset contains a main ranking question
 about four sources of identity and an anchor-ranking question with a
-known correct ordering. It also includes the survey weight
-<code>s_weight</code>.</p>
+known correct ordering.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">identity</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>party <span class="op">=</span> <span class="va">app_identity_1</span>,</span>
+<span>         religion <span class="op">=</span> <span class="va">app_identity_2</span>,</span>
+<span>         gender <span class="op">=</span> <span class="va">app_identity_3</span>,</span>
+<span>         race <span class="op">=</span> <span class="va">app_identity_4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    <span class="va">app_identity</span>, </span>
+<span>    <span class="va">party</span>, <span class="va">religion</span>, <span class="va">gender</span>, <span class="va">race</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
+<span><span class="co">#&gt;   app_identity party religion gender  race</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1423             1        4      2     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1423             1        4      2     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3412             3        4      1     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 1423             1        4      2     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4132             4        1      3     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 3124             3        1      2     4</span></span></code></pre></div>
+<p>It also includes the survey weight <code>s_weight</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">identity</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
 <span>    <span class="va">s_weight</span>,</span>
@@ -120,7 +140,7 @@ each respondent answered the anchor question correctly.</p>
 bias-corrected quantities of interest such as average ranks, pairwise
 ranking probabilities, top-k probabilities, and marginal rank
 probabilities.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
 <span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -130,14 +150,14 @@ probabilities.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>The first output summarizes the estimated proportion of random
 responses.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">est_p_random</span></span>
 <span><span class="co">#&gt;        mean     lower     upper</span></span>
 <span><span class="co">#&gt; 1 0.3512825 0.3077923 0.3977214</span></span></code></pre></div>
 <p>The second output contains several corrected ranking-based quantities
 of interest. For a first pass, average ranks are often the easiest place
 to start.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qoi</span> <span class="op">==</span> <span class="st">"average rank"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span></span>
@@ -153,7 +173,7 @@ to start.</p>
 </h2>
 <p>The <code>imprr_weights</code> function instead produces
 respondent-level weights that can be used in downstream analyses.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_weights.html">imprr_weights</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
 <span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -163,7 +183,7 @@ respondent-level weights that can be used in downstream analyses.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>One output gives the bias-correction weight assigned to each possible
 ranking profile.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_weights</span><span class="op">$</span><span class="va">rankings</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ranking</span>, <span class="va">weights</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -177,7 +197,7 @@ ranking profile.</p>
 <p>The respondent-level output keeps the original data and appends a
 <code>weights</code> column along with a unified <code>ranking</code>
 column.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_weights</span><span class="op">$</span><span class="va">results</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">weights</span>, <span class="va">s_weight</span>, <span class="va">app_identity</span>, <span class="va">ranking</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -196,7 +216,7 @@ column.</p>
 </h2>
 <p>The IPW-adjusted respondent-level data can be passed to downstream
 helpers such as <code>avg_rank</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">items_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"app_identity_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>,</span>
 <span>  item <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party"</span>, <span class="st">"Religion"</span>, <span class="st">"Gender"</span>, <span class="st">"Race"</span><span class="op">)</span></span>

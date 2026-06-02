@@ -1,6 +1,7 @@
 # 3. Correcting Bias in Ranking Data
 
 ``` r
+
 library(rankingQ)
 data(identity)
 
@@ -16,6 +17,7 @@ proportion of those who have correctly or incorrectly answered the
 anchor question is as follows:
 
 ``` r
+
 round(prop.table(table(identity$anc_correct_identity)) * 100, digits = 1)
 ```
 
@@ -29,6 +31,7 @@ respondents accidentally answering the question correctly. For an
 unbiased estimate of random responses, we use `unbiased_correct_prop`.
 
 ``` r
+
 identity$random_identity <- case_when(
   identity$anc_correct_identity == 1 ~ 0,
   TRUE ~ 1
@@ -58,6 +61,7 @@ anchor ranking questions. When survey weights are available, they can be
 included by specifying `weight` in the function.
 
 ``` r
+
 ## app_identity_1 indicates marginal rank for party
 ## app_identity_2 indicates marginal rank for religion
 ## app_identity_3 indicates marginal rank for gender
@@ -87,6 +91,7 @@ including `population` and `assumption`. For example, the uniform
 preference assumption can be specified as follows:
 
 ``` r
+
 # Bias correction for the entire population with the uniform assumption
 
 out_direct_uniform <- imprr_direct(
@@ -108,6 +113,7 @@ Similarly, the contaminated sampling assumption can be specified as
 follows:
 
 ``` r
+
 # Bias correction for the entire population with contaminated sampling
 
 out_direct_contaminated <- imprr_direct(
@@ -131,6 +137,7 @@ along with the lower and upper ends of its corresponding 95% confidence
 interval.
 
 ``` r
+
 # Estimated proportion of random responses with a 95% CI
 out_direct$est_p_random
 ```
@@ -152,6 +159,7 @@ The output tibble `qoi` stores the estimated quantities and their
 corresponding 95% CIs.
 
 ``` r
+
 # View the results based on the quantity of interest
 out_direct$results %>%
   filter(qoi == "average rank")
@@ -166,6 +174,7 @@ out_direct$results %>%
     ## 4 app_identity_4 average rank Avg: app_identity_4  2.48  2.42  2.53
 
 ``` r
+
 # View the results based on the item
 out_direct$results %>%
   filter(item == "app_identity_1")
@@ -189,6 +198,7 @@ out_direct$results %>%
 For example, one can visualize the result for average ranks as follows:
 
 ``` r
+
 # Plot the result
 out_direct$results %>%
   mutate(
@@ -218,6 +228,7 @@ best suited to small or moderate ranking questions; for larger `J`,
 practical.
 
 ``` r
+
 # Perform bias correction
 out_weights <- imprr_weights(
   data = identity,
@@ -236,6 +247,7 @@ including `population` and `assumption`. For example, the uniform
 preference assumption can be specified as follows:
 
 ``` r
+
 # Perform bias correction with the uniform preference assumption
 out_weights_uniform <- imprr_weights(
   data = identity,
@@ -255,6 +267,7 @@ Similarly, the contaminated sampling assumption can be specified as
 follows:
 
 ``` r
+
 # Perform bias correction with the uniform preference assumption
 out_weights_contaminated <- imprr_weights(
   data = identity,
@@ -276,6 +289,7 @@ set has `{1234, 1243, ..., 4321}` and each profile now has an estimated
 weight.
 
 ``` r
+
 # View the estimated weights
 out_weights$rankings %>%
   select(ranking, weights)
@@ -313,6 +327,7 @@ out_weights$rankings %>%
 all ranking profiles before and after bias correction.
 
 ``` r
+
 # View the estimated corrected PMF
 out_weights$rankings %>%
   select(ranking, prop_obs, prop_bc)
@@ -347,6 +362,7 @@ out_weights$rankings %>%
 ## Estimated Weights with Original Data
 
 ``` r
+
 identity_w <- out_weights$results
 head(identity_w)
 ```
@@ -368,5 +384,6 @@ head(identity_w)
     ## #   random_identity <dbl>, ranking <chr>
 
 ``` r
+
 # save(identity_w, file = "data/identity_w.rda")
 ```

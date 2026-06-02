@@ -8,6 +8,7 @@ uniformity test can be implemented even when researchers do not have any
 anchor ranking questions.
 
 ``` r
+
 library(rankingQ)
 data(identity)
 ```
@@ -66,6 +67,7 @@ thus second place). It’s a bit tricky at first, so please read this
 explanation carefully.
 
 ``` r
+
 recover_recorded_responses(
   presented_order = "app_identity_row_rnd",
   true_order = "app_identity",
@@ -131,6 +133,7 @@ uniform distribution. Non-uniformity in the test suggests the presence
 of random responses.
 
 ``` r
+
 uniformity_test(identity, "app_identity")
 #> 
 #>  Chi-squared test for given probabilities
@@ -158,6 +161,7 @@ We can check this by comparing the recorded responses of those who
 answered the anchor question correctly and incorrectly.
 
 ``` r
+
 ## Correctly answered the anchor question
 tab <- table(
   identity$anc_identity_recorded[identity$anc_correct_identity == 1]
@@ -208,6 +212,7 @@ important to augment the missing permutation patterns with a count of 0,
 which can be done with `permn_augment`.
 
 ``` r
+
 tab <- table(head(identity$app_identity_recorded))
 tab ## only five patterns out of twenty-four possible patterns
 #> 

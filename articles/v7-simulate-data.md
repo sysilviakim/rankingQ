@@ -8,10 +8,12 @@ the first choice, respectively. For each unit, the output provides a
 full ordering of `t` items with distinct alphabet letters.
 
 ``` r
+
 library(rankingQ)
 ```
 
 ``` r
+
 draw <- rpluce(
   n = 50,
   t = 4,

@@ -1,6 +1,7 @@
 # 4. Analysis of Bias-corrected Ranking Data
 
 ``` r
+
 library(rankingQ)
 library(estimatr)
 data(identity)
@@ -12,6 +13,7 @@ estimates respondent-level correction weights. Those weights can then be
 used for point estimation in downstream analyses.
 
 ``` r
+
 out_weights <- imprr_weights(
   identity,
   main_q = "app_identity",
@@ -27,6 +29,7 @@ For example, to estimate the average rank of party as a point estimate,
 one can leverage weighted linear regression as follows:
 
 ``` r
+
 lm_robust(
   app_identity_1 ~ 1,
   data = out_weights$results,
@@ -53,6 +56,7 @@ The `avg_rank` function remains a convenient way to compute point
 estimates from the IPW-adjusted respondent-level data:
 
 ``` r
+
 items_df <- data.frame(
   variable = paste0("app_identity_", 1:4),
   item = c("Party", "Religion", "Gender", "Race")
@@ -72,6 +76,7 @@ returns summaries in the same general format as
 [`imprr_direct()`](https://sysilviakim.com/rankingQ/reference/imprr_direct.md):
 
 ``` r
+
 out_boot <- imprr_weights_boot(
   identity,
   main_q = "app_identity",
@@ -98,6 +103,7 @@ The same object also contains bootstrap summaries for pairwise, top-k,
 and marginal ranking quantities:
 
 ``` r
+
 subset(out_boot$results, qoi == "pairwise ranking")
 #> # A tibble: 12 × 6
 #>    item           qoi              outcome            mean lower upper
