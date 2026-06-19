@@ -34,7 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/v1-getting-started.html">1. Getting Started</a></li>
-    <li><a class="dropdown-item" href="../articles/v2-basic-setup.html">2. Basic Setup</a></li>
+    <li><a class="dropdown-item" href="../articles/v2-basic-setup.html">2. Ranking Data and Anchor Questions</a></li>
     <li><a class="dropdown-item" href="../articles/v3-bias-correction.html">3. Correcting Bias in Ranking Data</a></li>
     <li><a class="dropdown-item" href="../articles/v4-analysis.html">4. Analysis of Bias-corrected Ranking Data</a></li>
     <li><a class="dropdown-item" href="../articles/v5-visualizing-rankings.html">5. Visualizing Rankings</a></li>
@@ -85,9 +85,12 @@ respondents.</p>
 <div class="section level2">
 <h2 id="the-example-data">The Example Data<a class="anchor" aria-label="anchor" href="#the-example-data"></a>
 </h2>
-<p>The <code>identity</code> dataset contains a main ranking question
-about four sources of identity and an anchor-ranking question with a
-known correct ordering.</p>
+<p>The <code>identity</code> dataset contains Americans’ rankings about
+four sources of identity and an anchor-ranking question with a known
+correct ordering. The four items include political party, religion,
+gender, and race. The key theoretical concept is <em>relative
+partisanship</em>—the extent to which people prioritize partisanship
+over other sources of identity.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">identity</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>party <span class="op">=</span> <span class="va">app_identity_1</span>,</span>
@@ -134,13 +137,58 @@ of interest, while <code>anc_correct_identity</code> indicates whether
 each respondent answered the anchor question correctly.</p>
 </div>
 <div class="section level2">
+<h2 id="estimate-ranking-based-quantities">Estimate Ranking-Based Quantities<a class="anchor" aria-label="anchor" href="#estimate-ranking-based-quantities"></a>
+</h2>
+<p>We begin by estimating various ranking-based quantities with no bias
+correction. We include survey weights via the <code>weight</code>
+argument.</p>
+<p>The <code>imprr_direct</code> function <strong>impr</strong>ove
+<strong>r</strong>anking analysis directly by estimating bias-corrected
+quantities of interest such as average ranks, pairwise ranking
+probabilities, top-k probabilities, and marginal rank probabilities.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out_direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
+<span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
+<span>  weight <span class="op">=</span> <span class="st">"s_weight"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; No anc_correct or p_random supplied; assuming everyone passes the anchor (p_random = 0), so no correction is applied.</span></span></code></pre></div>
+<p>The first output summarizes the estimated proportion of random
+responses. As expected, no random response was detected (no bias
+correction).</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">est_p_random</span></span>
+<span><span class="co">#&gt;   mean lower upper</span></span>
+<span><span class="co">#&gt; 1    0     0     0</span></span></code></pre></div>
+<p>The second output contains several corrected ranking-based quantities
+of interest.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 44 × 6</span></span></span>
+<span><span class="co">#&gt;    item           qoi              outcome              mean  lower upper</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> app_identity_1 average rank     Avg: app_identity_1 3.00  2.91   3.08 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> app_identity_1 marginal ranking Ranked 1            0.121 0.095<span style="text-decoration: underline;">3</span> 0.153</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> app_identity_1 marginal ranking Ranked 2            0.173 0.142  0.205</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> app_identity_1 marginal ranking Ranked 3            0.289 0.258  0.330</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> app_identity_1 marginal ranking Ranked 4            0.416 0.383  0.457</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> app_identity_1 pairwise ranking v. app_identity_2   0.410 0.374  0.447</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> app_identity_1 pairwise ranking v. app_identity_3   0.245 0.210  0.283</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> app_identity_1 pairwise ranking v. app_identity_4   0.344 0.303  0.381</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> app_identity_1 top-k ranking    Top-1               0.121 0.095<span style="text-decoration: underline;">3</span> 0.153</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> app_identity_1 top-k ranking    Top-2               0.295 0.257  0.331</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 34 more rows</span></span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="direct-bias-correction">Direct Bias Correction<a class="anchor" aria-label="anchor" href="#direct-bias-correction"></a>
 </h2>
-<p>The <code>imprr_direct</code> function directly estimates
-bias-corrected quantities of interest such as average ranks, pairwise
-ranking probabilities, top-k probabilities, and marginal rank
-probabilities.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Now, we compute the above quantities by detecting random responses
+and applying bias correction. The <code>imprr_direct</code> function
+takes another argument <code>anc_correct</code>, which is a dummy
+variable that takes 1 if a respondent has the right answer for the
+anchor question and 0 otherwise.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
 <span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -148,16 +196,15 @@ probabilities.</p>
 <span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
 <span>  weight <span class="op">=</span> <span class="st">"s_weight"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>The first output summarizes the estimated proportion of random
+<p>Now, the function returns the estimated proportion of random
 responses.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">est_p_random</span></span>
 <span><span class="co">#&gt;        mean     lower     upper</span></span>
 <span><span class="co">#&gt; 1 0.3512825 0.3077923 0.3977214</span></span></code></pre></div>
-<p>The second output contains several corrected ranking-based quantities
-of interest. For a first pass, average ranks are often the easiest place
-to start.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>Finally, we obtain bias-corrected estimates of various quantities of
+interest. Here, we focus on average rank.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qoi</span> <span class="op">==</span> <span class="st">"average rank"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span></span>
@@ -171,9 +218,10 @@ to start.</p>
 <div class="section level2">
 <h2 id="inverse-probability-weighting">Inverse-Probability Weighting<a class="anchor" aria-label="anchor" href="#inverse-probability-weighting"></a>
 </h2>
-<p>The <code>imprr_weights</code> function instead produces
-respondent-level weights that can be used in downstream analyses.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>Instead of directly correcting for bias, the
+<code>imprr_weights</code> function produces respondent-level
+(bias-correction) weights that can be used in downstream analyses.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_weights.html">imprr_weights</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
 <span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -183,7 +231,7 @@ respondent-level weights that can be used in downstream analyses.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>One output gives the bias-correction weight assigned to each possible
 ranking profile.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_weights</span><span class="op">$</span><span class="va">rankings</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ranking</span>, <span class="va">weights</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -196,43 +244,48 @@ ranking profile.</p>
 <span><span class="co">#&gt; 6    1432 0.2721408</span></span></code></pre></div>
 <p>The respondent-level output keeps the original data and appends a
 <code>weights</code> column along with a unified <code>ranking</code>
-column.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+column. To combine our bias-correction weights with survey weights,
+users can simply create a new variable that multiplies both weights.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_weights</span><span class="op">$</span><span class="va">results</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">weights</span>, <span class="va">s_weight</span>, <span class="va">app_identity</span>, <span class="va">ranking</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>joint_weight <span class="op">=</span> <span class="va">weights</span> <span class="op">*</span> <span class="va">s_weight</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span></span>
-<span><span class="co">#&gt;   weights s_weight app_identity ranking</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>   0.982    0.844 1423         1423   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>   0.982    0.886 1423         1423   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>   1.32     2.96  3412         3412   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>   0.982    0.987 1423         1423   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>   1.14     1.76  4132         4132   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>   0.966    0.469 3124         3124</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
+<span><span class="co">#&gt;   weights s_weight app_identity ranking joint_weight</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>   0.982    0.844 1423         1423           0.829</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>   0.982    0.886 1423         1423           0.870</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>   1.32     2.96  3412         3412           3.91 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>   0.982    0.987 1423         1423           0.969</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>   1.14     1.76  4132         4132           2.01 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>   0.966    0.469 3124         3124           0.453</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="using-the-ipw-weights">Using the IPW Weights<a class="anchor" aria-label="anchor" href="#using-the-ipw-weights"></a>
 </h2>
 <p>The IPW-adjusted respondent-level data can be passed to downstream
 helpers such as <code>avg_rank</code>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">items_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"app_identity_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>,</span>
 <span>  item <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party"</span>, <span class="st">"Religion"</span>, <span class="st">"Gender"</span>, <span class="st">"Race"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">ipw_df</span> <span class="op">&lt;-</span> <span class="va">out_weights</span><span class="op">$</span><span class="va">results</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>joint_weight <span class="op">=</span> <span class="va">weights</span> <span class="op">*</span> <span class="va">s_weight</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="../reference/avg_rank.html">avg_rank</a></span><span class="op">(</span></span>
-<span>  <span class="va">out_weights</span><span class="op">$</span><span class="va">results</span>,</span>
+<span>  <span class="va">ipw_df</span>,</span>
 <span>  items <span class="op">=</span> <span class="va">items_df</span>,</span>
-<span>  weight <span class="op">=</span> <span class="st">"weights"</span>,</span>
+<span>  weight <span class="op">=</span> <span class="st">"joint_weight"</span>,</span>
 <span>  raw <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;       item          qoi     mean         se    lower    upper method</span></span>
-<span><span class="co">#&gt; 1    Party Average Rank 3.226655 0.02751980 3.172656 3.280653    IPW</span></span>
-<span><span class="co">#&gt; 2 Religion Average Rank 2.600988 0.04074443 2.521041 2.680935    IPW</span></span>
-<span><span class="co">#&gt; 3   Gender Average Rank 1.707342 0.02466106 1.658953 1.755731    IPW</span></span>
-<span><span class="co">#&gt; 4     Race Average Rank 2.465016 0.02531970 2.415334 2.514697    IPW</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    Party Average Rank 3.215044 0.03702728 3.142391 3.287698    IPW</span></span>
+<span><span class="co">#&gt; 2 Religion Average Rank 2.596829 0.05518234 2.488553 2.705106    IPW</span></span>
+<span><span class="co">#&gt; 3   Gender Average Rank 1.734215 0.03487726 1.665780 1.802650    IPW</span></span>
+<span><span class="co">#&gt; 4     Race Average Rank 2.453911 0.03337011 2.388434 2.519389    IPW</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="next-steps">Next Steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
@@ -241,8 +294,8 @@ helpers such as <code>avg_rank</code>.</p>
 workflow:</p>
 <ol style="list-style-type: decimal">
 <li>
-<code>2. Basic Setup</code> describes the expected input data
-structure.</li>
+<code>2. Ranking Data and Anchor Questions</code> describes our
+example dataset.</li>
 <li>
 <code>3. Correcting Bias in Ranking Data</code> covers the
 correction methods in more depth.</li>
@@ -255,9 +308,6 @@ helpers.</li>
 <li>
 <code>6. Uniformity Tests</code> covers diagnostics when anchor
 questions are unavailable or need validation.</li>
-<li>
-<code>7. Simulating Ranking Data</code> describes the
-data-generation helper <code>rpluce</code>.</li>
 </ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

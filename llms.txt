@@ -147,8 +147,8 @@ If you use `rankingQ`, please cite:
 
 - [1. Getting
   Started](https://sysilviakim.com/rankingQ/articles/v1-getting-started.md):
-- [2. Basic
-  Setup](https://sysilviakim.com/rankingQ/articles/v2-basic-setup.md):
+- [2. Ranking Data and Anchor
+  Questions](https://sysilviakim.com/rankingQ/articles/v2-basic-setup.md):
 - [3. Correcting Bias in Ranking
   Data](https://sysilviakim.com/rankingQ/articles/v3-bias-correction.md):
 - [4. Analysis of Bias-corrected Ranking

@@ -15,9 +15,11 @@ data(identity)
 
 ## The Example Data
 
-The `identity` dataset contains a main ranking question about four
-sources of identity and an anchor-ranking question with a known correct
-ordering.
+The `identity` dataset contains Americans’ rankings about four sources
+of identity and an anchor-ranking question with a known correct
+ordering. The four items include political party, religion, gender, and
+race. The key theoretical concept is *relative partisanship*—the extent
+to which people prioritize partisanship over other sources of identity.
 
 ``` r
 
@@ -71,11 +73,66 @@ The `app_identity` columns describe the ranking question of interest,
 while `anc_correct_identity` indicates whether each respondent answered
 the anchor question correctly.
 
+## Estimate Ranking-Based Quantities
+
+We begin by estimating various ranking-based quantities with no bias
+correction. We include survey weights via the `weight` argument.
+
+The `imprr_direct` function **impr**ove **r**anking analysis directly by
+estimating bias-corrected quantities of interest such as average ranks,
+pairwise ranking probabilities, top-k probabilities, and marginal rank
+probabilities.
+
+``` r
+
+out_direct <- imprr_direct(
+  data = identity,
+  J = 4,
+  main_q = "app_identity",
+  weight = "s_weight"
+)
+#> No anc_correct or p_random supplied; assuming everyone passes the anchor (p_random = 0), so no correction is applied.
+```
+
+The first output summarizes the estimated proportion of random
+responses. As expected, no random response was detected (no bias
+correction).
+
+``` r
+
+out_direct$est_p_random
+#>   mean lower upper
+#> 1    0     0     0
+```
+
+The second output contains several corrected ranking-based quantities of
+interest.
+
+``` r
+
+out_direct$results
+#> # A tibble: 44 × 6
+#>    item           qoi              outcome              mean  lower upper
+#>    <chr>          <chr>            <chr>               <dbl>  <dbl> <dbl>
+#>  1 app_identity_1 average rank     Avg: app_identity_1 3.00  2.91   3.08 
+#>  2 app_identity_1 marginal ranking Ranked 1            0.121 0.0953 0.153
+#>  3 app_identity_1 marginal ranking Ranked 2            0.173 0.142  0.205
+#>  4 app_identity_1 marginal ranking Ranked 3            0.289 0.258  0.330
+#>  5 app_identity_1 marginal ranking Ranked 4            0.416 0.383  0.457
+#>  6 app_identity_1 pairwise ranking v. app_identity_2   0.410 0.374  0.447
+#>  7 app_identity_1 pairwise ranking v. app_identity_3   0.245 0.210  0.283
+#>  8 app_identity_1 pairwise ranking v. app_identity_4   0.344 0.303  0.381
+#>  9 app_identity_1 top-k ranking    Top-1               0.121 0.0953 0.153
+#> 10 app_identity_1 top-k ranking    Top-2               0.295 0.257  0.331
+#> # ℹ 34 more rows
+```
+
 ## Direct Bias Correction
 
-The `imprr_direct` function directly estimates bias-corrected quantities
-of interest such as average ranks, pairwise ranking probabilities, top-k
-probabilities, and marginal rank probabilities.
+Now, we compute the above quantities by detecting random responses and
+applying bias correction. The `imprr_direct` function takes another
+argument `anc_correct`, which is a dummy variable that takes 1 if a
+respondent has the right answer for the anchor question and 0 otherwise.
 
 ``` r
 
@@ -88,8 +145,7 @@ out_direct <- imprr_direct(
 )
 ```
 
-The first output summarizes the estimated proportion of random
-responses.
+Now, the function returns the estimated proportion of random responses.
 
 ``` r
 
@@ -98,9 +154,8 @@ out_direct$est_p_random
 #> 1 0.3512825 0.3077923 0.3977214
 ```
 
-The second output contains several corrected ranking-based quantities of
-interest. For a first pass, average ranks are often the easiest place to
-start.
+Finally, we obtain bias-corrected estimates of various quantities of
+interest. Here, we focus on average rank.
 
 ``` r
 
@@ -117,8 +172,9 @@ out_direct$results |>
 
 ## Inverse-Probability Weighting
 
-The `imprr_weights` function instead produces respondent-level weights
-that can be used in downstream analyses.
+Instead of directly correcting for bias, the `imprr_weights` function
+produces respondent-level (bias-correction) weights that can be used in
+downstream analyses.
 
 ``` r
 
@@ -149,22 +205,25 @@ out_weights$rankings |>
 ```
 
 The respondent-level output keeps the original data and appends a
-`weights` column along with a unified `ranking` column.
+`weights` column along with a unified `ranking` column. To combine our
+bias-correction weights with survey weights, users can simply create a
+new variable that multiplies both weights.
 
 ``` r
 
 out_weights$results |>
   select(weights, s_weight, app_identity, ranking) |>
+  mutate(joint_weight = weights * s_weight) |>
   head()
-#> # A tibble: 6 × 4
-#>   weights s_weight app_identity ranking
-#>     <dbl>    <dbl> <chr>        <chr>  
-#> 1   0.982    0.844 1423         1423   
-#> 2   0.982    0.886 1423         1423   
-#> 3   1.32     2.96  3412         3412   
-#> 4   0.982    0.987 1423         1423   
-#> 5   1.14     1.76  4132         4132   
-#> 6   0.966    0.469 3124         3124
+#> # A tibble: 6 × 5
+#>   weights s_weight app_identity ranking joint_weight
+#>     <dbl>    <dbl> <chr>        <chr>          <dbl>
+#> 1   0.982    0.844 1423         1423           0.829
+#> 2   0.982    0.886 1423         1423           0.870
+#> 3   1.32     2.96  3412         3412           3.91 
+#> 4   0.982    0.987 1423         1423           0.969
+#> 5   1.14     1.76  4132         4132           2.01 
+#> 6   0.966    0.469 3124         3124           0.453
 ```
 
 ## Using the IPW Weights
@@ -179,17 +238,20 @@ items_df <- data.frame(
   item = c("Party", "Religion", "Gender", "Race")
 )
 
+ipw_df <- out_weights$results |>
+  mutate(joint_weight = weights * s_weight)
+
 avg_rank(
-  out_weights$results,
+  ipw_df,
   items = items_df,
-  weight = "weights",
+  weight = "joint_weight",
   raw = FALSE
 )
 #>       item          qoi     mean         se    lower    upper method
-#> 1    Party Average Rank 3.226655 0.02751980 3.172656 3.280653    IPW
-#> 2 Religion Average Rank 2.600988 0.04074443 2.521041 2.680935    IPW
-#> 3   Gender Average Rank 1.707342 0.02466106 1.658953 1.755731    IPW
-#> 4     Race Average Rank 2.465016 0.02531970 2.415334 2.514697    IPW
+#> 1    Party Average Rank 3.215044 0.03702728 3.142391 3.287698    IPW
+#> 2 Religion Average Rank 2.596829 0.05518234 2.488553 2.705106    IPW
+#> 3   Gender Average Rank 1.734215 0.03487726 1.665780 1.802650    IPW
+#> 4     Race Average Rank 2.453911 0.03337011 2.388434 2.519389    IPW
 ```
 
 ## Next Steps
@@ -197,7 +259,8 @@ avg_rank(
 The remaining vignettes go into more detail on specific parts of the
 workflow:
 
-1.  `2. Basic Setup` describes the expected input data structure.
+1.  `2. Ranking Data and Anchor Questions` describes our example
+    dataset.
 2.  `3. Correcting Bias in Ranking Data` covers the correction methods
     in more depth.
 3.  `4. Analysis of Bias-corrected Ranking Data` shows downstream
@@ -205,5 +268,3 @@ workflow:
 4.  `5. Visualizing Rankings` introduces the plotting helpers.
 5.  `6. Uniformity Tests` covers diagnostics when anchor questions are
     unavailable or need validation.
-6.  `7. Simulating Ranking Data` describes the data-generation helper
-    `rpluce`.
