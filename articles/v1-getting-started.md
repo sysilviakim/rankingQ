@@ -1,10 +1,9 @@
 # 1. Getting Started
 
 This vignette introduces the main `rankingQ` workflow using the
-`identity` dataset. The package is designed for estimating various
-ranking-based quantities from ranking data. It also allows researchers
-to correct for measurement error caused by inattentive survey
-respondents.
+`identity` dataset. The package estimates various ranking-based
+quantities from ranking data. It also allows researchers to correct for
+measurement error caused by inattentive survey respondents.
 
 ``` r
 
