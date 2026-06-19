@@ -4,8 +4,11 @@ author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{1. Getting Started}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r, include = FALSE}
@@ -16,7 +19,9 @@ knitr::opts_chunk$set(
 ```
 
 This vignette introduces the main `rankingQ` workflow using the
-`identity` dataset. The package is designed for estimating various ranking-based quantities from ranking data. It also allows researchers to correct for measurement error caused by inattentive survey respondents.
+`identity` dataset. The package estimates various ranking-based
+quantities from ranking data. It also allows researchers to correct for
+measurement error caused by inattentive survey respondents.
 
 ```{r setup, message = FALSE, warning = FALSE}
 library(rankingQ)
@@ -25,14 +30,11 @@ library(dplyr)
 data(identity)
 ```
 
-
-
 ## The Example Data
 
 The `identity` dataset contains a main ranking question about four
 sources of identity and an anchor-ranking question with a known correct
-ordering. 
-
+ordering.
 
 ```{r}
 identity |> 
@@ -46,7 +48,6 @@ identity |>
   ) |>
   head()
 ```
-
 
 It also includes the survey weight `s_weight`.
 
@@ -68,8 +69,8 @@ the anchor question correctly.
 ## Direct Bias Correction
 
 The `imprr_direct` function directly estimates bias-corrected quantities
-of interest such as average ranks, pairwise ranking probabilities,
-top-k probabilities, and marginal rank probabilities.
+of interest such as average ranks, pairwise ranking probabilities, top-k
+probabilities, and marginal rank probabilities.
 
 ```{r}
 out_direct <- imprr_direct(
@@ -154,13 +155,13 @@ avg_rank(
 The remaining vignettes go into more detail on specific parts of the
 workflow:
 
-1. `2. Basic Setup` describes the expected input data structure.
-2. `3. Correcting Bias in Ranking Data` covers the correction methods in
-   more depth.
-3. `4. Analysis of Bias-corrected Ranking Data` shows downstream
-   analysis with corrected weights.
-4. `5. Visualizing Rankings` introduces the plotting helpers.
-5. `6. Uniformity Tests` covers diagnostics when anchor questions are
-   unavailable or need validation.
-6. `7. Simulating Ranking Data` describes the data-generation helper
-   `rpluce`.
+1.  `2. Basic Setup` describes the expected input data structure.
+2.  `3. Correcting Bias in Ranking Data` covers the correction methods
+    in more depth.
+3.  `4. Analysis of Bias-corrected Ranking Data` shows downstream
+    analysis with corrected weights.
+4.  `5. Visualizing Rankings` introduces the plotting helpers.
+5.  `6. Uniformity Tests` covers diagnostics when anchor questions are
+    unavailable or need validation.
+6.  `7. Simulating Ranking Data` describes the data-generation helper
+    `rpluce`.
