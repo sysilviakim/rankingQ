@@ -32,9 +32,11 @@ data(identity)
 
 ## The Example Data
 
-The `identity` dataset contains a main ranking question about four
-sources of identity and an anchor-ranking question with a known correct
-ordering.
+The `identity` dataset contains Americans' rankings about four sources
+of identity and an anchor-ranking question with a known correct
+ordering. The four items include political party, religion, gender, and
+race. The key theoretical concept is *relative partisanship*—the extent
+to which people prioritize partisanship over other sources of identity.
 
 ```{r}
 identity |> 
@@ -66,11 +68,46 @@ The `app_identity` columns describe the ranking question of interest,
 while `anc_correct_identity` indicates whether each respondent answered
 the anchor question correctly.
 
+## Estimate Ranking-Based Quantities
+
+We begin by estimating various ranking-based quantities with no bias
+correction. We include survey weights via the `weight` argument.
+
+The `imprr_direct` function **impr**ove **r**anking analysis directly by
+estimating bias-corrected quantities of interest such as average ranks,
+pairwise ranking probabilities, top-k probabilities, and marginal rank
+probabilities.
+
+```{r}
+out_direct <- imprr_direct(
+  data = identity,
+  J = 4,
+  main_q = "app_identity",
+  weight = "s_weight"
+)
+```
+
+The first output summarizes the estimated proportion of random
+responses. As expected, no random response was detected (no bias
+correction).
+
+```{r}
+out_direct$est_p_random
+```
+
+The second output contains several corrected ranking-based quantities of
+interest.
+
+```{r}
+out_direct$results
+```
+
 ## Direct Bias Correction
 
-The `imprr_direct` function directly estimates bias-corrected quantities
-of interest such as average ranks, pairwise ranking probabilities, top-k
-probabilities, and marginal rank probabilities.
+Now, we compute the above quantities by detecting random responses and
+applying bias correction. The `imprr_direct` function takes another
+argument `anc_correct`, which is a dummy variable that takes 1 if a
+respondent has the right answer for the anchor question and 0 otherwise.
 
 ```{r}
 out_direct <- imprr_direct(
@@ -82,16 +119,14 @@ out_direct <- imprr_direct(
 )
 ```
 
-The first output summarizes the estimated proportion of random
-responses.
+Now, the function returns the estimated proportion of random responses.
 
 ```{r}
 out_direct$est_p_random
 ```
 
-The second output contains several corrected ranking-based quantities of
-interest. For a first pass, average ranks are often the easiest place to
-start.
+Finally, we obtain bias-corrected estimates of various quantities of
+interest. Here, we focus on average rank.
 
 ```{r}
 out_direct$results |>
@@ -100,8 +135,9 @@ out_direct$results |>
 
 ## Inverse-Probability Weighting
 
-The `imprr_weights` function instead produces respondent-level weights
-that can be used in downstream analyses.
+Instead of directly correcting for bias, the `imprr_weights` function
+produces respondent-level (bias-correction) weights that can be used in
+downstream analyses.
 
 ```{r}
 out_weights <- imprr_weights(
@@ -123,11 +159,14 @@ out_weights$rankings |>
 ```
 
 The respondent-level output keeps the original data and appends a
-`weights` column along with a unified `ranking` column.
+`weights` column along with a unified `ranking` column. To combine our
+bias-correction weights with survey weights, users can simply create a
+new variable that multiplies both weights.
 
 ```{r}
 out_weights$results |>
   select(weights, s_weight, app_identity, ranking) |>
+  mutate(joint_weight = weights * s_weight) |>
   head()
 ```
 
@@ -142,10 +181,13 @@ items_df <- data.frame(
   item = c("Party", "Religion", "Gender", "Race")
 )
 
+ipw_df <- out_weights$results |>
+  mutate(joint_weight = weights * s_weight)
+
 avg_rank(
-  out_weights$results,
+  ipw_df,
   items = items_df,
-  weight = "weights",
+  weight = "joint_weight",
   raw = FALSE
 )
 ```
@@ -155,7 +197,8 @@ avg_rank(
 The remaining vignettes go into more detail on specific parts of the
 workflow:
 
-1.  `2. Basic Setup` describes the expected input data structure.
+1.  `2. Ranking Data and Anchor Questions` describes our example
+    dataset.
 2.  `3. Correcting Bias in Ranking Data` covers the correction methods
     in more depth.
 3.  `4. Analysis of Bias-corrected Ranking Data` shows downstream
@@ -163,5 +206,3 @@ workflow:
 4.  `5. Visualizing Rankings` introduces the plotting helpers.
 5.  `6. Uniformity Tests` covers diagnostics when anchor questions are
     unavailable or need validation.
-6.  `7. Simulating Ranking Data` describes the data-generation helper
-    `rpluce`.

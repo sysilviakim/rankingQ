@@ -1,4 +1,4 @@
-# `rankingQ`: Estimating Ranking-Based Quantities with Bias Correction <a href="https://sysilviakim.com/rankingQ/"><img src="man/figures/logo.png" align="right" height="138"/></a>
+# `rankingQ`: Estimate Ranking-Based Quantities with Bias Correction <a href="https://sysilviakim.com/rankingQ/"><img src="man/figures/logo.png" align="right" height="138"/></a>
 
 <!-- badges: start -->
 
