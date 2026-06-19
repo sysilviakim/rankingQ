@@ -1,4 +1,4 @@
-# 3. Correcting Bias in Ranking Data
+# 3. Methods
 
 ``` r
 

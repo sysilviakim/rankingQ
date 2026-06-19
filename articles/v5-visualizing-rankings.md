@@ -1,4 +1,4 @@
-# 5. Visualizing Rankings
+# 5. Visualization
 
 The following code chunk shows how to plot the distribution of ranking
 profiles. This can help eyeball whether the ranking data is uniformly

@@ -1,4 +1,4 @@
-# 1. Getting Started
+# 1. Overview
 
 This vignette introduces the main `rankingQ` workflow using the
 `identity` dataset. The package estimates various ranking-based
@@ -262,12 +262,9 @@ avg_rank(
 The remaining vignettes go into more detail on specific parts of the
 workflow:
 
-1.  `2. Ranking Data and Anchor Questions` describes our example
-    dataset.
-2.  `3. Correcting Bias in Ranking Data` covers the correction methods
-    in more depth.
-3.  `4. Analysis of Bias-corrected Ranking Data` shows downstream
-    analysis with corrected weights.
-4.  `5. Visualizing Rankings` introduces the plotting helpers.
-5.  `6. Uniformity Tests` covers diagnostics when anchor questions are
-    unavailable or need validation.
+1.  `2. Data` describes our example dataset.
+2.  `3. Methods` covers the correction methods in more depth.
+3.  `4. Analysis` shows downstream analysis with corrected weights.
+4.  `5. Visualization` introduces the plotting helpers.
+5.  `6. Test` covers diagnostics when anchor questions are unavailable
+    or need validation.

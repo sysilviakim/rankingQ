@@ -1,4 +1,4 @@
-# 2. Ranking Data and Anchor Questions
+# 2. Data
 
 In this vignette, we show what the typical input data look like for the
 `rankingQ` package using the `identity` dataset.

@@ -1,4 +1,4 @@
-# 4. Analysis of Bias-corrected Ranking Data
+# 4. Analysis
 
 ``` r
 

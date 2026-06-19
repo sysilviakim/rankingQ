@@ -1,4 +1,4 @@
-# 6. Uniformity Tests
+# 6. Test
 
 In this vignette, we show how to detect the presence of random responses
 using the **uniformity test**. This test is based on the idea that,
