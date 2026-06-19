@@ -1,9 +1,9 @@
 ---
-title: "2. Ranking Data and Anchor Questions"
+title: "2. Data"
 author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{2. Ranking Data and Anchor Questions}
+  %\VignetteIndexEntry{2. Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

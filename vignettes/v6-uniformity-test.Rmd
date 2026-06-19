@@ -1,8 +1,8 @@
 ---
-title: "6. Uniformity Tests"
+title: "6. Test"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{6. Uniformity Tests}
+  %\VignetteIndexEntry{6. Test}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

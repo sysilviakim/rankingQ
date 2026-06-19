@@ -1,9 +1,9 @@
 ---
-title: "5. Visualizing Rankings"
+title: "5. Visualization"
 author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{5. Visualizing Rankings}
+  %\VignetteIndexEntry{5. Visualization}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

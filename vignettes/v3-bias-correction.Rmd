@@ -1,9 +1,9 @@
 ---
-title: "3. Correcting Bias in Ranking Data"
+title: "3. Methods"
 author: "Yuki Atsusaka and Seo-young Silvia Kim"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{3. Correcting Bias in Ranking Data}
+  %\VignetteIndexEntry{3. Methods}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
