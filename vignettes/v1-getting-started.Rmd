@@ -30,7 +30,7 @@ library(dplyr)
 data(identity)
 ```
 
-## The Example Data
+## Example Data
 
 The `identity` dataset contains Americans' rankings about four sources
 of identity and an anchor-ranking question with a known correct
@@ -120,13 +120,16 @@ out_direct <- imprr_direct(
 ```
 
 Now, the function returns the estimated proportion of random responses.
+We find that about 35\\% [31%-40%] of respondents—a sizable share of
+data—seem to provide random responses.
 
 ```{r}
 out_direct$est_p_random
 ```
 
 Finally, we obtain bias-corrected estimates of various quantities of
-interest. Here, we focus on average rank.
+interest. Here, we focus on average rank. The estimated average ranks
+are based on our plug-in bias-corrected estimator.
 
 ```{r}
 out_direct$results |>

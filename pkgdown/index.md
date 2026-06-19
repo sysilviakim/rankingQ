@@ -1,12 +1,16 @@
-# `rankingQ`: Design-Based Methods for Improving Ranking Questions
+# `rankingQ`: Estimate Ranking-Based Quantities with Bias Correction <a href="https://sysilviakim.com/rankingQ/"><img src="man/figures/logo.png" align="right" height="138"/></a>
 
-[![DOI](https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue)](https://doi.org/10.1017/pan.2024.33)
+<!-- badges: start -->
+
+[![pkgdown](https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml) [![DOI](https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue)](https://doi.org/10.1017/pan.2024.33)
+
+<!-- badges: end -->
 
 ## Overview
 
-Ranking data offer valuable insights into social science by allowing researchers to study how people make comparative judgments about multiple social and political options. However, a common practical concern is that data collected from ranking survey questions are often prone to measurement error due to insensible, random responses.
+Ranking data offer valuable insights into the social sciences by allowing researchers to study how people make comparative judgments about multiple social and political options. However, a common practical concern is that data collected from ranking survey questions are often prone to measurement error due to insensible, random responses.
 
-`rankingQ` implements design-based methods to **estimate various ranking-based quantities** while correcting for such measurement error. With an additional ranking question for detecting random responses, it provides direct bias correction, inverse-probability weighting (IPW), visualization helpers, and diagnostics for assessing anchor-ranking questions.
+`rankingQ` *estimates* *various ranking-based quantities* based on any ranking data. `rankingQ` also allows users to correct for measurement error due to random responses by including an additional ranking question to detect such responses. The package provides plug-in bias-corrected estimators and inverse-probability weighting (IPW), while also supporting visualization helpers, and diagnostics for assessing anchor-ranking questions.
 
 For the underlying methodology, see [Atsusaka and Kim (2025)](https://doi.org/10.1017/pan.2024.33), "Addressing Measurement Errors in Ranking Questions for the Social Sciences," *Political Analysis*, 33(4), 339-360. Visit the [package site](https://sysilviakim.com/rankingQ/) for vignettes and references.
 
@@ -14,24 +18,25 @@ For the underlying methodology, see [Atsusaka and Kim (2025)](https://doi.org/10
 
 `rankingQ` supports three ways to handle random or inattentive responding in its correction functions.
 
-- Use `anc_correct` when you have an anchor-ranking question.
+- Use `anc_correct` when you have an anchor ranking question.
 - Use `p_random` when you want to externally supply a plausible proportion of random or inattentive respondents.
-- Supply neither if you do not want to apply a correction; this is the default behavior, and the functions will let you know that no correction was applied. Both `imprr_direct` and `imprr_weights` will return the uncorrected estimates in this case, but still print useful outputs such as average rankings, top-k rankings, and so on.
+- Supply neither if no correction is necessary; this is the default behavior, and the functions will let you know that no correction was applied. Both `imprr_direct` and `imprr_weights` will return the uncorrected estimates in this case, but still print useful outputs such as average rankings, top-k rankings, and so on.
 
 ## Installation
 
 Currently, you can install the development version from GitHub:
 
-```r
+``` r
 remotes::install_github("sysilviakim/rankingQ", dependencies = TRUE)
 ```
 
-For a full walkthrough, see the [Getting Started vignette](articles/v1-getting-started.html).
+For a full walkthrough of an example and downstream analysis, see the [Getting Started vignette](https://sysilviakim.com/rankingQ/articles/v1-getting-started.html).
 
 ## Key Features
 
 - **Bias correction via plug-in estimator** (`imprr_direct`): estimates average ranks, marginal rank probabilities, pairwise preferences, and top-k rankings with confidence intervals
 - **Bias correction via IPW** (`imprr_weights`): reweights observed ranking distributions to correct for random responses
+- **Convenience augmentation** (`add_ipw_weights`): returns the original data with respondent-level IPW weights attached
 - **Visualization** (`plot_avg_ranking`): plots corrected average rankings with uncertainty bounds
 - **Diagnostics**: tools for detecting bias and assessing anchor-ranking questions
 
@@ -41,7 +46,7 @@ If you use `rankingQ`, please cite:
 
 > Atsusaka, Yuki, and Seo-young Silvia Kim. 2025. "Addressing Measurement Errors in Ranking Questions for the Social Sciences." *Political Analysis* 33(4): 339-360. <https://doi.org/10.1017/pan.2024.33>
 
-```bibtex
+``` bibtex
 @article{atsusaka_addressing_2025,
   author  = {Atsusaka, Yuki and Kim, Seo-young Silvia},
   title   = {Addressing Measurement Errors in Ranking Questions for the Social Sciences},
