@@ -83,7 +83,7 @@ respondents.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">identity</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="the-example-data">The Example Data<a class="anchor" aria-label="anchor" href="#the-example-data"></a>
+<h2 id="example-data">Example Data<a class="anchor" aria-label="anchor" href="#example-data"></a>
 </h2>
 <p>The <code>identity</code> dataset contains Americans’ rankings about
 four sources of identity and an anchor-ranking question with a known
@@ -197,13 +197,15 @@ anchor question and 0 otherwise.</p>
 <span>  weight <span class="op">=</span> <span class="st">"s_weight"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Now, the function returns the estimated proportion of random
-responses.</p>
+responses. We find that about 35\% [31%-40%] of respondents—a sizable
+share of data—seem to provide random responses.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">est_p_random</span></span>
 <span><span class="co">#&gt;        mean     lower     upper</span></span>
 <span><span class="co">#&gt; 1 0.3512825 0.3077923 0.3977214</span></span></code></pre></div>
 <p>Finally, we obtain bias-corrected estimates of various quantities of
-interest. Here, we focus on average rank.</p>
+interest. Here, we focus on average rank. The estimated average ranks
+are based on our plug-in bias-corrected estimator.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qoi</span> <span class="op">==</span> <span class="st">"average rank"</span><span class="op">)</span></span>

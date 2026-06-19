@@ -61,16 +61,19 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="rankingq-design-based-methods-for-improving-ranking-questions">
-<code>rankingQ</code>: Design-Based Methods for Improving Ranking Questions<a class="anchor" aria-label="anchor" href="#rankingq-design-based-methods-for-improving-ranking-questions"></a>
+<img src="logo.png" class="logo" alt=""><h1 id="rankingq-estimate-ranking-based-quantities-with-bias-correction-">
+<code>rankingQ</code>: Estimate Ranking-Based Quantities with Bias Correction 
+<a class="anchor" aria-label="anchor" href="#rankingq-estimate-ranking-based-quantities-with-bias-correction-"></a>
 </h1>
 </div>
-<p><a href="https://doi.org/10.1017/pan.2024.33" class="external-link"><img src="https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue" alt="DOI"></a></p>
+<!-- badges: start -->
+
+<!-- badges: end -->
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>Ranking data offer valuable insights into social science by allowing researchers to study how people make comparative judgments about multiple social and political options. However, a common practical concern is that data collected from ranking survey questions are often prone to measurement error due to insensible, random responses.</p>
-<p><code>rankingQ</code> implements design-based methods to <strong>estimate various ranking-based quantities</strong> while correcting for such measurement error. With an additional ranking question for detecting random responses, it provides direct bias correction, inverse-probability weighting (IPW), visualization helpers, and diagnostics for assessing anchor-ranking questions.</p>
+<p>Ranking data offer valuable insights into the social sciences by allowing researchers to study how people make comparative judgments about multiple social and political options. However, a common practical concern is that data collected from ranking survey questions are often prone to measurement error due to insensible, random responses.</p>
+<p><code>rankingQ</code> <em>estimates</em> <em>various ranking-based quantities</em> based on any ranking data. <code>rankingQ</code> also allows users to correct for measurement error due to random responses by including an additional ranking question to detect such responses. The package provides plug-in bias-corrected estimators and inverse-probability weighting (IPW), while also supporting visualization helpers, and diagnostics for assessing anchor-ranking questions.</p>
 <p>For the underlying methodology, see <a href="https://doi.org/10.1017/pan.2024.33" class="external-link">Atsusaka and Kim (2025)</a>, “Addressing Measurement Errors in Ranking Questions for the Social Sciences,” <em>Political Analysis</em>, 33(4), 339-360. Visit the <a href="https://sysilviakim.com/rankingQ/">package site</a> for vignettes and references.</p>
 </div>
 <div class="section level2">
@@ -78,9 +81,9 @@
 </h2>
 <p><code>rankingQ</code> supports three ways to handle random or inattentive responding in its correction functions.</p>
 <ul>
-<li>Use <code>anc_correct</code> when you have an anchor-ranking question.</li>
+<li>Use <code>anc_correct</code> when you have an anchor ranking question.</li>
 <li>Use <code>p_random</code> when you want to externally supply a plausible proportion of random or inattentive respondents.</li>
-<li>Supply neither if you do not want to apply a correction; this is the default behavior, and the functions will let you know that no correction was applied. Both <code>imprr_direct</code> and <code>imprr_weights</code> will return the uncorrected estimates in this case, but still print useful outputs such as average rankings, top-k rankings, and so on.</li>
+<li>Supply neither if no correction is necessary; this is the default behavior, and the functions will let you know that no correction was applied. Both <code>imprr_direct</code> and <code>imprr_weights</code> will return the uncorrected estimates in this case, but still print useful outputs such as average rankings, top-k rankings, and so on.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -89,7 +92,7 @@
 <p>Currently, you can install the development version from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"sysilviakim/rankingQ"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>For a full walkthrough, see the <a href="articles/v1-getting-started.html">Getting Started vignette</a>.</p>
+<p>For a full walkthrough of an example and downstream analysis, see the <a href="https://sysilviakim.com/rankingQ/articles/v1-getting-started.html">Getting Started vignette</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="key-features">Key Features<a class="anchor" aria-label="anchor" href="#key-features"></a>
@@ -99,6 +102,8 @@
 <strong>Bias correction via plug-in estimator</strong> (<code>imprr_direct</code>): estimates average ranks, marginal rank probabilities, pairwise preferences, and top-k rankings with confidence intervals</li>
 <li>
 <strong>Bias correction via IPW</strong> (<code>imprr_weights</code>): reweights observed ranking distributions to correct for random responses</li>
+<li>
+<strong>Convenience augmentation</strong> (<code>add_ipw_weights</code>): returns the original data with respondent-level IPW weights attached</li>
 <li>
 <strong>Visualization</strong> (<code>plot_avg_ranking</code>): plots corrected average rankings with uncertainty bounds</li>
 <li>
@@ -158,7 +163,13 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
+<li><a href="https://doi.org/10.1017/pan.2024.33" class="external-link"><img src="https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue" alt="DOI"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
