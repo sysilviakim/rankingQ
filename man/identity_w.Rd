@@ -14,25 +14,25 @@ A data frame with 1,082 rows and 18 columns:
   \item{app_identity}{
     Full ranking profile for the main identity ranking question.
   }
-  \item{app_identity_1}{
+  \item{party}{
     Marginal ranking for party (main identity ranking question).
   }
-  \item{app_identity_2}{
+  \item{religion}{
     Marginal ranking for religion (main identity ranking question).
   }
-  \item{app_identity_3}{
+  \item{gender}{
     Marginal ranking for gender (main identity ranking question).
   }
-  \item{app_identity_4}{
+  \item{race}{
     Marginal ranking for race (main identity ranking question).
   }
   \item{anc_identity}{Full ranking profile for the anchor ranking question.}
-  \item{anc_identity_1}{Marginal ranking for household (anchor question).}
-  \item{anc_identity_2}{
+  \item{household}{Marginal ranking for household (anchor question).}
+  \item{neighborhood}{
     Marginal ranking for neighborhood (anchor question).
   }
-  \item{anc_identity_3}{Marginal ranking for city (anchor question).}
-  \item{anc_identity_4}{Marginal ranking for state (anchor question).}
+  \item{city}{Marginal ranking for city (anchor question).}
+  \item{state}{Marginal ranking for state (anchor question).}
   \item{anc_correct_identity}{
     Whether the respondent answered the anchor questions correctly.
     This is a binary variable that 1 if the respondent correctly answers

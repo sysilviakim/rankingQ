@@ -29,8 +29,8 @@ stratifying variable.}
 in which case it will be inferred from the data.}
 
 \item{main_q}{Main ranking question specification. This can be a single
-column name or unquoted symbol such as `app_identity`, in which case the
-function looks for `app_identity_1`, `app_identity_2`, and so on. You may
+column name or unquoted symbol such as `my_ranking`, in which case the
+function looks for `my_ranking_1`, `my_ranking_2`, and so on. You may
 also supply `main_q` directly as a character vector or unquoted `c(...)`
 expression of ranking columns.}
 
@@ -71,7 +71,7 @@ identity2$stratum <- rep(c("group1", "group2"), length.out = nrow(identity2))
 out <- suppressMessages(stratified_avg(
   identity2,
   var_stratum = "stratum",
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   p_random = 0,
   n_bootstrap = 1,
   seed = 123

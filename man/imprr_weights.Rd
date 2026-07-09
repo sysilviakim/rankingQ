@@ -23,11 +23,11 @@ imprr_weights(
 in which case it will be inferred from the data.}
 
 \item{main_q}{Ranking question to be analyzed. When `main_q` is a single
-column name or unquoted symbol such as `app_identity`, the function looks
-for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on. You may
+column name or unquoted symbol such as `my_ranking`, the function looks
+for `my_ranking_1`, `my_ranking_2`, `my_ranking_3`, and so on. You may
 also supply `main_q` directly as a character vector or unquoted
 `c(...)` expression of ranking columns such as
-`c(party, gender, race, religion)`.}
+`c(party, religion, gender, race)`.}
 
 \item{anc_correct}{Optional indicator for passing the anchor question.
 If `NULL`, `p_random` is used when supplied; otherwise the function
@@ -80,7 +80,7 @@ suited to small or moderate ranking questions. For larger `J`, prefer
 \examples{
 out <- imprr_weights(
   identity,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity"
 )
 head(out$results)

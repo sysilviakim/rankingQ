@@ -5,7 +5,7 @@ test_that("plug-in estimation works", {
   example_direct <- imprr_direct(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 10
   )
@@ -14,9 +14,9 @@ test_that("plug-in estimation works", {
   expect_true(example_direct$est_p_random$mean > 0 &
     example_direct$est_p_random$mean < 1)
   expect_true(example_direct$est_p_random$lower <=
-                example_direct$est_p_random$mean)
+    example_direct$est_p_random$mean)
   expect_true(example_direct$est_p_random$upper >=
-                example_direct$est_p_random$mean)
+    example_direct$est_p_random$mean)
 })
 
 test_that("imprr_direct messages when using equal weights by default", {
@@ -26,7 +26,7 @@ test_that("imprr_direct messages when using equal weights by default", {
     imprr_direct(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 1,
       seed = 1
@@ -42,7 +42,7 @@ test_that("imprr_direct validates bootstrap count", {
     imprr_direct(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 0
     ),
@@ -57,7 +57,7 @@ test_that("imprr_direct rejects infinite J cleanly", {
     imprr_direct(
       identity,
       J = Inf,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 1
     ),
@@ -68,6 +68,7 @@ test_that("imprr_direct rejects infinite J cleanly", {
 test_that("imprr_direct validates main_q when inferring J", {
   identity <- rankingQ::identity
 
+  # Single-stem main_q with J = NULL requires the full-profile column.
   expect_error(
     imprr_direct(
       identity[, setdiff(names(identity), "app_identity")],
@@ -85,6 +86,11 @@ test_that("imprr_direct validates main_q when inferring J", {
 
 test_that("imprr_direct infers J when the first main_q value is NA", {
   identity <- rankingQ::identity
+  # Restore stem-named marginal columns so this test keeps covering the
+  # single-stem auto-detection path (main_q_1, ..., main_q_J).
+  names(identity)[match(
+    c("party", "religion", "gender", "race"), names(identity)
+  )] <- paste0("app_identity_", 1:4)
   identity$app_identity[1] <- NA_character_
 
   out_inferred <- imprr_direct(
@@ -116,7 +122,7 @@ test_that("imprr_direct validates anc_correct column presence", {
     imprr_direct(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "missing_anchor",
       n_bootstrap = 1
     ),
@@ -130,7 +136,7 @@ test_that("imprr_direct accepts a weight column name", {
   out <- imprr_direct(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     weight = "s_weight",
     n_bootstrap = 1,
@@ -208,7 +214,7 @@ test_that("imprr_direct errors on missing weight column", {
     imprr_direct(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       weight = "missing_weight",
       n_bootstrap = 1
@@ -224,7 +230,7 @@ test_that("imprr_direct rejects invalid weight values", {
     imprr_direct(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       weight = c(-1, rep(1, nrow(identity) - 1)),
       n_bootstrap = 1,
@@ -236,7 +242,7 @@ test_that("imprr_direct rejects invalid weight values", {
     imprr_direct(
       transform(identity, bad_weight = c(Inf, rep(1, nrow(identity) - 1))),
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       weight = "bad_weight",
       n_bootstrap = 1,
@@ -253,7 +259,7 @@ test_that("imprr_direct rejects empty data", {
     imprr_direct(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 1
     ),
@@ -310,7 +316,7 @@ test_that("imprr_direct validates population and assumption inputs", {
     imprr_direct(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       population = "oops",
       n_bootstrap = 1
@@ -322,7 +328,7 @@ test_that("imprr_direct validates population and assumption inputs", {
     imprr_direct(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       population = "all",
       assumption = "oops",
@@ -335,7 +341,7 @@ test_that("imprr_direct validates population and assumption inputs", {
     imprr_direct(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       population = "non-random",
       assumption = "uniform",
@@ -351,7 +357,7 @@ test_that("imprr_direct all-population contaminated matches default target", {
   out_default <- imprr_direct(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 10,
     seed = 123
@@ -360,7 +366,7 @@ test_that("imprr_direct all-population contaminated matches default target", {
   out_contaminated <- imprr_direct(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     population = "all",
     assumption = "contaminated",
@@ -401,7 +407,7 @@ test_that("imprr_direct accepts common input variants", {
   out_default <- imprr_direct(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 10,
     seed = 123
@@ -410,7 +416,7 @@ test_that("imprr_direct accepts common input variants", {
   out_variant <- imprr_direct(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     population = "Non random",
     assumption = "Contaminate",

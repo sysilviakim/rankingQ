@@ -9,11 +9,11 @@
 #' @param J The number of items in the ranking question. Defaults to NULL,
 #'   in which case it will be inferred from the data.
 #' @param main_q Ranking question to be analyzed. When \code{main_q} is a
-#'   single column name or unquoted symbol such as \code{app_identity}, the
-#'   function looks for \code{app_identity_1}, \code{app_identity_2},
-#'   \code{app_identity_3}, and so on. You may also supply \code{main_q}
+#'   single column name or unquoted symbol such as \code{my_ranking}, the
+#'   function looks for \code{my_ranking_1}, \code{my_ranking_2},
+#'   \code{my_ranking_3}, and so on. You may also supply \code{main_q}
 #'   directly as a character vector or unquoted \code{c(...)} expression of
-#'   ranking columns such as \code{c(party, gender, race, religion)}.
+#'   ranking columns such as \code{c(party, religion, gender, race)}.
 #' @param anc_correct Optional indicator for passing the anchor question.
 #'   If \code{NULL}, \code{p_random} is used when supplied; otherwise the
 #'   function defaults to \code{p_random = 0} and applies no correction.
@@ -55,14 +55,14 @@
 #' @examples
 #' dat_w <- add_ipw_weights(
 #'   identity,
-#'   main_q = "app_identity",
+#'   main_q = c("party", "religion", "gender", "race"),
 #'   anc_correct = "anc_correct_identity"
 #' )
 #' head(dat_w)
 #'
 #' out <- add_ipw_weights(
 #'   identity,
-#'   main_q = "app_identity",
+#'   main_q = c("party", "religion", "gender", "race"),
 #'   anc_correct = "anc_correct_identity",
 #'   keep_rankings = TRUE
 #' )
@@ -97,19 +97,19 @@ add_ipw_weights <- function(data,
     stop("data must be a data frame.")
   }
   if (!is.character(weight_col) || length(weight_col) != 1L ||
-      is.na(weight_col) || !nzchar(weight_col)) {
+    is.na(weight_col) || !nzchar(weight_col)) {
     stop("weight_col must be a single column name.")
   }
   if (!is.logical(keep_ranking) || length(keep_ranking) != 1L ||
-      is.na(keep_ranking)) {
+    is.na(keep_ranking)) {
     stop("keep_ranking must be either TRUE or FALSE.")
   }
   if (!is.character(ranking_col) || length(ranking_col) != 1L ||
-      is.na(ranking_col) || !nzchar(ranking_col)) {
+    is.na(ranking_col) || !nzchar(ranking_col)) {
     stop("ranking_col must be a single column name.")
   }
   if (!is.logical(keep_rankings) || length(keep_rankings) != 1L ||
-      is.na(keep_rankings)) {
+    is.na(keep_rankings)) {
     stop("keep_rankings must be either TRUE or FALSE.")
   }
   if (weight_col %in% names(data)) {

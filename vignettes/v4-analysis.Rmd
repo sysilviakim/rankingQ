@@ -28,7 +28,7 @@ weights can then be used for point estimation in downstream analyses.
 ```{r}
 out_weights <- imprr_weights(
   identity,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity"
 )
 
@@ -40,7 +40,7 @@ one can leverage weighted linear regression as follows:
 
 ```{r}
 lm_robust(
-  app_identity_1 ~ 1,
+  party ~ 1,
   data = out_weights$results,
   weights = out_weights$results$weights
 ) |>
@@ -60,7 +60,7 @@ estimates from the IPW-adjusted respondent-level data:
 
 ```{r}
 items_df <- data.frame(
-  variable = paste0("app_identity_", 1:4),
+  variable = c("party", "religion", "gender", "race"),
   item = c("Party", "Religion", "Gender", "Race")
 )
 
@@ -73,7 +73,7 @@ returns summaries in the same general format as `imprr_direct()`:
 ```{r}
 out_boot <- imprr_weights_boot(
   identity,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   n_bootstrap = 10,
   seed = 123

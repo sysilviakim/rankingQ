@@ -53,26 +53,22 @@ roughly 31.6% of the respondents are randomly responding.
 correction to several classes of quantities of interest.
 
 To apply the bias correction, we specify our dataset (`data`), the
-number of items (`J`), the prefix of column names that contain `J`
-items for the target ranking questions, and the prefix of column names
-for the anchor ranking questions. When survey weights are available,
-they can be included by specifying `weight` in the function.
+number of items (`J`), the columns holding the marginal ranks for the
+target ranking question (`main_q`), and the indicator for answering
+the anchor ranking question correctly (`anc_correct`). When survey
+weights are available, they can be included by specifying `weight` in
+the function.
 
 ```{r}
-## app_identity_1 indicates marginal rank for party
-## app_identity_2 indicates marginal rank for religion
-## app_identity_3 indicates marginal rank for gender
-## app_identity_4 indicates marginal rank for race
+## party, religion, gender, and race hold the marginal rank of each item
 
 # Perform bias correction
 out_direct <- imprr_direct(
   data = identity,
-  ## Not strictly necessary if app_identity, the input for `main_q`,
-  ## is specified. In that case, will look for J if unspecified
+  ## Not strictly necessary: when `main_q` lists the ranking columns,
+  ## J is inferred from their number
   J = 4,
-  ## automatically looks for
-  ## app_identity_1, app_identity_2, app_identity_3, app_identity_4
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   # setting to 10 only for our vignette
   n_bootstrap = 10
@@ -93,7 +89,7 @@ preference assumption can be specified as follows:
 out_direct_uniform <- imprr_direct(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   population = "all",
   assumption = "uniform",
@@ -109,7 +105,7 @@ Similarly, the contaminated sampling assumption can be specified as follows:
 out_direct_contaminated <- imprr_direct(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   population = "all",
   assumption = "contaminated",
@@ -150,7 +146,7 @@ out_direct$results %>%
 
 # View the results based on the item
 out_direct$results %>%
-  filter(item == "app_identity_1")
+  filter(item == "party")
 ```
 
 For example, one can visualize the result for average ranks as follows:
@@ -161,8 +157,7 @@ out_direct$results %>%
   mutate(
     item = factor(
       item,
-      levels = paste0("app_identity_", seq(4)),
-      labels = c("party", "religion", "gender", "race")
+      levels = c("party", "religion", "gender", "race")
     )
   ) %>%
   plot_avg_ranking()
@@ -186,7 +181,7 @@ best suited to small or moderate ranking questions; for larger `J`,
 out_weights <- imprr_weights(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity"
 )
 ```
@@ -203,7 +198,7 @@ preference assumption can be specified as follows:
 out_weights_uniform <- imprr_weights(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   population = "all",
   assumption = "uniform"
@@ -217,7 +212,7 @@ Similarly, the contaminated sampling assumption can be specified as follows:
 out_weights_contaminated <- imprr_weights(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   population = "all",
   assumption = "contaminated"

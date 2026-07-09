@@ -6,7 +6,7 @@ test_that("imprr_weights_boot returns direct-style summaries", {
   out <- suppressMessages(imprr_weights_boot(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 2,
     seed = 123
@@ -116,7 +116,7 @@ test_that("imprr_weights_boot handles existing weights output columns safely", {
   out <- suppressMessages(imprr_weights_boot(
     identity_w,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     weight = "s_weight",
     n_bootstrap = 1,
@@ -134,7 +134,7 @@ test_that("imprr_weights_boot validates n_bootstrap and uniform-all semantics", 
     imprr_weights_boot(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 0
     ),
@@ -145,7 +145,7 @@ test_that("imprr_weights_boot validates n_bootstrap and uniform-all semantics", 
     out <- imprr_weights_boot(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       population = "all",
       assumption = "uniform",

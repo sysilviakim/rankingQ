@@ -3,7 +3,7 @@ test_that("tidy() standardizes direct estimator output", {
     imprr_direct(
       rankingQ::identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 5,
       seed = 1
@@ -21,7 +21,7 @@ test_that("tidy() standardizes direct estimator output", {
     out,
     method = "raw",
     type = "pairwise",
-    item = "app_identity_1"
+    item = "party"
   )
 
   expect_named(
@@ -36,7 +36,7 @@ test_that("tidy() standardizes direct estimator output", {
   expect_true(all(avg_direct$type == "average_rank"))
   expect_true(all(pairwise_raw$method == "raw"))
   expect_true(all(pairwise_raw$type == "pairwise"))
-  expect_true(all(pairwise_raw$item == "app_identity_1"))
+  expect_true(all(pairwise_raw$item == "party"))
 })
 
 test_that("summary(), plot(), and autoplot() work for direct outputs", {
@@ -44,7 +44,7 @@ test_that("summary(), plot(), and autoplot() work for direct outputs", {
     imprr_direct(
       rankingQ::identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 5,
       seed = 1
@@ -68,7 +68,7 @@ test_that("tidy() standardizes IPW output regardless of method requested", {
     imprr_weights(
       rankingQ::identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity"
     )
   )
@@ -94,7 +94,7 @@ test_that("imprr_direct_rcpp exposes raw and direct methods through tidy()", {
     imprr_direct_rcpp(
       rankingQ::identity_w,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 5,
       seed = 1

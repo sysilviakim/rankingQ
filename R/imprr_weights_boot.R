@@ -14,7 +14,7 @@
   prob <- as.numeric(rankings_df[[prob_col]])
 
   if (length(prob) != nrow(ranking_mat) ||
-      anyNA(prob) || any(!is.finite(prob))) {
+    anyNA(prob) || any(!is.finite(prob))) {
     stop("The requested probability column must be finite and aligned.")
   }
   if (sum(prob) <= 0) {
@@ -100,11 +100,11 @@
 #' @param J The number of items in the ranking question. Defaults to NULL,
 #' in which case it will be inferred from the data.
 #' @param main_q Ranking question to be analyzed. When `main_q` is a single
-#' column name or unquoted symbol such as `app_identity`, the function looks
-#' for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on. You may
+#' column name or unquoted symbol such as `my_ranking`, the function looks
+#' for `my_ranking_1`, `my_ranking_2`, `my_ranking_3`, and so on. You may
 #' also supply `main_q` directly as a character vector or unquoted
 #' `c(...)` expression of ranking columns such as
-#' `c(party, gender, race, religion)`.
+#' `c(party, religion, gender, race)`.
 #' @param anc_correct Optional indicator for passing the anchor question.
 #'   If `NULL`, `p_random` is used when supplied; otherwise the function
 #'   defaults to `p_random = 0` and applies no correction.
@@ -141,7 +141,7 @@
 #' @examples
 #' out <- imprr_weights_boot(
 #'   identity,
-#'   main_q = "app_identity",
+#'   main_q = c("party", "religion", "gender", "race"),
 #'   anc_correct = "anc_correct_identity",
 #'   n_bootstrap = 2,
 #'   seed = 123
@@ -169,8 +169,8 @@ imprr_weights_boot <- function(data,
   }
 
   if (!is.numeric(n_bootstrap) || length(n_bootstrap) != 1 ||
-      is.na(n_bootstrap) || n_bootstrap < 1 ||
-      n_bootstrap != as.integer(n_bootstrap)) {
+    is.na(n_bootstrap) || n_bootstrap < 1 ||
+    n_bootstrap != as.integer(n_bootstrap)) {
     stop("n_bootstrap must be a single integer >= 1.")
   }
   if (!is.logical(verbose) || length(verbose) != 1 || is.na(verbose)) {

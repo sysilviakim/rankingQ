@@ -26,11 +26,11 @@ add_ipw_weights(
 in which case it will be inferred from the data.}
 
 \item{main_q}{Ranking question to be analyzed. When \code{main_q} is a
-single column name or unquoted symbol such as \code{app_identity}, the
-function looks for \code{app_identity_1}, \code{app_identity_2},
-\code{app_identity_3}, and so on. You may also supply \code{main_q}
+single column name or unquoted symbol such as \code{my_ranking}, the
+function looks for \code{my_ranking_1}, \code{my_ranking_2},
+\code{my_ranking_3}, and so on. You may also supply \code{main_q}
 directly as a character vector or unquoted \code{c(...)} expression of
-ranking columns such as \code{c(party, gender, race, religion)}.}
+ranking columns such as \code{c(party, religion, gender, race)}.}
 
 \item{anc_correct}{Optional indicator for passing the anchor question.
 If \code{NULL}, \code{p_random} is used when supplied; otherwise the
@@ -88,14 +88,14 @@ need the full ranking-profile output.
 \examples{
 dat_w <- add_ipw_weights(
   identity,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity"
 )
 head(dat_w)
 
 out <- add_ipw_weights(
   identity,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   keep_rankings = TRUE
 )

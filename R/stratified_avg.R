@@ -14,8 +14,8 @@
 #' @param J The number of items in the ranking question. Defaults to NULL,
 #' in which case it will be inferred from the data.
 #' @param main_q Main ranking question specification. This can be a single
-#' column name or unquoted symbol such as `app_identity`, in which case the
-#' function looks for `app_identity_1`, `app_identity_2`, and so on. You may
+#' column name or unquoted symbol such as `my_ranking`, in which case the
+#' function looks for `my_ranking_1`, `my_ranking_2`, and so on. You may
 #' also supply `main_q` directly as a character vector or unquoted `c(...)`
 #' expression of ranking columns.
 #' @param anc_correct Optional indicator for passing the anchor question.
@@ -43,7 +43,7 @@
 #' out <- suppressMessages(stratified_avg(
 #'   identity2,
 #'   var_stratum = "stratum",
-#'   main_q = "app_identity",
+#'   main_q = c("party", "religion", "gender", "race"),
 #'   p_random = 0,
 #'   n_bootstrap = 1,
 #'   seed = 123
@@ -60,8 +60,8 @@ stratified_avg <- function(data, var_stratum, J = NULL,
   . <- NULL
 
   if (!is.numeric(n_bootstrap) || length(n_bootstrap) != 1 ||
-      is.na(n_bootstrap) || n_bootstrap < 1 ||
-      n_bootstrap != as.integer(n_bootstrap)) {
+    is.na(n_bootstrap) || n_bootstrap < 1 ||
+    n_bootstrap != as.integer(n_bootstrap)) {
     stop("n_bootstrap must be a single integer >= 1.")
   }
   if (!is.logical(ipw) || length(ipw) != 1 || is.na(ipw)) {
@@ -83,7 +83,7 @@ stratified_avg <- function(data, var_stratum, J = NULL,
 
   ## class check
   if (!is.character(var_stratum) || length(var_stratum) != 1 ||
-      is.na(var_stratum) || !nzchar(var_stratum)) {
+    is.na(var_stratum) || !nzchar(var_stratum)) {
     stop("var_stratum must be a single column name.")
   }
   if (!(var_stratum %in% names(data))) {

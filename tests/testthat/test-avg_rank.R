@@ -94,7 +94,7 @@ test_that("Wide-format item labels must match the number of ranked items", {
 test_that("IPW avg_rank accepts item mappings as a data frame", {
   identity_w <- rankingQ::identity_w
   items_df <- data.frame(
-    variable = paste0("app_identity_", 1:4),
+    variable = c("party", "religion", "gender", "race"),
     item = c("Party", "Religion", "Gender", "Race")
   )
 
@@ -136,7 +136,7 @@ test_that("avg_rank ignores unrelated duplicate output columns", {
   )
 
   items_df <- data.frame(
-    variable = paste0("app_identity_", 1:4),
+    variable = c("party", "religion", "gender", "race"),
     item = c("Party", "Religion", "Gender", "Race")
   )
   ipw_result <- avg_rank(

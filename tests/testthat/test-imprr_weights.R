@@ -5,7 +5,7 @@ test_that("IPW estimation works", {
   example_ipw <- imprr_weights(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity"
   )
 
@@ -30,7 +30,7 @@ test_that("imprr_weights messages when using equal weights by default", {
     imprr_weights(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity"
     ),
     "No weight column supplied; using equal weights for all observations."
@@ -42,7 +42,7 @@ test_that("IPW weights sum to approximately 1", {
   example_ipw <- imprr_weights(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity"
   )
 
@@ -143,7 +143,7 @@ test_that("imprr_weights errors on missing weight column", {
     imprr_weights(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       weight = "missing_weight"
     ),
@@ -199,7 +199,7 @@ test_that("imprr_weights validates missing anc_correct and empty data clearly", 
     imprr_weights(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "missing_anc"
     ),
     "anc_correct column not found in data."
@@ -209,7 +209,7 @@ test_that("imprr_weights validates missing anc_correct and empty data clearly", 
     imprr_weights(
       identity[0, ],
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity"
     ),
     "There is no data to analyze"
@@ -234,6 +234,11 @@ test_that("imprr_weights validates J inference requirements clearly", {
 
 test_that("imprr_weights infers J when the first main_q value is NA", {
   identity <- rankingQ::identity
+  # Restore stem-named marginal columns so this test keeps covering the
+  # single-stem auto-detection path (main_q_1, ..., main_q_J).
+  names(identity)[match(
+    c("party", "religion", "gender", "race"), names(identity)
+  )] <- paste0("app_identity_", 1:4)
   identity$app_identity[1] <- NA_character_
 
   out_inferred <- imprr_weights(
@@ -262,7 +267,7 @@ test_that("imprr_weights no longer accepts seed", {
     imprr_weights(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       seed = 1
     ),
@@ -357,7 +362,7 @@ test_that("imprr_weights validates population and assumption inputs", {
     imprr_weights(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       population = "oops"
     ),
@@ -368,7 +373,7 @@ test_that("imprr_weights validates population and assumption inputs", {
     imprr_weights(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       population = "all",
       assumption = "oops"
@@ -380,7 +385,7 @@ test_that("imprr_weights validates population and assumption inputs", {
     imprr_weights(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       population = "non-random",
       assumption = "uniform"
@@ -395,14 +400,14 @@ test_that("imprr_weights all-population contaminated matches default target", {
   out_default <- imprr_weights(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity"
   )
 
   out_contaminated <- imprr_weights(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     population = "all",
     assumption = "contaminated"
@@ -419,14 +424,14 @@ test_that("imprr_weights accepts common input variants", {
   out_default <- imprr_weights(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity"
   )
 
   out_variant <- imprr_weights(
     identity,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     population = "Non random",
     assumption = "Contaminate"
@@ -444,7 +449,7 @@ test_that("imprr_weights errors on conflicting output column names", {
     imprr_weights(
       identity_w,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity"
     ),
     paste(
@@ -479,7 +484,7 @@ test_that("add_ipw_weights returns augmented data by default", {
     imprr_weights(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity"
     )
   )
@@ -487,7 +492,7 @@ test_that("add_ipw_weights returns augmented data by default", {
     add_ipw_weights(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity"
     )
   )
@@ -500,6 +505,11 @@ test_that("add_ipw_weights returns augmented data by default", {
 
 test_that("add_ipw_weights optionally keeps ranking outputs", {
   identity <- rankingQ::identity
+  # Restore stem-named marginal columns: main_q is given as an unquoted
+  # bare symbol, which exercises the single-stem auto-detection path.
+  names(identity)[match(
+    c("party", "religion", "gender", "race"), names(identity)
+  )] <- paste0("app_identity_", 1:4)
 
   out <- suppressMessages(
     add_ipw_weights(
@@ -548,7 +558,7 @@ test_that("add_ipw_weights validates output column collisions", {
     add_ipw_weights(
       identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity"
     ),
     "weight_col already exists in data."
@@ -558,7 +568,7 @@ test_that("add_ipw_weights validates output column collisions", {
     add_ipw_weights(
       rankingQ::identity,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       keep_ranking = TRUE,
       ranking_col = "app_identity"

@@ -6,7 +6,7 @@ test_that("imprr_direct_rcpp returns expected structure", {
   result <- imprr_direct_rcpp(
     data = identity_w,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 50,
     seed = 123
@@ -36,7 +36,7 @@ test_that("imprr_direct_rcpp messages when using equal weights by default", {
     imprr_direct_rcpp(
       data = identity_w,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 1,
       seed = 123
@@ -51,7 +51,7 @@ test_that("imprr_direct_rcpp produces reasonable estimates", {
   result <- imprr_direct_rcpp(
     data = identity_w,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 100,
     seed = 456
@@ -71,7 +71,7 @@ test_that("imprr_direct_rcpp accepts a weight column name", {
   result <- imprr_direct_rcpp(
     data = identity_w,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 50,
     seed = 789,
@@ -150,7 +150,7 @@ test_that("imprr_direct_rcpp errors on missing weight column", {
     imprr_direct_rcpp(
       data = identity_w,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 10,
       seed = 789,
@@ -167,7 +167,7 @@ test_that("imprr_direct_rcpp rejects invalid weight values", {
     imprr_direct_rcpp(
       data = identity_w,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 1,
       seed = 789,
@@ -179,7 +179,7 @@ test_that("imprr_direct_rcpp rejects invalid weight values", {
     imprr_direct_rcpp(
       data = transform(identity_w, zero_weight = 0),
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 1,
       seed = 789,
@@ -196,7 +196,7 @@ test_that("imprr_direct_rcpp validates bootstrap count", {
     imprr_direct_rcpp(
       data = identity_w,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 0,
       seed = 789
@@ -208,6 +208,7 @@ test_that("imprr_direct_rcpp validates bootstrap count", {
 test_that("imprr_direct_rcpp validates main_q when inferring J", {
   data(identity_w)
 
+  # Single-stem main_q with J = NULL requires the full-profile column.
   expect_error(
     imprr_direct_rcpp(
       data = identity_w[, setdiff(names(identity_w), "app_identity")],
@@ -226,6 +227,11 @@ test_that("imprr_direct_rcpp validates main_q when inferring J", {
 
 test_that("imprr_direct_rcpp infers J when the first main_q value is NA", {
   data(identity_w)
+  # Restore stem-named marginal columns so this test keeps covering the
+  # single-stem auto-detection path (main_q_1, ..., main_q_J).
+  names(identity_w)[match(
+    c("party", "religion", "gender", "race"), names(identity_w)
+  )] <- paste0("app_identity_", 1:4)
   identity_w$app_identity[1] <- NA_character_
 
   out_inferred <- imprr_direct_rcpp(
@@ -257,7 +263,7 @@ test_that("imprr_direct_rcpp validates anc_correct column presence", {
     imprr_direct_rcpp(
       data = identity_w,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "missing_anchor",
       n_bootstrap = 1,
       seed = 789
@@ -273,7 +279,7 @@ test_that("imprr_direct_rcpp rejects empty data", {
     imprr_direct_rcpp(
       data = identity_w[0, ],
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 1,
       seed = 789
@@ -396,7 +402,7 @@ test_that("imprr_direct_rcpp validates population and assumption inputs", {
     imprr_direct_rcpp(
       data = identity_w,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       population = "oops",
       n_bootstrap = 1,
@@ -409,7 +415,7 @@ test_that("imprr_direct_rcpp validates population and assumption inputs", {
     imprr_direct_rcpp(
       data = identity_w,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       population = "all",
       assumption = "oops",
@@ -423,7 +429,7 @@ test_that("imprr_direct_rcpp validates population and assumption inputs", {
     imprr_direct_rcpp(
       data = identity_w,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       population = "non-random",
       assumption = "uniform",
@@ -437,64 +443,64 @@ test_that("imprr_direct_rcpp validates population and assumption inputs", {
 test_that(
   "imprr_direct_rcpp all-population contaminated matches default target",
   {
-  data(identity_w)
+    data(identity_w)
 
-  out_default <- imprr_direct_rcpp(
-    data = identity_w,
-    J = 4,
-    main_q = "app_identity",
-    anc_correct = "anc_correct_identity",
-    n_bootstrap = 10,
-    seed = 123
-  )
+    out_default <- imprr_direct_rcpp(
+      data = identity_w,
+      J = 4,
+      main_q = c("party", "religion", "gender", "race"),
+      anc_correct = "anc_correct_identity",
+      n_bootstrap = 10,
+      seed = 123
+    )
 
-  out_contaminated <- imprr_direct_rcpp(
-    data = identity_w,
-    J = 4,
-    main_q = "app_identity",
-    anc_correct = "anc_correct_identity",
-    population = "all",
-    assumption = "contaminated",
-    n_bootstrap = 10,
-    seed = 123
-  )
+    out_contaminated <- imprr_direct_rcpp(
+      data = identity_w,
+      J = 4,
+      main_q = c("party", "religion", "gender", "race"),
+      anc_correct = "anc_correct_identity",
+      population = "all",
+      assumption = "contaminated",
+      n_bootstrap = 10,
+      seed = 123
+    )
 
-  expect_equal(out_contaminated$est_p_random, out_default$est_p_random)
-  expect_equal(out_contaminated$results, out_default$results)
+    expect_equal(out_contaminated$est_p_random, out_default$est_p_random)
+    expect_equal(out_contaminated$results, out_default$results)
   }
 )
 
 test_that(
   "imprr_direct_rcpp all-population uniform falls back to no correction",
   {
-  data(identity_w)
+    data(identity_w)
 
-  expect_message(
-    out_uniform <- imprr_direct_rcpp(
+    expect_message(
+      out_uniform <- imprr_direct_rcpp(
+        data = identity_w,
+        J = 4,
+        main_q = c("party", "religion", "gender", "race"),
+        anc_correct = "anc_correct_identity",
+        population = "all",
+        assumption = "uniform",
+        n_bootstrap = 10,
+        seed = 123
+      ),
+      "population = 'all' with assumption = 'uniform' implies no correction"
+    )
+
+    out_no_correction <- imprr_direct(
       data = identity_w,
       J = 4,
-      main_q = "app_identity",
-      anc_correct = "anc_correct_identity",
-      population = "all",
-      assumption = "uniform",
+      main_q = c("party", "religion", "gender", "race"),
+      p_random = 0,
       n_bootstrap = 10,
       seed = 123
-    ),
-    "population = 'all' with assumption = 'uniform' implies no correction"
-  )
+    )
 
-  out_no_correction <- imprr_direct(
-    data = identity_w,
-    J = 4,
-    main_q = "app_identity",
-    p_random = 0,
-    n_bootstrap = 10,
-    seed = 123
-  )
-
-  expect_equal(as.numeric(out_uniform$est_p_random[1, ]), c(0, 0, 0))
-  expect_equal(out_uniform$est_p_random, out_no_correction$est_p_random)
-  expect_equal(out_uniform$results, out_no_correction$results)
+    expect_equal(as.numeric(out_uniform$est_p_random[1, ]), c(0, 0, 0))
+    expect_equal(out_uniform$est_p_random, out_no_correction$est_p_random)
+    expect_equal(out_uniform$results, out_no_correction$results)
   }
 )
 
@@ -504,7 +510,7 @@ test_that("imprr_direct_rcpp accepts common input variants", {
   out_default <- imprr_direct_rcpp(
     data = identity_w,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 10,
     seed = 123
@@ -513,7 +519,7 @@ test_that("imprr_direct_rcpp accepts common input variants", {
   out_variant <- imprr_direct_rcpp(
     data = identity_w,
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     population = "Non random",
     assumption = "Contaminate",
@@ -532,7 +538,7 @@ test_that("imprr_direct_rcpp with verbose output", {
     imprr_direct_rcpp(
       data = identity_w,
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 10,
       seed = 111,

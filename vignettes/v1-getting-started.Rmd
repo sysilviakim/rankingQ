@@ -39,13 +39,9 @@ race. The key theoretical concept is *relative partisanship*—the extent
 to which people prioritize partisanship over other sources of identity.
 
 ```{r}
-identity |> 
-  rename(party = app_identity_1,
-         religion = app_identity_2,
-         gender = app_identity_3,
-         race = app_identity_4) |>
+identity |>
   select(
-    app_identity, 
+    app_identity,
     party, religion, gender, race
   ) |>
   head()
@@ -58,15 +54,16 @@ identity |>
   select(
     s_weight,
     app_identity,
-    starts_with("app_identity_"),
+    party, religion, gender, race,
     anc_correct_identity
   ) |>
   head()
 ```
 
-The `app_identity` columns describe the ranking question of interest,
-while `anc_correct_identity` indicates whether each respondent answered
-the anchor question correctly.
+The `app_identity` column stores the full ranking profile, the item
+columns (`party`, `religion`, `gender`, `race`) store the marginal
+ranks, and `anc_correct_identity` indicates whether each respondent
+answered the anchor question correctly.
 
 ## Estimate Ranking-Based Quantities
 
@@ -82,7 +79,7 @@ probabilities.
 out_direct <- imprr_direct(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   weight = "s_weight"
 )
 ```
@@ -113,7 +110,7 @@ respondent has the right answer for the anchor question and 0 otherwise.
 out_direct <- imprr_direct(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   weight = "s_weight"
 )
@@ -146,7 +143,7 @@ downstream analyses.
 out_weights <- imprr_weights(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   weight = "s_weight"
 )
@@ -180,7 +177,7 @@ helpers such as `avg_rank`.
 
 ```{r}
 items_df <- data.frame(
-  variable = paste0("app_identity_", 1:4),
+  variable = c("party", "religion", "gender", "race"),
   item = c("Party", "Religion", "Gender", "Race")
 )
 

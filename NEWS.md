@@ -2,6 +2,13 @@
 
 * First CRAN submission. The package was previously available on GitHub
   under version 0.1.0.
+* The bundled `identity` and `identity_w` datasets now use item names for
+  the marginal-rank columns: `party`, `religion`, `gender`, `race`
+  (previously `app_identity_1`--`app_identity_4`) and `household`,
+  `neighborhood`, `city`, `state` (previously
+  `anc_identity_1`--`anc_identity_4`). Examples and vignettes now pass
+  these columns explicitly, e.g.
+  `main_q = c("party", "religion", "gender", "race")`.
 * New exported function `rank_wider()` for converting long-format ranking
   data to wide format (one column per item or a single pasted ranking
   string).

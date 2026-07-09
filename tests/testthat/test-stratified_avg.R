@@ -9,13 +9,13 @@ test_that("stratified_avg returns correct structure", {
   )
 
   result <- suppressMessages(stratified_avg(
-    data         = identity,
-    var_stratum  = "test_stratum",
-    J            = 4,
-    main_q       = "app_identity",
-    anc_correct  = "anc_correct_identity",
-    n_bootstrap  = 1,
-    seed         = 123
+    data = identity,
+    var_stratum = "test_stratum",
+    J = 4,
+    main_q = c("party", "religion", "gender", "race"),
+    anc_correct = "anc_correct_identity",
+    n_bootstrap = 1,
+    seed = 123
   ))
 
   expect_s3_class(result, "data.frame")
@@ -37,7 +37,7 @@ test_that("stratified_avg returns IPW averages when ipw = TRUE", {
     data = identity,
     var_stratum = "test_stratum",
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 1,
     ipw = TRUE,
@@ -49,7 +49,7 @@ test_that("stratified_avg returns IPW averages when ipw = TRUE", {
   expect_false(anyNA(result$mean))
   expect_setequal(
     as.character(unique(result$item)),
-    paste0("app_identity_", 1:4)
+    c("party", "religion", "gender", "race")
   )
 })
 
@@ -57,20 +57,20 @@ test_that("stratified_avg errors on invalid var_stratum input", {
   identity <- rankingQ::identity
   expect_error(
     stratified_avg(
-      data        = identity,
+      data = identity,
       var_stratum = 123,
-      J           = 4,
-      main_q      = "app_identity",
+      J = 4,
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity"
     ),
     "var_stratum must be a single column name."
   )
   expect_error(
     stratified_avg(
-      data        = identity,
+      data = identity,
       var_stratum = "missing",
-      J           = 4,
-      main_q      = "app_identity",
+      J = 4,
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity"
     ),
     "The stratifying variable is not contained in the given data frame."
@@ -95,10 +95,10 @@ test_that("stratified_avg errors on non-character anc_correct", {
   identity <- rankingQ::identity
   expect_error(
     stratified_avg(
-      data        = identity,
+      data = identity,
       var_stratum = "anc_correct_identity",
-      J           = 4,
-      main_q      = "app_identity",
+      J = 4,
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = 123
     ),
     "anc_correct must be a single column name."
@@ -114,7 +114,7 @@ test_that("stratified_avg works without anc_correct when p_random is fixed", {
     data = identity,
     var_stratum = "test_stratum",
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     p_random = 0,
     n_bootstrap = 1,
     seed = 123
@@ -134,10 +134,10 @@ test_that("stratified_avg accepts direct ranking-column input and bare names", {
     data = identity,
     var_stratum = "test_stratum",
     main_q = c(
-      app_identity_1,
-      app_identity_2,
-      app_identity_3,
-      app_identity_4
+      party,
+      religion,
+      gender,
+      race
     ),
     anc_correct = anc_correct_identity,
     weight = s_weight,
@@ -164,7 +164,7 @@ test_that("stratified_avg uses provided weight vector", {
     data = identity,
     var_stratum = "test_stratum",
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     weight = w1,
     n_bootstrap = 1,
@@ -174,7 +174,7 @@ test_that("stratified_avg uses provided weight vector", {
     data = identity,
     var_stratum = "test_stratum",
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     weight = w2,
     n_bootstrap = 1,
@@ -193,7 +193,7 @@ test_that("stratified_avg matches equivalent vector and column-name weights", {
     data = identity,
     var_stratum = "test_stratum",
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     weight = identity$s_weight,
     n_bootstrap = 1,
@@ -203,7 +203,7 @@ test_that("stratified_avg matches equivalent vector and column-name weights", {
     data = identity,
     var_stratum = "test_stratum",
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     weight = "s_weight",
     n_bootstrap = 1,
@@ -221,7 +221,7 @@ test_that("stratified_avg infers J and is reproducible with the same seed", {
   out1 <- suppressMessages(stratified_avg(
     data = identity,
     var_stratum = "test_stratum",
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 1,
     seed = 321
@@ -229,7 +229,7 @@ test_that("stratified_avg infers J and is reproducible with the same seed", {
   out2 <- suppressMessages(stratified_avg(
     data = identity,
     var_stratum = "test_stratum",
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 1,
     seed = 321
@@ -237,7 +237,10 @@ test_that("stratified_avg infers J and is reproducible with the same seed", {
 
   expect_identical(out1, out2)
   expect_equal(nrow(out1), 1 * 4)
-  expect_setequal(as.character(unique(out1$item)), paste0("app_identity_", 1:4))
+  expect_setequal(
+    as.character(unique(out1$item)),
+    c("party", "religion", "gender", "race")
+  )
 })
 
 test_that("stratified_avg infers J when the first main_q value is NA", {
@@ -250,7 +253,7 @@ test_that("stratified_avg infers J when the first main_q value is NA", {
     data = identity,
     var_stratum = "test_stratum",
     J = NULL,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 1,
     seed = 321
@@ -260,7 +263,7 @@ test_that("stratified_avg infers J when the first main_q value is NA", {
     data = identity,
     var_stratum = "test_stratum",
     J = 4,
-    main_q = "app_identity",
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 1,
     seed = 321
@@ -279,7 +282,7 @@ test_that("stratified_avg validates labels length before computation", {
       data = identity,
       var_stratum = "test_stratum",
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       labels = "only_one",
       n_bootstrap = 1,
@@ -293,7 +296,7 @@ test_that("stratified_avg validates labels length before computation", {
       data = identity,
       var_stratum = "test_stratum",
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       labels = c("a", "b", "c"),
       n_bootstrap = 1,
@@ -315,7 +318,7 @@ test_that("stratified_avg emits the equal-weights message only once", {
       data = identity,
       var_stratum = "test_stratum",
       J = 4,
-      main_q = "app_identity",
+      main_q = c("party", "religion", "gender", "race"),
       anc_correct = "anc_correct_identity",
       n_bootstrap = 2,
       seed = 123

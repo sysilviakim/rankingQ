@@ -11,7 +11,7 @@ library(dplyr)
 data(identity_w)
 
 # Parameters
-main_q <- "app_identity"
+main_q <- c("party", "religion", "gender", "race")
 anc_correct <- "anc_correct_identity"
 J <- 4
 
@@ -81,22 +81,28 @@ for (nb in n_boots) {
   # Tidyverse (only run small ones to save time)
   if (nb <= 200) {
     t_tidy <- system.time({
-      imprr_direct(identity_w, J = J, main_q = main_q,
-                   anc_correct = anc_correct, n_bootstrap = nb, seed = 123)
+      imprr_direct(identity_w,
+        J = J, main_q = main_q,
+        anc_correct = anc_correct, n_bootstrap = nb, seed = 123
+      )
     })["elapsed"]
   } else {
-    t_tidy <- time_tidy * (nb / 200)  # Estimate based on linear scaling
+    t_tidy <- time_tidy * (nb / 200) # Estimate based on linear scaling
     cat("  (Tidyverse estimated)\n")
   }
 
   # Rcpp
   t_rcpp <- system.time({
-    imprr_direct_rcpp(identity_w, J = J, main_q = main_q,
-                      anc_correct = anc_correct, n_bootstrap = nb, seed = 123)
+    imprr_direct_rcpp(identity_w,
+      J = J, main_q = main_q,
+      anc_correct = anc_correct, n_bootstrap = nb, seed = 123
+    )
   })["elapsed"]
 
-  cat("  Tidyverse:", round(t_tidy, 2), "s | Rcpp:", round(t_rcpp, 2),
-      "s | Speedup:", round(t_tidy / t_rcpp, 0), "x\n")
+  cat(
+    "  Tidyverse:", round(t_tidy, 2), "s | Rcpp:", round(t_rcpp, 2),
+    "s | Speedup:", round(t_tidy / t_rcpp, 0), "x\n"
+  )
 }
 
 cat("\n=== Benchmark Complete ===\n")

@@ -4,8 +4,8 @@ test_that("plot_avg_ranking returns a ggplot object", {
   identity <- rankingQ::identity
   result <- imprr_direct(
     identity,
-    J           = 4,
-    main_q      = "app_identity",
+    J = 4,
+    main_q = c("party", "religion", "gender", "race"),
     anc_correct = "anc_correct_identity",
     n_bootstrap = 5
   )
