@@ -39,11 +39,11 @@ add_ipw_weights(
 - main_q:
 
   Ranking question to be analyzed. When `main_q` is a single column name
-  or unquoted symbol such as `app_identity`, the function looks for
-  `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on. You
-  may also supply `main_q` directly as a character vector or unquoted
+  or unquoted symbol such as `my_ranking`, the function looks for
+  `my_ranking_1`, `my_ranking_2`, `my_ranking_3`, and so on. You may
+  also supply `main_q` directly as a character vector or unquoted
   `c(...)` expression of ranking columns such as
-  `c(party, gender, race, religion)`.
+  `c(party, religion, gender, race)`.
 
 - anc_correct:
 
@@ -120,48 +120,46 @@ three elements:
 ``` r
 dat_w <- add_ipw_weights(
   identity,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity"
 )
 #> No weight column supplied; using equal weights for all observations.
 head(dat_w)
 #> # A tibble: 6 × 17
-#>   s_weight app_identity app_identity_1 app_identity_2 app_identity_3
-#>      <dbl> <chr>                 <dbl>          <dbl>          <dbl>
-#> 1    0.844 1423                      1              4              2
-#> 2    0.886 1423                      1              4              2
-#> 3    2.96  3412                      3              4              1
-#> 4    0.987 1423                      1              4              2
-#> 5    1.76  4132                      4              1              3
-#> 6    0.469 3124                      3              1              2
-#> # ℹ 12 more variables: app_identity_4 <dbl>, anc_identity <chr>,
-#> #   anc_identity_1 <dbl>, anc_identity_2 <dbl>, anc_identity_3 <dbl>,
-#> #   anc_identity_4 <dbl>, anc_correct_identity <dbl>,
-#> #   app_identity_recorded <chr>, anc_identity_recorded <chr>,
-#> #   app_identity_row_rnd <chr>, anc_identity_row_rnd <chr>, ipw_weights <dbl>
+#>   s_weight app_identity party religion gender  race anc_identity household
+#>      <dbl> <chr>        <dbl>    <dbl>  <dbl> <dbl> <chr>            <dbl>
+#> 1    0.844 1423             1        4      2     3 1234                 1
+#> 2    0.886 1423             1        4      2     3 1234                 1
+#> 3    2.96  3412             3        4      1     2 1234                 1
+#> 4    0.987 1423             1        4      2     3 1234                 1
+#> 5    1.76  4132             4        1      3     2 1324                 1
+#> 6    0.469 3124             3        1      2     4 1234                 1
+#> # ℹ 9 more variables: neighborhood <dbl>, city <dbl>, state <dbl>,
+#> #   anc_correct_identity <dbl>, app_identity_recorded <chr>,
+#> #   anc_identity_recorded <chr>, app_identity_row_rnd <chr>,
+#> #   anc_identity_row_rnd <chr>, ipw_weights <dbl>
 
 out <- add_ipw_weights(
   identity,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   keep_rankings = TRUE
 )
 #> No weight column supplied; using equal weights for all observations.
 head(out$data)
 #> # A tibble: 6 × 17
-#>   s_weight app_identity app_identity_1 app_identity_2 app_identity_3
-#>      <dbl> <chr>                 <dbl>          <dbl>          <dbl>
-#> 1    0.844 1423                      1              4              2
-#> 2    0.886 1423                      1              4              2
-#> 3    2.96  3412                      3              4              1
-#> 4    0.987 1423                      1              4              2
-#> 5    1.76  4132                      4              1              3
-#> 6    0.469 3124                      3              1              2
-#> # ℹ 12 more variables: app_identity_4 <dbl>, anc_identity <chr>,
-#> #   anc_identity_1 <dbl>, anc_identity_2 <dbl>, anc_identity_3 <dbl>,
-#> #   anc_identity_4 <dbl>, anc_correct_identity <dbl>,
-#> #   app_identity_recorded <chr>, anc_identity_recorded <chr>,
-#> #   app_identity_row_rnd <chr>, anc_identity_row_rnd <chr>, ipw_weights <dbl>
+#>   s_weight app_identity party religion gender  race anc_identity household
+#>      <dbl> <chr>        <dbl>    <dbl>  <dbl> <dbl> <chr>            <dbl>
+#> 1    0.844 1423             1        4      2     3 1234                 1
+#> 2    0.886 1423             1        4      2     3 1234                 1
+#> 3    2.96  3412             3        4      1     2 1234                 1
+#> 4    0.987 1423             1        4      2     3 1234                 1
+#> 5    1.76  4132             4        1      3     2 1324                 1
+#> 6    0.469 3124             3        1      2     4 1234                 1
+#> # ℹ 9 more variables: neighborhood <dbl>, city <dbl>, state <dbl>,
+#> #   anc_correct_identity <dbl>, app_identity_recorded <chr>,
+#> #   anc_identity_recorded <chr>, app_identity_row_rnd <chr>,
+#> #   anc_identity_row_rnd <chr>, ipw_weights <dbl>
 head(out$rankings)
 #>   ranking  n    prop_obs     prop_bc   weights   prop_bc_raw prop_bc_adj
 #> 1    1234 14 0.012939002 0.000000000 0.0000000 -0.0003526508 0.000000000

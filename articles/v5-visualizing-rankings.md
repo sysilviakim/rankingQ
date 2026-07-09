@@ -38,7 +38,7 @@ data(identity)
 out_direct <- imprr_direct(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   n_bootstrap = 10
 )
@@ -59,7 +59,7 @@ out_direct$results |>
   mutate(
     item = factor(
       item,
-      levels = paste0("app_identity_", seq(4)),
+      levels = c("party", "religion", "gender", "race"),
       labels = c("Party", "Religion", "Gender", "Race")
     )
   ) |>

@@ -40,10 +40,10 @@ stratified_avg(
 - main_q:
 
   Main ranking question specification. This can be a single column name
-  or unquoted symbol such as \`app_identity\`, in which case the
-  function looks for \`app_identity_1\`, \`app_identity_2\`, and so on.
-  You may also supply \`main_q\` directly as a character vector or
-  unquoted \`c(...)\` expression of ranking columns.
+  or unquoted symbol such as \`my_ranking\`, in which case the function
+  looks for \`my_ranking_1\`, \`my_ranking_2\`, and so on. You may also
+  supply \`main_q\` directly as a character vector or unquoted
+  \`c(...)\` expression of ranking columns.
 
 - anc_correct:
 
@@ -96,15 +96,15 @@ identity2$stratum <- rep(c("group1", "group2"), length.out = nrow(identity2))
 out <- suppressMessages(stratified_avg(
   identity2,
   var_stratum = "stratum",
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   p_random = 0,
   n_bootstrap = 1,
   seed = 123
 ))
 head(out)
-#>       mean           item
-#> 1 3.052680 app_identity_1
-#> 2 2.536044 app_identity_2
-#> 3 1.949168 app_identity_3
-#> 4 2.462107 app_identity_4
+#>       mean     item
+#> 1 1.949168   gender
+#> 2 3.052680    party
+#> 3 2.462107     race
+#> 4 2.536044 religion
 ```

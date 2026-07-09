@@ -16,7 +16,7 @@ used for point estimation in downstream analyses.
 
 out_weights <- imprr_weights(
   identity,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity"
 )
 #> No weight column supplied; using equal weights for all observations.
@@ -31,15 +31,15 @@ one can leverage weighted linear regression as follows:
 ``` r
 
 lm_robust(
-  app_identity_1 ~ 1,
+  party ~ 1,
   data = out_weights$results,
   weights = out_weights$results$weights
 ) |>
   tidy()
 #>          term estimate  std.error statistic p.value conf.low conf.high   df
 #> 1 (Intercept) 3.220388 0.02790142  115.4202       0 3.165641  3.275135 1081
-#>          outcome
-#> 1 app_identity_1
+#>   outcome
+#> 1   party
 ```
 
 That gives a valid point estimate, but its standard error treats the
@@ -58,7 +58,7 @@ estimates from the IPW-adjusted respondent-level data:
 ``` r
 
 items_df <- data.frame(
-  variable = paste0("app_identity_", 1:4),
+  variable = c("party", "religion", "gender", "race"),
   item = c("Party", "Religion", "Gender", "Race")
 )
 
@@ -79,7 +79,7 @@ returns summaries in the same general format as
 
 out_boot <- imprr_weights_boot(
   identity,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   n_bootstrap = 10,
   seed = 123
@@ -91,12 +91,12 @@ out_boot$est_p_random
 #> 1 0.3157438 0.2982159 0.3334646
 subset(out_boot$results, qoi == "average rank")
 #> # A tibble: 4 × 6
-#>   item           qoi          outcome              mean lower upper
-#>   <chr>          <chr>        <chr>               <dbl> <dbl> <dbl>
-#> 1 app_identity_1 average rank Avg: app_identity_1  3.21  3.15  3.30
-#> 2 app_identity_2 average rank Avg: app_identity_2  2.61  2.52  2.71
-#> 3 app_identity_3 average rank Avg: app_identity_3  1.70  1.66  1.73
-#> 4 app_identity_4 average rank Avg: app_identity_4  2.47  2.41  2.55
+#>   item     qoi          outcome        mean lower upper
+#>   <chr>    <chr>        <chr>         <dbl> <dbl> <dbl>
+#> 1 gender   average rank Avg: gender    1.70  1.66  1.73
+#> 2 party    average rank Avg: party     3.21  3.15  3.30
+#> 3 race     average rank Avg: race      2.47  2.41  2.55
+#> 4 religion average rank Avg: religion  2.61  2.52  2.71
 ```
 
 The same object also contains bootstrap summaries for pairwise, top-k,
@@ -106,20 +106,20 @@ and marginal ranking quantities:
 
 subset(out_boot$results, qoi == "pairwise ranking")
 #> # A tibble: 12 × 6
-#>    item           qoi              outcome            mean lower upper
-#>    <chr>          <chr>            <chr>             <dbl> <dbl> <dbl>
-#>  1 app_identity_1 pairwise ranking v. app_identity_2 0.381 0.348 0.426
-#>  2 app_identity_1 pairwise ranking v. app_identity_3 0.133 0.107 0.158
-#>  3 app_identity_1 pairwise ranking v. app_identity_4 0.275 0.242 0.307
-#>  4 app_identity_2 pairwise ranking v. app_identity_1 0.619 0.574 0.652
-#>  5 app_identity_2 pairwise ranking v. app_identity_3 0.342 0.320 0.369
-#>  6 app_identity_2 pairwise ranking v. app_identity_4 0.429 0.388 0.468
-#>  7 app_identity_3 pairwise ranking v. app_identity_1 0.867 0.842 0.893
-#>  8 app_identity_3 pairwise ranking v. app_identity_2 0.658 0.631 0.680
-#>  9 app_identity_3 pairwise ranking v. app_identity_4 0.770 0.740 0.792
-#> 10 app_identity_4 pairwise ranking v. app_identity_1 0.725 0.693 0.758
-#> 11 app_identity_4 pairwise ranking v. app_identity_2 0.571 0.532 0.612
-#> 12 app_identity_4 pairwise ranking v. app_identity_3 0.230 0.208 0.260
+#>    item     qoi              outcome      mean lower upper
+#>    <chr>    <chr>            <chr>       <dbl> <dbl> <dbl>
+#>  1 gender   pairwise ranking v. party    0.867 0.842 0.893
+#>  2 gender   pairwise ranking v. race     0.770 0.740 0.792
+#>  3 gender   pairwise ranking v. religion 0.658 0.631 0.680
+#>  4 party    pairwise ranking v. gender   0.133 0.107 0.158
+#>  5 party    pairwise ranking v. race     0.275 0.242 0.307
+#>  6 party    pairwise ranking v. religion 0.381 0.348 0.426
+#>  7 race     pairwise ranking v. gender   0.230 0.208 0.260
+#>  8 race     pairwise ranking v. party    0.725 0.693 0.758
+#>  9 race     pairwise ranking v. religion 0.571 0.532 0.612
+#> 10 religion pairwise ranking v. gender   0.342 0.320 0.369
+#> 11 religion pairwise ranking v. party    0.619 0.574 0.652
+#> 12 religion pairwise ranking v. race     0.429 0.388 0.468
 ```
 
 If you want uncertainty for an arbitrary downstream weighted analysis,

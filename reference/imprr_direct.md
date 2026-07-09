@@ -35,11 +35,11 @@ imprr_direct(
 - main_q:
 
   Ranking question to be analyzed. When \`main_q\` is a single column
-  name or unquoted symbol such as \`app_identity\`, the function looks
-  for \`app_identity_1\`, \`app_identity_2\`, \`app_identity_3\`, and so
-  on. You may also supply \`main_q\` directly as a character vector or
-  unquoted \`c(...)\` expression of ranking columns such as \`c(party,
-  gender, race, religion)\`.
+  name or unquoted symbol such as \`my_ranking\`, the function looks for
+  \`my_ranking_1\`, \`my_ranking_2\`, \`my_ranking_3\`, and so on. You
+  may also supply \`main_q\` directly as a character vector or unquoted
+  \`c(...)\` expression of ranking columns such as \`c(party, religion,
+  gender, race)\`.
 
 - anc_correct:
 
@@ -104,7 +104,7 @@ A list with two elements:
 ``` r
 out <- imprr_direct(
   identity,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   n_bootstrap = 1,
   seed = 123
@@ -115,12 +115,12 @@ out$est_p_random
 #> 1 0.310536 0.310536 0.310536
 head(out$results)
 #> # A tibble: 6 × 6
-#>   item           qoi              outcome               mean  lower  upper
-#>   <chr>          <chr>            <chr>                <dbl>  <dbl>  <dbl>
-#> 1 app_identity_1 average rank     Avg: app_identity_1 3.33   3.33   3.33  
-#> 2 app_identity_1 marginal ranking Ranked 1            0.0362 0.0362 0.0362
-#> 3 app_identity_1 marginal ranking Ranked 2            0.137  0.137  0.137 
-#> 4 app_identity_1 marginal ranking Ranked 3            0.284  0.284  0.284 
-#> 5 app_identity_1 marginal ranking Ranked 4            0.543  0.543  0.543 
-#> 6 app_identity_1 pairwise ranking v. app_identity_2   0.338  0.338  0.338 
+#>   item   qoi              outcome        mean   lower   upper
+#>   <chr>  <chr>            <chr>         <dbl>   <dbl>   <dbl>
+#> 1 gender average rank     Avg: gender 1.62    1.62    1.62   
+#> 2 gender marginal ranking Ranked 1    0.509   0.509   0.509  
+#> 3 gender marginal ranking Ranked 2    0.373   0.373   0.373  
+#> 4 gender marginal ranking Ranked 3    0.111   0.111   0.111  
+#> 5 gender marginal ranking Ranked 4    0.00670 0.00670 0.00670
+#> 6 gender pairwise ranking v. party    0.916   0.916   0.916  
 ```

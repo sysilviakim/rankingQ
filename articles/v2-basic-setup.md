@@ -25,29 +25,27 @@ columns are used to represent different items and their values represent
 the items’ marginal ranks.
 
 For example, in `identity`, the four sources of identity are stored in
-`app_identity_1`, `app_identity_2`, `app_identity_3`, and
-`app_identity_4`, corresponding to party, religion, gender, and race.
-The first respondent ranked party first, gender second, race third, and
-religion fourth, so the full ranking profile `app_identity` is `"1423"`
-given the reference choice set of party-religion-gender-race.
+`party`, `religion`, `gender`, and `race`. The first respondent ranked
+party first, gender second, race third, and religion fourth, so the full
+ranking profile `app_identity` is `"1423"` given the reference choice
+set of party-religion-gender-race.
 
 ``` r
 
 head(identity)
 #> # A tibble: 6 × 16
-#>   s_weight app_identity app_identity_1 app_identity_2 app_identity_3
-#>      <dbl> <chr>                 <dbl>          <dbl>          <dbl>
-#> 1    0.844 1423                      1              4              2
-#> 2    0.886 1423                      1              4              2
-#> 3    2.96  3412                      3              4              1
-#> 4    0.987 1423                      1              4              2
-#> 5    1.76  4132                      4              1              3
-#> 6    0.469 3124                      3              1              2
-#> # ℹ 11 more variables: app_identity_4 <dbl>, anc_identity <chr>,
-#> #   anc_identity_1 <dbl>, anc_identity_2 <dbl>, anc_identity_3 <dbl>,
-#> #   anc_identity_4 <dbl>, anc_correct_identity <dbl>,
-#> #   app_identity_recorded <chr>, anc_identity_recorded <chr>,
-#> #   app_identity_row_rnd <chr>, anc_identity_row_rnd <chr>
+#>   s_weight app_identity party religion gender  race anc_identity household
+#>      <dbl> <chr>        <dbl>    <dbl>  <dbl> <dbl> <chr>            <dbl>
+#> 1    0.844 1423             1        4      2     3 1234                 1
+#> 2    0.886 1423             1        4      2     3 1234                 1
+#> 3    2.96  3412             3        4      1     2 1234                 1
+#> 4    0.987 1423             1        4      2     3 1234                 1
+#> 5    1.76  4132             4        1      3     2 1324                 1
+#> 6    0.469 3124             3        1      2     4 1234                 1
+#> # ℹ 8 more variables: neighborhood <dbl>, city <dbl>, state <dbl>,
+#> #   anc_correct_identity <dbl>, app_identity_recorded <chr>,
+#> #   anc_identity_recorded <chr>, app_identity_row_rnd <chr>,
+#> #   anc_identity_row_rnd <chr>
 ```
 
 ## Anchor ranking question
@@ -58,11 +56,10 @@ that looks similar to the target question, whose “correct” answer is
 known to researchers. For example, `identity` has responses to the
 anchor question that asked respondents to rank four nested units:
 household, neighborhood, city, and state. These responses are included
-in `anc_identity_1`, `anc_identity_2`, `anc_identity_3`, and
-`anc_identity_4`. Here, the correct answer is assumed to be `"1234"`.
-Based on these responses, we code an indicator variable
-(`anc_correct_identity`) that takes 1 if respondents offer the correct
-answer and 0 otherwise.
+in `household`, `neighborhood`, `city`, and `state`. Here, the correct
+answer is assumed to be `"1234"`. Based on these responses, we code an
+indicator variable (`anc_correct_identity`) that takes 1 if respondents
+offer the correct answer and 0 otherwise.
 
 In the following dataset, the first and third respondents have provided
 an incorrect answer for the anchor question, whereas the rest have
@@ -70,16 +67,18 @@ provided the correct answer.
 
 ``` r
 
-identity[, c(paste0("anc_identity_", seq(4)), "anc_correct_identity")] |>
+identity[
+  ,
+  c("household", "neighborhood", "city", "state", "anc_correct_identity")
+] |>
   tail()
 #> # A tibble: 6 × 5
-#>   anc_identity_1 anc_identity_2 anc_identity_3 anc_identity_4
-#>            <dbl>          <dbl>          <dbl>          <dbl>
-#> 1              3              1              2              4
-#> 2              1              2              3              4
-#> 3              4              3              2              1
-#> 4              1              2              3              4
-#> 5              1              2              3              4
-#> 6              1              2              3              4
-#> # ℹ 1 more variable: anc_correct_identity <dbl>
+#>   household neighborhood  city state anc_correct_identity
+#>       <dbl>        <dbl> <dbl> <dbl>                <dbl>
+#> 1         3            1     2     4                    0
+#> 2         1            2     3     4                    1
+#> 3         4            3     2     1                    0
+#> 4         1            2     3     4                    1
+#> 5         1            2     3     4                    1
+#> 6         1            2     3     4                    1
 ```

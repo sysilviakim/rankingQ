@@ -93,29 +93,26 @@ relative importance to them.</p>
 columns are used to represent different items and their values represent
 the items’ marginal ranks.</p>
 <p>For example, in <code>identity</code>, the four sources of identity
-are stored in <code>app_identity_1</code>, <code>app_identity_2</code>,
-<code>app_identity_3</code>, and <code>app_identity_4</code>,
-corresponding to party, religion, gender, and race. The first respondent
-ranked party first, gender second, race third, and religion fourth, so
-the full ranking profile <code>app_identity</code> is
-<code>"1423"</code> given the reference choice set of
-party-religion-gender-race.</p>
+are stored in <code>party</code>, <code>religion</code>,
+<code>gender</code>, and <code>race</code>. The first respondent ranked
+party first, gender second, race third, and religion fourth, so the full
+ranking profile <code>app_identity</code> is <code>"1423"</code> given
+the reference choice set of party-religion-gender-race.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">identity</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 16</span></span></span>
-<span><span class="co">#&gt;   s_weight app_identity app_identity_1 app_identity_2 app_identity_3</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    0.844 1423                      1              4              2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>    0.886 1423                      1              4              2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>    2.96  3412                      3              4              1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>    0.987 1423                      1              4              2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>    1.76  4132                      4              1              3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>    0.469 3124                      3              1              2</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 11 more variables: app_identity_4 &lt;dbl&gt;, anc_identity &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   anc_identity_1 &lt;dbl&gt;, anc_identity_2 &lt;dbl&gt;, anc_identity_3 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   anc_identity_4 &lt;dbl&gt;, anc_correct_identity &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   app_identity_recorded &lt;chr&gt;, anc_identity_recorded &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   app_identity_row_rnd &lt;chr&gt;, anc_identity_row_rnd &lt;chr&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   s_weight app_identity party religion gender  race anc_identity household</span></span>
+<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    0.844 1423             1        4      2     3 1234                 1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>    0.886 1423             1        4      2     3 1234                 1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>    2.96  3412             3        4      1     2 1234                 1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>    0.987 1423             1        4      2     3 1234                 1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>    1.76  4132             4        1      3     2 1324                 1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>    0.469 3124             3        1      2     4 1234                 1</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 8 more variables: neighborhood &lt;dbl&gt;, city &lt;dbl&gt;, state &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   anc_correct_identity &lt;dbl&gt;, app_identity_recorded &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   anc_identity_recorded &lt;chr&gt;, app_identity_row_rnd &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   anc_identity_row_rnd &lt;chr&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="anchor-ranking-question">Anchor ranking question<a class="anchor" aria-label="anchor" href="#anchor-ranking-question"></a>
@@ -126,28 +123,29 @@ question that looks similar to the target question, whose “correct”
 answer is known to researchers. For example, <code>identity</code> has
 responses to the anchor question that asked respondents to rank four
 nested units: household, neighborhood, city, and state. These responses
-are included in <code>anc_identity_1</code>,
-<code>anc_identity_2</code>, <code>anc_identity_3</code>, and
-<code>anc_identity_4</code>. Here, the correct answer is assumed to be
-<code>"1234"</code>. Based on these responses, we code an indicator
-variable (<code>anc_correct_identity</code>) that takes 1 if respondents
-offer the correct answer and 0 otherwise.</p>
+are included in <code>household</code>, <code>neighborhood</code>,
+<code>city</code>, and <code>state</code>. Here, the correct answer is
+assumed to be <code>"1234"</code>. Based on these responses, we code an
+indicator variable (<code>anc_correct_identity</code>) that takes 1 if
+respondents offer the correct answer and 0 otherwise.</p>
 <p>In the following dataset, the first and third respondents have
 provided an incorrect answer for the anchor question, whereas the rest
 have provided the correct answer.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">identity</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"anc_identity_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span>, <span class="st">"anc_correct_identity"</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">identity</span><span class="op">[</span></span>
+<span>  ,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"household"</span>, <span class="st">"neighborhood"</span>, <span class="st">"city"</span>, <span class="st">"state"</span>, <span class="st">"anc_correct_identity"</span><span class="op">)</span></span>
+<span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
-<span><span class="co">#&gt;   anc_identity_1 anc_identity_2 anc_identity_3 anc_identity_4</span></span>
-<span><span class="co">#&gt;            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>              3              1              2              4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>              1              2              3              4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>              4              3              2              1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>              1              2              3              4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>              1              2              3              4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>              1              2              3              4</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: anc_correct_identity &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   household neighborhood  city state anc_correct_identity</span></span>
+<span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>         3            1     2     4                    0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>         1            2     3     4                    1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>         4            3     2     1                    0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>         1            2     3     4                    1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>         1            2     3     4                    1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>         1            2     3     4                    1</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -160,7 +158,7 @@ have provided the correct answer.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

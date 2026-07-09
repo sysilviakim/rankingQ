@@ -27,19 +27,19 @@ identity
 
   Full ranking profile for the main identity ranking question.
 
-- app_identity_1:
+- party:
 
   Marginal ranking for party (main identity ranking question).
 
-- app_identity_2:
+- religion:
 
   Marginal ranking for religion (main identity ranking question).
 
-- app_identity_3:
+- gender:
 
   Marginal ranking for gender (main identity ranking question).
 
-- app_identity_4:
+- race:
 
   Marginal ranking for race (main identity ranking question).
 
@@ -47,19 +47,19 @@ identity
 
   Full ranking profile for the anchor ranking question.
 
-- anc_identity_1:
+- household:
 
   Marginal ranking for household (anchor question).
 
-- anc_identity_2:
+- neighborhood:
 
   Marginal ranking for neighborhood (anchor question).
 
-- anc_identity_3:
+- city:
 
   Marginal ranking for city (anchor question).
 
-- anc_identity_4:
+- state:
 
   Marginal ranking for state (anchor question).
 

@@ -89,11 +89,11 @@ in which case it will be inferred from the data.</p></dd>
 
 <dt id="arg-main-q">main_q<a class="anchor" aria-label="anchor" href="#arg-main-q"></a></dt>
 <dd><p>Ranking question to be analyzed. When `main_q` is a single
-column name or unquoted symbol such as `app_identity`, the function looks
-for `app_identity_1`, `app_identity_2`, `app_identity_3`, and so on. You may
+column name or unquoted symbol such as `my_ranking`, the function looks
+for `my_ranking_1`, `my_ranking_2`, `my_ranking_3`, and so on. You may
 also supply `main_q` directly as a character vector or unquoted
 `c(...)` expression of ranking columns such as
-`c(party, gender, race, religion)`.</p></dd>
+`c(party, religion, gender, race)`.</p></dd>
 
 
 <dt id="arg-anc-correct">anc_correct<a class="anchor" aria-label="anchor" href="#arg-anc-correct"></a></dt>
@@ -158,7 +158,7 @@ are provided.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">imprr_weights_boot</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">identity</span>,</span></span>
-<span class="r-in"><span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span></span>
+<span class="r-in"><span>  main_q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="st">"religion"</span>, <span class="st">"gender"</span>, <span class="st">"race"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span></span>
 <span class="r-in"><span>  n_bootstrap <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>  seed <span class="op">=</span> <span class="fl">123</span></span></span>
@@ -169,14 +169,14 @@ are provided.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3172868 0.3108736 0.3237001</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">results</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   item           qoi              outcome               mean  lower  upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> app_identity_1 average rank     Avg: app_identity_1 3.27   3.27   3.27  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> app_identity_1 marginal ranking Ranked 1            0.059<span style="text-decoration: underline;">0</span> 0.054<span style="text-decoration: underline;">5</span> 0.063<span style="text-decoration: underline;">5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> app_identity_1 marginal ranking Ranked 2            0.133  0.124  0.142 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> app_identity_1 marginal ranking Ranked 3            0.287  0.281  0.293 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> app_identity_1 marginal ranking Ranked 4            0.521  0.519  0.523 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> app_identity_1 pairwise ranking v. app_identity_2   0.351  0.348  0.355 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   item   qoi              outcome       mean  lower  upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> gender average rank     Avg: gender 1.70   1.69   1.70  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> gender marginal ranking Ranked 1    0.490  0.490  0.491 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gender marginal ranking Ranked 2    0.359  0.359  0.359 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> gender marginal ranking Ranked 3    0.113  0.111  0.115 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> gender marginal ranking Ranked 4    0.037<span style="text-decoration: underline;">8</span> 0.035<span style="text-decoration: underline;">0</span> 0.040<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> gender pairwise ranking v. party    0.879  0.877  0.882 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -189,7 +189,7 @@ are provided.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

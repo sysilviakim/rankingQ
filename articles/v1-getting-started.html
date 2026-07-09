@@ -91,13 +91,9 @@ gender, and race. The key theoretical concept is <em>relative
 partisanship</em>—the extent to which people prioritize partisanship
 over other sources of identity.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">identity</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>party <span class="op">=</span> <span class="va">app_identity_1</span>,</span>
-<span>         religion <span class="op">=</span> <span class="va">app_identity_2</span>,</span>
-<span>         gender <span class="op">=</span> <span class="va">app_identity_3</span>,</span>
-<span>         race <span class="op">=</span> <span class="va">app_identity_4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">identity</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
-<span>    <span class="va">app_identity</span>, </span>
+<span>    <span class="va">app_identity</span>,</span>
 <span>    <span class="va">party</span>, <span class="va">religion</span>, <span class="va">gender</span>, <span class="va">race</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -116,24 +112,24 @@ over other sources of identity.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
 <span>    <span class="va">s_weight</span>,</span>
 <span>    <span class="va">app_identity</span>,</span>
-<span>    <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"app_identity_"</span><span class="op">)</span>,</span>
+<span>    <span class="va">party</span>, <span class="va">religion</span>, <span class="va">gender</span>, <span class="va">race</span>,</span>
 <span>    <span class="va">anc_correct_identity</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 9</span></span></span>
-<span><span class="co">#&gt;   s_weight app_identity app_identity_1 app_identity_2 app_identity_3</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    0.844 1423                      1              4              2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>    0.886 1423                      1              4              2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>    2.96  3412                      3              4              1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>    0.987 1423                      1              4              2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>    1.76  4132                      4              1              3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>    0.469 3124                      3              1              2</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: app_identity_4 &lt;dbl&gt;, app_identity_recorded &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   app_identity_row_rnd &lt;chr&gt;, anc_correct_identity &lt;dbl&gt;</span></span></span></code></pre></div>
-<p>The <code>app_identity</code> columns describe the ranking question
-of interest, while <code>anc_correct_identity</code> indicates whether
-each respondent answered the anchor question correctly.</p>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
+<span><span class="co">#&gt;   s_weight app_identity party religion gender  race anc_correct_identity</span></span>
+<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    0.844 1423             1        4      2     3                    1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>    0.886 1423             1        4      2     3                    1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>    2.96  3412             3        4      1     2                    1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>    0.987 1423             1        4      2     3                    1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>    1.76  4132             4        1      3     2                    0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>    0.469 3124             3        1      2     4                    1</span></span></code></pre></div>
+<p>The <code>app_identity</code> column stores the full ranking profile,
+the item columns (<code>party</code>, <code>religion</code>,
+<code>gender</code>, <code>race</code>) store the marginal ranks, and
+<code>anc_correct_identity</code> indicates whether each respondent
+answered the anchor question correctly.</p>
 </div>
 <div class="section level2">
 <h2 id="estimate-ranking-based-quantities">Estimate Ranking-Based Quantities<a class="anchor" aria-label="anchor" href="#estimate-ranking-based-quantities"></a>
@@ -149,7 +145,7 @@ probabilities, top-k probabilities, and marginal rank probabilities.</p>
 <code class="sourceCode R"><span><span class="va">out_direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
 <span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
+<span>  main_q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="st">"religion"</span>, <span class="st">"gender"</span>, <span class="st">"race"</span><span class="op">)</span>,</span>
 <span>  weight <span class="op">=</span> <span class="st">"s_weight"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; No anc_correct or p_random supplied; assuming everyone passes the anchor (p_random = 0), so no correction is applied.</span></span></code></pre></div>
@@ -165,18 +161,18 @@ of interest.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 44 × 6</span></span></span>
-<span><span class="co">#&gt;    item           qoi              outcome              mean  lower upper</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> app_identity_1 average rank     Avg: app_identity_1 3.00  2.91   3.08 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> app_identity_1 marginal ranking Ranked 1            0.121 0.095<span style="text-decoration: underline;">3</span> 0.153</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> app_identity_1 marginal ranking Ranked 2            0.173 0.142  0.205</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> app_identity_1 marginal ranking Ranked 3            0.289 0.258  0.330</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> app_identity_1 marginal ranking Ranked 4            0.416 0.383  0.457</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> app_identity_1 pairwise ranking v. app_identity_2   0.410 0.374  0.447</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> app_identity_1 pairwise ranking v. app_identity_3   0.245 0.210  0.283</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> app_identity_1 pairwise ranking v. app_identity_4   0.344 0.303  0.381</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> app_identity_1 top-k ranking    Top-1               0.121 0.095<span style="text-decoration: underline;">3</span> 0.153</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> app_identity_1 top-k ranking    Top-2               0.295 0.257  0.331</span></span>
+<span><span class="co">#&gt;    item   qoi              outcome       mean  lower upper</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> gender average rank     Avg: gender 1.96   1.88   2.05 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> gender marginal ranking Ranked 1    0.408  0.364  0.444</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> gender marginal ranking Ranked 2    0.324  0.286  0.365</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> gender marginal ranking Ranked 3    0.173  0.144  0.206</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> gender marginal ranking Ranked 4    0.094<span style="text-decoration: underline;">8</span> 0.074<span style="text-decoration: underline;">8</span> 0.121</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> gender pairwise ranking v. party    0.755  0.717  0.790</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> gender pairwise ranking v. race     0.682  0.642  0.724</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> gender pairwise ranking v. religion 0.608  0.566  0.651</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> gender top-k ranking    Top-1       0.408  0.364  0.444</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> gender top-k ranking    Top-2       0.732  0.688  0.769</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 34 more rows</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -191,7 +187,7 @@ anchor question and 0 otherwise.</p>
 <code class="sourceCode R"><span><span class="va">out_direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
 <span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
+<span>  main_q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="st">"religion"</span>, <span class="st">"gender"</span>, <span class="st">"race"</span><span class="op">)</span>,</span>
 <span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
 <span>  weight <span class="op">=</span> <span class="st">"s_weight"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -209,12 +205,12 @@ are based on our plug-in bias-corrected estimator.</p>
 <code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qoi</span> <span class="op">==</span> <span class="st">"average rank"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span></span>
-<span><span class="co">#&gt;   item           qoi          outcome              mean lower upper</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> app_identity_1 average rank Avg: app_identity_1  3.27  3.13  3.40</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> app_identity_2 average rank Avg: app_identity_2  2.58  2.43  2.75</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> app_identity_3 average rank Avg: app_identity_3  1.66  1.52  1.81</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> app_identity_4 average rank Avg: app_identity_4  2.49  2.37  2.59</span></span></code></pre></div>
+<span><span class="co">#&gt;   item     qoi          outcome        mean lower upper</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> gender   average rank Avg: gender    1.66  1.52  1.81</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> party    average rank Avg: party     3.27  3.13  3.40</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> race     average rank Avg: race      2.49  2.37  2.59</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> religion average rank Avg: religion  2.58  2.43  2.75</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="inverse-probability-weighting">Inverse-Probability Weighting<a class="anchor" aria-label="anchor" href="#inverse-probability-weighting"></a>
@@ -226,7 +222,7 @@ are based on our plug-in bias-corrected estimator.</p>
 <code class="sourceCode R"><span><span class="va">out_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_weights.html">imprr_weights</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
 <span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  main_q <span class="op">=</span> <span class="st">"app_identity"</span>,</span>
+<span>  main_q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="st">"religion"</span>, <span class="st">"gender"</span>, <span class="st">"race"</span><span class="op">)</span>,</span>
 <span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
 <span>  weight <span class="op">=</span> <span class="st">"s_weight"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -269,7 +265,7 @@ users can simply create a new variable that multiplies both weights.</p>
 helpers such as <code>avg_rank</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">items_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"app_identity_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>,</span>
+<span>  variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="st">"religion"</span>, <span class="st">"gender"</span>, <span class="st">"race"</span><span class="op">)</span>,</span>
 <span>  item <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party"</span>, <span class="st">"Religion"</span>, <span class="st">"Gender"</span>, <span class="st">"Race"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -320,7 +316,7 @@ unavailable or need validation.</li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

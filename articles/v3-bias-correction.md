@@ -55,27 +55,23 @@ roughly 31.6% of the respondents are randomly responding.
 correction to several classes of quantities of interest.
 
 To apply the bias correction, we specify our dataset (`data`), the
-number of items (`J`), the prefix of column names that contain `J` items
-for the target ranking questions, and the prefix of column names for the
-anchor ranking questions. When survey weights are available, they can be
-included by specifying `weight` in the function.
+number of items (`J`), the columns holding the marginal ranks for the
+target ranking question (`main_q`), and the indicator for answering the
+anchor ranking question correctly (`anc_correct`). When survey weights
+are available, they can be included by specifying `weight` in the
+function.
 
 ``` r
 
-## app_identity_1 indicates marginal rank for party
-## app_identity_2 indicates marginal rank for religion
-## app_identity_3 indicates marginal rank for gender
-## app_identity_4 indicates marginal rank for race
+## party, religion, gender, and race hold the marginal rank of each item
 
 # Perform bias correction
 out_direct <- imprr_direct(
   data = identity,
-  ## Not strictly necessary if app_identity, the input for `main_q`,
-  ## is specified. In that case, will look for J if unspecified
+  ## Not strictly necessary: when `main_q` lists the ranking columns,
+  ## J is inferred from their number
   J = 4,
-  ## automatically looks for
-  ## app_identity_1, app_identity_2, app_identity_3, app_identity_4
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   # setting to 10 only for our vignette
   n_bootstrap = 10
@@ -97,7 +93,7 @@ preference assumption can be specified as follows:
 out_direct_uniform <- imprr_direct(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   population = "all",
   assumption = "uniform",
@@ -119,7 +115,7 @@ follows:
 out_direct_contaminated <- imprr_direct(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   population = "all",
   assumption = "contaminated",
@@ -166,34 +162,34 @@ out_direct$results %>%
 ```
 
     ## # A tibble: 4 × 6
-    ##   item           qoi          outcome              mean lower upper
-    ##   <chr>          <chr>        <chr>               <dbl> <dbl> <dbl>
-    ## 1 app_identity_1 average rank Avg: app_identity_1  3.27  3.21  3.30
-    ## 2 app_identity_2 average rank Avg: app_identity_2  2.60  2.49  2.66
-    ## 3 app_identity_3 average rank Avg: app_identity_3  1.66  1.61  1.74
-    ## 4 app_identity_4 average rank Avg: app_identity_4  2.48  2.42  2.53
+    ##   item     qoi          outcome        mean lower upper
+    ##   <chr>    <chr>        <chr>         <dbl> <dbl> <dbl>
+    ## 1 gender   average rank Avg: gender    1.66  1.61  1.74
+    ## 2 party    average rank Avg: party     3.27  3.21  3.30
+    ## 3 race     average rank Avg: race      2.48  2.42  2.53
+    ## 4 religion average rank Avg: religion  2.60  2.49  2.66
 
 ``` r
 
 # View the results based on the item
 out_direct$results %>%
-  filter(item == "app_identity_1")
+  filter(item == "party")
 ```
 
     ## # A tibble: 11 × 6
-    ##    item           qoi              outcome               mean  lower  upper
-    ##    <chr>          <chr>            <chr>                <dbl>  <dbl>  <dbl>
-    ##  1 app_identity_1 average rank     Avg: app_identity_1 3.27   3.21   3.30  
-    ##  2 app_identity_1 marginal ranking Ranked 1            0.0427 0.0309 0.0638
-    ##  3 app_identity_1 marginal ranking Ranked 2            0.151  0.133  0.171 
-    ##  4 app_identity_1 marginal ranking Ranked 3            0.304  0.289  0.336 
-    ##  5 app_identity_1 marginal ranking Ranked 4            0.503  0.488  0.520 
-    ##  6 app_identity_1 pairwise ranking v. app_identity_2   0.359  0.335  0.382 
-    ##  7 app_identity_1 pairwise ranking v. app_identity_3   0.109  0.0807 0.143 
-    ##  8 app_identity_1 pairwise ranking v. app_identity_4   0.266  0.257  0.287 
-    ##  9 app_identity_1 top-k ranking    Top-1               0.0427 0.0309 0.0638
-    ## 10 app_identity_1 top-k ranking    Top-2               0.194  0.172  0.213 
-    ## 11 app_identity_1 top-k ranking    Top-3               0.497  0.480  0.512
+    ##    item  qoi              outcome       mean  lower  upper
+    ##    <chr> <chr>            <chr>        <dbl>  <dbl>  <dbl>
+    ##  1 party average rank     Avg: party  3.27   3.21   3.30  
+    ##  2 party marginal ranking Ranked 1    0.0427 0.0309 0.0638
+    ##  3 party marginal ranking Ranked 2    0.151  0.133  0.171 
+    ##  4 party marginal ranking Ranked 3    0.304  0.289  0.336 
+    ##  5 party marginal ranking Ranked 4    0.503  0.488  0.520 
+    ##  6 party pairwise ranking v. gender   0.109  0.0807 0.143 
+    ##  7 party pairwise ranking v. race     0.266  0.257  0.287 
+    ##  8 party pairwise ranking v. religion 0.359  0.335  0.382 
+    ##  9 party top-k ranking    Top-1       0.0427 0.0309 0.0638
+    ## 10 party top-k ranking    Top-2       0.194  0.172  0.213 
+    ## 11 party top-k ranking    Top-3       0.497  0.480  0.512
 
 For example, one can visualize the result for average ranks as follows:
 
@@ -204,8 +200,7 @@ out_direct$results %>%
   mutate(
     item = factor(
       item,
-      levels = paste0("app_identity_", seq(4)),
-      labels = c("party", "religion", "gender", "race")
+      levels = c("party", "religion", "gender", "race")
     )
   ) %>%
   plot_avg_ranking()
@@ -233,7 +228,7 @@ practical.
 out_weights <- imprr_weights(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity"
 )
 ```
@@ -252,7 +247,7 @@ preference assumption can be specified as follows:
 out_weights_uniform <- imprr_weights(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   population = "all",
   assumption = "uniform"
@@ -272,7 +267,7 @@ follows:
 out_weights_contaminated <- imprr_weights(
   data = identity,
   J = 4,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   population = "all",
   assumption = "contaminated"
@@ -368,20 +363,18 @@ head(identity_w)
 ```
 
     ## # A tibble: 6 × 19
-    ##   weights s_weight app_identity app_identity_1 app_identity_2 app_identity_3
-    ##     <dbl>    <dbl> <chr>                 <dbl>          <dbl>          <dbl>
-    ## 1    1.02    0.844 1423                      1              4              2
-    ## 2    1.02    0.886 1423                      1              4              2
-    ## 3    1.27    2.96  3412                      3              4              1
-    ## 4    1.02    0.987 1423                      1              4              2
-    ## 5    1.10    1.76  4132                      4              1              3
-    ## 6    1.02    0.469 3124                      3              1              2
-    ## # ℹ 13 more variables: app_identity_4 <dbl>, anc_identity <chr>,
-    ## #   anc_identity_1 <dbl>, anc_identity_2 <dbl>, anc_identity_3 <dbl>,
-    ## #   anc_identity_4 <dbl>, anc_correct_identity <dbl>,
-    ## #   app_identity_recorded <chr>, anc_identity_recorded <chr>,
-    ## #   app_identity_row_rnd <chr>, anc_identity_row_rnd <chr>,
-    ## #   random_identity <dbl>, ranking <chr>
+    ##   weights s_weight app_identity party religion gender  race anc_identity
+    ##     <dbl>    <dbl> <chr>        <dbl>    <dbl>  <dbl> <dbl> <chr>       
+    ## 1    1.02    0.844 1423             1        4      2     3 1234        
+    ## 2    1.02    0.886 1423             1        4      2     3 1234        
+    ## 3    1.27    2.96  3412             3        4      1     2 1234        
+    ## 4    1.02    0.987 1423             1        4      2     3 1234        
+    ## 5    1.10    1.76  4132             4        1      3     2 1324        
+    ## 6    1.02    0.469 3124             3        1      2     4 1234        
+    ## # ℹ 11 more variables: household <dbl>, neighborhood <dbl>, city <dbl>,
+    ## #   state <dbl>, anc_correct_identity <dbl>, app_identity_recorded <chr>,
+    ## #   anc_identity_recorded <chr>, app_identity_row_rnd <chr>,
+    ## #   anc_identity_row_rnd <chr>, random_identity <dbl>, ranking <chr>
 
 ``` r
 

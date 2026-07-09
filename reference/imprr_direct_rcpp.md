@@ -36,11 +36,11 @@ imprr_direct_rcpp(
 - main_q:
 
   Ranking question to be analyzed. When \`main_q\` is a single column
-  name or unquoted symbol such as \`app_identity\`, the function looks
-  for \`app_identity_1\`, \`app_identity_2\`, \`app_identity_3\`, and so
-  on. You may also supply \`main_q\` directly as a character vector or
-  unquoted \`c(...)\` expression of ranking columns such as \`c(party,
-  gender, race, religion)\`.
+  name or unquoted symbol such as \`my_ranking\`, the function looks for
+  \`my_ranking_1\`, \`my_ranking_2\`, \`my_ranking_3\`, and so on. You
+  may also supply \`main_q\` directly as a character vector or unquoted
+  \`c(...)\` expression of ranking columns such as \`c(party, religion,
+  gender, race)\`.
 
 - anc_correct:
 
@@ -104,7 +104,7 @@ A list with two elements:
 ``` r
 out <- imprr_direct_rcpp(
   identity,
-  main_q = "app_identity",
+  main_q = c("party", "religion", "gender", "race"),
   anc_correct = "anc_correct_identity",
   n_bootstrap = 1,
   seed = 123
@@ -117,12 +117,12 @@ out$est_p_random
 #> 1 0.322 0.322 0.322
 head(out$results)
 #> # A tibble: 6 × 6
-#>   item           qoi              outcome               mean  lower  upper
-#>   <chr>          <chr>            <chr>                <dbl>  <dbl>  <dbl>
-#> 1 app_identity_1 average rank     Avg: app_identity_1 3.30   3.30   3.30  
-#> 2 app_identity_1 pairwise ranking v. app_identity_2   0.349  0.349  0.349 
-#> 3 app_identity_1 pairwise ranking v. app_identity_3   0.0924 0.0924 0.0924
-#> 4 app_identity_1 pairwise ranking v. app_identity_4   0.256  0.256  0.256 
-#> 5 app_identity_1 top-k ranking    Top-1               0.0298 0.0298 0.0298
-#> 6 app_identity_1 top-k ranking    Top-2               0.171  0.171  0.171 
+#>   item  qoi              outcome       mean  lower  upper
+#>   <chr> <chr>            <chr>        <dbl>  <dbl>  <dbl>
+#> 1 party average rank     Avg: party  3.30   3.30   3.30  
+#> 2 party pairwise ranking v. religion 0.349  0.349  0.349 
+#> 3 party pairwise ranking v. gender   0.0924 0.0924 0.0924
+#> 4 party pairwise ranking v. race     0.256  0.256  0.256 
+#> 5 party top-k ranking    Top-1       0.0298 0.0298 0.0298
+#> 6 party top-k ranking    Top-2       0.171  0.171  0.171 
 ```
