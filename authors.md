@@ -14,12 +14,12 @@
 Source:
 [`DESCRIPTION`](https://github.com/sysilviakim/rankingQ/blob/main/DESCRIPTION)
 
-Kim S, Atsusaka Y (2026). *rankingQ: Design-Based Methods for Improving
-Ranking Questions*. R package version 0.2.0,
+Kim S, Atsusaka Y (2026). *rankingQ: Design-Based Methods for Ranking
+Questions*. R package version 0.2.0,
 <https://github.com/sysilviakim/rankingQ>.
 
     @Manual{,
-      title = {rankingQ: Design-Based Methods for Improving Ranking Questions},
+      title = {rankingQ: Design-Based Methods for Ranking Questions},
       author = {Seo-young Silvia Kim and Yuki Atsusaka},
       year = {2026},
       note = {R package version 0.2.0},
