@@ -78,9 +78,7 @@ to correct for measurement error caused by inattentive survey
 respondents.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sysilviakim/rankingQ" class="external-link">rankingQ</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">identity</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="example-data">Example Data<a class="anchor" aria-label="anchor" href="#example-data"></a>
 </h2>
@@ -91,10 +89,13 @@ theoretical concept is <em>relative partisanship</em>—the extent to
 which people prioritize partisanship over other sources of
 identity.<br><br>
 Below, the <code>app_identity</code> column stores the full ranking
-profile, the item columns (<code>party</code>, <code>religion</code>,
-<code>gender</code>, <code>race</code>) store the marginal ranks.</p>
+profile. Similarly, the item columns (<code>party</code>,
+<code>religion</code>, <code>gender</code>, <code>race</code>) store the
+marginal ranks.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">identity</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">identity</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">identity</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
 <span>    <span class="va">app_identity</span>,</span>
 <span>    <span class="va">party</span>, <span class="va">religion</span>, <span class="va">gender</span>, <span class="va">race</span></span>
@@ -110,9 +111,9 @@ profile, the item columns (<code>party</code>, <code>religion</code>,
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4132             4        1      3     2</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 3124             3        1      2     4</span></span></code></pre></div>
 <p>It also includes the survey weight <code>s_weight</code>.
-Additionally, the dataset includes the binary variable for whether
-respondents provide the correct answer to the anchor ranking question
-(see Data).</p>
+Additionally, <code>anc_correct_identity</code> is the binary variable
+for whether respondents provide the correct answer to the anchor ranking
+question.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">identity</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
@@ -131,8 +132,6 @@ respondents provide the correct answer to the anchor ranking question
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 1423             1        4      2     3    0.987                    1</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4132             4        1      3     2    1.76                     0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 3124             3        1      2     4    0.469                    1</span></span></code></pre></div>
-<p>Here, <code>anc_correct_identity</code> indicates whether each
-respondent answered the anchor question correctly.</p>
 <p>Substantively, <a href="https://doi.org/10.1017/pan.2024.33" class="external-link">Atsusaka
 and Kim (2025)</a> are interested in the extent to which <em>political
 party</em> is important when it comes to people’s multidimensional
@@ -145,12 +144,16 @@ identity.</p>
 quantities based on the data. We begin by estimating such quantities
 with no bias correction. To make it realistic, however, we include
 survey weights via the <code>weight</code> argument.</p>
+<div class="section level3">
+<h3 id="input">Input<a class="anchor" aria-label="anchor" href="#input"></a>
+</h3>
 <p>The <code>imprr_direct</code> function <strong>impr</strong>ove
 <strong>r</strong>anking analysis <strong>direct</strong>ly (as in a
-plug-in way) by estimating bias-corrected quantities of interest such as
-average ranks, pairwise ranking probabilities, top-k probabilities, and
-marginal rank probabilities. Here, <code>main_q</code> argument takes a
-vector of all items in the choice set.</p>
+plug-in way) by estimating bias-corrected quantities of interest. These
+quantities include average ranks, pairwise ranking probabilities, top-k
+probabilities, and marginal rank probabilities.</p>
+<p>Here, <code>main_q</code> argument takes a vector of all items in the
+choice set.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
@@ -159,6 +162,10 @@ vector of all items in the choice set.</p>
 <span>  weight <span class="op">=</span> <span class="st">"s_weight"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; No anc_correct or p_random supplied; assuming everyone passes the anchor (p_random = 0), so no correction is applied.</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="output">Output<a class="anchor" aria-label="anchor" href="#output"></a>
+</h3>
 <p><code>imprr_direct</code> returns two lists as an output.<br><br>
 The first output summarizes the estimated proportion of random
 responses. As expected, no random response was detected (no bias
@@ -185,34 +192,72 @@ of interest.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> gender top-k ranking    Top-1       0.408  0.364  0.444</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> gender top-k ranking    Top-2       0.732  0.688  0.769</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 34 more rows</span></span></span></code></pre></div>
+<p>Researchers can examine any classes of ranking-based quantities. For
+example, they can filer out the results by focusing on top-k ranking
+probabilities:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qoi</span> <span class="op">==</span> <span class="st">"top-k ranking"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 6</span></span></span>
+<span><span class="co">#&gt;    item     qoi           outcome  mean  lower upper</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> gender   top-k ranking Top-1   0.408 0.364  0.444</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> gender   top-k ranking Top-2   0.732 0.688  0.769</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> gender   top-k ranking Top-3   0.905 0.879  0.925</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> party    top-k ranking Top-1   0.121 0.095<span style="text-decoration: underline;">3</span> 0.153</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> party    top-k ranking Top-2   0.295 0.257  0.331</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> party    top-k ranking Top-3   0.584 0.543  0.617</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> race     top-k ranking Top-1   0.156 0.131  0.184</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> race     top-k ranking Top-2   0.520 0.487  0.560</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> race     top-k ranking Top-3   0.834 0.804  0.857</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> religion top-k ranking Top-1   0.315 0.274  0.355</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> religion top-k ranking Top-2   0.454 0.415  0.491</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> religion top-k ranking Top-3   0.678 0.640  0.716</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
-<h2 id="direct-bias-correction">Direct Bias Correction<a class="anchor" aria-label="anchor" href="#direct-bias-correction"></a>
+<h2 id="apply-bias-correction">Apply Bias Correction<a class="anchor" aria-label="anchor" href="#apply-bias-correction"></a>
 </h2>
-<p>Now, we compute the above quantities by detecting random responses
-and applying bias correction. The <code>imprr_direct</code> function
-takes another argument <code>anc_correct</code>, which is a dummy
-variable that takes 1 if a respondent has the right answer for the
-anchor question and 0 otherwise.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>Now, suppose that we are concerned that the original data contain
+random responses or satisficing answers. We worry that such responses
+would introduce measurement error to our data.</p>
+<p>The <code>rankingQ</code> package offers two ways to address such
+concern. Both approaches allow us to compute bias-corrected estimates of
+our quantities of interest.</p>
+<div class="section level3">
+<h3 id="plug-in-bias-corrected-estimator">Plug-in Bias-corrected Estimator<a class="anchor" aria-label="anchor" href="#plug-in-bias-corrected-estimator"></a>
+</h3>
+<p>The first approach is to account for the proportion of random
+responses and directly bias correct our estimates.</p>
+<p>To estimate the proportion of random responses, <a href="https://doi.org/10.1017/pan.2024.33" class="external-link">Atsusaka and Kim (2025)</a>
+advocated using an anchor ranking question: an auxiliary ranking
+question whose correct answer is known to researchers and respondents.
+To precisely measure the level of satisficing responses in the target
+ranking question, we recommend that researchers ask the anchor question
+right before or after the primary ranking question.</p>
+<p>The <code>imprr_direct</code> function takes an additional argument
+<code>anc_correct</code>, which is a dummy variable that takes 1 if a
+respondent has the right answer for the anchor question and 0
+otherwise.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
 <span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  main_q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="st">"religion"</span>, <span class="st">"gender"</span>, <span class="st">"race"</span><span class="op">)</span>,</span>
-<span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
-<span>  weight <span class="op">=</span> <span class="st">"s_weight"</span></span>
+<span>  weight <span class="op">=</span> <span class="st">"s_weight"</span>,</span>
+<span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span> <span class="co"># additional input</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Now, the function returns the estimated proportion of random
-responses. We find that about 35\% [31%-40%] of respondents—a sizable
-share of data—seem to provide random responses.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>In this example, the function returns the estimated proportion of
+random responses. We find that about 35\% [31%-40%] of respondents—a
+sizable share of data—seem to provide random responses.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">est_p_random</span></span>
 <span><span class="co">#&gt;        mean     lower     upper</span></span>
 <span><span class="co">#&gt; 1 0.3512825 0.3077923 0.3977214</span></span></code></pre></div>
-<p>Finally, we obtain bias-corrected estimates of various quantities of
-interest. Here, we focus on average rank. The estimated average ranks
-are based on our plug-in bias-corrected estimator.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>Our bias-corrected estimates are available in <code>results</code>.
+Here, we focus on average rank. Again, the estimated average ranks are
+based on our plug-in bias-corrected estimator.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span><span class="op">$</span><span class="va">results</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qoi</span> <span class="op">==</span> <span class="st">"average rank"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span></span>
@@ -222,24 +267,67 @@ are based on our plug-in bias-corrected estimator.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> party    average rank Avg: party     3.27  3.13  3.40</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> race     average rank Avg: race      2.49  2.37  2.59</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> religion average rank Avg: religion  2.58  2.43  2.75</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="using-attention-checks-or-other-methods">Using Attention Checks or Other Methods<a class="anchor" aria-label="anchor" href="#using-attention-checks-or-other-methods"></a>
+</h4>
+<p>In some applications, random responses may also be detected by other
+methods, including attention checks, screener questions, factual
+manipulation checks, and response time.</p>
+<p><strong>Our package can accommodate these alternative methods with no
+problems.</strong></p>
+<p>The only change is to use an alternative argument
+<code>p_random</code> and specify the estimated proportion of random
+responses directly.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out_alternative</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
+<span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  main_q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="st">"religion"</span>, <span class="st">"gender"</span>, <span class="st">"race"</span><span class="op">)</span>,</span>
+<span>  weight <span class="op">=</span> <span class="st">"s_weight"</span>,</span>
+<span>  p_random <span class="op">=</span> <span class="fl">0.5</span> <span class="co"># estimated proportion of random responses</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>By definition, <code>est_p_random</code> returns the input value:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out_alternative</span><span class="op">$</span><span class="va">est_p_random</span></span>
+<span><span class="co">#&gt;   mean lower upper</span></span>
+<span><span class="co">#&gt; 1  0.5   0.5   0.5</span></span></code></pre></div>
+<p>The output format stays the same as before.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out_alternative</span><span class="op">$</span><span class="va">results</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qoi</span> <span class="op">==</span> <span class="st">"average rank"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span></span>
+<span><span class="co">#&gt;   item     qoi          outcome        mean lower upper</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> gender   average rank Avg: gender    1.41  1.25  1.61</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> party    average rank Avg: party     3.50  3.33  3.66</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> race     average rank Avg: race      2.48  2.33  2.61</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> religion average rank Avg: religion  2.61  2.41  2.83</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="inverse-probability-weighting">Inverse-Probability Weighting<a class="anchor" aria-label="anchor" href="#inverse-probability-weighting"></a>
-</h2>
-<p>Instead of directly correcting for bias, the
-<code>imprr_weights</code> function produces respondent-level
-(bias-correction) weights that can be used in downstream analyses.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+</div>
+<div class="section level3">
+<h3 id="inverse-probability-weighting">Inverse-Probability Weighting<a class="anchor" aria-label="anchor" href="#inverse-probability-weighting"></a>
+</h3>
+<p>The second approach is to estimate bias-correction weights and use
+the weights in downstream analyses.</p>
+<p>The key idea is that some rankings are oversampled and others are
+undersampled due to measurement error. Thus, for rankings that are
+artificially overrepresented, we want to down weight them. For rankings
+that are underrepresented, we want to weight them up.</p>
+<p>This is known as the inverse-probability weighting.</p>
+<p>For this strategy, the <code>imprr_weights</code> function allows us
+to estimate bias-correction weights for each survey respondent.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_weights.html">imprr_weights</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
 <span>  J <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  main_q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="st">"religion"</span>, <span class="st">"gender"</span>, <span class="st">"race"</span><span class="op">)</span>,</span>
-<span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>,</span>
-<span>  weight <span class="op">=</span> <span class="st">"s_weight"</span></span>
+<span>  weight <span class="op">=</span> <span class="st">"s_weight"</span>,</span>
+<span>  anc_correct <span class="op">=</span> <span class="st">"anc_correct_identity"</span>, <span class="co"># additional input</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>One output gives the bias-correction weight assigned to each possible
-ranking profile.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p>What this approach does is to assign a bias-corrected weight to each
+possible ranking profile. The <code>rankings</code> list contains the
+comprehensive list of rankings with bias-correction weights.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_weights</span><span class="op">$</span><span class="va">rankings</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ranking</span>, <span class="va">weights</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -252,9 +340,12 @@ ranking profile.</p>
 <span><span class="co">#&gt; 6    1432 0.2721408</span></span></code></pre></div>
 <p>The respondent-level output keeps the original data and appends a
 <code>weights</code> column along with a unified <code>ranking</code>
-column. To combine our bias-correction weights with survey weights,
-users can simply create a new variable that multiplies both weights.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+column.</p>
+<p>In many cases, we wish to account for two types of weights: survey
+weights and bias-correction weights. We can do so by multiplying both
+weights to create a single (joint) weight variable. To do so, users can
+simply create a new variable that multiplies both weights.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_weights</span><span class="op">$</span><span class="va">results</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">weights</span>, <span class="va">s_weight</span>, <span class="va">app_identity</span>, <span class="va">ranking</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>joint_weight <span class="op">=</span> <span class="va">weights</span> <span class="op">*</span> <span class="va">s_weight</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -268,13 +359,11 @@ users can simply create a new variable that multiplies both weights.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>   0.982    0.987 1423         1423           0.969</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>   1.14     1.76  4132         4132           2.01 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>   0.966    0.469 3124         3124           0.453</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="using-the-ipw-weights">Using the IPW Weights<a class="anchor" aria-label="anchor" href="#using-the-ipw-weights"></a>
-</h2>
-<p>The IPW-adjusted respondent-level data can be passed to downstream
-helpers such as <code>avg_rank</code>.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<p>The IPW-adjusted respondent-level data can be passed to any
+downstreatm analyses, including descriptive and regression analyses.</p>
+<p>We demonstrate it by using our in-house helper function
+<code>avg_rank</code>.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">items_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="st">"religion"</span>, <span class="st">"gender"</span>, <span class="st">"race"</span><span class="op">)</span>,</span>
 <span>  item <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party"</span>, <span class="st">"Religion"</span>, <span class="st">"Gender"</span>, <span class="st">"Race"</span><span class="op">)</span></span>
@@ -294,6 +383,7 @@ helpers such as <code>avg_rank</code>.</p>
 <span><span class="co">#&gt; 2 Religion Average Rank 2.596829 0.05518234 2.488553 2.705106    IPW</span></span>
 <span><span class="co">#&gt; 3   Gender Average Rank 1.734215 0.03487726 1.665780 1.802650    IPW</span></span>
 <span><span class="co">#&gt; 4     Race Average Rank 2.453911 0.03337011 2.388434 2.519389    IPW</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="next-steps">Next Steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>

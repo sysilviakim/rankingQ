@@ -9,8 +9,6 @@ measurement error caused by inattentive survey respondents.
 
 library(rankingQ)
 library(dplyr)
-
-data(identity)
 ```
 
 ## Example Data
@@ -21,11 +19,13 @@ include political party, religion, gender, and race. The key theoretical
 concept is *relative partisanship*—the extent to which people prioritize
 partisanship over other sources of identity.  
   
-Below, the `app_identity` column stores the full ranking profile, the
-item columns (`party`, `religion`, `gender`, `race`) store the marginal
-ranks.
+Below, the `app_identity` column stores the full ranking profile.
+Similarly, the item columns (`party`, `religion`, `gender`, `race`)
+store the marginal ranks.
 
 ``` r
+
+data(identity)
 
 identity |>
   select(
@@ -44,9 +44,9 @@ identity |>
 #> 6 3124             3        1      2     4
 ```
 
-It also includes the survey weight `s_weight`. Additionally, the dataset
-includes the binary variable for whether respondents provide the correct
-answer to the anchor ranking question (see Data).
+It also includes the survey weight `s_weight`. Additionally,
+`anc_correct_identity` is the binary variable for whether respondents
+provide the correct answer to the anchor ranking question.
 
 ``` r
 
@@ -69,9 +69,6 @@ identity |>
 #> 6 3124             3        1      2     4    0.469                    1
 ```
 
-Here, `anc_correct_identity` indicates whether each respondent answered
-the anchor question correctly.
-
 Substantively, [Atsusaka and Kim
 (2025)](https://doi.org/10.1017/pan.2024.33) are interested in the
 extent to which *political party* is important when it comes to people’s
@@ -84,10 +81,14 @@ based on the data. We begin by estimating such quantities with no bias
 correction. To make it realistic, however, we include survey weights via
 the `weight` argument.
 
+### Input
+
 The `imprr_direct` function **impr**ove **r**anking analysis
 **direct**ly (as in a plug-in way) by estimating bias-corrected
-quantities of interest such as average ranks, pairwise ranking
-probabilities, top-k probabilities, and marginal rank probabilities.
+quantities of interest. These quantities include average ranks, pairwise
+ranking probabilities, top-k probabilities, and marginal rank
+probabilities.
+
 Here, `main_q` argument takes a vector of all items in the choice set.
 
 ``` r
@@ -100,6 +101,8 @@ out_direct <- imprr_direct(
 )
 #> No anc_correct or p_random supplied; assuming everyone passes the anchor (p_random = 0), so no correction is applied.
 ```
+
+### Output
 
 `imprr_direct` returns two lists as an output.  
   
@@ -136,12 +139,57 @@ out_direct$results
 #> # ℹ 34 more rows
 ```
 
-## Direct Bias Correction
+Researchers can examine any classes of ranking-based quantities. For
+example, they can filer out the results by focusing on top-k ranking
+probabilities:
 
-Now, we compute the above quantities by detecting random responses and
-applying bias correction. The `imprr_direct` function takes another
-argument `anc_correct`, which is a dummy variable that takes 1 if a
-respondent has the right answer for the anchor question and 0 otherwise.
+``` r
+
+out_direct$results |>
+  filter(qoi == "top-k ranking")
+#> # A tibble: 12 × 6
+#>    item     qoi           outcome  mean  lower upper
+#>    <chr>    <chr>         <chr>   <dbl>  <dbl> <dbl>
+#>  1 gender   top-k ranking Top-1   0.408 0.364  0.444
+#>  2 gender   top-k ranking Top-2   0.732 0.688  0.769
+#>  3 gender   top-k ranking Top-3   0.905 0.879  0.925
+#>  4 party    top-k ranking Top-1   0.121 0.0953 0.153
+#>  5 party    top-k ranking Top-2   0.295 0.257  0.331
+#>  6 party    top-k ranking Top-3   0.584 0.543  0.617
+#>  7 race     top-k ranking Top-1   0.156 0.131  0.184
+#>  8 race     top-k ranking Top-2   0.520 0.487  0.560
+#>  9 race     top-k ranking Top-3   0.834 0.804  0.857
+#> 10 religion top-k ranking Top-1   0.315 0.274  0.355
+#> 11 religion top-k ranking Top-2   0.454 0.415  0.491
+#> 12 religion top-k ranking Top-3   0.678 0.640  0.716
+```
+
+## Apply Bias Correction
+
+Now, suppose that we are concerned that the original data contain random
+responses or satisficing answers. We worry that such responses would
+introduce measurement error to our data.
+
+The `rankingQ` package offers two ways to address such concern. Both
+approaches allow us to compute bias-corrected estimates of our
+quantities of interest.
+
+### Plug-in Bias-corrected Estimator
+
+The first approach is to account for the proportion of random responses
+and directly bias correct our estimates.
+
+To estimate the proportion of random responses, [Atsusaka and Kim
+(2025)](https://doi.org/10.1017/pan.2024.33) advocated using an anchor
+ranking question: an auxiliary ranking question whose correct answer is
+known to researchers and respondents. To precisely measure the level of
+satisficing responses in the target ranking question, we recommend that
+researchers ask the anchor question right before or after the primary
+ranking question.
+
+The `imprr_direct` function takes an additional argument `anc_correct`,
+which is a dummy variable that takes 1 if a respondent has the right
+answer for the anchor question and 0 otherwise.
 
 ``` r
 
@@ -149,14 +197,14 @@ out_direct <- imprr_direct(
   data = identity,
   J = 4,
   main_q = c("party", "religion", "gender", "race"),
-  anc_correct = "anc_correct_identity",
-  weight = "s_weight"
+  weight = "s_weight",
+  anc_correct = "anc_correct_identity" # additional input
 )
 ```
 
-Now, the function returns the estimated proportion of random responses.
-We find that about 35\\ \[31%-40%\] of respondents—a sizable share of
-data—seem to provide random responses.
+In this example, the function returns the estimated proportion of random
+responses. We find that about 35\\ \[31%-40%\] of respondents—a sizable
+share of data—seem to provide random responses.
 
 ``` r
 
@@ -165,9 +213,9 @@ out_direct$est_p_random
 #> 1 0.3512825 0.3077923 0.3977214
 ```
 
-Finally, we obtain bias-corrected estimates of various quantities of
-interest. Here, we focus on average rank. The estimated average ranks
-are based on our plug-in bias-corrected estimator.
+Our bias-corrected estimates are available in `results`. Here, we focus
+on average rank. Again, the estimated average ranks are based on our
+plug-in bias-corrected estimator.
 
 ``` r
 
@@ -182,11 +230,67 @@ out_direct$results |>
 #> 4 religion average rank Avg: religion  2.58  2.43  2.75
 ```
 
-## Inverse-Probability Weighting
+#### Using Attention Checks or Other Methods
 
-Instead of directly correcting for bias, the `imprr_weights` function
-produces respondent-level (bias-correction) weights that can be used in
-downstream analyses.
+In some applications, random responses may also be detected by other
+methods, including attention checks, screener questions, factual
+manipulation checks, and response time.
+
+**Our package can accommodate these alternative methods with no
+problems.**
+
+The only change is to use an alternative argument `p_random` and specify
+the estimated proportion of random responses directly.
+
+``` r
+
+out_alternative <- imprr_direct(
+  data = identity,
+  J = 4,
+  main_q = c("party", "religion", "gender", "race"),
+  weight = "s_weight",
+  p_random = 0.5 # estimated proportion of random responses
+)
+```
+
+By definition, `est_p_random` returns the input value:
+
+``` r
+
+out_alternative$est_p_random
+#>   mean lower upper
+#> 1  0.5   0.5   0.5
+```
+
+The output format stays the same as before.
+
+``` r
+
+out_alternative$results |>
+  filter(qoi == "average rank")
+#> # A tibble: 4 × 6
+#>   item     qoi          outcome        mean lower upper
+#>   <chr>    <chr>        <chr>         <dbl> <dbl> <dbl>
+#> 1 gender   average rank Avg: gender    1.41  1.25  1.61
+#> 2 party    average rank Avg: party     3.50  3.33  3.66
+#> 3 race     average rank Avg: race      2.48  2.33  2.61
+#> 4 religion average rank Avg: religion  2.61  2.41  2.83
+```
+
+### Inverse-Probability Weighting
+
+The second approach is to estimate bias-correction weights and use the
+weights in downstream analyses.
+
+The key idea is that some rankings are oversampled and others are
+undersampled due to measurement error. Thus, for rankings that are
+artificially overrepresented, we want to down weight them. For rankings
+that are underrepresented, we want to weight them up.
+
+This is known as the inverse-probability weighting.
+
+For this strategy, the `imprr_weights` function allows us to estimate
+bias-correction weights for each survey respondent.
 
 ``` r
 
@@ -194,13 +298,14 @@ out_weights <- imprr_weights(
   data = identity,
   J = 4,
   main_q = c("party", "religion", "gender", "race"),
-  anc_correct = "anc_correct_identity",
-  weight = "s_weight"
+  weight = "s_weight",
+  anc_correct = "anc_correct_identity", # additional input
 )
 ```
 
-One output gives the bias-correction weight assigned to each possible
-ranking profile.
+What this approach does is to assign a bias-corrected weight to each
+possible ranking profile. The `rankings` list contains the comprehensive
+list of rankings with bias-correction weights.
 
 ``` r
 
@@ -217,9 +322,12 @@ out_weights$rankings |>
 ```
 
 The respondent-level output keeps the original data and appends a
-`weights` column along with a unified `ranking` column. To combine our
-bias-correction weights with survey weights, users can simply create a
-new variable that multiplies both weights.
+`weights` column along with a unified `ranking` column.
+
+In many cases, we wish to account for two types of weights: survey
+weights and bias-correction weights. We can do so by multiplying both
+weights to create a single (joint) weight variable. To do so, users can
+simply create a new variable that multiplies both weights.
 
 ``` r
 
@@ -238,10 +346,10 @@ out_weights$results |>
 #> 6   0.966    0.469 3124         3124           0.453
 ```
 
-## Using the IPW Weights
+The IPW-adjusted respondent-level data can be passed to any downstreatm
+analyses, including descriptive and regression analyses.
 
-The IPW-adjusted respondent-level data can be passed to downstream
-helpers such as `avg_rank`.
+We demonstrate it by using our in-house helper function `avg_rank`.
 
 ``` r
 
