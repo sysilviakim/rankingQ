@@ -99,17 +99,17 @@ recover_recorded_responses(
 
 ### Theory
 
-In [Atsusaka and Kim (2024)](https://osf.io/3ys8x), we prove that once
-there is item order randomization, the recorded responses will follow a
-uniform distribution in the absence of random responses. Suppose, for
-example, that everyone prefers a-b-c in that order. Some respondents
-will have a recorded response of 1-2-3, while others will have 3-2-1,
-given the differently observed sets of items. Then, in the absence of
-random responses, the proportion of recorded responses for each possible
-ranking should converge to 1/24 = 0.0417, given that there are 4! = 24
-possible ways to rank the items. Accordingly, a notable deviation from
-the uniform distribution provides evidence for the presence of random
-responses.
+In [Atsusaka and Kim (2025)](https://doi.org/10.1017/pan.2024.33), we
+prove that once there is item order randomization, the recorded
+responses will follow a uniform distribution in the absence of random
+responses. Suppose, for example, that everyone prefers a-b-c in that
+order. Some respondents will have a recorded response of 1-2-3, while
+others will have 3-2-1, given the differently observed sets of items.
+Then, in the absence of random responses, the proportion of recorded
+responses for each possible ranking should converge to 1/24 = 0.0417,
+given that there are 4! = 24 possible ways to rank the items.
+Accordingly, a notable deviation from the uniform distribution provides
+evidence for the presence of random responses.
 
 What happens with random responses? The figure below shows some likely
 scenarios.

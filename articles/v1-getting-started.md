@@ -15,11 +15,15 @@ data(identity)
 
 ## Example Data
 
-The `identity` dataset contains Americans’ rankings about four sources
-of identity and an anchor-ranking question with a known correct
-ordering. The four items include political party, religion, gender, and
-race. The key theoretical concept is *relative partisanship*—the extent
-to which people prioritize partisanship over other sources of identity.
+The `identity` dataset contains data on how Americans rank four sources
+of identity that are central to American politics. The four items
+include political party, religion, gender, and race. The key theoretical
+concept is *relative partisanship*—the extent to which people prioritize
+partisanship over other sources of identity.  
+  
+Below, the `app_identity` column stores the full ranking profile, the
+item columns (`party`, `religion`, `gender`, `race`) store the marginal
+ranks.
 
 ``` r
 
@@ -40,43 +44,51 @@ identity |>
 #> 6 3124             3        1      2     4
 ```
 
-It also includes the survey weight `s_weight`.
+It also includes the survey weight `s_weight`. Additionally, the dataset
+includes the binary variable for whether respondents provide the correct
+answer to the anchor ranking question (see Data).
 
 ``` r
 
 identity |>
   select(
-    s_weight,
     app_identity,
     party, religion, gender, race,
+    s_weight,
     anc_correct_identity
   ) |>
   head()
 #> # A tibble: 6 × 7
-#>   s_weight app_identity party religion gender  race anc_correct_identity
-#>      <dbl> <chr>        <dbl>    <dbl>  <dbl> <dbl>                <dbl>
-#> 1    0.844 1423             1        4      2     3                    1
-#> 2    0.886 1423             1        4      2     3                    1
-#> 3    2.96  3412             3        4      1     2                    1
-#> 4    0.987 1423             1        4      2     3                    1
-#> 5    1.76  4132             4        1      3     2                    0
-#> 6    0.469 3124             3        1      2     4                    1
+#>   app_identity party religion gender  race s_weight anc_correct_identity
+#>   <chr>        <dbl>    <dbl>  <dbl> <dbl>    <dbl>                <dbl>
+#> 1 1423             1        4      2     3    0.844                    1
+#> 2 1423             1        4      2     3    0.886                    1
+#> 3 3412             3        4      1     2    2.96                     1
+#> 4 1423             1        4      2     3    0.987                    1
+#> 5 4132             4        1      3     2    1.76                     0
+#> 6 3124             3        1      2     4    0.469                    1
 ```
 
-The `app_identity` column stores the full ranking profile, the item
-columns (`party`, `religion`, `gender`, `race`) store the marginal
-ranks, and `anc_correct_identity` indicates whether each respondent
-answered the anchor question correctly.
+Here, `anc_correct_identity` indicates whether each respondent answered
+the anchor question correctly.
+
+Substantively, [Atsusaka and Kim
+(2025)](https://doi.org/10.1017/pan.2024.33) are interested in the
+extent to which *political party* is important when it comes to people’s
+multidimensional identity.
 
 ## Estimate Ranking-Based Quantities
 
-We begin by estimating various ranking-based quantities with no bias
-correction. We include survey weights via the `weight` argument.
+Now, let us demonstrate how to compute various ranking-based quantities
+based on the data. We begin by estimating such quantities with no bias
+correction. To make it realistic, however, we include survey weights via
+the `weight` argument.
 
-The `imprr_direct` function **impr**ove **r**anking analysis directly by
-estimating bias-corrected quantities of interest such as average ranks,
-pairwise ranking probabilities, top-k probabilities, and marginal rank
-probabilities.
+The `imprr_direct` function **impr**ove **r**anking analysis
+**direct**ly (as in a plug-in way) by estimating bias-corrected
+quantities of interest such as average ranks, pairwise ranking
+probabilities, top-k probabilities, and marginal rank probabilities.
+Here, `main_q` argument takes a vector of all items in the choice set.
 
 ``` r
 
@@ -89,6 +101,8 @@ out_direct <- imprr_direct(
 #> No anc_correct or p_random supplied; assuming everyone passes the anchor (p_random = 0), so no correction is applied.
 ```
 
+`imprr_direct` returns two lists as an output.  
+  
 The first output summarizes the estimated proportion of random
 responses. As expected, no random response was detected (no bias
 correction).

@@ -84,12 +84,15 @@ respondents.</p>
 <div class="section level2">
 <h2 id="example-data">Example Data<a class="anchor" aria-label="anchor" href="#example-data"></a>
 </h2>
-<p>The <code>identity</code> dataset contains Americans’ rankings about
-four sources of identity and an anchor-ranking question with a known
-correct ordering. The four items include political party, religion,
-gender, and race. The key theoretical concept is <em>relative
-partisanship</em>—the extent to which people prioritize partisanship
-over other sources of identity.</p>
+<p>The <code>identity</code> dataset contains data on how Americans rank
+four sources of identity that are central to American politics. The four
+items include political party, religion, gender, and race. The key
+theoretical concept is <em>relative partisanship</em>—the extent to
+which people prioritize partisanship over other sources of
+identity.<br><br>
+Below, the <code>app_identity</code> column stores the full ranking
+profile, the item columns (<code>party</code>, <code>religion</code>,
+<code>gender</code>, <code>race</code>) store the marginal ranks.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">identity</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
@@ -106,41 +109,48 @@ over other sources of identity.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 1423             1        4      2     3</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4132             4        1      3     2</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 3124             3        1      2     4</span></span></code></pre></div>
-<p>It also includes the survey weight <code>s_weight</code>.</p>
+<p>It also includes the survey weight <code>s_weight</code>.
+Additionally, the dataset includes the binary variable for whether
+respondents provide the correct answer to the anchor ranking question
+(see Data).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">identity</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
-<span>    <span class="va">s_weight</span>,</span>
 <span>    <span class="va">app_identity</span>,</span>
 <span>    <span class="va">party</span>, <span class="va">religion</span>, <span class="va">gender</span>, <span class="va">race</span>,</span>
+<span>    <span class="va">s_weight</span>,</span>
 <span>    <span class="va">anc_correct_identity</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
-<span><span class="co">#&gt;   s_weight app_identity party religion gender  race anc_correct_identity</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    0.844 1423             1        4      2     3                    1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>    0.886 1423             1        4      2     3                    1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>    2.96  3412             3        4      1     2                    1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>    0.987 1423             1        4      2     3                    1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>    1.76  4132             4        1      3     2                    0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>    0.469 3124             3        1      2     4                    1</span></span></code></pre></div>
-<p>The <code>app_identity</code> column stores the full ranking profile,
-the item columns (<code>party</code>, <code>religion</code>,
-<code>gender</code>, <code>race</code>) store the marginal ranks, and
-<code>anc_correct_identity</code> indicates whether each respondent
-answered the anchor question correctly.</p>
+<span><span class="co">#&gt;   app_identity party religion gender  race s_weight anc_correct_identity</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1423             1        4      2     3    0.844                    1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1423             1        4      2     3    0.886                    1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3412             3        4      1     2    2.96                     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 1423             1        4      2     3    0.987                    1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4132             4        1      3     2    1.76                     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 3124             3        1      2     4    0.469                    1</span></span></code></pre></div>
+<p>Here, <code>anc_correct_identity</code> indicates whether each
+respondent answered the anchor question correctly.</p>
+<p>Substantively, <a href="https://doi.org/10.1017/pan.2024.33" class="external-link">Atsusaka
+and Kim (2025)</a> are interested in the extent to which <em>political
+party</em> is important when it comes to people’s multidimensional
+identity.</p>
 </div>
 <div class="section level2">
 <h2 id="estimate-ranking-based-quantities">Estimate Ranking-Based Quantities<a class="anchor" aria-label="anchor" href="#estimate-ranking-based-quantities"></a>
 </h2>
-<p>We begin by estimating various ranking-based quantities with no bias
-correction. We include survey weights via the <code>weight</code>
-argument.</p>
+<p>Now, let us demonstrate how to compute various ranking-based
+quantities based on the data. We begin by estimating such quantities
+with no bias correction. To make it realistic, however, we include
+survey weights via the <code>weight</code> argument.</p>
 <p>The <code>imprr_direct</code> function <strong>impr</strong>ove
-<strong>r</strong>anking analysis directly by estimating bias-corrected
-quantities of interest such as average ranks, pairwise ranking
-probabilities, top-k probabilities, and marginal rank probabilities.</p>
+<strong>r</strong>anking analysis <strong>direct</strong>ly (as in a
+plug-in way) by estimating bias-corrected quantities of interest such as
+average ranks, pairwise ranking probabilities, top-k probabilities, and
+marginal rank probabilities. Here, <code>main_q</code> argument takes a
+vector of all items in the choice set.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_direct.html">imprr_direct</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>
@@ -149,7 +159,8 @@ probabilities, top-k probabilities, and marginal rank probabilities.</p>
 <span>  weight <span class="op">=</span> <span class="st">"s_weight"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; No anc_correct or p_random supplied; assuming everyone passes the anchor (p_random = 0), so no correction is applied.</span></span></code></pre></div>
-<p>The first output summarizes the estimated proportion of random
+<p><code>imprr_direct</code> returns two lists as an output.<br><br>
+The first output summarizes the estimated proportion of random
 responses. As expected, no random response was detected (no bias
 correction).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
