@@ -209,7 +209,7 @@ The key idea is that some rankings are oversampled and others are undersampled d
 
 This is known as the inverse-probability weighting.
 
-For this strategy, the `imprr_weights` function allows us to estimate bias-correction weights for each survey respondent.
+For this strategy, the `imprr_weights` function allows us to estimate bias-correction **weights** for each survey respondent.
 
 ```{r}
 out_weights <- imprr_weights(
