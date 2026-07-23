@@ -315,7 +315,8 @@ artificially overrepresented, we want to down weight them. For rankings
 that are underrepresented, we want to weight them up.</p>
 <p>This is known as the inverse-probability weighting.</p>
 <p>For this strategy, the <code>imprr_weights</code> function allows us
-to estimate bias-correction weights for each survey respondent.</p>
+to estimate bias-correction <strong>weights</strong> for each survey
+respondent.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imprr_weights.html">imprr_weights</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">identity</span>,</span>

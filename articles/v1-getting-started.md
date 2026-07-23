@@ -290,7 +290,7 @@ that are underrepresented, we want to weight them up.
 This is known as the inverse-probability weighting.
 
 For this strategy, the `imprr_weights` function allows us to estimate
-bias-correction weights for each survey respondent.
+bias-correction **weights** for each survey respondent.
 
 ``` r
 
