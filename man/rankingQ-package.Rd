@@ -4,11 +4,11 @@
 \name{rankingQ-package}
 \alias{rankingQ}
 \alias{rankingQ-package}
-\title{rankingQ: Design-Based Methods for Improving Ranking Questions}
+\title{rankingQ: Design-Based Methods for Ranking Questions}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Provides design-based methods to reduce measurement error from random responding in survey ranking questions. Uses anchor-ranking items or user-supplied random-response rates to estimate corrected average ranks, marginal rank probabilities, pairwise comparisons, and ranking distributions. Includes tools for visualization, format conversion, simulation, and diagnostic checks for ranking data. Based on Atsusaka and Kim (2025) \doi{10.1017/pan.2024.33}.
+Provides a design-based toolkit for survey ranking questions. Estimates average ranks, marginal rank probabilities, pairwise comparisons, and ranking distributions, with optional bias correction for random responding via anchor-ranking items or user-supplied random-response rates. Includes Plackett-Luce simulation, visualization, format conversion, and diagnostic checks. Methods are described in Atsusaka and Kim (2025) \doi{10.1017/pan.2024.33}.
 }
 \seealso{
 Useful links:
