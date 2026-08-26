@@ -2,6 +2,8 @@
 
 ## rankingQ 0.2.0
 
+CRAN release: 2026-08-21
+
 - First CRAN submission. The package was previously available on GitHub
   under version 0.1.0.
 - The bundled `identity` and `identity_w` datasets now use item names

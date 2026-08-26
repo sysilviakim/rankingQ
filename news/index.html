@@ -41,7 +41,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0" id="rankingq-020">rankingQ 0.2.0<a class="anchor" aria-label="anchor" href="#rankingq-020"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="rankingq-020">rankingQ 0.2.0<a class="anchor" aria-label="anchor" href="#rankingq-020"></a></h2><p class="text-muted">CRAN release: 2026-08-21</p>
 <ul><li>First CRAN submission. The package was previously available on GitHub under version 0.1.0.</li>
 <li>The bundled <code>identity</code> and <code>identity_w</code> datasets now use item names for the marginal-rank columns: <code>party</code>, <code>religion</code>, <code>gender</code>, <code>race</code> (previously <code>app_identity_1</code>–<code>app_identity_4</code>) and <code>household</code>, <code>neighborhood</code>, <code>city</code>, <code>state</code> (previously <code>anc_identity_1</code>–<code>anc_identity_4</code>). Examples and vignettes now pass these columns explicitly, e.g. <code>main_q = c("party", "religion", "gender", "race")</code>.</li>
 <li>New exported function <code><a href="../reference/rank_wider.html">rank_wider()</a></code> for converting long-format ranking data to wide format (one column per item or a single pasted ranking string).</li>
