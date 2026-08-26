@@ -98,7 +98,7 @@ recover_recorded_responses(
 
 ### Theory
 
-In [Atsusaka and Kim (2024)](https://osf.io/3ys8x), we prove that once
+In [Atsusaka and Kim (2025)](https://doi.org/10.1017/pan.2024.33), we prove that once
 there is item order randomization, the recorded responses will follow a
 uniform distribution in the absence of random responses. Suppose, for
 example, that everyone prefers a-b-c in that order. Some respondents
