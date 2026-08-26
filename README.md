@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 
-[![pkgdown](https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml) [![DOI](https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue)](https://doi.org/10.1017/pan.2024.33)
+[![CRAN status](https://www.r-pkg.org/badges/version/rankingQ)](https://CRAN.R-project.org/package=rankingQ) [![CRAN downloads](https://cranlogs.r-pkg.org/badges/last-month/rankingQ)](https://CRAN.R-project.org/package=rankingQ) [![R-CMD-check](https://github.com/sysilviakim/rankingQ/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sysilviakim/rankingQ/actions/workflows/R-CMD-check.yaml) [![pkgdown](https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/sysilviakim/rankingQ/actions/workflows/pkgdown.yaml) [![DOI](https://img.shields.io/badge/DOI-10.1017%2Fpan.2024.33-blue)](https://doi.org/10.1017/pan.2024.33)
 
 <!-- badges: end -->
 
@@ -24,9 +24,16 @@ For the underlying methodology, see [Atsusaka and Kim (2025)](https://doi.org/10
 
 ## Installation
 
-Currently, you can install the development version from GitHub:
+Install the released version from CRAN:
 
 ``` r
+install.packages("rankingQ")
+```
+
+To install the development version from GitHub:
+
+``` r
+# install.packages("remotes")
 remotes::install_github("sysilviakim/rankingQ", dependencies = TRUE)
 ```
 
